@@ -9,3 +9,10 @@
 
 # Executables
 *.exe
+keen5
+
+# SDL
+CON
+
+# Other
+core
