@@ -1,0 +1,11 @@
+# Object files
+*.o
+
+# Precompiled global header files
+*.gch
+
+# Swap files
+*.swp
+
+# Executables
+*.exe
