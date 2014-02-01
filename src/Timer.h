@@ -1,7 +1,7 @@
 #ifndef TIMER_H
 #define TIMER_H
 
-#include "SDL2/SDL.h"
+#include "SDL.h"
 
 extern const int FRAMES_PER_SECOND;
 

@@ -34,6 +34,7 @@ SDL_Texture *load_image(std::string path) {
     return newTexture;
 }
 
+// Deprecated with SDL2
 void apply_surface(int x, int y, SDL_Surface *source, SDL_Surface *destination, SDL_Rect *clip=NULL) {
     // Make a temp rect to hold the offsets
     SDL_Rect offset;

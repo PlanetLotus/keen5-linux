@@ -1,7 +1,7 @@
 #ifndef GLOBALS_H
 #define GLOBALS_H
 
-#include "SDL2/SDL.h"
+#include "SDL.h"
 #include "Texture.h"
 
 // Screen attributes

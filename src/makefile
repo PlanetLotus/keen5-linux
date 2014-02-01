@@ -1,16 +1,25 @@
+CC = g++
+CFLAGS = -Wall -g
+INCLUDES = -I/usr/local/include/SDL2 -D_REENTRANT
+LFLAGS = -L/usr/local/lib -Wl,-rpath,/usr/local/lib
+LIBS = -lSDL2 -lSDL2main -lSDL2_image -lSDL2_ttf -lpthread
+SRCS = globals.cpp Player.cpp Texture.cpp helpers.cpp main.cpp Timer.cpp Tile.cpp
+OBJS = $(SRCS:.cpp=.o)
 PROG = keen5
-OBJS = globals.o Player.o Texture.o helpers.o main.o Timer.o
-FLAGS = -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf
+
+.PHONY: depend clean
+
+all: $(PROG)
+	@echo keen5 has been compiled
 
 $(PROG): $(OBJS)
-	g++ -g -Wall -o $(PROG) $(OBJS) $(FLAGS)
+	$(CC) $(CFLAGS) $(INCLUDES) -o $(PROG) $(OBJS) $(LFLAGS) $(LIBS)
+
+.cpp.o:
+	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 clean:
-	rm *.o keen5
+	rm *.o $(PROG)
 
-# Dependencies
-globals.o: globals.h
-Player.o: Player.h
-Texture.o: Texture.h
-helpers.o: helpers.h
-Timer.o: Timer.h
+depend: $(SRCS)
+	makedepend $(INCLUDES) $^
