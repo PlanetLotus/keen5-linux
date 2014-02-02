@@ -16,7 +16,7 @@ class Tile {
         Tile(int x, int y, int tileType);
 
         // Shows the tile
-        void render(SDL_Rect& camera);
+        void render(int destX, int destY, SDL_Rect& camera);
 
         int getType();
 

@@ -100,6 +100,20 @@ bool load_files() {
     return true;
 }
 
+bool set_tiles() {
+    // Tile offsets in pixels
+    int x = 2;
+    int y = 2;
+
+    // TODO: Make this set tiles from an input file
+
+    // These won't be quite so hardcoded later
+    gTiles[0] = new Tile(66, 34, 0);
+    gTiles[1] = new Tile(66, 66, 1);
+
+    return true;
+}
+
 void clean_up() {
     gKeenTexture->free();
     gMaskTexture->free();

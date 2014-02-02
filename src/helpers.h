@@ -11,6 +11,8 @@ bool init();
 
 bool load_files();
 
+bool set_tiles();
+
 void set_clips();
 
 void clean_up();

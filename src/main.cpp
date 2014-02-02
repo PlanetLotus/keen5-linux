@@ -20,6 +20,7 @@ int main (int argc, char **args) {
     // Initialize SDL
     if (!init()) return 1;
     if (!load_files()) return 1;
+    if (!set_tiles()) return 1;
 
     // Create player object
     //Player character;
@@ -57,15 +58,20 @@ int main (int argc, char **args) {
         SDL_RenderClear(renderer);
 
         // Render masks
-        SDL_Rect clip = {66, 34, 32, 32};
-        gMaskTexture->render(20, 40, &clip);
+        // perhaps modify the params in render so that it's source, dest and not dest, source?
+        SDL_Rect camera = {32, 32, 32, 32};
+        gTiles[0]->render(64, 64, camera);
+        gTiles[1]->render(64, 96, camera);
+        gTiles[0]->render(96, 64, camera);
+        gTiles[1]->render(96, 96, camera);
 
         // Render objects
+        SDL_Rect clip = {66, 34, 32, 32};
         clip.x = 0;
         clip.y = 0;
         clip.w = 40;
         clip.h = 80;
-        gKeenTexture->render(50, 40, &clip);
+        gKeenTexture->render(64, 16, &clip);
 
         // Update screen
         SDL_RenderPresent(renderer);

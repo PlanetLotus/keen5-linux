@@ -11,8 +11,8 @@ Tile::Tile(int x, int y, int tileType) {
     type = tileType;
 }
 
-void Tile::render(SDL_Rect& camera) {
-    gMaskTexture->render(box.x, box.y, &gTiles[type]->box);
+void Tile::render(int destX, int destY, SDL_Rect& camera) {
+    gMaskTexture->render(destX, destY, &box);
 }
 
 int Tile::getType() { return type; }
