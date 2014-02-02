@@ -56,8 +56,16 @@ int main (int argc, char **args) {
         SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
         SDL_RenderClear(renderer);
 
+        // Render masks
+        SDL_Rect clip = {66, 34, 32, 32};
+        gMaskTexture->render(20, 40, &clip);
+
         // Render objects
-        keen->render(20, 40);
+        clip.x = 0;
+        clip.y = 0;
+        clip.w = 40;
+        clip.h = 80;
+        gKeenTexture->render(50, 40, &clip);
 
         // Update screen
         SDL_RenderPresent(renderer);

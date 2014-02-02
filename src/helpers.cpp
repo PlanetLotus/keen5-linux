@@ -34,19 +34,6 @@ SDL_Texture *load_image(std::string path) {
     return newTexture;
 }
 
-// Deprecated with SDL2
-void apply_surface(int x, int y, SDL_Surface *source, SDL_Surface *destination, SDL_Rect *clip=NULL) {
-    // Make a temp rect to hold the offsets
-    SDL_Rect offset;
-
-    // Give the offsets to the rect
-    offset.x = x;
-    offset.y = y;
-
-    // Blit the surface
-    //SDL_BlitSurface(source, clip, destination, &offset);
-}
-
 bool init() {
     // Init all SDL subsystems
     if (SDL_Init( SDL_INIT_TIMER | SDL_INIT_AUDIO | SDL_INIT_VIDEO ) == -1) {
@@ -57,7 +44,7 @@ bool init() {
     // Init IMG
     int flags = IMG_INIT_JPG | IMG_INIT_PNG;
     int initted = IMG_Init(flags);
-    if (initted&flags != flags) {
+    if ((initted&flags) != flags) {
         printf("Couldn't init SDL_image. IMG_Error: %s\n", IMG_GetError());
     }
 
@@ -83,10 +70,6 @@ bool init() {
     // Init renderer color
     SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
 
-    // Add screen to window
-    //surfaces.push_back(screen);
-    //screen = SDL_GetWindowSurface(window);
-
     // Initialize SDL_ttf
     if (TTF_Init() == -1) return false;
 
@@ -97,19 +80,17 @@ bool init() {
 }
 
 bool load_files() {
+    std::string data = "../data/";
+
     // Load images
-    if (!background->loadFromFile("../data/background.png")) {
-        printf("Failed to load background texture!\n");
-        return false;
-    }
-    if (!keen->loadFromFile("../data/keensprite.png")) {
+    if (!gKeenTexture->loadFromFile(data + "keensprite.png")) {
         printf("Failed to load keen texture!\n");
         return false;
     }
-
-    // Add to surfaces
-    //surfaces.push_back(background);
-    //surfaces.push_back(keen);
+    if (!gMaskTexture->loadFromFile(data + "masks.png")) {
+        printf("Failed to load masks texture!\n");
+        return false;
+    }
 
     // Open the fonts
     //TTF_Font *font = TTF_OpenFont ("lazy.ttf", 28);
@@ -120,17 +101,17 @@ bool load_files() {
 }
 
 void clean_up() {
-    // Free images
-    /*for (vector<SDL_Surface*>::iterator i=surfaces.begin(); i!=surfaces.end(); ++i) {
-        SDL_FreeSurface(*i);
-    }*/
+    gKeenTexture->free();
+    gMaskTexture->free();
+
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
 
     // Close font
     //TTF_CloseFont(font);
 
-    // Quit SDL_TTF
-    TTF_Quit();
-
     // Quit SDL
+    IMG_Quit();
+    TTF_Quit();
     SDL_Quit();
 }

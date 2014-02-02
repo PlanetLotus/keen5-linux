@@ -3,8 +3,8 @@
 
 #include "SDL.h"
 
-const int TILE_WIDTH = 80;
-const int TILE_HEIGHT = 80;
+const int TILE_WIDTH = 32;
+const int TILE_HEIGHT = 32;
 
 class Tile {
     private:

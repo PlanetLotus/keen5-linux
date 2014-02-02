@@ -1,4 +1,5 @@
 #include "Tile.h"
+#include "globals.h"
 
 Tile::Tile(int x, int y, int tileType) {
     box.x = x;
@@ -9,3 +10,10 @@ Tile::Tile(int x, int y, int tileType) {
 
     type = tileType;
 }
+
+void Tile::render(SDL_Rect& camera) {
+    gMaskTexture->render(box.x, box.y, &gTiles[type]->box);
+}
+
+int Tile::getType() { return type; }
+SDL_Rect Tile::getBox() { return box; }

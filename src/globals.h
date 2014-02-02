@@ -3,19 +3,25 @@
 
 #include "SDL.h"
 #include "Texture.h"
+#include "Tile.h"
+#include <vector>
 
 // Screen attributes
 extern const int SCREEN_WIDTH;
 extern const int SCREEN_HEIGHT;
 extern const int SCREEN_BPP;
 
+extern const int TEXTURE_COUNT;
+extern const int TILE_COUNT;
+
 // Window and renderer
 extern SDL_Window* window;
 extern SDL_Renderer* renderer;
-//extern std::vector<SDL_Surface*> surfaces;
 
 // Global textures
-extern Texture* background;
-extern Texture* keen;
+extern Texture* gKeenTexture;
+extern Texture* gMaskTexture;
+
+extern std::vector<Tile*> gTiles;
 
 #endif
