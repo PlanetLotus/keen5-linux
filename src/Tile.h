@@ -8,7 +8,7 @@ const int TILE_HEIGHT = 32;
 
 class Tile {
     private:
-        SDL_Rect srcBox;
+        SDL_Rect destBox;
         int type;
 
     public:
