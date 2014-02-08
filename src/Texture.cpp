@@ -77,19 +77,19 @@ void Texture::setAlpha( Uint8 alpha ) {
     SDL_SetTextureAlphaMod( mTexture, alpha );
 }
 
-void Texture::render(int x, int y, SDL_Rect* clip, double angle, SDL_Point* center, SDL_RendererFlip flip) {
+void Texture::render(int x, int y, SDL_Rect* srcClip, double angle, SDL_Point* center, SDL_RendererFlip flip) {
     // Set rendering space and render to screen
     SDL_Rect renderQuad = { x, y, mWidth, mHeight };
 
     // Set clip rendering dimensions
-    if ( clip != NULL )
+    if ( srcClip != NULL )
     {
-        renderQuad.w = clip->w;
-        renderQuad.h = clip->h;
+        renderQuad.w = srcClip->w;
+        renderQuad.h = srcClip->h;
     }
 
     // Render to screen
-    SDL_RenderCopyEx( renderer, mTexture, clip, &renderQuad, angle, center, flip );
+    SDL_RenderCopyEx( renderer, mTexture, srcClip, &renderQuad, angle, center, flip );
 }
 
 int Texture::getWidth() {
