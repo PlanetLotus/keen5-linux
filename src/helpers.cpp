@@ -4,13 +4,18 @@
 #include "Texture.h"
 #include "globals.h"
 
+#include <stdio.h>
+#include <string>
+#include <fstream>
+#include <sstream>
+
 using namespace std;
 
 // Surface clips
 SDL_Rect clipsRight[5];
 SDL_Rect clipsLeft[5];
 
-SDL_Texture *load_image(std::string path) {
+SDL_Texture *load_image(string path) {
     SDL_Surface *loadedSurface = NULL;
     SDL_Texture *newTexture = NULL;
 
@@ -42,7 +47,7 @@ bool init() {
     }
 
     // Init IMG
-    int flags = IMG_INIT_JPG | IMG_INIT_PNG;
+    int flags = IMG_INIT_PNG;
     int initted = IMG_Init(flags);
     if ((initted&flags) != flags) {
         printf("Couldn't init SDL_image. IMG_Error: %s\n", IMG_GetError());
@@ -80,7 +85,7 @@ bool init() {
 }
 
 bool load_files() {
-    std::string data = "../data/";
+    string data = "../data/";
 
     // Load images
     if (!gKeenTexture->loadFromFile(data + "keensprite.png")) {
@@ -102,14 +107,38 @@ bool load_files() {
 
 bool set_tiles() {
     // Tile offsets in pixels
-    int x = 2;
-    int y = 2;
+    int x = 0;
+    int y = 0;
+    int i = 0;
 
-    // TODO: Make this set tiles from an input file
+    int data = -1;
 
-    // These won't be quite so hardcoded later
-    gTiles[0] = new Tile(66, 34, 0);
-    gTiles[1] = new Tile(66, 66, 1);
+    ifstream map("../data/level1");
+    string line;
+
+    // Loop through each line...
+    while (getline(map, line)) {
+        istringstream iss(line);
+
+        // Loop through each number on each line...
+        while (!iss.eof()) {
+            iss >> data;
+            if (iss.fail()) {
+                printf("Error getting data from line.\n");
+                return false;
+            }
+            gTiles[i] = new Tile(32*i, 32*y, data);
+            x += TILE_WIDTH;
+            i++;
+        }
+        y += TILE_HEIGHT;
+    }
+
+    for (unsigned int i=0; i<gTiles.size(); i++) {
+        printf("%d\n", gTiles[i]->getBox().x);
+    }
+
+    map.close();
 
     return true;
 }
