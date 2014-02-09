@@ -108,9 +108,25 @@ bool set_tiles() {
     int i = 0;
 
     int tileType = -1;
+    int tileCount = -1;
 
     ifstream map("../data/level1");
     string line;
+    istringstream iss;
+
+    // Special case: First line contains number of tiles
+    // Reserve this many tiles in gTiles
+    getline(map, line);
+    iss.str(line);
+    iss >> tileCount;
+    if (iss.fail() || tileCount == -1) {
+        printf("Error getting number of tiles from line.\n");
+        return false;
+    }
+
+    // This is slow because it inits every element when we don't need to
+    // Figure out how to assign to it in the code below
+    gTiles.resize(tileCount);
 
     // Loop through each line...
     while (getline(map, line)) {
@@ -143,6 +159,9 @@ bool set_tiles() {
     map.close();
 
     // Set clips for each tile
+    gTileClips[WALLFILL_BLUE].x = TILE_OFFSET + (TILE_WIDTH * 6);
+    gTileClips[WALLFILL_BLUE].y = TILE_OFFSET + (TILE_HEIGHT * 3);
+
     gTileClips[PLATFORM_BLUE_FLAT_TOP].x = TILE_OFFSET + (TILE_WIDTH * 2);
     gTileClips[PLATFORM_BLUE_FLAT_TOP].y = TILE_OFFSET + (TILE_HEIGHT * 1);
 
