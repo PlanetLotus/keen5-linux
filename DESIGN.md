@@ -11,3 +11,11 @@ Next steps:
     <li>Write basic enemy AI (animation optional)</li>
     <li>Pit the player against the basic enemy AI</li>
 </ol>
+
+Noteworthy progress:
+
+The game now loads in a file that represents a level by integer values, each
+value representing a tile. Eight tiles have been added. On this front, I'm
+stopping here for now and moving onto another task.
+
+Next up: Basic movement without animation.
