@@ -29,7 +29,12 @@ extern std::vector<SDL_Rect> gTileClips;
 
 // Mapping of tile type int to where to find it on the sprite sheet
 extern const int WALLFILL_BLUE;
+extern const int PLATFORM_BLUE_FLAT_TOP_EDGEL;
+extern const int PLATFORM_BLUE_FLAT_BOT_EDGEL;
 extern const int PLATFORM_BLUE_FLAT_TOP;
 extern const int PLATFORM_BLUE_FLAT_BOT;
+extern const int PLATFORM_BLUE_FLAT_TOP_EDGER;
+extern const int PLATFORM_BLUE_FLAT_BOT_EDGER;
+extern const int PLATFORM_BLUE_FLAT_FILL_EDGE;
 
 #endif
