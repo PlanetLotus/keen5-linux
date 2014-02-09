@@ -7,11 +7,6 @@
 #include "Player.h"
 
 int main (int argc, char **args) {
-    // Redirect stdout back to console
-    FILE *ctt = fopen("CON", "w");
-    freopen("CON", "w", stdout);
-    freopen("CON", "w", stderr);
-
     // Initialize variables
     bool running = true;
     SDL_Event event;
@@ -21,6 +16,13 @@ int main (int argc, char **args) {
     if (!init()) return 1;
     if (!load_files()) return 1;
     if (!set_tiles()) return 1;
+
+    // Redirect stdout back to console
+    /*
+    FILE *ctt = fopen("CON", "w");
+    freopen("CON", "w", stdout);
+    freopen("CON", "w", stderr);
+    */
 
     // Create player object
     //Player character;
@@ -58,12 +60,10 @@ int main (int argc, char **args) {
         SDL_RenderClear(renderer);
 
         // Render masks
-        // perhaps modify the params in render so that it's source, dest and not dest, source?
         SDL_Rect camera = {32, 32, 32, 32};
-        gTiles[0]->render(64, 64, camera);
-        gTiles[1]->render(64, 96, camera);
-        gTiles[0]->render(96, 64, camera);
-        gTiles[1]->render(96, 96, camera);
+        for (unsigned int i=0; i<gTiles.size(); i++) {
+            gTiles[i]->render(0, 0, camera);
+        }
 
         // Render objects
         SDL_Rect clip = {66, 34, 32, 32};
@@ -83,7 +83,7 @@ int main (int argc, char **args) {
 
     // Prepare for quit
     clean_up();
-    fclose(ctt);
+    //fclose(ctt);
 
     return 0;
 }

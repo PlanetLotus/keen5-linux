@@ -11,10 +11,6 @@
 
 using namespace std;
 
-// Surface clips
-SDL_Rect clipsRight[5];
-SDL_Rect clipsLeft[5];
-
 SDL_Texture *load_image(string path) {
     SDL_Surface *loadedSurface = NULL;
     SDL_Texture *newTexture = NULL;
@@ -127,10 +123,13 @@ bool set_tiles() {
                 printf("Error getting data from line.\n");
                 return false;
             }
-            gTiles[i] = new Tile(32*i, 32*y, data);
+
+            gTiles[i] = new Tile(x, y, data);
+
             x += TILE_WIDTH;
             i++;
         }
+        x = 0;
         y += TILE_HEIGHT;
     }
 
@@ -139,6 +138,18 @@ bool set_tiles() {
     }
 
     map.close();
+
+    // Set clips for each tile
+    gTileClips[PLATFORM_BLUE_FLAT_TOP].x = TILE_OFFSET + (TILE_WIDTH * 2);
+    gTileClips[PLATFORM_BLUE_FLAT_TOP].y = TILE_OFFSET + (TILE_HEIGHT * 1);
+
+    gTileClips[PLATFORM_BLUE_FLAT_BOT].x = TILE_OFFSET + (TILE_WIDTH * 2);
+    gTileClips[PLATFORM_BLUE_FLAT_BOT].y = TILE_OFFSET + (TILE_HEIGHT * 2);
+
+    for (unsigned int i=0; i<gTileClips.size(); i++) {
+        gTileClips[i].w = TILE_WIDTH;
+        gTileClips[i].h = TILE_HEIGHT;
+    }
 
     return true;
 }

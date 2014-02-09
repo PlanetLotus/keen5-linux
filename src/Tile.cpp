@@ -12,7 +12,7 @@ Tile::Tile(int x, int y, int tileType) {
 }
 
 void Tile::render(int destX, int destY, SDL_Rect& camera) {
-    gMaskTexture->render(destBox.x, destBox.y, gTileClips[type]);
+    gMaskTexture->render(destBox.x, destBox.y+64, &gTileClips[type]);
 }
 
 int Tile::getType() { return type; }

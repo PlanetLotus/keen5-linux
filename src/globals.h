@@ -25,7 +25,7 @@ extern Texture* gMaskTexture;
 extern std::vector<Tile*> gTiles;
 
 // Where to find each type of tile on the sprite sheet
-extern std::vector<SDL_Rect*> gTileClips;
+extern std::vector<SDL_Rect> gTileClips;
 
 // Mapping of tile type int to where to find it on the sprite sheet
 extern const int PLATFORM_BLUE_FLAT_TOP;
