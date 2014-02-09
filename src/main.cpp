@@ -25,7 +25,7 @@ int main (int argc, char **args) {
     */
 
     // Create player object
-    //Player character;
+    Player character;
 
     while (running) {
         // Start timer
@@ -44,9 +44,14 @@ int main (int argc, char **args) {
             if (event.type == SDL_KEYDOWN) {
                 switch (event.key.keysym.sym) {
                     case SDLK_ESCAPE: running = false; break;
-                    //case SDLK_RIGHT: character.set_state(WALKR); break;
+                    case SDLK_RIGHT: character.walk(RIGHT); break;
                     //case SDLK_DOWN: character.set_state(STANDR); break;
                 }
+            } else {
+                // Later: Make this call "idle" which checks the last state
+                // If it's a movement, figure out which way you should be standing
+                // Else, Add to the time he's been idling for animation purposes
+                character.set_state(STANDR);
             }
 
             // If the user X'd out of the window
@@ -66,12 +71,17 @@ int main (int argc, char **args) {
         }
 
         // Render objects
+        /*
         SDL_Rect clip = {66, 34, 32, 32};
         clip.x = 0;
         clip.y = 0;
         clip.w = 40;
         clip.h = 80;
         gKeenTexture->render(64, 16, &clip);
+        */
+
+        // Render units
+        character.draw();
 
         // Update screen
         SDL_RenderPresent(renderer);

@@ -2,9 +2,12 @@
 
 #include "helpers.h"
 #include "Player.h"
+#include "globals.h"
 
 Player::Player() {
     ammo = 5;   // Might depend on difficulty level
+    xPos = 66;
+    yPos = 34;
     xVel = 0;
     yVel = 0;
 
@@ -19,7 +22,9 @@ void Player::shoot() {
 }
 
 void Player::walk(directionEnum dir) {
-    return;
+    // Depends on direction...
+    state = WALKR;
+    xVel = 10;
 }
 
 void Player::jump() {
@@ -43,6 +48,18 @@ void Player::enter_door() {
 }
 
 void Player::draw() {
+    // Could use an associative array where key=state, value=SDL_Rect clip
+    SDL_Rect srcClip = {0, 0, frameWidth, frameHeight};
+
+    // Walk right
+    xPos += xVel;
+    yPos += yVel;
+    gKeenTexture->render(xPos, yPos, &srcClip);
+
+    xVel = 0;
+    yVel = 0;
+
+    /*
     if (state == STANDR) {
         // Stand still
         frame = 0;
@@ -53,9 +70,11 @@ void Player::draw() {
         tempRect.h = frameHeight;
         //apply_surface(50, 50, keen, screen, &tempRect);
         return;
-    }
+    } else if (state == WALKR) {
+    */
 
     // Go to next frame
+    /*
     frame++;
     if (frame >= 5)
         frame = 1;
@@ -66,6 +85,7 @@ void Player::draw() {
     tempRect.y = 0;
     tempRect.w = frameWidth;
     tempRect.h = frameHeight;
+    */
 
     // Draw the character
     //apply_surface(50, 50, keen, screen, &tempRect);

@@ -1,7 +1,5 @@
 // Header file for Player class
 
-//#include "Unit.h"
-
 #ifndef PLAYER_H
 #define PLAYER_H
 
@@ -11,6 +9,8 @@ enum animStateEnum {STANDL, STANDR, WALKL, WALKR};
 class Player {
     private:
         int ammo;
+        int xPos;
+        int yPos;
         int xVel;     // Movement speed
         int yVel;     // Movement speed
 
