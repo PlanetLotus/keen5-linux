@@ -107,7 +107,7 @@ bool set_tiles() {
     int y = 0;
     int i = 0;
 
-    int data = -1;
+    int tileType = -1;
 
     ifstream map("../data/level1");
     string line;
@@ -118,16 +118,19 @@ bool set_tiles() {
 
         // Loop through each number on each line...
         while (!iss.eof()) {
-            iss >> data;
-            if (iss.fail()) {
+            iss >> tileType;
+            if (iss.fail() || tileType == -1) {
                 printf("Error getting data from line.\n");
                 return false;
             }
 
-            gTiles[i] = new Tile(x, y, data);
+            // 0 represents empty space, therefore no tile
+            if (tileType != 0) {
+                gTiles[i] = new Tile(x, y, tileType);
+                i++;
+            }
 
             x += TILE_WIDTH;
-            i++;
         }
         x = 0;
         y += TILE_HEIGHT;
