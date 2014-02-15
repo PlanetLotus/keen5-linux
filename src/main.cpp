@@ -39,23 +39,15 @@ int main (int argc, char **args) {
         // For game-related keypresses, pass it as a parameter...? into the
         // game processing loop.
 
-        if (SDL_PollEvent(&event)) {
+        while (SDL_PollEvent(&event)) {
             // If a key was pressed
             if (event.type == SDL_KEYDOWN) {
                 switch (event.key.keysym.sym) {
                     case SDLK_ESCAPE: running = false; break;
-                    case SDLK_RIGHT: character.walk(RIGHT); break;
-                    //case SDLK_DOWN: character.set_state(STANDR); break;
                 }
-            } else {
-                // Later: Make this call "idle" which checks the last state
-                // If it's a movement, figure out which way you should be standing
-                // Else, Add to the time he's been idling for animation purposes
-                character.set_state(STANDR);
             }
-
             // If the user X'd out of the window
-            if (event.type == SDL_QUIT) {
+            else if (event.type == SDL_QUIT) {
                 running = false;
             }
         }
@@ -70,17 +62,11 @@ int main (int argc, char **args) {
             gTiles[i]->render(0, 0, camera);
         }
 
-        // Render objects
-        /*
-        SDL_Rect clip = {66, 34, 32, 32};
-        clip.x = 0;
-        clip.y = 0;
-        clip.w = 40;
-        clip.h = 80;
-        gKeenTexture->render(64, 16, &clip);
-        */
-
-        // Render units
+        // Update units and draw them
+        // Later this will probably be done in a batch
+        // Be sure to update THEN draw. Don't let the order get messed up across several units
+        // All logic should be handled before any of the units on-screen get updated
+        character.update();
         character.draw();
 
         // Update screen

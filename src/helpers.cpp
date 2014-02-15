@@ -152,10 +152,6 @@ bool set_tiles() {
         y += TILE_HEIGHT;
     }
 
-    for (unsigned int i=0; i<gTiles.size(); i++) {
-        printf("%d\n", gTiles[i]->getBox().x);
-    }
-
     map.close();
 
     // Set clips for each tile

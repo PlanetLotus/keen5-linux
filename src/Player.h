@@ -27,6 +27,7 @@ class Player {
         void look(directionEnum dir);
         void climb(directionEnum dir);
         void enter_door();
+        void update();
         void draw();
 
         // Getters and setters

@@ -22,9 +22,16 @@ void Player::shoot() {
 }
 
 void Player::walk(directionEnum dir) {
-    // Depends on direction...
-    state = WALKR;
-    xVel = 10;
+    switch (dir) {
+        case RIGHT:
+            state = WALKR;
+            xVel = 10;
+            break;
+        case LEFT:
+            state = WALKL;
+            xVel = -10;
+            break;
+    }
 }
 
 void Player::jump() {
@@ -45,6 +52,17 @@ void Player::climb(directionEnum dir) {
 
 void Player::enter_door() {
     return;
+}
+
+void Player::update() {
+    // Read in current keyboard state and update object accordingly
+    const Uint8* state = SDL_GetKeyboardState(NULL);
+
+    if (state[SDL_SCANCODE_RIGHT]) {
+        walk(RIGHT);
+    } else if (state[SDL_SCANCODE_LEFT]) {
+        walk(LEFT);
+    }
 }
 
 void Player::draw() {
