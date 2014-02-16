@@ -6,8 +6,10 @@ modification (and delusional goals).
 <h2>Next steps</h2>
 
 <ol>
-    <li>Create a small part of the first level (physics not priority)</li>
-    <li>Write basic player movement (animation optional, not priority)</li>
+    <li>Design a level editor</li>
+    <li>Add collision properties to tiles and Keen</li>
+    <li>Add basic physics (gravity)</li>
+    <li>Add player 'shoot' capability</li>
     <li>Write basic enemy AI (animation optional)</li>
     <li>Pit the player against the basic enemy AI</li>
 </ol>
