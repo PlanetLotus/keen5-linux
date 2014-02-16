@@ -13,7 +13,7 @@ class Texture
         ~Texture();
 
         // Loads image at specified path
-        bool loadFromFile( std::string path );
+        bool loadFromFile( std::string path, bool doSetColorKey );
 
         #ifdef _SDL_TTF_H
         // Creates image from font string

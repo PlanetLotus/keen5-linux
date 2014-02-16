@@ -13,7 +13,7 @@ Texture::~Texture() {
     free();
 }
 
-bool Texture::loadFromFile(std::string path) {
+bool Texture::loadFromFile(std::string path, bool doSetColorKey) {
     // Get rid of preexisting texture
     free();
 
@@ -24,27 +24,29 @@ bool Texture::loadFromFile(std::string path) {
     SDL_Surface* loadedSurface = IMG_Load( path.c_str() );
     if ( loadedSurface == NULL ) {
         printf( "Unable to load image %s! SDL_image Error: %s\n", path.c_str(), IMG_GetError() );
-    } else {
-        // Color key image
+        return false;
+    }
+
+    // Color key image
+    if (doSetColorKey)
         SDL_SetColorKey( loadedSurface, SDL_TRUE, SDL_MapRGB( loadedSurface->format, 0xFF, 0xFF, 0xFF ) );
 
-        // Create texture from surface pixels
-        newTexture = SDL_CreateTextureFromSurface( renderer, loadedSurface );
-        if ( newTexture == NULL ) {
-            printf( "Unable to create texture from %s! SDL Error: %s\n", path.c_str(), SDL_GetError() );
-        } else {
-            // Get image dimensions
-            mWidth = loadedSurface->w;
-            mHeight = loadedSurface->h;
-        }
-
-        // Get rid of old loaded surface
-        SDL_FreeSurface( loadedSurface );
+    // Create texture from surface pixels
+    newTexture = SDL_CreateTextureFromSurface( renderer, loadedSurface );
+    if ( newTexture == NULL ) {
+        printf( "Unable to create texture from %s! SDL Error: %s\n", path.c_str(), SDL_GetError() );
+    } else {
+        // Get image dimensions
+        mWidth = loadedSurface->w;
+        mHeight = loadedSurface->h;
     }
+
+    // Get rid of old loaded surface
+    SDL_FreeSurface( loadedSurface );
 
     // Return success
     mTexture = newTexture;
-    return mTexture != NULL;
+    return true;
 }
 
 bool Texture::loadFromRenderedText(std::string textureText, SDL_Color textColor) {

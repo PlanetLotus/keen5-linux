@@ -11,30 +11,6 @@
 
 using namespace std;
 
-SDL_Texture *load_image(string path) {
-    SDL_Surface *loadedSurface = NULL;
-    SDL_Texture *newTexture = NULL;
-
-    // Load image
-    loadedSurface = IMG_Load(path.c_str());
-
-    // If nothing went wrong loading the image
-    if (loadedSurface == NULL) {
-        printf("Unable to load image %s! SDL_image Error: %s\n", path.c_str(), IMG_GetError());
-    }
-
-    // Create an optimized image
-    newTexture = SDL_CreateTextureFromSurface(renderer, loadedSurface);
-    if (newTexture == NULL) {
-        printf("Unable to create texture from %s! SDL Error: %s\n", path.c_str(), SDL_GetError());
-    }
-
-    // Free old image
-    SDL_FreeSurface(loadedSurface);
-
-    return newTexture;
-}
-
 bool init() {
     // Init all SDL subsystems
     if (SDL_Init( SDL_INIT_TIMER | SDL_INIT_AUDIO | SDL_INIT_VIDEO ) == -1) {
@@ -84,11 +60,11 @@ bool load_files() {
     string data = "../data/";
 
     // Load images
-    if (!gKeenTexture->loadFromFile(data + "keensprite.png")) {
+    if (!gKeenTexture->loadFromFile(data + "keensprite.png", true)) {
         printf("Failed to load keen texture!\n");
         return false;
     }
-    if (!gMaskTexture->loadFromFile(data + "masks.png")) {
+    if (!gMaskTexture->loadFromFile(data + "masks.png", false)) {
         printf("Failed to load masks texture!\n");
         return false;
     }
