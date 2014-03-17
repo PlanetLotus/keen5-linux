@@ -1,19 +1,22 @@
 #include "Tile.h"
 #include "globals.h"
 
-Tile::Tile(int x, int y, int tileType) {
-    destBox.x = x;
-    destBox.y = y;
+Tile::Tile(int srcX, int srcY, int destX, int destY) {
+    srcBox.x = srcX;
+    srcBox.y = srcY;
+
+    srcBox.w = TILE_WIDTH;
+    srcBox.h = TILE_HEIGHT;
+
+    destBox.x = destX;
+    destBox.y = destY;
 
     destBox.w = TILE_WIDTH;
     destBox.h = TILE_HEIGHT;
-
-    type = tileType;
 }
 
 void Tile::render(int destX, int destY, SDL_Rect& camera) {
-    gMaskTexture->render(destBox.x, destBox.y, &gTileClips[type]);
+    gMaskTexture->render(destBox.x, destBox.y, &srcBox);
 }
 
-int Tile::getType() { return type; }
 SDL_Rect Tile::getBox() { return destBox; }

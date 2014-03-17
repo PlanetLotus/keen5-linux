@@ -9,17 +9,15 @@ const int TILE_OFFSET = 0;
 
 class Tile {
     private:
+        SDL_Rect srcBox;
         SDL_Rect destBox;
-        int type;
 
     public:
         // Inits position and type
-        Tile(int x, int y, int tileType);
+        Tile(int srcX, int srcY, int destX, int destY);
 
         // Shows the tile
         void render(int destX, int destY, SDL_Rect& camera);
-
-        int getType();
 
         SDL_Rect getBox();
 };

@@ -78,88 +78,73 @@ bool load_files() {
 }
 
 bool set_tiles() {
-    // Tile offsets in pixels
-    int x = 0;
-    int y = 0;
-    int i = 0;
+    // Notes:
+    // Does levelWidth / levelHeight matter? Yes, because we have to know when we're at the end of a "row" when reading the file
+    // Does tileCount (actual tiles, not blank) matter? A little bit. We need gTiles, and it's faster to initialize it rather than keep adding to it
 
-    int tileType = -1;
+    int tilesWide = -1;
+    int tilesTall = -1;
     int tileCount = -1;
+
+    int xSrc = -1;
+    int ySrc = -1;
+
+    int xDest = -1;
+    int yDest = -1;
+    int i = 0;
 
     ifstream map("../data/level1");
     string line;
     istringstream iss;
 
-    // Special case: First line contains number of tiles
-    // Reserve this many tiles in gTiles
+    // Special case: First line contains # of tiles wide, # tiles tall, and tileCount
+    // Maybe use a "level" class??
     getline(map, line);
     iss.str(line);
+    iss >> tilesWide;
+    iss >> tilesTall;
     iss >> tileCount;
-    if (iss.fail() || tileCount == -1) {
-        printf("Error getting number of tiles from line.\n");
+    if (iss.fail() || tilesWide == -1 || tilesTall == -1 || tileCount == -1) {
+        printf("Error getting number of tiles from line 1.\n");
         return false;
     }
+
+    // Special case: Second line contains source file absolute path
+    // This is mostly used by the level editor. We only want the file name.
+    // NOT USED RIGHT NOW, BUT MIGHT BE A GOOD IDEA LATER.
+    // Only downside is the level files are computed at runtime...better hardcoded.
+    getline(map, line);
 
     // This is slow because it inits every element when we don't need to
     // Figure out how to assign to it in the code below
     gTiles.resize(tileCount);
 
-    // Loop through each line...
+    // Loop through each line
     while (getline(map, line)) {
+        // Check row position
+        if (xDest / TILE_WIDTH > tilesWide - 1) {
+            yDest += TILE_HEIGHT;
+            xDest = 0;
+        }
+
         istringstream iss(line);
 
-        // Loop through each number on each line...
-        while (!iss.eof()) {
-            iss >> tileType;
-            if (iss.fail() || tileType == -1) {
-                printf("Error getting data from line.\n");
-                return false;
-            }
+        iss >> xSrc;
 
-            // 0 represents empty space, therefore no tile
-            if (tileType != 0) {
-                gTiles[i] = new Tile(x, y, tileType);
-                i++;
-            }
-
-            x += TILE_WIDTH;
+        if (xSrc == -1) {
+            xDest += TILE_WIDTH;
+            continue;
         }
-        x = 0;
-        y += TILE_HEIGHT;
+
+        iss >> ySrc;
+
+        gTiles[i] = new Tile(xSrc, ySrc, xDest, yDest);
+
+        xDest += TILE_WIDTH;
+        i++;
     }
 
     map.close();
-
-    // Set clips for each tile
-    gTileClips[WALLFILL_BLUE].x = TILE_OFFSET + (TILE_WIDTH * 6);
-    gTileClips[WALLFILL_BLUE].y = TILE_OFFSET + (TILE_HEIGHT * 3);
-
-    gTileClips[PLATFORM_BLUE_FLAT_TOP_EDGEL].x = TILE_OFFSET + (TILE_WIDTH * 1);
-    gTileClips[PLATFORM_BLUE_FLAT_TOP_EDGEL].y = TILE_OFFSET + (TILE_HEIGHT * 1);
-
-    gTileClips[PLATFORM_BLUE_FLAT_BOT_EDGEL].x = TILE_OFFSET + (TILE_WIDTH * 0);
-    gTileClips[PLATFORM_BLUE_FLAT_BOT_EDGEL].y = TILE_OFFSET + (TILE_HEIGHT * 2);
-
-    gTileClips[PLATFORM_BLUE_FLAT_TOP].x = TILE_OFFSET + (TILE_WIDTH * 2);
-    gTileClips[PLATFORM_BLUE_FLAT_TOP].y = TILE_OFFSET + (TILE_HEIGHT * 1);
-
-    gTileClips[PLATFORM_BLUE_FLAT_BOT].x = TILE_OFFSET + (TILE_WIDTH * 2);
-    gTileClips[PLATFORM_BLUE_FLAT_BOT].y = TILE_OFFSET + (TILE_HEIGHT * 2);
-
-    gTileClips[PLATFORM_BLUE_FLAT_TOP_EDGER].x = TILE_OFFSET + (TILE_WIDTH * 4);
-    gTileClips[PLATFORM_BLUE_FLAT_TOP_EDGER].y = TILE_OFFSET + (TILE_HEIGHT * 1);
-
-    gTileClips[PLATFORM_BLUE_FLAT_BOT_EDGER].x = TILE_OFFSET + (TILE_WIDTH * 3);
-    gTileClips[PLATFORM_BLUE_FLAT_BOT_EDGER].y = TILE_OFFSET + (TILE_HEIGHT * 2);
-
-    gTileClips[PLATFORM_BLUE_FLAT_FILL_EDGE].x = TILE_OFFSET + (TILE_WIDTH * 4);
-    gTileClips[PLATFORM_BLUE_FLAT_FILL_EDGE].y = TILE_OFFSET + (TILE_HEIGHT * 2);
-
-    for (unsigned int i=0; i<gTileClips.size(); i++) {
-        gTileClips[i].w = TILE_WIDTH;
-        gTileClips[i].h = TILE_HEIGHT;
-    }
-
     return true;
 }
 
