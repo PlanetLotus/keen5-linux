@@ -89,8 +89,8 @@ bool set_tiles() {
     int xSrc = -1;
     int ySrc = -1;
 
-    int xDest = -1;
-    int yDest = -1;
+    int xDest = 0;
+    int yDest = 0;
     int i = 0;
 
     ifstream map("../data/level1");
