@@ -12,9 +12,14 @@ class Tile {
         SDL_Rect srcBox;
         SDL_Rect destBox;
 
+        bool collideTop;
+        bool collideRight;
+        bool collideBottom;
+        bool collideLeft;
+
     public:
         // Inits position and type
-        Tile(int srcX, int srcY, int destX, int destY);
+        Tile(int srcX, int srcY, int destX, int destY, bool collideT, bool collideR, bool collideB, bool collideL);
 
         // Shows the tile
         void render(int destX, int destY, SDL_Rect& camera);

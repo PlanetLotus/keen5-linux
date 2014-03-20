@@ -1,7 +1,7 @@
 #include "Tile.h"
 #include "globals.h"
 
-Tile::Tile(int srcX, int srcY, int destX, int destY) {
+Tile::Tile(int srcX, int srcY, int destX, int destY, bool collideT, bool collideR, bool collideB, bool collideL) {
     srcBox.x = srcX;
     srcBox.y = srcY;
 
@@ -13,6 +13,11 @@ Tile::Tile(int srcX, int srcY, int destX, int destY) {
 
     destBox.w = TILE_WIDTH;
     destBox.h = TILE_HEIGHT;
+
+    collideTop = collideT;
+    collideRight = collideR;
+    collideBottom = collideB;
+    collideLeft = collideL;
 }
 
 void Tile::render(int destX, int destY, SDL_Rect& camera) {

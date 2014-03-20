@@ -6,8 +6,8 @@
 
 Player::Player() {
     ammo = 5;   // Might depend on difficulty level
-    xPos = 66;
-    yPos = 34;
+    xPos = 40;
+    yPos = 16;
     xVel = 0;
     yVel = 0;
 
