@@ -1,6 +1,6 @@
 #include "Timer.h"
 
-const int FRAMES_PER_SECOND = 12;
+const int FRAMES_PER_SECOND = 24;
 
 Timer::Timer() {
     startTicks = 0;

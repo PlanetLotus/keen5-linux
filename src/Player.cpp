@@ -10,6 +10,7 @@ Player::Player() {
     yPos = 16;
     xVel = 0;
     yVel = 0;
+    yAccel = 0;
 
     frameWidth = 64;
     frameHeight = 80;
@@ -25,11 +26,15 @@ void Player::walk(directionEnum dir) {
     switch (dir) {
         case RIGHT:
             state = WALKR;
-            xVel = 10;
+            xVel = 5;
             break;
         case LEFT:
             state = WALKL;
-            xVel = -10;
+            xVel = -5;
+            break;
+        case STOP:
+            state = STANDR;
+            xVel = 0;
             break;
     }
 }
@@ -54,6 +59,15 @@ void Player::enter_door() {
     return;
 }
 
+void Player::fall() {
+    yAccel = 2;
+
+    if (yVel >= 10)
+        return;
+
+    yVel += yAccel;
+}
+
 void Player::update() {
     // Read in current keyboard state and update object accordingly
     const Uint8* state = SDL_GetKeyboardState(NULL);
@@ -62,7 +76,13 @@ void Player::update() {
         walk(RIGHT);
     } else if (state[SDL_SCANCODE_LEFT]) {
         walk(LEFT);
+    } else {
+        walk(STOP);
     }
+
+    // Apply gravity
+    // if (!notCollidingWithFloor)
+    fall();
 }
 
 void Player::draw() {
@@ -75,7 +95,7 @@ void Player::draw() {
     gKeenTexture->render(xPos, yPos, &srcClip);
 
     xVel = 0;
-    yVel = 0;
+    //yVel = 0;
 
     /*
     if (state == STANDR) {

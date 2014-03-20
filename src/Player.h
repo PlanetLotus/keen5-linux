@@ -3,7 +3,7 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-enum directionEnum {UP, DOWN, LEFT, RIGHT};
+enum directionEnum {UP, DOWN, LEFT, RIGHT, STOP};
 enum animStateEnum {STANDL, STANDR, WALKL, WALKR};
 
 class Player {
@@ -13,6 +13,7 @@ class Player {
         int yPos;
         int xVel;     // Movement speed
         int yVel;     // Movement speed
+        int yAccel;
 
         int frameWidth;
         int frameHeight;
@@ -27,6 +28,7 @@ class Player {
         void look(directionEnum dir);
         void climb(directionEnum dir);
         void enter_door();
+        void fall();
         void update();
         void draw();
 
