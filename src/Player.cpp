@@ -6,14 +6,15 @@
 
 Player::Player() {
     ammo = 5;   // Might depend on difficulty level
-    xPos = 40;
-    yPos = 16;
     xVel = 0;
     yVel = 0;
     yAccel = 0;
 
-    frameWidth = 64;
-    frameHeight = 80;
+    hitbox.x = 40;
+    hitbox.y = 16;
+    hitbox.w = 64;
+    hitbox.h = 80;
+
     frame = 0;
     state = STANDR;
 }
@@ -68,7 +69,43 @@ void Player::fall() {
     yVel += yAccel;
 }
 
+bool Player::is_colliding(SDL_Rect a, SDL_Rect b) {
+    int leftA = a.x;
+    int rightA = a.x + a.w;
+    int topA = a.y;
+    int bottomA = a.y + a.h;
+
+    int leftB = b.x;
+    int rightB = b.x + b.w;
+    int topB = b.y;
+    int bottomB = b.y + b.h;
+
+    // This strategy doesn't tell me which side it collided with
+    //if (bottomA <= topB)
+
+    return false;
+}
+
+bool Player::is_colliding_with_tiles() {
+    // Hitbox after update
+    SDL_Rect nextHitbox = { hitbox.x + xVel, hitbox.y + yVel, hitbox.w, hitbox.h };
+
+    // Loop through tiles and check collision for each
+    for (unsigned int i=0; i<gTiles.size(); i++) {
+        if (is_colliding(nextHitbox, gTiles[i]->getBox())) {
+            // Stop moving!
+        }
+    }
+
+    return false;
+}
+
 void Player::update() {
+    // Some idea for how to handle update... (NOT IMPLEMENTED)
+    // Use "velocity" as a calculation of how far to move per loop
+    // Assign or increment position by velocity AFTER all updates have been calculated (walking, falling, collision, etc.)
+    // Reset velocity to 0 afterward
+
     // Read in current keyboard state and update object accordingly
     const Uint8* state = SDL_GetKeyboardState(NULL);
 
@@ -81,18 +118,19 @@ void Player::update() {
     }
 
     // Apply gravity
-    // if (!notCollidingWithFloor)
-    fall();
+    //fall();
+
+    // Check collision
 }
 
 void Player::draw() {
     // Could use an associative array where key=state, value=SDL_Rect clip
-    SDL_Rect srcClip = {0, 0, frameWidth, frameHeight};
+    SDL_Rect srcClip = {0, 0, hitbox.w, hitbox.h};
 
     // Walk right
-    xPos += xVel;
-    yPos += yVel;
-    gKeenTexture->render(xPos, yPos, &srcClip);
+    hitbox.x += xVel;
+    hitbox.y += yVel;
+    gKeenTexture->render(hitbox.x, hitbox.y, &srcClip); // Later: Need an offset for the frame. Hitbox and graphic will not match 100%
 
     xVel = 0;
     //yVel = 0;
@@ -141,5 +179,4 @@ int Player::get_xVel() { return xVel; }
 int Player::get_yVel() { return yVel; }
 int Player::get_state() { return state; }
 
-int Player::get_frameWidth() { return frameWidth; }
-int Player::get_frameHeight() { return frameHeight; }
+SDL_Rect Player::get_hitbox() { return hitbox; }

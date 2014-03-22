@@ -9,14 +9,12 @@ enum animStateEnum {STANDL, STANDR, WALKL, WALKR};
 class Player {
     private:
         int ammo;
-        int xPos;
-        int yPos;
         int xVel;     // Movement speed
         int yVel;     // Movement speed
         int yAccel;
 
-        int frameWidth;
-        int frameHeight;
+        SDL_Rect hitbox;
+
         int frame;
         animStateEnum state;
     public:
@@ -29,6 +27,8 @@ class Player {
         void climb(directionEnum dir);
         void enter_door();
         void fall();
+        bool is_colliding(SDL_Rect a, SDL_Rect b);
+        bool is_colliding_with_tiles();
         void update();
         void draw();
 
@@ -43,8 +43,7 @@ class Player {
         int get_yVel();
         int get_state();
 
-        int get_frameWidth();
-        int get_frameHeight();
+        SDL_Rect get_hitbox();
 };
 
 #endif
