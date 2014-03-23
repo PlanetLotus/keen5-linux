@@ -22,7 +22,8 @@ extern SDL_Renderer* renderer;
 extern Texture* gKeenTexture;
 extern Texture* gMaskTexture;
 
-extern std::vector<Tile*> gTiles;
+// 2D array of tiles describing a level
+extern std::vector< std::vector<Tile*> > gTiles;
 
 // Where to find each type of tile on the sprite sheet
 extern std::vector<SDL_Rect> gTileClips;

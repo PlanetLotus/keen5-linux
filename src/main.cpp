@@ -59,7 +59,10 @@ int main (int argc, char **args) {
         // Render masks
         SDL_Rect camera = {32, 32, 32, 32};
         for (unsigned int i=0; i<gTiles.size(); i++) {
-            gTiles[i]->render(0, 0, camera);
+            for (unsigned int j=0; j<gTiles[i].size(); j++) {
+                if (gTiles[i][j] != NULL)
+                    gTiles[i][j]->render(0, 0, camera);
+            }
         }
 
         // Update units and draw them

@@ -80,11 +80,10 @@ bool load_files() {
 bool set_tiles() {
     // Notes:
     // Does levelWidth / levelHeight matter? Yes, because we have to know when we're at the end of a "row" when reading the file
-    // Does tileCount (actual tiles, not blank) matter? A little bit. We need gTiles, and it's faster to initialize it rather than keep adding to it
+    // tileCount in file is currently UNUSED
 
     int tilesWide = -1;
     int tilesTall = -1;
-    int tileCount = -1;
 
     int xSrc = -1;
     int ySrc = -1;
@@ -94,9 +93,8 @@ bool set_tiles() {
     bool collideB = false;
     bool collideL = false;
 
-    int xDest = 0;
-    int yDest = 0;
-    int i = 0;
+    int x = 0;
+    int y = 0;
 
     ifstream map("../data/level1");
     string line;
@@ -108,8 +106,7 @@ bool set_tiles() {
     iss.str(line);
     iss >> tilesWide;
     iss >> tilesTall;
-    iss >> tileCount;
-    if (iss.fail() || tilesWide == -1 || tilesTall == -1 || tileCount == -1) {
+    if (iss.fail() || tilesWide == -1 || tilesTall == -1) {
         printf("Error getting number of tiles from line 1.\n");
         return false;
     }
@@ -122,14 +119,16 @@ bool set_tiles() {
 
     // This is slow because it inits every element when we don't need to
     // Figure out how to assign to it in the code below
-    gTiles.resize(tileCount);
+    gTiles.resize(tilesWide);
+    for (unsigned int iter = 0; iter < gTiles.size(); iter++)
+        gTiles[iter].resize(tilesTall);
 
     // Loop through each line
     while (getline(map, line)) {
         // Check row position
-        if (xDest / TILE_WIDTH > tilesWide - 1) {
-            yDest += TILE_HEIGHT;
-            xDest = 0;
+        if (x == tilesWide) {
+            y++;
+            x = 0;
         }
 
         istringstream iss(line);
@@ -137,7 +136,8 @@ bool set_tiles() {
         iss >> xSrc;
 
         if (xSrc == -1) {
-            xDest += TILE_WIDTH;
+            gTiles[x][y] = NULL;
+            x++;
             continue;
         }
 
@@ -152,10 +152,9 @@ bool set_tiles() {
         iss >> collideVal;
         collideL = collideVal == 1 ? true : false;
 
-        gTiles[i] = new Tile(xSrc, ySrc, xDest, yDest, collideT, collideR, collideB, collideL);
+        gTiles[x][y] = new Tile(xSrc, ySrc, x * TILE_WIDTH, y * TILE_HEIGHT, collideT, collideR, collideB, collideL);
 
-        xDest += TILE_WIDTH;
-        i++;
+        x++;
     }
 
     map.close();

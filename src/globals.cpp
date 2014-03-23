@@ -12,7 +12,7 @@ SDL_Renderer* renderer = NULL;
 Texture* gKeenTexture = new Texture();
 Texture* gMaskTexture = new Texture();
 
-std::vector<Tile*> gTiles;
+std::vector< std::vector<Tile*> > gTiles;
 
 // Number of tile sprites on the sprite sheet
 // One extra is allocated because it's one-indexed rather than zero
