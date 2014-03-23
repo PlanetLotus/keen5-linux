@@ -69,79 +69,56 @@ void Player::fall() {
     yVel += yAccel;
 }
 
-bool Player::is_colliding(SDL_Rect a, SDL_Rect b) {
-    int leftA = a.x;
+bool Player::IsRightColliding(SDL_Rect a, SDL_Rect b) {
     int rightA = a.x + a.w;
-    int topA = a.y;
-    int bottomA = a.y + a.h;
-
     int leftB = b.x;
-    int rightB = b.x + b.w;
-    int topB = b.y;
-    int bottomB = b.y + b.h;
-
-    // This strategy doesn't tell me which side it collided with
-    //if (bottomA <= topB)
-
-    return true;
-}
-
-bool Player::is_colliding_x(SDL_Rect a, SDL_Rect b) {
-    int leftA = a.x;
-    int rightA = a.x + a.w;
-
-    int leftB = b.x;
-    int rightB = b.x + b.w;
 
     if (rightA <= leftB) return false;
-    if (leftA >= rightB) return false;
 
     return true;
 }
 
-bool Player::is_colliding_with_tiles() {
-    // Hitbox after update
-    SDL_Rect nextHitbox = { hitbox.x + xVel, hitbox.y + yVel, hitbox.w, hitbox.h };
+void Player::CheckXRightCollision() {
+    // Hitbox after update in x-direction
+    // Does not include new yVel
+    SDL_Rect nextHitbox = { hitbox.x + xVel, hitbox.y, hitbox.w, hitbox.h };
+
+    int minRow = nextHitbox.y / TILE_HEIGHT;
+    int maxRow = (int) ceil( (float) (nextHitbox.y + nextHitbox.h) / TILE_HEIGHT );
+
+    int col = nextHitbox.x / TILE_WIDTH;
+
+    for (unsigned int i = col; i < gTiles.size(); i++) {
+        for (unsigned int j = minRow; j <= maxRow; j++) {
+            if (gTiles[i][j] != NULL &&
+                gTiles[i][j]->CollideLeft() &&
+                IsRightColliding(nextHitbox, gTiles[i][j]->getBox())) {
+
+                // Set xVel to the distance between the player and the
+                // tile he's colliding with
+                xVel = gTiles[i][j]->getBox().x - (hitbox.x + hitbox.w);
+                return;
+            }
+        }
+    }
+}
+
+void Player::CheckXLeftCollision() {
+
+}
+
+bool Player::IsCollidingWithTiles() {
 
     bool xChange = xVel != 0;
     bool yChange = yVel != 0;
 
     // For static objects (tiles), check per-axis collision only if we're moving on that axis
     if (xChange) {
-        // Using old hitbox here because we haven't done y-collision yet!
-        int minRow = hitbox.y / TILE_HEIGHT;
-        int maxRow = (int) ceil( (float) (hitbox.y + hitbox.h) / TILE_HEIGHT );
-
-        SDL_Rect temp = gTiles[4][2]->getBox();
-        printf("%d,%d\n", temp.x, temp.y);
-
-        for (unsigned int j=minRow; j<=maxRow; j++) {
-            printf("j: %d\n", j);
-            if (xVel > 0) {
-                int col = nextHitbox.x / TILE_WIDTH;
-                for (unsigned int i=col; i<gTiles[i].size(); i++) {
-                    printf("i: %d\n", i);
-                    if (gTiles[i][j] != NULL &&
-                        gTiles[i][j]->CollideLeft() &&
-                        is_colliding_x(nextHitbox, gTiles[i][j]->getBox())) {
-                        printf("Right-Collision detected at %d,%d\n", i, j);
-                        xVel = gTiles[i][j]->getBox().x - (hitbox.x + hitbox.w);
-                        printf("%d\n", xVel);
-                        break;
-                    }
-                }
-            }
-        }
+        if (xVel > 0)
+            CheckXRightCollision();
+        else
+            CheckXLeftCollision();
     }
-
-    // Loop through tiles and check collision for each
-    /*
-    for (unsigned int i=0; i<gTiles.size(); i++) {
-        if (is_colliding(nextHitbox, gTiles[i]->getBox())) {
-            // Stop moving!
-        }
-    }
-    */
 
     return false;
 }
@@ -167,7 +144,7 @@ void Player::update() {
     //fall();
 
     // Check collision
-    is_colliding_with_tiles();
+    IsCollidingWithTiles();
 }
 
 void Player::draw() {
