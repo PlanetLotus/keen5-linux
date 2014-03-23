@@ -18,6 +18,8 @@ Tile::Tile(int srcX, int srcY, int destX, int destY, bool collideT, bool collide
     collideRight = collideR;
     collideBottom = collideB;
     collideLeft = collideL;
+
+    hasCollision = collideT || collideR || collideB || collideL ? true : false;
 }
 
 void Tile::render(int destX, int destY, SDL_Rect& camera) {

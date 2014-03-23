@@ -12,6 +12,7 @@ class Tile {
         SDL_Rect srcBox;
         SDL_Rect destBox;
 
+        bool hasCollision;
         bool collideTop;
         bool collideRight;
         bool collideBottom;
