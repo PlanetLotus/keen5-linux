@@ -28,6 +28,7 @@ class Player {
         void enter_door();
         void fall();
         bool is_colliding(SDL_Rect a, SDL_Rect b);
+        bool is_colliding_x(SDL_Rect a, SDL_Rect b);
         bool is_colliding_with_tiles();
         void update();
         void draw();

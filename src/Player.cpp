@@ -83,19 +83,65 @@ bool Player::is_colliding(SDL_Rect a, SDL_Rect b) {
     // This strategy doesn't tell me which side it collided with
     //if (bottomA <= topB)
 
-    return false;
+    return true;
+}
+
+bool Player::is_colliding_x(SDL_Rect a, SDL_Rect b) {
+    int leftA = a.x;
+    int rightA = a.x + a.w;
+
+    int leftB = b.x;
+    int rightB = b.x + b.w;
+
+    if (rightA <= leftB) return false;
+    if (leftA >= rightB) return false;
+
+    return true;
 }
 
 bool Player::is_colliding_with_tiles() {
     // Hitbox after update
     SDL_Rect nextHitbox = { hitbox.x + xVel, hitbox.y + yVel, hitbox.w, hitbox.h };
 
+    bool xChange = xVel != 0;
+    bool yChange = yVel != 0;
+
+    // For static objects (tiles), check per-axis collision only if we're moving on that axis
+    if (xChange) {
+        // Using old hitbox here because we haven't done y-collision yet!
+        int minRow = hitbox.y / TILE_HEIGHT;
+        int maxRow = (int) ceil( (float) (hitbox.y + hitbox.h) / TILE_HEIGHT );
+
+        SDL_Rect temp = gTiles[4][2]->getBox();
+        printf("%d,%d\n", temp.x, temp.y);
+
+        for (unsigned int j=minRow; j<=maxRow; j++) {
+            printf("j: %d\n", j);
+            if (xVel > 0) {
+                int col = nextHitbox.x / TILE_WIDTH;
+                for (unsigned int i=col; i<gTiles[i].size(); i++) {
+                    printf("i: %d\n", i);
+                    if (gTiles[i][j] != NULL &&
+                        gTiles[i][j]->CollideLeft() &&
+                        is_colliding_x(nextHitbox, gTiles[i][j]->getBox())) {
+                        printf("Right-Collision detected at %d,%d\n", i, j);
+                        xVel = gTiles[i][j]->getBox().x - (hitbox.x + hitbox.w);
+                        printf("%d\n", xVel);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
     // Loop through tiles and check collision for each
+    /*
     for (unsigned int i=0; i<gTiles.size(); i++) {
         if (is_colliding(nextHitbox, gTiles[i]->getBox())) {
             // Stop moving!
         }
     }
+    */
 
     return false;
 }
@@ -121,6 +167,7 @@ void Player::update() {
     //fall();
 
     // Check collision
+    is_colliding_with_tiles();
 }
 
 void Player::draw() {

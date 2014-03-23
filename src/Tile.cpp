@@ -27,3 +27,8 @@ void Tile::render(int destX, int destY, SDL_Rect& camera) {
 }
 
 SDL_Rect Tile::getBox() { return destBox; }
+bool Tile::HasCollision() { return hasCollision; }
+bool Tile::CollideTop() { return collideTop; }
+bool Tile::CollideRight() { return collideRight; }
+bool Tile::CollideBottom() { return collideBottom; }
+bool Tile::CollideLeft() { return collideLeft; }

@@ -26,6 +26,11 @@ class Tile {
         void render(int destX, int destY, SDL_Rect& camera);
 
         SDL_Rect getBox();
+        bool HasCollision();
+        bool CollideTop();
+        bool CollideRight();
+        bool CollideBottom();
+        bool CollideLeft();
 };
 
 #endif
