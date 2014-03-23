@@ -27,6 +27,7 @@ class Player {
         void climb(directionEnum dir);
         void enter_door();
         void fall();
+        bool IsLeftColliding(SDL_Rect a, SDL_Rect b);
         bool IsRightColliding(SDL_Rect a, SDL_Rect b);
         void CheckXLeftCollision();
         void CheckXRightCollision();
