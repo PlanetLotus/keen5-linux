@@ -69,6 +69,19 @@ void Player::fall() {
     yVel += yAccel;
 }
 
+bool Player::IsTopColliding(SDL_Rect a, SDL_Rect b) {
+    return false;
+}
+
+bool Player::IsBottomColliding(SDL_Rect a, SDL_Rect b) {
+    int bottomA = a.y + a.h;
+    int topB = b.y;
+
+    if (bottomA <= topB) return false;
+
+    return true;
+}
+
 bool Player::IsLeftColliding(SDL_Rect a, SDL_Rect b) {
     int leftA = a.x;
     int rightB = b.x + b.w;
@@ -87,7 +100,37 @@ bool Player::IsRightColliding(SDL_Rect a, SDL_Rect b) {
     return true;
 }
 
-void Player::CheckXLeftCollision() {
+void Player::CheckTopCollision() {
+
+}
+
+void Player::CheckBottomCollision() {
+    // Hitbox after update in y-direction
+    SDL_Rect nextHitbox = { hitbox.x + xVel, hitbox.y + yVel, hitbox.w, hitbox.h };
+
+    int minCol = nextHitbox.x / TILE_WIDTH;
+    int maxCol = (int) ceil( (float) (nextHitbox.x + nextHitbox.h) / TILE_WIDTH);
+
+    int row = (nextHitbox.y + nextHitbox.h) / TILE_HEIGHT;
+
+    for (int i = minCol; i <= maxCol; i++) {
+        for (int j = row; j < gTiles[i].size(); j++) {
+            Tile* tile = gTiles[i][j];
+
+            if (tile != NULL &&
+                tile->CollideTop() &&
+                IsBottomColliding(nextHitbox, tile->getBox())) {
+
+                // Set yVel to the distance between the player and the
+                // tile he's colliding with
+                yVel = tile->getBox().y - (hitbox.y + hitbox.h);
+                return;
+            }
+        }
+    }
+}
+
+void Player::CheckLeftCollision() {
     // Hitbox after update in x-direction
     // Does not include new yVel
     SDL_Rect nextHitbox = { hitbox.x + xVel, hitbox.y, hitbox.w, hitbox.h };
@@ -114,7 +157,7 @@ void Player::CheckXLeftCollision() {
     }
 }
 
-void Player::CheckXRightCollision() {
+void Player::CheckRightCollision() {
     // Hitbox after update in x-direction
     // Does not include new yVel
     SDL_Rect nextHitbox = { hitbox.x + xVel, hitbox.y, hitbox.w, hitbox.h };
@@ -122,6 +165,7 @@ void Player::CheckXRightCollision() {
     int minRow = nextHitbox.y / TILE_HEIGHT;
     int maxRow = (int) ceil( (float) (nextHitbox.y + nextHitbox.h) / TILE_HEIGHT );
 
+    // This could be wrong...should it round up instead?
     int col = nextHitbox.x / TILE_WIDTH;
 
     for (unsigned int i = col; i < gTiles.size(); i++) {
@@ -149,9 +193,16 @@ bool Player::IsCollidingWithTiles() {
     // For static objects (tiles), check per-axis collision only if we're moving on that axis
     if (xChange) {
         if (xVel > 0)
-            CheckXRightCollision();
+            CheckRightCollision();
         else
-            CheckXLeftCollision();
+            CheckLeftCollision();
+    }
+
+    if (yChange) {
+        if (yVel > 0)
+            CheckBottomCollision();
+        else
+            CheckTopCollision();
     }
 
     return false;
@@ -175,7 +226,7 @@ void Player::update() {
     }
 
     // Apply gravity
-    //fall();
+    fall();
 
     // Check collision
     IsCollidingWithTiles();
