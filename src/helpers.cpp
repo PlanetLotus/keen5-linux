@@ -111,6 +111,9 @@ bool set_tiles() {
         return false;
     }
 
+    TILES_WIDE = tilesWide;
+    TILES_TALL = tilesTall;
+
     // Special case: Second line contains source file absolute path
     // This is mostly used by the level editor. We only want the file name.
     // NOT USED RIGHT NOW, BUT MIGHT BE A GOOD IDEA LATER.

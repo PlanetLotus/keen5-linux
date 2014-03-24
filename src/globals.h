@@ -14,6 +14,11 @@ extern const int SCREEN_BPP;
 extern const int TEXTURE_COUNT;
 extern const int TOTAL_TILE_TYPES;
 
+// Level globals
+// These should really go in a "level" class
+extern int TILES_WIDE;
+extern int TILES_TALL;
+
 // Window and renderer
 extern SDL_Window* window;
 extern SDL_Renderer* renderer;

@@ -11,9 +11,11 @@ Player::Player() {
     yAccel = 0;
 
     hitbox.x = 40;
-    hitbox.y = 16;
-    hitbox.w = 64;
-    hitbox.h = 80;
+    hitbox.y = 64;
+    //hitbox.w = 64;
+    //hitbox.h = 80;
+    hitbox.w = 49;
+    hitbox.h = 75;
 
     frame = 0;
     state = STANDR;
@@ -32,6 +34,12 @@ void Player::walk(directionEnum dir) {
         case LEFT:
             state = WALKL;
             xVel = -5;
+            break;
+        case UP:
+            yVel = -5;
+            break;
+        case DOWN:
+            yVel = 5;
             break;
         case STOP:
             state = STANDR;
@@ -70,7 +78,12 @@ void Player::fall() {
 }
 
 bool Player::IsTopColliding(SDL_Rect a, SDL_Rect b) {
-    return false;
+    int topA = a.y;
+    int bottomB = b.y + b.h;
+
+    if (topA >= bottomB) return false;
+
+    return true;
 }
 
 bool Player::IsBottomColliding(SDL_Rect a, SDL_Rect b) {
@@ -101,7 +114,32 @@ bool Player::IsRightColliding(SDL_Rect a, SDL_Rect b) {
 }
 
 void Player::CheckTopCollision() {
+    // Hitbox after update in y-direction
+    SDL_Rect nextHitbox = { hitbox.x + xVel, hitbox.y + yVel, hitbox.w, hitbox.h };
 
+    int minCol = nextHitbox.x / TILE_WIDTH;
+    int maxCol = (int) ceil( (float) (nextHitbox.x + nextHitbox.w) / TILE_WIDTH);
+
+    // Don't let maxCol go out of bounds
+    if (maxCol > TILES_WIDE-1) maxCol = TILES_WIDE-1;
+
+    int row = nextHitbox.y / TILE_HEIGHT;
+
+    for (int i = minCol; i <= maxCol; i++) {
+        for (int j = row; j >= 0; j--) {
+            Tile* tile = gTiles[i][j];
+
+            if (tile != NULL &&
+                tile->CollideBottom() &&
+                IsTopColliding(nextHitbox, tile->getBox())) {
+
+                // Set yVel to the distance between the player and the
+                // tile he's colliding with
+                yVel = (tile->getBox().y + tile->getBox().h) - hitbox.y;
+                return;
+            }
+        }
+    }
 }
 
 void Player::CheckBottomCollision() {
@@ -109,7 +147,10 @@ void Player::CheckBottomCollision() {
     SDL_Rect nextHitbox = { hitbox.x + xVel, hitbox.y + yVel, hitbox.w, hitbox.h };
 
     int minCol = nextHitbox.x / TILE_WIDTH;
-    int maxCol = (int) ceil( (float) (nextHitbox.x + nextHitbox.h) / TILE_WIDTH);
+    int maxCol = (int) ceil( (float) (nextHitbox.x + nextHitbox.w) / TILE_WIDTH);
+
+    // Don't let maxCol go out of bounds
+    if (maxCol > TILES_WIDE-1) maxCol = TILES_WIDE-1;
 
     int row = (nextHitbox.y + nextHitbox.h) / TILE_HEIGHT;
 
@@ -138,6 +179,9 @@ void Player::CheckLeftCollision() {
     int minRow = nextHitbox.y / TILE_HEIGHT;
     int maxRow = (int) ceil( (float) (nextHitbox.y + nextHitbox.h) / TILE_HEIGHT );
 
+    // Don't let maxRow go out of bounds
+    if (maxRow > TILES_TALL-1) maxRow = TILES_TALL-1;
+
     int col = nextHitbox.x / TILE_WIDTH;
 
     for (int i = col; i >= 0; i--) {
@@ -164,6 +208,9 @@ void Player::CheckRightCollision() {
 
     int minRow = nextHitbox.y / TILE_HEIGHT;
     int maxRow = (int) ceil( (float) (nextHitbox.y + nextHitbox.h) / TILE_HEIGHT );
+
+    // Don't let maxRow go out of bounds
+    if (maxRow > TILES_TALL-1) maxRow = TILES_TALL-1;
 
     // This could be wrong...should it round up instead?
     int col = nextHitbox.x / TILE_WIDTH;
@@ -221,12 +268,16 @@ void Player::update() {
         walk(RIGHT);
     } else if (state[SDL_SCANCODE_LEFT]) {
         walk(LEFT);
+    } else if (state[SDL_SCANCODE_UP]) {
+        walk(UP);
+    } else if (state[SDL_SCANCODE_DOWN]) {
+        walk(DOWN);
     } else {
         walk(STOP);
     }
 
     // Apply gravity
-    fall();
+    //fall();
 
     // Check collision
     IsCollidingWithTiles();
@@ -234,7 +285,7 @@ void Player::update() {
 
 void Player::draw() {
     // Could use an associative array where key=state, value=SDL_Rect clip
-    SDL_Rect srcClip = {0, 0, hitbox.w, hitbox.h};
+    SDL_Rect srcClip = {0, 5, hitbox.w, hitbox.h};
 
     // Walk right
     hitbox.x += xVel;
@@ -242,7 +293,7 @@ void Player::draw() {
     gKeenTexture->render(hitbox.x, hitbox.y, &srcClip); // Later: Need an offset for the frame. Hitbox and graphic will not match 100%
 
     xVel = 0;
-    //yVel = 0;
+    yVel = 0;
 
     /*
     if (state == STANDR) {

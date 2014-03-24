@@ -6,6 +6,9 @@ const int SCREEN_BPP = 32;
 
 const int TEXTURE_COUNT = 3;
 
+int TILES_WIDE;
+int TILES_TALL;
+
 SDL_Window* window = NULL;
 SDL_Renderer* renderer = NULL;
 
