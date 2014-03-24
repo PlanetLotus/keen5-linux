@@ -99,13 +99,15 @@ void Player::CheckXLeftCollision() {
 
     for (int i = col; i >= 0; i--) {
         for (int j = minRow; j <= maxRow; j++) {
-            if (gTiles[i][j] != NULL &&
-                gTiles[i][j]->CollideLeft() &&
-                IsLeftColliding(nextHitbox, gTiles[i][j]->getBox())) {
+            Tile* tile = gTiles[i][j];
+
+            if (tile != NULL &&
+                tile->CollideRight() &&
+                IsLeftColliding(nextHitbox, tile->getBox())) {
 
                 // Set xVel to the distance between the player and the
                 // tile he's colliding with
-                xVel = (gTiles[i][j]->getBox().x + gTiles[i][j]->getBox().w) - hitbox.x;
+                xVel = (tile->getBox().x + tile->getBox().w) - hitbox.x;
                 return;
             }
         }
@@ -124,13 +126,15 @@ void Player::CheckXRightCollision() {
 
     for (unsigned int i = col; i < gTiles.size(); i++) {
         for (int j = minRow; j <= maxRow; j++) {
-            if (gTiles[i][j] != NULL &&
-                gTiles[i][j]->CollideLeft() &&
-                IsRightColliding(nextHitbox, gTiles[i][j]->getBox())) {
+            Tile* tile = gTiles[i][j];
+
+            if (tile != NULL &&
+                tile->CollideLeft() &&
+                IsRightColliding(nextHitbox, tile->getBox())) {
 
                 // Set xVel to the distance between the player and the
                 // tile he's colliding with
-                xVel = gTiles[i][j]->getBox().x - (hitbox.x + hitbox.w);
+                xVel = tile->getBox().x - (hitbox.x + hitbox.w);
                 return;
             }
         }
