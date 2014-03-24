@@ -6,9 +6,7 @@ modification (and delusional goals).
 <h2>Next steps</h2>
 
 <ol>
-    <li>Design a level editor</li>
-    <li>Add collision properties to tiles and Keen</li>
-    <li>Add basic physics (gravity)</li>
+    <li>Fix sprite sheet and generalize hitbox to work with any player frame</li>
     <li>Add player 'shoot' capability</li>
     <li>Write basic enemy AI (animation optional)</li>
     <li>Pit the player against the basic enemy AI</li>
@@ -16,8 +14,11 @@ modification (and delusional goals).
 
 <h2>Noteworthy progress</h2>
 
-The game now loads in a file that represents a level by integer values, each
-value representing a tile. Eight tiles have been added. On this front, I'm
-stopping here for now and moving onto another task.
+Level editor outputs a file that the game then reads in. Tile placement and tile collision info are included.
+Level editor is also capable of loading saved files and overwriting them.
 
 Basic left/right movement implemented. No animation yet.
+
+Basic collision implemented against the static tiles. No slopes yet, no moving objects yet.
+
+Basic physics (gravity) implemented. No jump physics yet.
