@@ -2,7 +2,6 @@
 
 #include "helpers.h"
 #include "Player.h"
-#include "globals.h"
 
 Player::Player() {
     ammo = 5;   // Might depend on difficulty level
@@ -10,14 +9,14 @@ Player::Player() {
     yVel = 0;
     yAccel = 0;
 
-    hitbox.x = 40;
-    hitbox.y = 64;
+    hitbox.x = 0;
+    hitbox.y = 0;
     //hitbox.w = 64;
     //hitbox.h = 80;
-    hitbox.w = 49;
-    hitbox.h = 75;
+    hitbox.w = TILE_WIDTH;
+    hitbox.h = TILE_HEIGHT * 2;
 
-    frame = 0;
+    frame = 1;
     state = STANDR;
 }
 
@@ -155,7 +154,7 @@ void Player::CheckBottomCollision() {
     int row = (nextHitbox.y + nextHitbox.h) / TILE_HEIGHT;
 
     for (int i = minCol; i <= maxCol; i++) {
-        for (int j = row; j < gTiles[i].size(); j++) {
+        for (unsigned int j = row; j < gTiles[i].size(); j++) {
             Tile* tile = gTiles[i][j];
 
             if (tile != NULL &&
@@ -285,7 +284,20 @@ void Player::update() {
 
 void Player::draw() {
     // Could use an associative array where key=state, value=SDL_Rect clip
-    SDL_Rect srcClip = {0, 5, hitbox.w, hitbox.h};
+    SDL_Rect srcClip;
+    printf("%d\n", frame);
+
+    if (frame == 1)
+        srcClip = WALKR1;
+    else if (frame == 2)
+        srcClip = WALKR2;
+    else if (frame == 3)
+        srcClip = WALKR3;
+    else if (frame == 4) {
+        srcClip = WALKR4;
+        frame = 0;
+    }
+    frame++;
 
     // Walk right
     hitbox.x += xVel;

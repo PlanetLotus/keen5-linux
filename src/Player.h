@@ -3,8 +3,18 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
+#include "globals.h"
+
 enum directionEnum {UP, DOWN, LEFT, RIGHT, STOP};
 enum animStateEnum {STANDL, STANDR, WALKL, WALKR};
+
+// Animation frames
+// TODO: Fix name conflict with animStateEnum
+SDL_Rect STANDR0 = {0, 0, TILE_WIDTH, TILE_HEIGHT * 2};
+SDL_Rect WALKR1 = {TILE_WIDTH, 0, TILE_WIDTH + 1, TILE_HEIGHT * 2};
+SDL_Rect WALKR2 = {TILE_WIDTH * 3, 0, TILE_WIDTH + 3, TILE_HEIGHT * 2};
+SDL_Rect WALKR3 = {TILE_WIDTH * 5, 0, TILE_WIDTH, TILE_HEIGHT * 2};
+SDL_Rect WALKR4 = {TILE_WIDTH * 7, 0, TILE_WIDTH + 4, TILE_HEIGHT * 2};
 
 class Player {
     private:
