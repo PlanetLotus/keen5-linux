@@ -7,6 +7,7 @@ modification (and delusional goals).
 
 <ol>
     <li>Fix sprite sheet and generalize hitbox to work with any player frame</li>
+    <li>Add animation for walking right</li>
     <li>Add player 'shoot' capability</li>
     <li>Write basic enemy AI (animation optional)</li>
     <li>Pit the player against the basic enemy AI</li>
