@@ -3,20 +3,39 @@
 #include "helpers.h"
 #include "Player.h"
 
+// Animation frames
+// TODO: Fix name conflict with animStateEnum
+SDL_Rect STANDR0 = {0, 0, TILE_WIDTH, TILE_HEIGHT * 2};
+SDL_Rect WALKR1 = {TILE_WIDTH, 0, TILE_WIDTH + 1, TILE_HEIGHT * 2};
+SDL_Rect WALKR2 = {TILE_WIDTH * 3, 0, TILE_WIDTH + 3, TILE_HEIGHT * 2};
+SDL_Rect WALKR3 = {TILE_WIDTH * 5, 0, TILE_WIDTH, TILE_HEIGHT * 2};
+SDL_Rect WALKR4 = {TILE_WIDTH * 7, 0, TILE_WIDTH + 4, TILE_HEIGHT * 2};
+
+SDL_Rect WALKR_ARRAY[4] = { WALKR1, WALKR2, WALKR3, WALKR4 };   // Only used to initialize vector
+std::vector<SDL_Rect> WALKR_ANIM(WALKR_ARRAY, WALKR_ARRAY + sizeof(WALKR_ARRAY) / sizeof(SDL_Rect));
+
+// Array of animations
+// Statically set...animStateEnum's value needs to match this array
+// e.g. if ANIMS[0] == walk right, then animStateEnum[WALKR] == 0
+// Purpose: To be dynamic in animate()
+std::vector<SDL_Rect> ANIMS[1] = { WALKR_ANIM };
+
 Player::Player() {
     ammo = 5;   // Might depend on difficulty level
     xVel = 0;
     yVel = 0;
     yAccel = 0;
 
-    hitbox.x = 0;
-    hitbox.y = 0;
+    srcClip = NULL;
+
+    hitbox.x = TILE_WIDTH;
+    hitbox.y = TILE_HEIGHT;
     //hitbox.w = 64;
     //hitbox.h = 80;
     hitbox.w = TILE_WIDTH;
     hitbox.h = TILE_HEIGHT * 2;
 
-    frame = 1;
+    frame = 0;
     state = STANDR;
 }
 
@@ -255,10 +274,15 @@ bool Player::IsCollidingWithTiles() {
 }
 
 void Player::update() {
-    // Some idea for how to handle update... (NOT IMPLEMENTED)
-    // Use "velocity" as a calculation of how far to move per loop
-    // Assign or increment position by velocity AFTER all updates have been calculated (walking, falling, collision, etc.)
-    // Reset velocity to 0 afterward
+    // Process in this order
+    // 1) User actions
+    // 2) AI actions
+    // 3) Environment consequences (gravity, other static things)
+    // 4) Collision
+    // 3 & 4 might need mixed or reversed in some situations
+    // Handle animations at any step - Some steps can overwrite other steps' animation
+    // e.g. Collision while walking
+    // Other animations are only done via keypress e.g. shooting but also are preventable by collision, like dying
 
     // Read in current keyboard state and update object accordingly
     const Uint8* state = SDL_GetKeyboardState(NULL);
@@ -282,27 +306,34 @@ void Player::update() {
     IsCollidingWithTiles();
 }
 
+void Player::animate(animStateEnum nextState) {
+    if (state == nextState) {
+        // Get next frame
+        frame++;
+    } else {
+        // Start new animation
+        frame = 0;
+        state = nextState;
+    }
+
+    if (frame == ANIMS[state].size())
+        frame = 0;
+
+    srcClip = &ANIMS[state][frame];
+}
+
 void Player::draw() {
     // Could use an associative array where key=state, value=SDL_Rect clip
-    SDL_Rect srcClip;
     printf("%d\n", frame);
+    srcClip = &WALKR_ANIM[frame];
 
-    if (frame == 1)
-        srcClip = WALKR1;
-    else if (frame == 2)
-        srcClip = WALKR2;
-    else if (frame == 3)
-        srcClip = WALKR3;
-    else if (frame == 4) {
-        srcClip = WALKR4;
-        frame = 0;
-    }
     frame++;
+    if (frame == 4) frame = 0;
 
     // Walk right
     hitbox.x += xVel;
     hitbox.y += yVel;
-    gKeenTexture->render(hitbox.x, hitbox.y, &srcClip); // Later: Need an offset for the frame. Hitbox and graphic will not match 100%
+    gKeenTexture->render(hitbox.x, hitbox.y, srcClip); // Later: Need an offset for the frame. Hitbox and graphic will not match 100%
 
     xVel = 0;
     yVel = 0;
