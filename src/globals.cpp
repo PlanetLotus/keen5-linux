@@ -32,3 +32,6 @@ const int PLATFORM_BLUE_FLAT_BOT = 5;
 const int PLATFORM_BLUE_FLAT_TOP_EDGER = 6;
 const int PLATFORM_BLUE_FLAT_BOT_EDGER = 7;
 const int PLATFORM_BLUE_FLAT_FILL_EDGE = 8;
+
+// Number of timer loops per animation frame
+const int FRAMETIME = 2;

@@ -43,4 +43,7 @@ extern const int PLATFORM_BLUE_FLAT_TOP_EDGER;
 extern const int PLATFORM_BLUE_FLAT_BOT_EDGER;
 extern const int PLATFORM_BLUE_FLAT_FILL_EDGE;
 
+// Number of timer loops per animation frame
+extern const int FRAMETIME;
+
 #endif

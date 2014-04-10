@@ -4,21 +4,39 @@
 #include "Player.h"
 
 // Animation frames
-// TODO: Fix name conflict with animStateEnum
+SDL_Rect STANDL0 = {0, 0, TILE_WIDTH, TILE_HEIGHT * 2}; // Correct frames not set yet
 SDL_Rect STANDR0 = {0, 0, TILE_WIDTH, TILE_HEIGHT * 2};
-SDL_Rect WALKR1 = {TILE_WIDTH, 0, TILE_WIDTH + 1, TILE_HEIGHT * 2};
-SDL_Rect WALKR2 = {TILE_WIDTH * 3, 0, TILE_WIDTH + 3, TILE_HEIGHT * 2};
-SDL_Rect WALKR3 = {TILE_WIDTH * 5, 0, TILE_WIDTH, TILE_HEIGHT * 2};
-SDL_Rect WALKR4 = {TILE_WIDTH * 7, 0, TILE_WIDTH + 4, TILE_HEIGHT * 2};
 
-SDL_Rect WALKR_ARRAY[4] = { WALKR1, WALKR2, WALKR3, WALKR4 };   // Only used to initialize vector
+SDL_Rect WALKL0 = {TILE_WIDTH, 0, TILE_WIDTH + 1, TILE_HEIGHT * 2};     // Correct frames not set yet
+SDL_Rect WALKL1 = {TILE_WIDTH * 3, 0, TILE_WIDTH + 3, TILE_HEIGHT * 2};
+SDL_Rect WALKL2 = {TILE_WIDTH * 5, 0, TILE_WIDTH, TILE_HEIGHT * 2};
+SDL_Rect WALKL3 = {TILE_WIDTH * 7, 0, TILE_WIDTH + 4, TILE_HEIGHT * 2};
+
+SDL_Rect WALKR0 = {TILE_WIDTH, 0, TILE_WIDTH + 1, TILE_HEIGHT * 2};
+SDL_Rect WALKR1 = {TILE_WIDTH * 3, 0, TILE_WIDTH + 3, TILE_HEIGHT * 2};
+SDL_Rect WALKR2 = {TILE_WIDTH * 5, 0, TILE_WIDTH, TILE_HEIGHT * 2};
+SDL_Rect WALKR3 = {TILE_WIDTH * 7, 0, TILE_WIDTH + 4, TILE_HEIGHT * 2};
+
+// TODO: Could contain idle animation so that this isn't just a wasted array
+SDL_Rect STANDL_ARRAY[1] = { STANDL0 };
+std::vector<SDL_Rect> STANDL_ANIM(STANDL_ARRAY, STANDL_ARRAY + sizeof(STANDL_ARRAY) / sizeof(SDL_Rect));
+
+// TODO: Could contain idle animation so that this isn't just a wasted array
+SDL_Rect STANDR_ARRAY[1] = { STANDR0 };
+std::vector<SDL_Rect> STANDR_ANIM(STANDR_ARRAY, STANDR_ARRAY + sizeof(STANDR_ARRAY) / sizeof(SDL_Rect));
+
+SDL_Rect WALKL_ARRAY[4] = { WALKL0, WALKL1, WALKL2, WALKL3 };
+std::vector<SDL_Rect> WALKL_ANIM(WALKL_ARRAY, WALKL_ARRAY + sizeof(WALKL_ARRAY) / sizeof(SDL_Rect));
+
+SDL_Rect WALKR_ARRAY[4] = { WALKR0, WALKR1, WALKR2, WALKR3 };
 std::vector<SDL_Rect> WALKR_ANIM(WALKR_ARRAY, WALKR_ARRAY + sizeof(WALKR_ARRAY) / sizeof(SDL_Rect));
 
 // Array of animations
 // Statically set...animStateEnum's value needs to match this array
 // e.g. if ANIMS[0] == walk right, then animStateEnum[WALKR] == 0
 // Purpose: To be dynamic in animate()
-std::vector<SDL_Rect> ANIMS[1] = { WALKR_ANIM };
+// Alternative: Could use an associative array where key=state, value=array of SDL_Rect clip
+std::vector<SDL_Rect> ANIMS[4] = { STANDL_ANIM, STANDR_ANIM, WALKL_ANIM, WALKR_ANIM };
 
 Player::Player() {
     ammo = 5;   // Might depend on difficulty level
@@ -46,11 +64,11 @@ void Player::shoot() {
 void Player::walk(directionEnum dir) {
     switch (dir) {
         case RIGHT:
-            state = WALKR;
             xVel = 5;
+            animate(WALKR);
             break;
         case LEFT:
-            state = WALKL;
+            //state = WALKL;
             xVel = -5;
             break;
         case UP:
@@ -60,8 +78,8 @@ void Player::walk(directionEnum dir) {
             yVel = 5;
             break;
         case STOP:
-            state = STANDR;
             xVel = 0;
+            animate(STANDR);    // TODO: Won't always be R
             break;
     }
 }
@@ -316,58 +334,21 @@ void Player::animate(animStateEnum nextState) {
         state = nextState;
     }
 
-    if (frame == ANIMS[state].size())
+    if (frame == ANIMS[state].size() * FRAMETIME)
         frame = 0;
 
-    srcClip = &ANIMS[state][frame];
+    printf("%d\n", state);
+    srcClip = &ANIMS[state][frame / FRAMETIME];
 }
 
 void Player::draw() {
-    // Could use an associative array where key=state, value=SDL_Rect clip
-    printf("%d\n", frame);
-    srcClip = &WALKR_ANIM[frame];
-
-    frame++;
-    if (frame == 4) frame = 0;
-
-    // Walk right
+    // Now that all decisions have been made, finally update player location
     hitbox.x += xVel;
     hitbox.y += yVel;
     gKeenTexture->render(hitbox.x, hitbox.y, srcClip); // Later: Need an offset for the frame. Hitbox and graphic will not match 100%
 
     xVel = 0;
     yVel = 0;
-
-    /*
-    if (state == STANDR) {
-        // Stand still
-        frame = 0;
-        SDL_Rect tempRect;
-        tempRect.x = 0;
-        tempRect.y = 0;
-        tempRect.w = frameWidth;
-        tempRect.h = frameHeight;
-        //apply_surface(50, 50, keen, screen, &tempRect);
-        return;
-    } else if (state == WALKR) {
-    */
-
-    // Go to next frame
-    /*
-    frame++;
-    if (frame >= 5)
-        frame = 1;
-
-    // Walk right frames
-    SDL_Rect tempRect;
-    tempRect.x = frame * frameWidth;
-    tempRect.y = 0;
-    tempRect.w = frameWidth;
-    tempRect.h = frameHeight;
-    */
-
-    // Draw the character
-    //apply_surface(50, 50, keen, screen, &tempRect);
 }
 
 // Getters and setters
