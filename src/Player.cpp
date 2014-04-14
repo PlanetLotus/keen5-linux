@@ -3,7 +3,7 @@
 #include "helpers.h"
 #include "Player.h"
 
-// Animation frames
+// Animation (srcClip) frames
 SDL_Rect STANDL0 = {0, 0, TILE_WIDTH, TILE_HEIGHT * 2}; // Correct frames not set yet
 SDL_Rect STANDR0 = {0, 0, TILE_WIDTH, TILE_HEIGHT * 2};
 
@@ -12,24 +12,24 @@ SDL_Rect WALKL1 = {TILE_WIDTH * 3, 0, TILE_WIDTH + 3, TILE_HEIGHT * 2};
 SDL_Rect WALKL2 = {TILE_WIDTH * 5, 0, TILE_WIDTH, TILE_HEIGHT * 2};
 SDL_Rect WALKL3 = {TILE_WIDTH * 7, 0, TILE_WIDTH + 4, TILE_HEIGHT * 2};
 
-SDL_Rect WALKR0 = {TILE_WIDTH, 0, TILE_WIDTH + 1, TILE_HEIGHT * 2};
-SDL_Rect WALKR1 = {TILE_WIDTH * 3, 0, TILE_WIDTH + 3, TILE_HEIGHT * 2};
+SDL_Rect WALKR0 = {TILE_WIDTH, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2};
+SDL_Rect WALKR1 = {TILE_WIDTH * 3, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2};
 SDL_Rect WALKR2 = {TILE_WIDTH * 5, 0, TILE_WIDTH, TILE_HEIGHT * 2};
-SDL_Rect WALKR3 = {TILE_WIDTH * 7, 0, TILE_WIDTH + 4, TILE_HEIGHT * 2};
+SDL_Rect WALKR3 = {TILE_WIDTH * 6, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2};
 
 // TODO: Could contain idle animation so that this isn't just a wasted array
 SDL_Rect STANDL_ARRAY[1] = { STANDL0 };
-std::vector<SDL_Rect> STANDL_ANIM(STANDL_ARRAY, STANDL_ARRAY + sizeof(STANDL_ARRAY) / sizeof(SDL_Rect));
+vector<SDL_Rect> STANDL_ANIM(STANDL_ARRAY, STANDL_ARRAY + sizeof(STANDL_ARRAY) / sizeof(SDL_Rect));
 
 // TODO: Could contain idle animation so that this isn't just a wasted array
 SDL_Rect STANDR_ARRAY[1] = { STANDR0 };
-std::vector<SDL_Rect> STANDR_ANIM(STANDR_ARRAY, STANDR_ARRAY + sizeof(STANDR_ARRAY) / sizeof(SDL_Rect));
+vector<SDL_Rect> STANDR_ANIM(STANDR_ARRAY, STANDR_ARRAY + sizeof(STANDR_ARRAY) / sizeof(SDL_Rect));
 
 SDL_Rect WALKL_ARRAY[4] = { WALKL0, WALKL1, WALKL2, WALKL3 };
-std::vector<SDL_Rect> WALKL_ANIM(WALKL_ARRAY, WALKL_ARRAY + sizeof(WALKL_ARRAY) / sizeof(SDL_Rect));
+vector<SDL_Rect> WALKL_ANIM(WALKL_ARRAY, WALKL_ARRAY + sizeof(WALKL_ARRAY) / sizeof(SDL_Rect));
 
 SDL_Rect WALKR_ARRAY[4] = { WALKR0, WALKR1, WALKR2, WALKR3 };
-std::vector<SDL_Rect> WALKR_ANIM(WALKR_ARRAY, WALKR_ARRAY + sizeof(WALKR_ARRAY) / sizeof(SDL_Rect));
+vector<SDL_Rect> WALKR_ANIM(WALKR_ARRAY, WALKR_ARRAY + sizeof(WALKR_ARRAY) / sizeof(SDL_Rect));
 
 // Array of animations
 // Statically set...animStateEnum's value needs to match this array
@@ -337,7 +337,7 @@ void Player::animate(animStateEnum nextState) {
     if (frame == ANIMS[state].size() * FRAMETIME)
         frame = 0;
 
-    printf("%d\n", state);
+    //printf("%d\n", state);
     srcClip = &ANIMS[state][frame / FRAMETIME];
 }
 
@@ -345,7 +345,13 @@ void Player::draw() {
     // Now that all decisions have been made, finally update player location
     hitbox.x += xVel;
     hitbox.y += yVel;
-    gKeenTexture->render(hitbox.x, hitbox.y, srcClip); // Later: Need an offset for the frame. Hitbox and graphic will not match 100%
+
+    // Center the hitbox (horizontally) inside the displayed frame
+    int offsetX = srcClip->w / 2 - TILE_WIDTH / 2;
+    printf("%d\n", offsetX);
+    int destX = hitbox.x - offsetX;
+
+    gKeenTexture->render(destX, hitbox.y, srcClip); // Later: Need an offset for the frame. Hitbox and graphic will not match 100%
 
     xVel = 0;
     yVel = 0;

@@ -8,6 +8,8 @@
 enum directionEnum {UP, DOWN, LEFT, RIGHT, STOP};
 enum animStateEnum {STANDL, STANDR, WALKL, WALKR};
 
+using namespace std;
+
 class Player {
     private:
         int ammo;
