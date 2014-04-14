@@ -8,7 +8,7 @@ Since it's way more convenient to write code in a Linux-based environment, I've
 decided to start over with Linux in mind (hopefully I can make it
 cross-platform anyway!) and also start using SDL 2.0 instead of 1.2.
 
-Currently using SDL version 2.0.1.
+Currently using SDL version 2.0.3.
 
 <h2>Program Motivation</h2>
 
