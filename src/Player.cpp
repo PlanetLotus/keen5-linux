@@ -4,13 +4,13 @@
 #include "Player.h"
 
 // Animation (srcClip) frames
-SDL_Rect STANDL0 = {0, 0, TILE_WIDTH, TILE_HEIGHT * 2}; // Correct frames not set yet
+SDL_Rect STANDL0 = {0, TILE_HEIGHT * 2, TILE_WIDTH, TILE_HEIGHT * 2};
 SDL_Rect STANDR0 = {0, 0, TILE_WIDTH, TILE_HEIGHT * 2};
 
-SDL_Rect WALKL0 = {TILE_WIDTH, 0, TILE_WIDTH + 1, TILE_HEIGHT * 2};     // Correct frames not set yet
-SDL_Rect WALKL1 = {TILE_WIDTH * 3, 0, TILE_WIDTH + 3, TILE_HEIGHT * 2};
-SDL_Rect WALKL2 = {TILE_WIDTH * 5, 0, TILE_WIDTH, TILE_HEIGHT * 2};
-SDL_Rect WALKL3 = {TILE_WIDTH * 7, 0, TILE_WIDTH + 4, TILE_HEIGHT * 2};
+SDL_Rect WALKL0 = {TILE_WIDTH, TILE_HEIGHT * 2, TILE_WIDTH * 2, TILE_HEIGHT * 2};
+SDL_Rect WALKL1 = {TILE_WIDTH * 3, TILE_HEIGHT * 2, TILE_WIDTH * 2, TILE_HEIGHT * 2};
+SDL_Rect WALKL2 = {TILE_WIDTH * 5, TILE_HEIGHT * 2, TILE_WIDTH, TILE_HEIGHT * 2};
+SDL_Rect WALKL3 = {TILE_WIDTH * 6, TILE_HEIGHT * 2, TILE_WIDTH * 2, TILE_HEIGHT * 2};
 
 SDL_Rect WALKR0 = {TILE_WIDTH, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2};
 SDL_Rect WALKR1 = {TILE_WIDTH * 3, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2};
@@ -68,8 +68,8 @@ void Player::walk(directionEnum dir) {
             animate(WALKR);
             break;
         case LEFT:
-            //state = WALKL;
             xVel = -5;
+            animate(WALKL);
             break;
         case UP:
             yVel = -5;
@@ -79,7 +79,12 @@ void Player::walk(directionEnum dir) {
             break;
         case STOP:
             xVel = 0;
-            animate(STANDR);    // TODO: Won't always be R
+            // TODO: Make this more dynamic
+            printf("%d\n", state);
+            if (state == WALKL || state == STANDL)
+                animate(STANDL);
+            else if (state == WALKR || state == STANDR)
+                animate(STANDR);
             break;
     }
 }
@@ -348,7 +353,7 @@ void Player::draw() {
 
     // Center the hitbox (horizontally) inside the displayed frame
     int offsetX = srcClip->w / 2 - TILE_WIDTH / 2;
-    printf("%d\n", offsetX);
+    //printf("%d\n", offsetX);
     int destX = hitbox.x - offsetX;
 
     gKeenTexture->render(destX, hitbox.y, srcClip); // Later: Need an offset for the frame. Hitbox and graphic will not match 100%
