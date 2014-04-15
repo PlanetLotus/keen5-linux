@@ -47,9 +47,7 @@ Player::Player() {
     srcClip = NULL;
 
     hitbox.x = TILE_WIDTH;
-    hitbox.y = TILE_HEIGHT;
-    //hitbox.w = 64;
-    //hitbox.h = 80;
+    hitbox.y = TILE_HEIGHT * 3;
     hitbox.w = TILE_WIDTH;
     hitbox.h = TILE_HEIGHT * 2;
 
@@ -80,7 +78,6 @@ void Player::walk(directionEnum dir) {
         case STOP:
             xVel = 0;
             // TODO: Make this more dynamic
-            printf("%d\n", state);
             if (state == WALKL || state == STANDL)
                 animate(STANDL);
             else if (state == WALKR || state == STANDR)
@@ -159,7 +156,12 @@ void Player::CheckTopCollision() {
     SDL_Rect nextHitbox = { hitbox.x + xVel, hitbox.y + yVel, hitbox.w, hitbox.h };
 
     int minCol = nextHitbox.x / TILE_WIDTH;
-    int maxCol = (int) ceil( (float) (nextHitbox.x + nextHitbox.w) / TILE_WIDTH);
+    int maxCol = (nextHitbox.x + nextHitbox.w) / TILE_WIDTH;
+
+    // TODO: Fix this logic. Currently this addresses the case where, if the rightmost point
+    // of player and leftmost point of tile are equal, it should NOT check this column.
+    if ((nextHitbox.x + nextHitbox.w) % TILE_WIDTH == 0 && maxCol > 0)
+        maxCol--;
 
     // Don't let maxCol go out of bounds
     if (maxCol > TILES_WIDE-1) maxCol = TILES_WIDE-1;
@@ -188,7 +190,12 @@ void Player::CheckBottomCollision() {
     SDL_Rect nextHitbox = { hitbox.x + xVel, hitbox.y + yVel, hitbox.w, hitbox.h };
 
     int minCol = nextHitbox.x / TILE_WIDTH;
-    int maxCol = (int) ceil( (float) (nextHitbox.x + nextHitbox.w) / TILE_WIDTH);
+    int maxCol = (nextHitbox.x + nextHitbox.w) / TILE_WIDTH;
+
+    // TODO: Fix this logic. Currently this addresses the case where, if the rightmost point
+    // of player and leftmost point of tile are equal, it should NOT check this column.
+    if ((nextHitbox.x + nextHitbox.w) % TILE_WIDTH == 0 && maxCol > 0)
+        maxCol--;
 
     // Don't let maxCol go out of bounds
     if (maxCol > TILES_WIDE-1) maxCol = TILES_WIDE-1;
@@ -218,7 +225,12 @@ void Player::CheckLeftCollision() {
     SDL_Rect nextHitbox = { hitbox.x + xVel, hitbox.y, hitbox.w, hitbox.h };
 
     int minRow = nextHitbox.y / TILE_HEIGHT;
-    int maxRow = (int) ceil( (float) (nextHitbox.y + nextHitbox.h) / TILE_HEIGHT );
+    int maxRow = (nextHitbox.y + nextHitbox.h) / TILE_HEIGHT;
+
+    // TODO: Fix this logic. Currently this addresses the case where, if the bottommost point
+    // of player and topmost point of tile are equal, it should NOT check this row.
+    if ((nextHitbox.y + nextHitbox.h) % TILE_WIDTH == 0 && maxRow > 0)
+        maxRow--;
 
     // Don't let maxRow go out of bounds
     if (maxRow > TILES_TALL-1) maxRow = TILES_TALL-1;
@@ -248,7 +260,12 @@ void Player::CheckRightCollision() {
     SDL_Rect nextHitbox = { hitbox.x + xVel, hitbox.y, hitbox.w, hitbox.h };
 
     int minRow = nextHitbox.y / TILE_HEIGHT;
-    int maxRow = (int) ceil( (float) (nextHitbox.y + nextHitbox.h) / TILE_HEIGHT );
+    int maxRow = (nextHitbox.y + nextHitbox.h) / TILE_HEIGHT;
+
+    // TODO: Fix this logic. Currently this addresses the case where, if the bottommost point
+    // of player and topmost point of tile are equal, it should NOT check this row.
+    if ((nextHitbox.y + nextHitbox.h) % TILE_WIDTH == 0 && maxRow > 0)
+        maxRow--;
 
     // Don't let maxRow go out of bounds
     if (maxRow > TILES_TALL-1) maxRow = TILES_TALL-1;
@@ -342,7 +359,6 @@ void Player::animate(animStateEnum nextState) {
     if (frame == ANIMS[state].size() * FRAMETIME)
         frame = 0;
 
-    //printf("%d\n", state);
     srcClip = &ANIMS[state][frame / FRAMETIME];
 }
 
@@ -353,7 +369,6 @@ void Player::draw() {
 
     // Center the hitbox (horizontally) inside the displayed frame
     int offsetX = srcClip->w / 2 - TILE_WIDTH / 2;
-    //printf("%d\n", offsetX);
     int destX = hitbox.x - offsetX;
 
     gKeenTexture->render(destX, hitbox.y, srcClip); // Later: Need an offset for the frame. Hitbox and graphic will not match 100%
