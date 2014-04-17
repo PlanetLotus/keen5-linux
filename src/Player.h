@@ -22,6 +22,9 @@ class Player {
 
         unsigned int frame;
         animStateEnum state;
+
+        bool canStartJump;
+        bool jumping;
     public:
         Player();
         void shoot();

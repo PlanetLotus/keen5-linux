@@ -53,6 +53,9 @@ Player::Player() {
 
     frame = 0;
     state = STANDR;
+
+    canStartJump = true;
+    jumping = false;
 }
 
 void Player::shoot() {
@@ -86,10 +89,6 @@ void Player::walk(directionEnum dir) {
     }
 }
 
-void Player::jump() {
-    return;
-}
-
 void Player::pogo() {
     return;
 }
@@ -106,10 +105,23 @@ void Player::enter_door() {
     return;
 }
 
+void Player::jump() {
+    if (jumping) {
+        yAccel = -1;
+        yVel += yAccel;
+    } else if (canStartJump) {
+        yAccel = -20;
+        yVel += yAccel;
+
+        jumping = true;
+        canStartJump = false;
+    }
+}
+
 void Player::fall() {
     yAccel = 2;
 
-    if (yVel >= 10)
+    if (yVel >= 20)
         return;
 
     yVel += yAccel;
@@ -129,6 +141,8 @@ bool Player::IsBottomColliding(SDL_Rect a, SDL_Rect b) {
     int topB = b.y;
 
     if (bottomA <= topB) return false;
+
+    canStartJump = true;
 
     return true;
 }
@@ -291,7 +305,6 @@ void Player::CheckRightCollision() {
 }
 
 bool Player::IsCollidingWithTiles() {
-
     bool xChange = xVel != 0;
     bool yChange = yVel != 0;
 
@@ -327,6 +340,12 @@ void Player::update() {
     // Read in current keyboard state and update object accordingly
     const Uint8* state = SDL_GetKeyboardState(NULL);
 
+    if (state[SDL_SCANCODE_LCTRL]) {
+        jump();
+    } else {
+        jumping = false;
+    }
+
     if (state[SDL_SCANCODE_RIGHT]) {
         walk(RIGHT);
     } else if (state[SDL_SCANCODE_LEFT]) {
@@ -340,7 +359,7 @@ void Player::update() {
     }
 
     // Apply gravity
-    //fall();
+    fall();
 
     // Check collision
     IsCollidingWithTiles();
@@ -373,8 +392,8 @@ void Player::draw() {
 
     gKeenTexture->render(destX, hitbox.y, srcClip); // Later: Need an offset for the frame. Hitbox and graphic will not match 100%
 
-    xVel = 0;
-    yVel = 0;
+    //xVel = 0;
+    //yVel = 0;
 }
 
 // Getters and setters
