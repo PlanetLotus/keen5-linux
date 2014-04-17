@@ -172,6 +172,13 @@ void clean_up() {
     gKeenTexture->free();
     gMaskTexture->free();
 
+    for (unsigned int i=0; i<gTiles.size(); i++) {
+        for (unsigned int j=0; j<gTiles[i].size(); j++) {
+            if (gTiles[i][j] != NULL)
+                delete gTiles[i][j];
+        }
+    }
+
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
 
