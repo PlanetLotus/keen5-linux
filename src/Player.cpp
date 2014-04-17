@@ -392,8 +392,10 @@ void Player::update() {
     bool idle = true;
 
     if (state[SDL_SCANCODE_LCTRL]) {
-        jump();
-        idle = false;
+        if (!(isJumping && canStartJump)) {
+            jump();
+            idle = false;
+        }
     } else {
         isJumping = false;
     }
@@ -449,7 +451,7 @@ void Player::draw() {
 
     gKeenTexture->render(destX, hitbox.y, srcClip); // Later: Need an offset for the frame. Hitbox and graphic will not match 100%
 
-    //xVel = 0;
+    xVel = 0;
     //yVel = 0;
 }
 
