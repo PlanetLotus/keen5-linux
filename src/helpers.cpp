@@ -96,7 +96,7 @@ bool set_tiles() {
     int x = 0;
     int y = 0;
 
-    ifstream map("../data/level1");
+    ifstream map("../data/level2");
     string line;
     istringstream iss;
 
@@ -128,15 +128,19 @@ bool set_tiles() {
 
     // Loop through each line
     while (getline(map, line)) {
+        istringstream iss(line);
+
+        iss >> xSrc;
+
+        // Blank line detected - common at end of file
+        if (iss.fail())
+            continue;
+
         // Check row position
         if (x == tilesWide) {
             y++;
             x = 0;
         }
-
-        istringstream iss(line);
-
-        iss >> xSrc;
 
         if (xSrc == -1) {
             gTiles[x][y] = NULL;
