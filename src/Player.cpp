@@ -17,6 +17,10 @@ SDL_Rect WALKR1 = {TILE_WIDTH * 3, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2};
 SDL_Rect WALKR2 = {TILE_WIDTH * 5, 0, TILE_WIDTH, TILE_HEIGHT * 2};
 SDL_Rect WALKR3 = {TILE_WIDTH * 6, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2};
 
+SDL_Rect JUMPL0 = {TILE_WIDTH * 8, TILE_HEIGHT * 2, TILE_WIDTH * 2, TILE_HEIGHT * 2};
+SDL_Rect FLOATL0 = {TILE_WIDTH * 10, TILE_HEIGHT * 2, TILE_WIDTH * 2, TILE_HEIGHT * 2};
+SDL_Rect FALLL0 = {TILE_WIDTH * 12, TILE_HEIGHT * 2, TILE_WIDTH * 2, TILE_HEIGHT * 2};
+
 SDL_Rect JUMPR0 = {TILE_WIDTH * 8, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2};
 SDL_Rect FLOATR0 = {TILE_WIDTH * 10, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2};
 SDL_Rect FALLR0 = {TILE_WIDTH * 12, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2};
@@ -35,6 +39,15 @@ vector<SDL_Rect> WALKL_ANIM(WALKL_ARRAY, WALKL_ARRAY + sizeof(WALKL_ARRAY) / siz
 SDL_Rect WALKR_ARRAY[4] = { WALKR0, WALKR1, WALKR2, WALKR3 };
 vector<SDL_Rect> WALKR_ANIM(WALKR_ARRAY, WALKR_ARRAY + sizeof(WALKR_ARRAY) / sizeof(SDL_Rect));
 
+SDL_Rect JUMPL_ARRAY[1] = { JUMPL0 };
+vector<SDL_Rect> JUMPL_ANIM(JUMPL_ARRAY, JUMPL_ARRAY + sizeof(JUMPL_ARRAY) / sizeof(SDL_Rect));
+
+SDL_Rect FLOATL_ARRAY[1] = { FLOATL0 };
+vector<SDL_Rect> FLOATL_ANIM(FLOATL_ARRAY, FLOATL_ARRAY + sizeof(FLOATL_ARRAY) / sizeof(SDL_Rect));
+
+SDL_Rect FALLL_ARRAY[1] = { FALLL0 };
+vector<SDL_Rect> FALLL_ANIM(FALLL_ARRAY, FALLL_ARRAY + sizeof(FALLL_ARRAY) / sizeof(SDL_Rect));
+
 SDL_Rect JUMPR_ARRAY[1] = { JUMPR0 };
 vector<SDL_Rect> JUMPR_ANIM(JUMPR_ARRAY, JUMPR_ARRAY + sizeof(JUMPR_ARRAY) / sizeof(SDL_Rect));
 
@@ -49,7 +62,12 @@ vector<SDL_Rect> FALLR_ANIM(FALLR_ARRAY, FALLR_ARRAY + sizeof(FALLR_ARRAY) / siz
 // e.g. if ANIMS[0] == walk right, then animStateEnum[WALKR] == 0
 // Purpose: To be dynamic in animate()
 // Alternative: Could use an associative array where key=state, value=array of SDL_Rect clip
-std::vector<SDL_Rect> ANIMS[7] = { STANDL_ANIM, STANDR_ANIM, WALKL_ANIM, WALKR_ANIM, JUMPR_ANIM, FLOATR_ANIM, FALLR_ANIM };
+std::vector<SDL_Rect> ANIMS[10] = {
+    STANDL_ANIM, STANDR_ANIM,
+    WALKL_ANIM, WALKR_ANIM,
+    JUMPL_ANIM, FLOATL_ANIM, FALLL_ANIM,
+    JUMPR_ANIM, FLOATR_ANIM, FALLR_ANIM
+};
 
 Player::Player() {
     ammo = 5;   // Might depend on difficulty level
@@ -145,12 +163,16 @@ void Player::fall() {
     yVel += yAccel;
 
     if (!canStartJump) { // Implies that he's either falling or jumping
-        if (yVel > 0)
-            animate(FALLR);
-        else if (yVel == 0)
-            animate(FLOATR);
-        else
-            animate(JUMPR);
+        if (yVel > 0) {
+            if (facing == LEFT) animate(FALLL);
+            else animate(FALLR);
+        } else if (yVel == 0) {
+            if (facing == LEFT) animate(FLOATL);
+            else animate(FLOATR);
+        } else {
+            if (facing == LEFT) animate(JUMPL);
+            else animate(JUMPR);
+        }
     }
 }
 

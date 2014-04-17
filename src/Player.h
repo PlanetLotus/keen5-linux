@@ -6,7 +6,7 @@
 #include "globals.h"
 
 enum directionEnum {UP, DOWN, LEFT, RIGHT, STOP};
-enum animStateEnum {STANDL, STANDR, WALKL, WALKR, JUMPR, FLOATR, FALLR};
+enum animStateEnum {STANDL, STANDR, WALKL, WALKR, JUMPL, FLOATL, FALLL, JUMPR, FLOATR, FALLR};
 
 using namespace std;
 
