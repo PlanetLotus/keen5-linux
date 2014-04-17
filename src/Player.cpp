@@ -53,6 +53,7 @@ Player::Player() {
 
     frame = 0;
     state = STANDR;
+    facing = LEFT;
 
     canStartJump = true;
     jumping = false;
@@ -66,10 +67,12 @@ void Player::walk(directionEnum dir) {
     switch (dir) {
         case RIGHT:
             xVel = 5;
+            facing = RIGHT;
             animate(WALKR);
             break;
         case LEFT:
             xVel = -5;
+            facing = LEFT;
             animate(WALKL);
             break;
         case UP:
@@ -81,9 +84,9 @@ void Player::walk(directionEnum dir) {
         case STOP:
             xVel = 0;
             // TODO: Make this more dynamic
-            if (state == WALKL || state == STANDL)
+            if (facing == LEFT)
                 animate(STANDL);
-            else if (state == WALKR || state == STANDR)
+            else if (facing == RIGHT)
                 animate(STANDR);
             break;
     }

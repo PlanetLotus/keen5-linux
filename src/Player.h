@@ -22,6 +22,7 @@ class Player {
 
         unsigned int frame;
         animStateEnum state;
+        directionEnum facing;
 
         bool canStartJump;
         bool jumping;
