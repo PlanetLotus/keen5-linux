@@ -17,6 +17,10 @@ SDL_Rect WALKR1 = {TILE_WIDTH * 3, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2};
 SDL_Rect WALKR2 = {TILE_WIDTH * 5, 0, TILE_WIDTH, TILE_HEIGHT * 2};
 SDL_Rect WALKR3 = {TILE_WIDTH * 6, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2};
 
+SDL_Rect JUMPR0 = {TILE_WIDTH * 8, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2};
+SDL_Rect FLOATR0 = {TILE_WIDTH * 10, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2};
+SDL_Rect FALLR0 = {TILE_WIDTH * 12, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2};
+
 // TODO: Could contain idle animation so that this isn't just a wasted array
 SDL_Rect STANDL_ARRAY[1] = { STANDL0 };
 vector<SDL_Rect> STANDL_ANIM(STANDL_ARRAY, STANDL_ARRAY + sizeof(STANDL_ARRAY) / sizeof(SDL_Rect));
@@ -31,12 +35,21 @@ vector<SDL_Rect> WALKL_ANIM(WALKL_ARRAY, WALKL_ARRAY + sizeof(WALKL_ARRAY) / siz
 SDL_Rect WALKR_ARRAY[4] = { WALKR0, WALKR1, WALKR2, WALKR3 };
 vector<SDL_Rect> WALKR_ANIM(WALKR_ARRAY, WALKR_ARRAY + sizeof(WALKR_ARRAY) / sizeof(SDL_Rect));
 
+SDL_Rect JUMPR_ARRAY[1] = { JUMPR0 };
+vector<SDL_Rect> JUMPR_ANIM(JUMPR_ARRAY, JUMPR_ARRAY + sizeof(JUMPR_ARRAY) / sizeof(SDL_Rect));
+
+SDL_Rect FLOATR_ARRAY[1] = { FLOATR0 };
+vector<SDL_Rect> FLOATR_ANIM(FLOATR_ARRAY, FLOATR_ARRAY + sizeof(FLOATR_ARRAY) / sizeof(SDL_Rect));
+
+SDL_Rect FALLR_ARRAY[1] = { FALLR0 };
+vector<SDL_Rect> FALLR_ANIM(FALLR_ARRAY, FALLR_ARRAY + sizeof(FALLR_ARRAY) / sizeof(SDL_Rect));
+
 // Array of animations
 // Statically set...animStateEnum's value needs to match this array
 // e.g. if ANIMS[0] == walk right, then animStateEnum[WALKR] == 0
 // Purpose: To be dynamic in animate()
 // Alternative: Could use an associative array where key=state, value=array of SDL_Rect clip
-std::vector<SDL_Rect> ANIMS[4] = { STANDL_ANIM, STANDR_ANIM, WALKL_ANIM, WALKR_ANIM };
+std::vector<SDL_Rect> ANIMS[7] = { STANDL_ANIM, STANDR_ANIM, WALKL_ANIM, WALKR_ANIM, JUMPR_ANIM, FLOATR_ANIM, FALLR_ANIM };
 
 Player::Player() {
     ammo = 5;   // Might depend on difficulty level
@@ -56,7 +69,7 @@ Player::Player() {
     facing = LEFT;
 
     canStartJump = true;
-    jumping = false;
+    isJumping = false;
 }
 
 void Player::shoot() {
@@ -109,16 +122,18 @@ void Player::enter_door() {
 }
 
 void Player::jump() {
-    if (jumping) {
+    if (!isJumping && !canStartJump) return;
+
+    if (isJumping) {
         yAccel = -1;
-        yVel += yAccel;
     } else if (canStartJump) {
         yAccel = -20;
-        yVel += yAccel;
 
-        jumping = true;
+        isJumping = true;
         canStartJump = false;
     }
+
+    yVel += yAccel;
 }
 
 void Player::fall() {
@@ -128,6 +143,15 @@ void Player::fall() {
         return;
 
     yVel += yAccel;
+
+    if (!canStartJump) { // Implies that he's either falling or jumping
+        if (yVel > 0)
+            animate(FALLR);
+        else if (yVel == 0)
+            animate(FLOATR);
+        else
+            animate(JUMPR);
+    }
 }
 
 bool Player::IsTopColliding(SDL_Rect a, SDL_Rect b) {

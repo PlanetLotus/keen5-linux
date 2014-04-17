@@ -6,7 +6,7 @@
 #include "globals.h"
 
 enum directionEnum {UP, DOWN, LEFT, RIGHT, STOP};
-enum animStateEnum {STANDL, STANDR, WALKL, WALKR};
+enum animStateEnum {STANDL, STANDR, WALKL, WALKR, JUMPR, FLOATR, FALLR};
 
 using namespace std;
 
@@ -25,7 +25,7 @@ class Player {
         directionEnum facing;
 
         bool canStartJump;
-        bool jumping;
+        bool isJumping;
     public:
         Player();
         void shoot();
