@@ -343,23 +343,31 @@ void Player::update() {
     // Read in current keyboard state and update object accordingly
     const Uint8* state = SDL_GetKeyboardState(NULL);
 
+    bool idle = true;
+
     if (state[SDL_SCANCODE_LCTRL]) {
         jump();
+        idle = false;
     } else {
-        jumping = false;
+        isJumping = false;
     }
 
     if (state[SDL_SCANCODE_RIGHT]) {
         walk(RIGHT);
+        idle = false;
     } else if (state[SDL_SCANCODE_LEFT]) {
         walk(LEFT);
+        idle = false;
     } else if (state[SDL_SCANCODE_UP]) {
         walk(UP);
+        idle = false;
     } else if (state[SDL_SCANCODE_DOWN]) {
         walk(DOWN);
-    } else {
-        walk(STOP);
+        idle = false;
     }
+
+    if (idle)
+        walk(STOP);
 
     // Apply gravity
     fall();
