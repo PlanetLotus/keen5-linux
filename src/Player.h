@@ -32,6 +32,9 @@ class Player {
 
         bool canStartJump;
         bool isJumping;
+
+        int shootingFrameCount;
+        bool isShooting;
     public:
         Player();
         void shoot();

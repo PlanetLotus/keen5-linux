@@ -98,9 +98,20 @@ Player::Player() {
 
     canStartJump = true;
     isJumping = false;
+
+    shootingFrameCount = 0;
+    isShooting = false;
 }
 
 void Player::shoot() {
+    if (shootingFrameCount >= 4) {
+        isShooting = false;
+        shootingFrameCount = 0;
+    } else {
+        isShooting = true;
+        shootingFrameCount++;
+    }
+
     if (facing == LEFT)
         animate(SHOOTL);
     else if (facing == RIGHT)
@@ -406,37 +417,43 @@ void Player::update() {
 
     bool idle = true;
 
-    if (state[SDL_SCANCODE_SPACE]) {
-        // TODO: Rate-limit firing and check holding spacebar
-        shoot();
-        idle = false;
-    }
-
-    if (state[SDL_SCANCODE_LCTRL]) {
-        if (!(isJumping && canStartJump)) { // Player landed jump but is still holding ctrl
-            jump();
+    // TODO: Make this suck a lot less
+    if (!isShooting) {
+        if (state[SDL_SCANCODE_SPACE] && !gController.IsHoldingSpace) {
+            // TODO: Rate-limit firing and check holding spacebar
+            shoot();
+            gController.IsHoldingSpace = true;
             idle = false;
         }
+
+        if (state[SDL_SCANCODE_LCTRL]) {
+            if (!(isJumping && canStartJump)) { // Player landed jump but is still holding ctrl
+                jump();
+                idle = false;
+            }
+        } else {
+            isJumping = false;
+        }
+
+        if (state[SDL_SCANCODE_RIGHT]) {
+            walk(RIGHT);
+            idle = false;
+        } else if (state[SDL_SCANCODE_LEFT]) {
+            walk(LEFT);
+            idle = false;
+        } else if (state[SDL_SCANCODE_UP]) {
+            walk(UP);
+            idle = false;
+        } else if (state[SDL_SCANCODE_DOWN]) {
+            walk(DOWN);
+            idle = false;
+        }
+
+        if (idle)
+            walk(STOP);
     } else {
-        isJumping = false;
+        shoot();
     }
-
-    if (state[SDL_SCANCODE_RIGHT]) {
-        walk(RIGHT);
-        idle = false;
-    } else if (state[SDL_SCANCODE_LEFT]) {
-        walk(LEFT);
-        idle = false;
-    } else if (state[SDL_SCANCODE_UP]) {
-        walk(UP);
-        idle = false;
-    } else if (state[SDL_SCANCODE_DOWN]) {
-        walk(DOWN);
-        idle = false;
-    }
-
-    if (idle)
-        walk(STOP);
 
     // Apply gravity
     fall();
