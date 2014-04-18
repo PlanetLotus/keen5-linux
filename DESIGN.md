@@ -10,7 +10,7 @@ modification (and delusional goals).
     <li>Add pogo stick jumping (and idling)</li>
     <li>Add hanging from ledge</li>
     <li>Add pole climbing</li>
-    <li>Shoot from poles>
+    <li>Shoot from poles</li>
     <li>"Jump down" from platformers that have top but not bottom collision</li>
     <li>Add sloped tiles and their collision properties</li>
     <li>Add camera scrolling (make level bigger than camera)</li>
