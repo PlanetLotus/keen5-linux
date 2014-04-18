@@ -14,7 +14,7 @@ modification (and delusional goals).
     <li>"Jump down" from platformers that have top but not bottom collision</li>
     <li>Add sloped tiles and their collision properties</li>
     <li>Add camera scrolling (make level bigger than camera)</li>
-    <li>Look up/down>
+    <li>Look up/down</li>
     <li>Write basic enemy AI (animation optional)</li>
     <li>Pit the player against the basic enemy AI</li>
 </ol>
