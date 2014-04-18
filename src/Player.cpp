@@ -189,10 +189,12 @@ bool Player::IsBottomColliding(SDL_Rect a, SDL_Rect b) {
     int bottomA = a.y + a.h;
     int topB = b.y;
 
-    if (bottomA <= topB) return false;
+    if (bottomA <= topB) {
+        canStartJump = false;
+        return false;
+    }
 
     canStartJump = true;
-
     return true;
 }
 
@@ -392,7 +394,7 @@ void Player::update() {
     bool idle = true;
 
     if (state[SDL_SCANCODE_LCTRL]) {
-        if (!(isJumping && canStartJump)) {
+        if (!(isJumping && canStartJump)) { // Player landed jump but is still holding ctrl
             jump();
             idle = false;
         }
