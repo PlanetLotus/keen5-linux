@@ -24,7 +24,6 @@ int main (int argc, char **args) {
     freopen("CON", "w", stderr);
     */
 
-    // Create player object
     Player character;
 
     while (running) {
@@ -44,6 +43,10 @@ int main (int argc, char **args) {
             if (event.type == SDL_KEYDOWN) {
                 switch (event.key.keysym.sym) {
                     case SDLK_ESCAPE: running = false; break;
+                }
+            } else if (event.type == SDL_KEYUP) {
+                switch (event.key.keysym.sym) {
+                    case SDLK_SPACE: gController.IsHoldingSpace = false; break;
                 }
             }
             // If the user X'd out of the window
