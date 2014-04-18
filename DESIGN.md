@@ -7,6 +7,14 @@ modification (and delusional goals).
 
 <ol>
     <li>Add player 'shoot' capability</li>
+    <li>Add pogo stick jumping (and idling)</li>
+    <li>Add hanging from ledge</li>
+    <li>Add pole climbing</li>
+    <li>Shoot from poles>
+    <li>"Jump down" from platformers that have top but not bottom collision</li>
+    <li>Add sloped tiles and their collision properties</li>
+    <li>Add camera scrolling (make level bigger than camera)</li>
+    <li>Look up/down>
     <li>Write basic enemy AI (animation optional)</li>
     <li>Pit the player against the basic enemy AI</li>
 </ol>
