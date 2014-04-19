@@ -11,7 +11,8 @@ enum animStateEnum {
     WALKL, WALKR,
     JUMPL, FLOATL, FALLL,
     JUMPR, FLOATR, FALLR,
-    SHOOTL, SHOOTR
+    SHOOTL, SHOOTR,
+    JUMPSHOOTL, JUMPSHOOTR
 };
 
 using namespace std;
@@ -29,6 +30,7 @@ class Player {
         unsigned int frame;
         animStateEnum state;
         directionEnum facing;
+        bool idle;
 
         bool canStartJump;
         bool isJumping;

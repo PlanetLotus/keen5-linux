@@ -28,6 +28,9 @@ SDL_Rect FALLR0 = {TILE_WIDTH * 12, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2};
 SDL_Rect SHOOTL0 = {0, TILE_HEIGHT * 6, TILE_WIDTH * 3, TILE_HEIGHT * 2};
 SDL_Rect SHOOTR0 = {0, TILE_HEIGHT * 4, TILE_WIDTH * 3, TILE_HEIGHT * 2};
 
+SDL_Rect JUMPSHOOTL0 = {TILE_WIDTH * 3, TILE_HEIGHT * 6, TILE_WIDTH * 3, TILE_HEIGHT * 2};
+SDL_Rect JUMPSHOOTR0 = {TILE_WIDTH * 3, TILE_HEIGHT * 4, TILE_WIDTH * 3, TILE_HEIGHT * 2};
+
 // TODO: Could contain idle animation so that this isn't just a wasted array
 SDL_Rect STANDL_ARRAY[1] = { STANDL0 };
 vector<SDL_Rect> STANDL_ANIM(STANDL_ARRAY, STANDL_ARRAY + sizeof(STANDL_ARRAY) / sizeof(SDL_Rect));
@@ -66,17 +69,24 @@ vector<SDL_Rect> SHOOTL_ANIM(SHOOTL_ARRAY, SHOOTL_ARRAY + sizeof(SHOOTL_ARRAY) /
 SDL_Rect SHOOTR_ARRAY[1] = { SHOOTR0 };
 vector<SDL_Rect> SHOOTR_ANIM(SHOOTR_ARRAY, SHOOTR_ARRAY + sizeof(SHOOTR_ARRAY) / sizeof(SDL_Rect));
 
+SDL_Rect JUMPSHOOTL_ARRAY[1] = { JUMPSHOOTL0 };
+vector<SDL_Rect> JUMPSHOOTL_ANIM(JUMPSHOOTL_ARRAY, JUMPSHOOTL_ARRAY + sizeof(JUMPSHOOTL_ARRAY) / sizeof(SDL_Rect));
+
+SDL_Rect JUMPSHOOTR_ARRAY[1] = { JUMPSHOOTR0 };
+vector<SDL_Rect> JUMPSHOOTR_ANIM(JUMPSHOOTR_ARRAY, JUMPSHOOTR_ARRAY + sizeof(JUMPSHOOTR_ARRAY) / sizeof(SDL_Rect));
+
 // Array of animations
 // Statically set...animStateEnum's value needs to match this array
 // e.g. if ANIMS[0] == walk right, then animStateEnum[WALKR] == 0
 // Purpose: To be dynamic in animate()
 // Alternative: Could use an associative array where key=state, value=array of SDL_Rect clip
-std::vector<SDL_Rect> ANIMS[12] = {
+std::vector<SDL_Rect> ANIMS[14] = {
     STANDL_ANIM, STANDR_ANIM,
     WALKL_ANIM, WALKR_ANIM,
     JUMPL_ANIM, FLOATL_ANIM, FALLL_ANIM,
     JUMPR_ANIM, FLOATR_ANIM, FALLR_ANIM,
-    SHOOTL_ANIM, SHOOTR_ANIM
+    SHOOTL_ANIM, SHOOTR_ANIM,
+    JUMPSHOOTL_ANIM, JUMPSHOOTR_ANIM
 };
 
 Player::Player() {
@@ -95,6 +105,7 @@ Player::Player() {
     frame = 0;
     state = STANDR;
     facing = LEFT;
+    idle = true;
 
     canStartJump = true;
     isJumping = false;
@@ -196,6 +207,14 @@ void Player::fall() {
         } else {
             if (facing == LEFT) animate(JUMPL);
             else animate(JUMPR);
+        }
+
+        // Shooting takes animation precedence over jumping/falling
+        if (isShooting) {
+            if (facing == LEFT)
+                animate(JUMPSHOOTL);
+            else if (facing == RIGHT)
+                animate(JUMPSHOOTR);
         }
     }
 }
@@ -415,17 +434,10 @@ void Player::update() {
     // Read in current keyboard state and update object accordingly
     const Uint8* state = SDL_GetKeyboardState(NULL);
 
-    bool idle = true;
+    idle = true;
 
     // TODO: Make this suck a lot less
     if (!isShooting) {
-        if (state[SDL_SCANCODE_SPACE] && !gController.IsHoldingSpace) {
-            // TODO: Rate-limit firing and check holding spacebar
-            shoot();
-            gController.IsHoldingSpace = true;
-            idle = false;
-        }
-
         if (state[SDL_SCANCODE_LCTRL]) {
             if (!(isJumping && canStartJump)) { // Player landed jump but is still holding ctrl
                 jump();
@@ -449,10 +461,17 @@ void Player::update() {
             idle = false;
         }
 
+        if (state[SDL_SCANCODE_SPACE] && !gController.IsHoldingSpace) {
+            shoot();
+            gController.IsHoldingSpace = true;
+            idle = false;
+        }
+
         if (idle)
             walk(STOP);
     } else {
         shoot();
+        idle = false;
     }
 
     // Apply gravity
