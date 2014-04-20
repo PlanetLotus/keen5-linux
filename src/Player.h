@@ -34,8 +34,8 @@ class Player {
         directionEnum facing;
         bool idle;
 
-        bool canStartJump;
-        bool isJumping;
+        bool isOnGround;
+        //bool isJumping;
 
         int shootingFrameCount;
         bool isShooting;

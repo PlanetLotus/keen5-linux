@@ -107,8 +107,8 @@ Player::Player() {
     facing = LEFT;
     idle = true;
 
-    canStartJump = true;
-    isJumping = false;
+    isOnGround = true;
+    //isJumping = false;
 
     shootingFrameCount = 0;
     isShooting = false;
@@ -123,6 +123,8 @@ void Player::shoot() {
         shootingFrameCount++;
     }
 
+    if (isOnGround) xVel = 0;
+
     animate(10 + facing);
 }
 
@@ -131,7 +133,7 @@ void Player::walk(directionEnum dir) {
     else if (dir == LEFT) facing = LEFT;
 
     // On ground = no acceleration
-    if (canStartJump) {
+    if (isOnGround) {
         xAccel = 0;
 
         if (dir == RIGHT) {
@@ -171,17 +173,6 @@ void Player::walk(directionEnum dir) {
         }
     }
 
-    switch (dir) {
-        case UP:
-            yVel = -5;
-            break;
-        case STOP:
-            //xVel = 0;
-            // TODO: Make this more dynamic
-            animate(facing);
-            break;
-    }
-
     // Limit velocity
     if (xVel > 5) xVel = 5;
     if (xVel < -5) xVel = -5;
@@ -204,15 +195,14 @@ void Player::enter_door() {
 }
 
 void Player::jump() {
-    if (!isJumping && !canStartJump) return;
+    //if (!isJumping && !isOnGround) return;  // What case does this handle?
 
-    if (isJumping) {
+    if (gController.IsHoldingCtrl) {
         yAccel = -1;
-    } else if (canStartJump) {
+    } else if (isOnGround) {
         yAccel = -20;
-
-        isJumping = true;
-        canStartJump = false;
+        //isJumping = true;
+        gController.IsHoldingCtrl = true;
     }
 
     yVel += yAccel;
@@ -226,7 +216,7 @@ void Player::fall() {
 
     yVel += yAccel;
 
-    if (!canStartJump) { // Implies that he's either falling or jumping
+    if (!isOnGround) { // Implies that he's either falling or jumping
         if (yVel > 0) {
             animate(8 + facing);
         } else if (yVel == 0) {
@@ -255,11 +245,11 @@ bool Player::IsBottomColliding(SDL_Rect a, SDL_Rect b) {
     int topB = b.y;
 
     if (bottomA <= topB) {
-        canStartJump = false;
+        isOnGround = false;
         return false;
     }
 
-    canStartJump = true;
+    isOnGround = true;
     return true;
 }
 
@@ -456,12 +446,34 @@ void Player::update() {
     // Read in current keyboard state and update object accordingly
     const Uint8* state = SDL_GetKeyboardState(NULL);
 
+    if (state[SDL_SCANCODE_LCTRL]) {
+        jump();
+    }
+
+    if (state[SDL_SCANCODE_LEFT]) {
+        walk(LEFT);
+    } else if (state[SDL_SCANCODE_RIGHT]) {
+        walk(RIGHT);
+    }
+
+    if (state[SDL_SCANCODE_SPACE] && !gController.IsHoldingSpace) {
+        shoot();
+        gController.IsHoldingSpace = true;
+    }
+
+    // Apply gravity
+    fall();
+
+    // Check collision
+    IsCollidingWithTiles();
+
+    /*
     idle = true;
 
     // TODO: Make this suck a lot less
-    if (!isShooting) {
+    if (!isShooting || !isOnGround) {
         if (state[SDL_SCANCODE_LCTRL]) {
-            if (!(isJumping && canStartJump)) { // Player landed jump but is still holding ctrl
+            if (!(isJumping && isOnGround)) { // Player landed jump but is still holding ctrl
                 jump();
                 idle = false;
             }
@@ -487,6 +499,9 @@ void Player::update() {
             shoot();
             gController.IsHoldingSpace = true;
             idle = false;
+        } else if (isShooting) {
+            shoot();
+            idle = false;
         }
 
         if (idle)
@@ -495,12 +510,7 @@ void Player::update() {
         shoot();
         idle = false;
     }
-
-    // Apply gravity
-    fall();
-
-    // Check collision
-    IsCollidingWithTiles();
+    */
 }
 
 void Player::animate(int nextState) {

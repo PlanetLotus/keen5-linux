@@ -46,6 +46,7 @@ int main (int argc, char **args) {
                 }
             } else if (event.type == SDL_KEYUP) {
                 switch (event.key.keysym.sym) {
+                    case SDLK_LCTRL: gController.IsHoldingCtrl = false; break;
                     case SDLK_SPACE: gController.IsHoldingSpace = false; break;
                 }
             }
