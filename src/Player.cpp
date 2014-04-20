@@ -1,5 +1,3 @@
-// Player definition
-
 #include "helpers.h"
 #include "Player.h"
 
@@ -93,6 +91,7 @@ Player::Player() {
     ammo = 5;
     xVel = 0;
     yVel = 0;
+    xAccel = 0;
     yAccel = 0;
 
     srcClip = NULL;
@@ -130,25 +129,59 @@ void Player::shoot() {
 }
 
 void Player::walk(directionEnum dir) {
-    switch (dir) {
-        case RIGHT:
+    if (dir == RIGHT) facing = RIGHT;
+    else if (dir == LEFT) facing = LEFT;
+
+    // On ground = no acceleration
+    if (canStartJump) {
+        xAccel = 0;
+
+        if (dir == RIGHT) {
             xVel = 5;
-            facing = RIGHT;
             animate(WALKR);
-            break;
-        case LEFT:
+        } else if (dir == LEFT) {
             xVel = -5;
-            facing = LEFT;
             animate(WALKL);
-            break;
+        } else if (dir == STOP) {
+            xVel = 0;
+            if (facing == LEFT)
+                animate(STANDL);
+            else if (facing == RIGHT)
+                animate(STANDR);
+        }
+    } else {
+        // In air = acceleration
+        if (dir == RIGHT) {
+            xAccel = 0;
+            xVel = 5;
+        }
+
+        if (dir == LEFT) {
+            xAccel = 0;
+            xVel = -5;
+        }
+
+        if (dir == STOP && facing == RIGHT) {
+            xAccel += -1;
+        } else if (dir == STOP && facing == LEFT) {
+            xAccel += 1;
+        }
+
+        xVel += xAccel / 1;
+
+        // Might cause problems when switching directions
+        if ((facing == RIGHT && xVel <= 0) || (facing == LEFT && xVel >= 0)) {
+            xAccel = 0;
+            xVel = 0;
+        }
+    }
+
+    switch (dir) {
         case UP:
             yVel = -5;
             break;
-        case DOWN:
-            yVel = 5;
-            break;
         case STOP:
-            xVel = 0;
+            //xVel = 0;
             // TODO: Make this more dynamic
             if (facing == LEFT)
                 animate(STANDL);
@@ -156,6 +189,10 @@ void Player::walk(directionEnum dir) {
                 animate(STANDR);
             break;
     }
+
+    // Limit velocity
+    if (xVel > 5) xVel = 5;
+    if (xVel < -5) xVel = -5;
 }
 
 void Player::pogo() {
@@ -507,9 +544,6 @@ void Player::draw() {
     int destX = hitbox.x - offsetX;
 
     gKeenTexture->render(destX, hitbox.y, srcClip); // Later: Need an offset for the frame. Hitbox and graphic will not match 100%
-
-    xVel = 0;
-    //yVel = 0;
 }
 
 // Getters and setters

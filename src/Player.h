@@ -1,5 +1,3 @@
-// Header file for Player class
-
 #ifndef PLAYER_H
 #define PLAYER_H
 
@@ -20,8 +18,9 @@ using namespace std;
 class Player {
     private:
         int ammo;
-        int xVel;     // Movement speed
-        int yVel;     // Movement speed
+        int xVel;
+        int yVel;
+        int xAccel;
         int yAccel;
 
         SDL_Rect* srcClip;
