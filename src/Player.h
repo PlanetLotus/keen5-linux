@@ -3,7 +3,8 @@
 
 #include "globals.h"
 
-enum directionEnum {UP, DOWN, LEFT, RIGHT, STOP};
+enum directionEnum {LEFT, RIGHT, UP, DOWN, STOP};
+/*
 enum animStateEnum {
     STANDL, STANDR,
     WALKL, WALKR,
@@ -12,6 +13,7 @@ enum animStateEnum {
     SHOOTL, SHOOTR,
     JUMPSHOOTL, JUMPSHOOTR
 };
+*/
 
 using namespace std;
 
@@ -27,7 +29,8 @@ class Player {
         SDL_Rect hitbox;
 
         unsigned int frame;
-        animStateEnum state;
+        //animStateEnum state;
+        int animState;
         directionEnum facing;
         bool idle;
 
@@ -56,14 +59,14 @@ class Player {
         void CheckRightCollision();
         bool IsCollidingWithTiles();
         void update();
-        void animate(animStateEnum nextState);
+        void animate(int nextState);
         void draw();
 
         // Getters and setters
         void set_ammo(int x);
         void set_xVel(int x);
         void set_yVel(int y);
-        void set_state(animStateEnum x);
+        void set_state(int x);
 
         int get_ammo();
         int get_xVel();

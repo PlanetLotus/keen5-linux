@@ -74,15 +74,16 @@ SDL_Rect JUMPSHOOTR_ARRAY[1] = { JUMPSHOOTR0 };
 vector<SDL_Rect> JUMPSHOOTR_ANIM(JUMPSHOOTR_ARRAY, JUMPSHOOTR_ARRAY + sizeof(JUMPSHOOTR_ARRAY) / sizeof(SDL_Rect));
 
 // Array of animations
-// Statically set...animStateEnum's value needs to match this array
+// Statically set...animState's value needs to match this array
 // e.g. if ANIMS[0] == walk right, then animStateEnum[WALKR] == 0
 // Purpose: To be dynamic in animate()
 // Alternative: Could use an associative array where key=state, value=array of SDL_Rect clip
 std::vector<SDL_Rect> ANIMS[14] = {
     STANDL_ANIM, STANDR_ANIM,
     WALKL_ANIM, WALKR_ANIM,
-    JUMPL_ANIM, FLOATL_ANIM, FALLL_ANIM,
-    JUMPR_ANIM, FLOATR_ANIM, FALLR_ANIM,
+    JUMPL_ANIM, JUMPR_ANIM,
+    FLOATL_ANIM, FLOATR_ANIM,
+    FALLL_ANIM, FALLR_ANIM,
     SHOOTL_ANIM, SHOOTR_ANIM,
     JUMPSHOOTL_ANIM, JUMPSHOOTR_ANIM
 };
@@ -102,7 +103,7 @@ Player::Player() {
     hitbox.h = TILE_HEIGHT * 2;
 
     frame = 0;
-    state = STANDR;
+    animState = 2;
     facing = LEFT;
     idle = true;
 
@@ -122,10 +123,7 @@ void Player::shoot() {
         shootingFrameCount++;
     }
 
-    if (facing == LEFT)
-        animate(SHOOTL);
-    else if (facing == RIGHT)
-        animate(SHOOTR);
+    animate(10 + facing);
 }
 
 void Player::walk(directionEnum dir) {
@@ -138,16 +136,13 @@ void Player::walk(directionEnum dir) {
 
         if (dir == RIGHT) {
             xVel = 5;
-            animate(WALKR);
+            animate(3);
         } else if (dir == LEFT) {
             xVel = -5;
-            animate(WALKL);
+            animate(2);
         } else if (dir == STOP) {
             xVel = 0;
-            if (facing == LEFT)
-                animate(STANDL);
-            else if (facing == RIGHT)
-                animate(STANDR);
+            animate(facing);
         }
     } else {
         // In air = acceleration
@@ -183,10 +178,7 @@ void Player::walk(directionEnum dir) {
         case STOP:
             //xVel = 0;
             // TODO: Make this more dynamic
-            if (facing == LEFT)
-                animate(STANDL);
-            else if (facing == RIGHT)
-                animate(STANDR);
+            animate(facing);
             break;
     }
 
@@ -236,23 +228,16 @@ void Player::fall() {
 
     if (!canStartJump) { // Implies that he's either falling or jumping
         if (yVel > 0) {
-            if (facing == LEFT) animate(FALLL);
-            else animate(FALLR);
+            animate(8 + facing);
         } else if (yVel == 0) {
-            if (facing == LEFT) animate(FLOATL);
-            else animate(FLOATR);
+            animate(6 + facing);
         } else {
-            if (facing == LEFT) animate(JUMPL);
-            else animate(JUMPR);
+            animate(4 + facing);
         }
 
         // Shooting takes animation precedence over jumping/falling
-        if (isShooting) {
-            if (facing == LEFT)
-                animate(JUMPSHOOTL);
-            else if (facing == RIGHT)
-                animate(JUMPSHOOTR);
-        }
+        if (isShooting)
+            animate(12 + facing);
     }
 }
 
@@ -518,20 +503,20 @@ void Player::update() {
     IsCollidingWithTiles();
 }
 
-void Player::animate(animStateEnum nextState) {
-    if (state == nextState) {
+void Player::animate(int nextState) {
+    if (animState == nextState) {
         // Get next frame
         frame++;
     } else {
         // Start new animation
         frame = 0;
-        state = nextState;
+        animState = nextState;
     }
 
-    if (frame == ANIMS[state].size() * FRAMETIME)
+    if (frame == ANIMS[animState].size() * FRAMETIME)
         frame = 0;
 
-    srcClip = &ANIMS[state][frame / FRAMETIME];
+    srcClip = &ANIMS[animState][frame / FRAMETIME];
 }
 
 void Player::draw() {
@@ -551,11 +536,11 @@ void Player::draw() {
 void Player::set_ammo(int x) { ammo = x; }
 void Player::set_xVel(int x) { xVel = x; }
 void Player::set_yVel(int y) { yVel = y; }
-void Player::set_state(animStateEnum x) { state = x; }
+void Player::set_state(int x) { animState = x; }
 
 int Player::get_ammo() { return ammo; }
 int Player::get_xVel() { return xVel; }
 int Player::get_yVel() { return yVel; }
-int Player::get_state() { return state; }
+int Player::get_state() { return animState; }
 
 SDL_Rect Player::get_hitbox() { return hitbox; }
