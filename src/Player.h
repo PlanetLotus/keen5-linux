@@ -43,6 +43,7 @@ class Player {
         Player();
         void shoot();
         void walk(directionEnum dir);
+        void stopwalk();
         void jump();
         void pogo();
         void look(directionEnum dir);

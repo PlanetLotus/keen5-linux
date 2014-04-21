@@ -129,10 +129,31 @@ void Player::shoot() {
 }
 
 void Player::walk(directionEnum dir) {
-    if (dir == RIGHT) facing = RIGHT;
-    else if (dir == LEFT) facing = LEFT;
+    // TODO: Enforce dir being only left or right
+    facing = dir == LEFT ? LEFT : RIGHT;
+
+    if (isOnGround) {
+        xAccel = 0;
+
+        if (isShooting) {
+            xVel = 0;
+            return;
+        }
+
+        xVel = dir == LEFT ? -5 : 5;
+        animate(2 + facing);
+    } else {
+        // Walking in the air
+        xAccel = dir == LEFT ? -1 : 1;
+        xVel += xAccel;
+
+        // Limit velocity, but let him go a little too fast briefly
+        if (xVel > 7) xVel = 6;
+        else if (xVel < -7) xVel = -6;
+    }
 
     // On ground = no acceleration
+    /*
     if (isOnGround) {
         xAccel = 0;
 
@@ -176,6 +197,27 @@ void Player::walk(directionEnum dir) {
     // Limit velocity
     if (xVel > 5) xVel = 5;
     if (xVel < -5) xVel = -5;
+    */
+}
+
+void Player::stopwalk() {
+    // This is not synonymous with idle. This is specifically NOT holding left or right arrow keys.
+    // It's not idling because we could be falling, shooting, etc.
+
+    if (isOnGround) {
+        xAccel = 0;
+        xVel = 0;
+        animate(facing);    // Make sure shooting gets priority over this
+    } else {
+        // Falling
+        int drag = facing == LEFT ? 1 : -1;
+        xAccel = drag;
+        //xVel += xAccel / 4;
+
+        // Limit velocity
+        if (facing == LEFT && xVel > 0) xVel = 0;
+        else if (facing == RIGHT && xVel < 0) xVel = 0;
+    }
 }
 
 void Player::pogo() {
@@ -452,6 +494,8 @@ void Player::update() {
         walk(LEFT);
     } else if (state[SDL_SCANCODE_RIGHT]) {
         walk(RIGHT);
+    } else {
+        stopwalk();
     }
 
     if (state[SDL_SCANCODE_SPACE] && !gController.IsHoldingSpace) {
