@@ -4,16 +4,6 @@
 #include "globals.h"
 
 enum directionEnum {LEFT, RIGHT, UP, DOWN, STOP};
-/*
-enum animStateEnum {
-    STANDL, STANDR,
-    WALKL, WALKR,
-    JUMPL, FLOATL, FALLL,
-    JUMPR, FLOATR, FALLR,
-    SHOOTL, SHOOTR,
-    JUMPSHOOTL, JUMPSHOOTR
-};
-*/
 
 using namespace std;
 
@@ -29,13 +19,11 @@ class Player {
         SDL_Rect hitbox;
 
         unsigned int frame;
-        //animStateEnum state;
         int animState;
         directionEnum facing;
         bool idle;
 
         bool isOnGround;
-        //bool isJumping;
 
         int shootingFrameCount;
         bool isShooting;

@@ -108,7 +108,6 @@ Player::Player() {
     idle = true;
 
     isOnGround = true;
-    //isJumping = false;
 
     shootingFrameCount = 0;
     isShooting = false;
@@ -151,53 +150,6 @@ void Player::walk(directionEnum dir) {
         if (xVel > 7) xVel = 6;
         else if (xVel < -7) xVel = -6;
     }
-
-    // On ground = no acceleration
-    /*
-    if (isOnGround) {
-        xAccel = 0;
-
-        if (dir == RIGHT) {
-            xVel = 5;
-            animate(3);
-        } else if (dir == LEFT) {
-            xVel = -5;
-            animate(2);
-        } else if (dir == STOP) {
-            xVel = 0;
-            animate(facing);
-        }
-    } else {
-        // In air = acceleration
-        if (dir == RIGHT) {
-            xAccel = 0;
-            xVel = 5;
-        }
-
-        if (dir == LEFT) {
-            xAccel = 0;
-            xVel = -5;
-        }
-
-        if (dir == STOP && facing == RIGHT) {
-            xAccel += -1;
-        } else if (dir == STOP && facing == LEFT) {
-            xAccel += 1;
-        }
-
-        xVel += xAccel / 1;
-
-        // Might cause problems when switching directions
-        if ((facing == RIGHT && xVel <= 0) || (facing == LEFT && xVel >= 0)) {
-            xAccel = 0;
-            xVel = 0;
-        }
-    }
-
-    // Limit velocity
-    if (xVel > 5) xVel = 5;
-    if (xVel < -5) xVel = -5;
-    */
 }
 
 void Player::stopwalk() {
@@ -209,10 +161,11 @@ void Player::stopwalk() {
         xVel = 0;
         animate(facing);    // Make sure shooting gets priority over this
     } else {
+        // Currently not using this section (drag). Keen should stop moving without drag.
         // Falling
         int drag = facing == LEFT ? 1 : -1;
         xAccel = drag;
-        //xVel += xAccel / 4;
+        //xVel += xAccel;
 
         // Limit velocity
         if (facing == LEFT && xVel > 0) xVel = 0;
@@ -501,6 +454,8 @@ void Player::update() {
     if (state[SDL_SCANCODE_SPACE] && !gController.IsHoldingSpace) {
         shoot();
         gController.IsHoldingSpace = true;
+    } else if (isShooting) {    // Would prefer this logic elsewhere
+        shoot();
     }
 
     // Apply gravity
@@ -508,51 +463,6 @@ void Player::update() {
 
     // Check collision
     IsCollidingWithTiles();
-
-    /*
-    idle = true;
-
-    // TODO: Make this suck a lot less
-    if (!isShooting || !isOnGround) {
-        if (state[SDL_SCANCODE_LCTRL]) {
-            if (!(isJumping && isOnGround)) { // Player landed jump but is still holding ctrl
-                jump();
-                idle = false;
-            }
-        } else {
-            isJumping = false;
-        }
-
-        if (state[SDL_SCANCODE_RIGHT]) {
-            walk(RIGHT);
-            idle = false;
-        } else if (state[SDL_SCANCODE_LEFT]) {
-            walk(LEFT);
-            idle = false;
-        } else if (state[SDL_SCANCODE_UP]) {
-            walk(UP);
-            idle = false;
-        } else if (state[SDL_SCANCODE_DOWN]) {
-            walk(DOWN);
-            idle = false;
-        }
-
-        if (state[SDL_SCANCODE_SPACE] && !gController.IsHoldingSpace) {
-            shoot();
-            gController.IsHoldingSpace = true;
-            idle = false;
-        } else if (isShooting) {
-            shoot();
-            idle = false;
-        }
-
-        if (idle)
-            walk(STOP);
-    } else {
-        shoot();
-        idle = false;
-    }
-    */
 }
 
 void Player::animate(int nextState) {
@@ -580,7 +490,7 @@ void Player::draw() {
     int offsetX = srcClip->w / 2 - TILE_WIDTH / 2;
     int destX = hitbox.x - offsetX;
 
-    gKeenTexture->render(destX, hitbox.y, srcClip); // Later: Need an offset for the frame. Hitbox and graphic will not match 100%
+    gKeenTexture->render(destX, hitbox.y, srcClip);
 }
 
 // Getters and setters
