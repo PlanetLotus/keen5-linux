@@ -195,17 +195,15 @@ void Player::enter_door() {
 }
 
 void Player::jump() {
-    //if (!isJumping && !isOnGround) return;  // What case does this handle?
-
     if (gController.IsHoldingCtrl) {
         yAccel = -1;
+        yVel += yAccel;
     } else if (isOnGround) {
         yAccel = -20;
-        //isJumping = true;
         gController.IsHoldingCtrl = true;
+        yVel += yAccel;
+        isOnGround = false; // This isn't ideal. It's assuming nothing stopped the jump.
     }
-
-    yVel += yAccel;
 }
 
 void Player::fall() {
