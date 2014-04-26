@@ -5,6 +5,7 @@
 #include "helpers.h"
 #include "Timer.h"
 #include "Player.h"
+#include "BlasterShot.h"
 
 int main (int argc, char **args) {
     // Initialize variables
@@ -25,6 +26,7 @@ int main (int argc, char **args) {
     */
 
     Player character;
+    BlasterShot blasterShot = BlasterShot(320, 320, 0, 0);
 
     while (running) {
         // Start timer
@@ -75,6 +77,8 @@ int main (int argc, char **args) {
         // All logic should be handled before any of the units on-screen get updated
         character.update();
         character.draw();
+        blasterShot.update();
+        blasterShot.draw();
 
         // Update screen
         SDL_RenderPresent(renderer);

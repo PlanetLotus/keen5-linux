@@ -3,15 +3,23 @@
 
 #include "globals.h"
 
+using namespace std;
+
 class BlasterShot {
     private:
-        int speed;
-        int startX;
-        int startY;
+        int xVel;
+        int yVel;
 
         SDL_Rect* srcClip;
+        SDL_Rect hitbox;
+
+        unsigned int frame;
+        int animState;
     public:
-        BlasterShot(int startX, int startY);
+        BlasterShot(int startX, int startY, int velocityX, int velocityY);
+        void update();
+        void animate(int nextState);
+        void draw();
 };
 
 #endif

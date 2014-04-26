@@ -78,7 +78,7 @@ vector<SDL_Rect> JUMPSHOOTR_ANIM(JUMPSHOOTR_ARRAY, JUMPSHOOTR_ARRAY + sizeof(JUM
 // e.g. if ANIMS[0] == walk right, then animStateEnum[WALKR] == 0
 // Purpose: To be dynamic in animate()
 // Alternative: Could use an associative array where key=state, value=array of SDL_Rect clip
-std::vector<SDL_Rect> ANIMS[14] = {
+vector<SDL_Rect> ANIMS[14] = {
     STANDL_ANIM, STANDR_ANIM,
     WALKL_ANIM, WALKR_ANIM,
     JUMPL_ANIM, JUMPR_ANIM,
