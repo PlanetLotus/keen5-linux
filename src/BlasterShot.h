@@ -15,6 +15,7 @@ class BlasterShot {
 
         unsigned int frame;
         int animState;
+        vector<SDL_Rect> anims[2];
     public:
         BlasterShot(int startX, int startY, int velocityX, int velocityY);
         void update();

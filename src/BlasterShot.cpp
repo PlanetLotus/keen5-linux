@@ -1,21 +1,5 @@
 #include "BlasterShot.h"
 
-SDL_Rect MOVE0 = {TILE_WIDTH * 6, TILE_HEIGHT * 7, TILE_WIDTH, TILE_HEIGHT};
-SDL_Rect MOVE1 = {TILE_WIDTH * 7, TILE_HEIGHT * 7, TILE_WIDTH, TILE_HEIGHT};
-SDL_Rect MOVE2 = {TILE_WIDTH * 8, TILE_HEIGHT * 7, TILE_WIDTH, TILE_HEIGHT};
-SDL_Rect MOVE3 = {TILE_WIDTH * 9, TILE_HEIGHT * 7, TILE_WIDTH, TILE_HEIGHT};
-
-SDL_Rect COLLIDE0 = {TILE_WIDTH * 10, TILE_HEIGHT * 7, TILE_WIDTH, TILE_HEIGHT};
-SDL_Rect COLLIDE1 = {TILE_WIDTH * 11, TILE_HEIGHT * 7, TILE_WIDTH, TILE_HEIGHT};
-
-SDL_Rect MOVE_ARRAY[4] = { MOVE0, MOVE1, MOVE2, MOVE3 };
-vector<SDL_Rect> MOVE_ANIM(MOVE_ARRAY, MOVE_ARRAY + sizeof(MOVE_ARRAY) / sizeof(SDL_Rect));
-
-SDL_Rect COLLIDE_ARRAY[2] = { COLLIDE0, COLLIDE1 };
-vector<SDL_Rect> COLLIDE_ANIM(COLLIDE_ARRAY, COLLIDE_ARRAY + sizeof(COLLIDE_ARRAY) / sizeof(SDL_Rect));
-
-static vector<SDL_Rect> ANIMS[2] = { MOVE_ANIM, COLLIDE_ANIM };
-
 BlasterShot::BlasterShot(int startX, int startY, int velocityX, int velocityY) {
     hitbox.x = startX;
     hitbox.y = startY;
@@ -29,6 +13,24 @@ BlasterShot::BlasterShot(int startX, int startY, int velocityX, int velocityY) {
     animState = 0;
 
     srcClip = NULL;
+
+    // Animation instantiation
+    SDL_Rect move0 = {TILE_WIDTH * 6, TILE_HEIGHT * 7, TILE_WIDTH, TILE_HEIGHT};
+    SDL_Rect move1 = {TILE_WIDTH * 7, TILE_HEIGHT * 7, TILE_WIDTH, TILE_HEIGHT};
+    SDL_Rect move2 = {TILE_WIDTH * 8, TILE_HEIGHT * 7, TILE_WIDTH, TILE_HEIGHT};
+    SDL_Rect move3 = {TILE_WIDTH * 9, TILE_HEIGHT * 7, TILE_WIDTH, TILE_HEIGHT};
+
+    SDL_Rect collide0 = {TILE_WIDTH * 10, TILE_HEIGHT * 7, TILE_WIDTH, TILE_HEIGHT};
+    SDL_Rect collide1 = {TILE_WIDTH * 11, TILE_HEIGHT * 7, TILE_WIDTH, TILE_HEIGHT};
+
+    SDL_Rect move_array[4] = { move0, move1, move2, move3 };
+    vector<SDL_Rect> move_anim(move_array, move_array + sizeof(move_array) / sizeof(SDL_Rect));
+
+    SDL_Rect collide_array[2] = { collide0, collide1 };
+    vector<SDL_Rect> collide_anim(collide_array, collide_array + sizeof(collide_array) / sizeof(SDL_Rect));
+
+    anims[0] = move_anim;
+    anims[1] = collide_anim;
 }
 
 void BlasterShot::update() {
@@ -46,10 +48,10 @@ void BlasterShot::animate(int nextState) {
         animState = nextState;
     }
 
-    if (frame == ANIMS[animState].size() * FRAMETIME)
+    if (frame == anims[animState].size() * FRAMETIME)
         frame = 0;
 
-    srcClip = &ANIMS[animState][frame / FRAMETIME];
+    srcClip = &anims[animState][frame / FRAMETIME];
 }
 
 void BlasterShot::draw() {
