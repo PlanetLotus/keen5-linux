@@ -24,9 +24,9 @@ BlasterShot::BlasterShot(int startX, int startY, int velocityX, int velocityY) {
     SDL_Rect collide1 = {TILE_WIDTH * 11, TILE_HEIGHT * 7, TILE_WIDTH, TILE_HEIGHT};
 
     SDL_Rect move_array[4] = { move0, move1, move2, move3 };
-    vector<SDL_Rect> move_anim(move_array, move_array + sizeof(move_array) / sizeof(SDL_Rect));
-
     SDL_Rect collide_array[2] = { collide0, collide1 };
+
+    vector<SDL_Rect> move_anim(move_array, move_array + sizeof(move_array) / sizeof(SDL_Rect));
     vector<SDL_Rect> collide_anim(collide_array, collide_array + sizeof(collide_array) / sizeof(SDL_Rect));
 
     anims[0] = move_anim;
