@@ -20,6 +20,8 @@ class Player {
 
         unsigned int frame;
         int animState;
+        vector<SDL_Rect> anims[14];
+
         directionEnum facing;
         bool idle;
 

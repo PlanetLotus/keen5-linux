@@ -1,93 +1,6 @@
 #include "helpers.h"
 #include "Player.h"
 
-// Animation (srcClip) frames
-SDL_Rect STANDL0 = {0, TILE_HEIGHT * 2, TILE_WIDTH, TILE_HEIGHT * 2};
-SDL_Rect STANDR0 = {0, 0, TILE_WIDTH, TILE_HEIGHT * 2};
-
-SDL_Rect WALKL0 = {TILE_WIDTH, TILE_HEIGHT * 2, TILE_WIDTH * 2, TILE_HEIGHT * 2};
-SDL_Rect WALKL1 = {TILE_WIDTH * 3, TILE_HEIGHT * 2, TILE_WIDTH * 2, TILE_HEIGHT * 2};
-SDL_Rect WALKL2 = {TILE_WIDTH * 5, TILE_HEIGHT * 2, TILE_WIDTH, TILE_HEIGHT * 2};
-SDL_Rect WALKL3 = {TILE_WIDTH * 6, TILE_HEIGHT * 2, TILE_WIDTH * 2, TILE_HEIGHT * 2};
-
-SDL_Rect WALKR0 = {TILE_WIDTH, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2};
-SDL_Rect WALKR1 = {TILE_WIDTH * 3, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2};
-SDL_Rect WALKR2 = {TILE_WIDTH * 5, 0, TILE_WIDTH, TILE_HEIGHT * 2};
-SDL_Rect WALKR3 = {TILE_WIDTH * 6, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2};
-
-SDL_Rect JUMPL0 = {TILE_WIDTH * 8, TILE_HEIGHT * 2, TILE_WIDTH * 2, TILE_HEIGHT * 2};
-SDL_Rect FLOATL0 = {TILE_WIDTH * 10, TILE_HEIGHT * 2, TILE_WIDTH * 2, TILE_HEIGHT * 2};
-SDL_Rect FALLL0 = {TILE_WIDTH * 12, TILE_HEIGHT * 2, TILE_WIDTH * 2, TILE_HEIGHT * 2};
-
-SDL_Rect JUMPR0 = {TILE_WIDTH * 8, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2};
-SDL_Rect FLOATR0 = {TILE_WIDTH * 10, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2};
-SDL_Rect FALLR0 = {TILE_WIDTH * 12, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2};
-
-SDL_Rect SHOOTL0 = {0, TILE_HEIGHT * 6, TILE_WIDTH * 3, TILE_HEIGHT * 2};
-SDL_Rect SHOOTR0 = {0, TILE_HEIGHT * 4, TILE_WIDTH * 3, TILE_HEIGHT * 2};
-
-SDL_Rect JUMPSHOOTL0 = {TILE_WIDTH * 3, TILE_HEIGHT * 6, TILE_WIDTH * 3, TILE_HEIGHT * 2};
-SDL_Rect JUMPSHOOTR0 = {TILE_WIDTH * 3, TILE_HEIGHT * 4, TILE_WIDTH * 3, TILE_HEIGHT * 2};
-
-// TODO: Could contain idle animation so that this isn't just a wasted array
-SDL_Rect STANDL_ARRAY[1] = { STANDL0 };
-vector<SDL_Rect> STANDL_ANIM(STANDL_ARRAY, STANDL_ARRAY + sizeof(STANDL_ARRAY) / sizeof(SDL_Rect));
-
-// TODO: Could contain idle animation so that this isn't just a wasted array
-SDL_Rect STANDR_ARRAY[1] = { STANDR0 };
-vector<SDL_Rect> STANDR_ANIM(STANDR_ARRAY, STANDR_ARRAY + sizeof(STANDR_ARRAY) / sizeof(SDL_Rect));
-
-SDL_Rect WALKL_ARRAY[4] = { WALKL0, WALKL1, WALKL2, WALKL3 };
-vector<SDL_Rect> WALKL_ANIM(WALKL_ARRAY, WALKL_ARRAY + sizeof(WALKL_ARRAY) / sizeof(SDL_Rect));
-
-SDL_Rect WALKR_ARRAY[4] = { WALKR0, WALKR1, WALKR2, WALKR3 };
-vector<SDL_Rect> WALKR_ANIM(WALKR_ARRAY, WALKR_ARRAY + sizeof(WALKR_ARRAY) / sizeof(SDL_Rect));
-
-SDL_Rect JUMPL_ARRAY[1] = { JUMPL0 };
-vector<SDL_Rect> JUMPL_ANIM(JUMPL_ARRAY, JUMPL_ARRAY + sizeof(JUMPL_ARRAY) / sizeof(SDL_Rect));
-
-SDL_Rect FLOATL_ARRAY[1] = { FLOATL0 };
-vector<SDL_Rect> FLOATL_ANIM(FLOATL_ARRAY, FLOATL_ARRAY + sizeof(FLOATL_ARRAY) / sizeof(SDL_Rect));
-
-SDL_Rect FALLL_ARRAY[1] = { FALLL0 };
-vector<SDL_Rect> FALLL_ANIM(FALLL_ARRAY, FALLL_ARRAY + sizeof(FALLL_ARRAY) / sizeof(SDL_Rect));
-
-SDL_Rect JUMPR_ARRAY[1] = { JUMPR0 };
-vector<SDL_Rect> JUMPR_ANIM(JUMPR_ARRAY, JUMPR_ARRAY + sizeof(JUMPR_ARRAY) / sizeof(SDL_Rect));
-
-SDL_Rect FLOATR_ARRAY[1] = { FLOATR0 };
-vector<SDL_Rect> FLOATR_ANIM(FLOATR_ARRAY, FLOATR_ARRAY + sizeof(FLOATR_ARRAY) / sizeof(SDL_Rect));
-
-SDL_Rect FALLR_ARRAY[1] = { FALLR0 };
-vector<SDL_Rect> FALLR_ANIM(FALLR_ARRAY, FALLR_ARRAY + sizeof(FALLR_ARRAY) / sizeof(SDL_Rect));
-
-SDL_Rect SHOOTL_ARRAY[1] = { SHOOTL0 };
-vector<SDL_Rect> SHOOTL_ANIM(SHOOTL_ARRAY, SHOOTL_ARRAY + sizeof(SHOOTL_ARRAY) / sizeof(SDL_Rect));
-
-SDL_Rect SHOOTR_ARRAY[1] = { SHOOTR0 };
-vector<SDL_Rect> SHOOTR_ANIM(SHOOTR_ARRAY, SHOOTR_ARRAY + sizeof(SHOOTR_ARRAY) / sizeof(SDL_Rect));
-
-SDL_Rect JUMPSHOOTL_ARRAY[1] = { JUMPSHOOTL0 };
-vector<SDL_Rect> JUMPSHOOTL_ANIM(JUMPSHOOTL_ARRAY, JUMPSHOOTL_ARRAY + sizeof(JUMPSHOOTL_ARRAY) / sizeof(SDL_Rect));
-
-SDL_Rect JUMPSHOOTR_ARRAY[1] = { JUMPSHOOTR0 };
-vector<SDL_Rect> JUMPSHOOTR_ANIM(JUMPSHOOTR_ARRAY, JUMPSHOOTR_ARRAY + sizeof(JUMPSHOOTR_ARRAY) / sizeof(SDL_Rect));
-
-// Array of animations
-// Statically set...animState's value needs to match this array
-// e.g. if ANIMS[0] == walk right, then animStateEnum[WALKR] == 0
-// Purpose: To be dynamic in animate()
-// Alternative: Could use an associative array where key=state, value=array of SDL_Rect clip
-vector<SDL_Rect> ANIMS[14] = {
-    STANDL_ANIM, STANDR_ANIM,
-    WALKL_ANIM, WALKR_ANIM,
-    JUMPL_ANIM, JUMPR_ANIM,
-    FLOATL_ANIM, FLOATR_ANIM,
-    FALLL_ANIM, FALLR_ANIM,
-    SHOOTL_ANIM, SHOOTR_ANIM,
-    JUMPSHOOTL_ANIM, JUMPSHOOTR_ANIM
-};
-
 Player::Player() {
     ammo = 5;
     xVel = 0;
@@ -111,6 +24,84 @@ Player::Player() {
 
     shootingFrameCount = 0;
     isShooting = false;
+
+    // Animation data
+    SDL_Rect standL0 = {0, TILE_HEIGHT * 2, TILE_WIDTH, TILE_HEIGHT * 2};
+    SDL_Rect standR0 = {0, 0, TILE_WIDTH, TILE_HEIGHT * 2};
+
+    SDL_Rect walkL0 = {TILE_WIDTH, TILE_HEIGHT * 2, TILE_WIDTH * 2, TILE_HEIGHT * 2};
+    SDL_Rect walkL1 = {TILE_WIDTH * 3, TILE_HEIGHT * 2, TILE_WIDTH * 2, TILE_HEIGHT * 2};
+    SDL_Rect walkL2 = {TILE_WIDTH * 5, TILE_HEIGHT * 2, TILE_WIDTH, TILE_HEIGHT * 2};
+    SDL_Rect walkL3 = {TILE_WIDTH * 6, TILE_HEIGHT * 2, TILE_WIDTH * 2, TILE_HEIGHT * 2};
+
+    SDL_Rect walkR0 = {TILE_WIDTH, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2};
+    SDL_Rect walkR1 = {TILE_WIDTH * 3, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2};
+    SDL_Rect walkR2 = {TILE_WIDTH * 5, 0, TILE_WIDTH, TILE_HEIGHT * 2};
+    SDL_Rect walkR3 = {TILE_WIDTH * 6, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2};
+
+    SDL_Rect jumpL0 = {TILE_WIDTH * 8, TILE_HEIGHT * 2, TILE_WIDTH * 2, TILE_HEIGHT * 2};
+    SDL_Rect floatL0 = {TILE_WIDTH * 10, TILE_HEIGHT * 2, TILE_WIDTH * 2, TILE_HEIGHT * 2};
+    SDL_Rect fallL0 = {TILE_WIDTH * 12, TILE_HEIGHT * 2, TILE_WIDTH * 2, TILE_HEIGHT * 2};
+
+    SDL_Rect jumpR0 = {TILE_WIDTH * 8, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2};
+    SDL_Rect floatR0 = {TILE_WIDTH * 10, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2};
+    SDL_Rect fallR0 = {TILE_WIDTH * 12, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2};
+
+    SDL_Rect shootL0 = {0, TILE_HEIGHT * 6, TILE_WIDTH * 3, TILE_HEIGHT * 2};
+    SDL_Rect shootR0 = {0, TILE_HEIGHT * 4, TILE_WIDTH * 3, TILE_HEIGHT * 2};
+
+    SDL_Rect jumpShootL0 = {TILE_WIDTH * 3, TILE_HEIGHT * 6, TILE_WIDTH * 3, TILE_HEIGHT * 2};
+    SDL_Rect jumpShootR0 = {TILE_WIDTH * 3, TILE_HEIGHT * 4, TILE_WIDTH * 3, TILE_HEIGHT * 2};
+
+    SDL_Rect standL_array[1] = { standL0 };
+    vector<SDL_Rect> standL_anim(standL_array, standL_array + sizeof(standL_array) / sizeof(SDL_Rect));
+
+    SDL_Rect standR_array[1] = { standR0 };
+    vector<SDL_Rect> standR_anim(standR_array, standR_array + sizeof(standR_array) / sizeof(SDL_Rect));
+
+    SDL_Rect walkL_array[4] = { walkL0, walkL1, walkL2, walkL3 };
+    vector<SDL_Rect> walkL_anim(walkL_array, walkL_array + sizeof(walkL_array) / sizeof(SDL_Rect));
+
+    SDL_Rect walkR_array[4] = { walkR0, walkR1, walkR2, walkR3 };
+    vector<SDL_Rect> walkR_anim(walkR_array, walkR_array + sizeof(walkR_array) / sizeof(SDL_Rect));
+
+    SDL_Rect jumpL_array[1] = { jumpL0 };
+    vector<SDL_Rect> jumpL_anim(jumpL_array, jumpL_array + sizeof(jumpL_array) / sizeof(SDL_Rect));
+
+    SDL_Rect floatL_array[1] = { floatL0 };
+    vector<SDL_Rect> floatL_anim(floatL_array, floatL_array + sizeof(floatL_array) / sizeof(SDL_Rect));
+
+    SDL_Rect fallL_array[1] = { fallL0 };
+    vector<SDL_Rect> fallL_anim(fallL_array, fallL_array + sizeof(fallL_array) / sizeof(SDL_Rect));
+
+    SDL_Rect jumpR_array[1] = { jumpR0 };
+    vector<SDL_Rect> jumpR_anim(jumpR_array, jumpR_array + sizeof(jumpR_array) / sizeof(SDL_Rect));
+
+    SDL_Rect floatR_array[1] = { floatR0 };
+    vector<SDL_Rect> floatR_anim(floatR_array, floatR_array + sizeof(floatR_array) / sizeof(SDL_Rect));
+
+    SDL_Rect fallR_array[1] = { fallR0 };
+    vector<SDL_Rect> fallR_anim(fallR_array, fallR_array + sizeof(fallR_array) / sizeof(SDL_Rect));
+
+    SDL_Rect shootL_array[1] = { shootL0 };
+    vector<SDL_Rect> shootL_anim(shootL_array, shootL_array + sizeof(shootL_array) / sizeof(SDL_Rect));
+
+    SDL_Rect shootR_array[1] = { shootR0 };
+    vector<SDL_Rect> shootR_anim(shootR_array, shootR_array + sizeof(shootR_array) / sizeof(SDL_Rect));
+
+    SDL_Rect jumpShootL_array[1] = { jumpShootL0 };
+    vector<SDL_Rect> jumpShootL_anim(jumpShootL_array, jumpShootL_array + sizeof(jumpShootL_array) / sizeof(SDL_Rect));
+
+    SDL_Rect jumpShootR_array[1] = { jumpShootR0 };
+    vector<SDL_Rect> jumpShootR_anim(jumpShootR_array, jumpShootR_array + sizeof(jumpShootR_array) / sizeof(SDL_Rect));
+
+    anims[0] = standL_anim; anims[1] = standR_anim;
+    anims[2] = walkL_anim; anims[3] = walkR_anim;
+    anims[4] = jumpL_anim; anims[5] = jumpR_anim;
+    anims[6] = floatL_anim; anims[7] = floatR_anim;
+    anims[8] = fallL_anim; anims[9] = fallR_anim;
+    anims[10] = shootL_anim; anims[11] = shootR_anim;
+    anims[12] = jumpShootL_anim; anims[13] = jumpShootR_anim;
 }
 
 void Player::shoot() {
@@ -475,10 +466,10 @@ void Player::animate(int nextState) {
         animState = nextState;
     }
 
-    if (frame == ANIMS[animState].size() * FRAMETIME)
+    if (frame == anims[animState].size() * FRAMETIME)
         frame = 0;
 
-    srcClip = &ANIMS[animState][frame / FRAMETIME];
+    srcClip = &anims[animState][frame / FRAMETIME];
 }
 
 void Player::draw() {
