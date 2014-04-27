@@ -212,7 +212,7 @@ void Player::fall() {
     }
 }
 
-void Player::CheckTopCollision() {
+void Player::CheckTBCollision() {
     // Hitbox after update in y-direction
     SDL_Rect nextHitbox = { hitbox.x + xVel, hitbox.y + yVel, hitbox.w, hitbox.h };
 
@@ -229,6 +229,37 @@ void Player::CheckTopCollision() {
 
     int row = nextHitbox.y / TILE_HEIGHT;
 
+    if (yVel > 0)
+        CheckBottomCollision(minCol, maxCol, row, nextHitbox);
+    else
+        CheckTopCollision(minCol, maxCol, row, nextHitbox);
+}
+
+void Player::CheckLRCollision() {
+    // Hitbox after update in x-direction
+    // Does not include new yVel
+    SDL_Rect nextHitbox = { hitbox.x + xVel, hitbox.y, hitbox.w, hitbox.h };
+
+    int minRow = nextHitbox.y / TILE_HEIGHT;
+    int maxRow = (nextHitbox.y + nextHitbox.h) / TILE_HEIGHT;
+
+    // TODO: Fix this logic. Currently this addresses the case where, if the bottommost point
+    // of player and topmost point of tile are equal, it should NOT check this row.
+    if ((nextHitbox.y + nextHitbox.h) % TILE_WIDTH == 0 && maxRow > 0)
+        maxRow--;
+
+    // Don't let maxRow go out of bounds
+    if (maxRow > TILES_TALL-1) maxRow = TILES_TALL-1;
+
+    int col = nextHitbox.x / TILE_WIDTH;
+
+    if (xVel > 0)
+        CheckRightCollision(col, minRow, maxRow, nextHitbox);
+    else
+        CheckLeftCollision(col, minRow, maxRow, nextHitbox);
+}
+
+void Player::CheckTopCollision(int minCol, int maxCol, int row, SDL_Rect nextHitbox) {
     for (int i = minCol; i <= maxCol; i++) {
         for (int j = row; j >= 0; j--) {
             Tile* tile = gTiles[i][j];
@@ -246,23 +277,7 @@ void Player::CheckTopCollision() {
     }
 }
 
-void Player::CheckBottomCollision() {
-    // Hitbox after update in y-direction
-    SDL_Rect nextHitbox = { hitbox.x + xVel, hitbox.y + yVel, hitbox.w, hitbox.h };
-
-    int minCol = nextHitbox.x / TILE_WIDTH;
-    int maxCol = (nextHitbox.x + nextHitbox.w) / TILE_WIDTH;
-
-    // TODO: Fix this logic. Currently this addresses the case where, if the rightmost point
-    // of player and leftmost point of tile are equal, it should NOT check this column.
-    if ((nextHitbox.x + nextHitbox.w) % TILE_WIDTH == 0 && maxCol > 0)
-        maxCol--;
-
-    // Don't let maxCol go out of bounds
-    if (maxCol > TILES_WIDE-1) maxCol = TILES_WIDE-1;
-
-    int row = (nextHitbox.y + nextHitbox.h) / TILE_HEIGHT;
-
+void Player::CheckBottomCollision(int minCol, int maxCol, int row, SDL_Rect nextHitbox) {
     for (int i = minCol; i <= maxCol; i++) {
         for (unsigned int j = row; j < gTiles[i].size(); j++) {
             Tile* tile = gTiles[i][j];
@@ -280,24 +295,7 @@ void Player::CheckBottomCollision() {
     }
 }
 
-void Player::CheckLeftCollision() {
-    // Hitbox after update in x-direction
-    // Does not include new yVel
-    SDL_Rect nextHitbox = { hitbox.x + xVel, hitbox.y, hitbox.w, hitbox.h };
-
-    int minRow = nextHitbox.y / TILE_HEIGHT;
-    int maxRow = (nextHitbox.y + nextHitbox.h) / TILE_HEIGHT;
-
-    // TODO: Fix this logic. Currently this addresses the case where, if the bottommost point
-    // of player and topmost point of tile are equal, it should NOT check this row.
-    if ((nextHitbox.y + nextHitbox.h) % TILE_WIDTH == 0 && maxRow > 0)
-        maxRow--;
-
-    // Don't let maxRow go out of bounds
-    if (maxRow > TILES_TALL-1) maxRow = TILES_TALL-1;
-
-    int col = nextHitbox.x / TILE_WIDTH;
-
+void Player::CheckLeftCollision(int col, int minRow, int maxRow, SDL_Rect nextHitbox) {
     for (int i = col; i >= 0; i--) {
         for (int j = minRow; j <= maxRow; j++) {
             Tile* tile = gTiles[i][j];
@@ -315,25 +313,7 @@ void Player::CheckLeftCollision() {
     }
 }
 
-void Player::CheckRightCollision() {
-    // Hitbox after update in x-direction
-    // Does not include new yVel
-    SDL_Rect nextHitbox = { hitbox.x + xVel, hitbox.y, hitbox.w, hitbox.h };
-
-    int minRow = nextHitbox.y / TILE_HEIGHT;
-    int maxRow = (nextHitbox.y + nextHitbox.h) / TILE_HEIGHT;
-
-    // TODO: Fix this logic. Currently this addresses the case where, if the bottommost point
-    // of player and topmost point of tile are equal, it should NOT check this row.
-    if ((nextHitbox.y + nextHitbox.h) % TILE_WIDTH == 0 && maxRow > 0)
-        maxRow--;
-
-    // Don't let maxRow go out of bounds
-    if (maxRow > TILES_TALL-1) maxRow = TILES_TALL-1;
-
-    // This could be wrong...should it round up instead?
-    int col = nextHitbox.x / TILE_WIDTH;
-
+void Player::CheckRightCollision(int col, int minRow, int maxRow, SDL_Rect nextHitbox) {
     for (unsigned int i = col; i < gTiles.size(); i++) {
         for (int j = minRow; j <= maxRow; j++) {
             Tile* tile = gTiles[i][j];
@@ -356,19 +336,10 @@ bool Player::IsCollidingWithTiles() {
     bool yChange = yVel != 0;
 
     // For static objects (tiles), check per-axis collision only if we're moving on that axis
-    if (xChange) {
-        if (xVel > 0)
-            CheckRightCollision();
-        else
-            CheckLeftCollision();
-    }
-
-    if (yChange) {
-        if (yVel > 0)
-            CheckBottomCollision();
-        else
-            CheckTopCollision();
-    }
+    if (xChange)
+        CheckLRCollision();
+    if (yChange)
+        CheckTBCollision();
 
     return false;
 }
