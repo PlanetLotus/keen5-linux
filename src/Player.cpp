@@ -101,21 +101,28 @@ void Player::shoot(bool isPressingUp, bool isPressingDown) {
 
     if (!isShooting) {
         // Create shot
-        // Determine direction of shot
+        int xStart = 0;
+        int yStart = 0;
         int xShotVel = 0;
         int yShotVel = 0;
 
         if (isPressingUp) {
+            xStart = hitbox.x;
+            yStart = hitbox.y - TILE_HEIGHT;
             yShotVel = -1;
             animVal = isOnGround ? 10 : 12; // Correct values not yet implemented
         } else if (isPressingDown && !isOnGround) {
+            xStart = hitbox.x;
+            yStart = hitbox.y + TILE_HEIGHT;
             yShotVel = 1;
             animVal = 10; // Correct value not yet implemented
         } else {
+            xStart = facing == 0 ? hitbox.x - TILE_WIDTH : hitbox.x + TILE_WIDTH;
+            yStart = hitbox.y + TILE_HEIGHT / 3;
             xShotVel = facing == 0 ? -1 : 1;
         }
 
-        new BlasterShot(hitbox.x + TILE_WIDTH*3/2, hitbox.y + TILE_HEIGHT/3, xShotVel, yShotVel);
+        new BlasterShot(xStart, yStart, xShotVel, yShotVel);
     }
 
     if (shootingFrameCount >= 4) {
