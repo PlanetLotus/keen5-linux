@@ -4,8 +4,11 @@
 #include "globals.h"
 #include "helpers.h"
 #include "Timer.h"
+#include "Sprite.h"
 #include "Player.h"
 #include "BlasterShot.h"
+
+using namespace std;
 
 int main (int argc, char **args) {
     // Initialize variables
@@ -25,8 +28,8 @@ int main (int argc, char **args) {
     freopen("CON", "w", stderr);
     */
 
-    Player character;
-    BlasterShot blasterShot = BlasterShot(320, 320, 0, 0);
+    Sprite* character = new Player();
+    gSpriteBatch[0] = character;
 
     while (running) {
         // Start timer
@@ -75,10 +78,10 @@ int main (int argc, char **args) {
         // Later this will probably be done in a batch
         // Be sure to update THEN draw. Don't let the order get messed up across several units
         // All logic should be handled before any of the units on-screen get updated
-        character.update();
-        character.draw();
-        blasterShot.update();
-        blasterShot.draw();
+        for (unsigned int i = 0; i < gSpriteBatch.size(); i++)
+            gSpriteBatch[i]->update();
+        for (unsigned int i = 0; i < gSpriteBatch.size(); i++)
+            gSpriteBatch[i]->draw();
 
         // Update screen
         SDL_RenderPresent(renderer);

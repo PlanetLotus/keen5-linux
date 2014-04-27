@@ -2,12 +2,13 @@
 #define PLAYER_H
 
 #include "globals.h"
+#include "Sprite.h"
 
 enum directionEnum {LEFT, RIGHT, UP, DOWN, STOP};
 
 using namespace std;
 
-class Player {
+class Player : public Sprite {
     private:
         int ammo;
         int xVel;

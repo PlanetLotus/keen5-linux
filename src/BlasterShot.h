@@ -5,7 +5,7 @@
 
 using namespace std;
 
-class BlasterShot {
+class BlasterShot : public Sprite {
     private:
         int xVel;
         int yVel;

@@ -1,4 +1,5 @@
 #include "helpers.h"
+#include "BlasterShot.h"
 #include "Player.h"
 
 Player::Player() {
@@ -93,6 +94,12 @@ Player::Player() {
 }
 
 void Player::shoot() {
+    if (!isShooting) {
+        // Create shot
+        Sprite* blasterShot = new BlasterShot(hitbox.x + TILE_WIDTH*3/2, hitbox.y + TILE_HEIGHT/3, 0, 0);
+        gSpriteBatch.push_back(blasterShot);
+    }
+
     if (shootingFrameCount >= 4) {
         isShooting = false;
         shootingFrameCount = 0;

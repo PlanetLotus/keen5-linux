@@ -27,3 +27,5 @@ std::vector<SDL_Rect> gTileClips(TOTAL_TILE_TYPES);
 
 // Number of timer loops per animation frame
 const int FRAMETIME = 2;
+
+std::vector<Sprite*> gSpriteBatch(1);

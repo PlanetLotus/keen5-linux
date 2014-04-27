@@ -2,6 +2,7 @@
 #define GLOBALS_H
 
 #include "SDL.h"
+#include "Sprite.h"
 #include "Texture.h"
 #include "Tile.h"
 #include "Controller.h"
@@ -38,5 +39,7 @@ extern Controller gController;
 
 // Number of timer loops per animation frame
 extern const int FRAMETIME;
+
+extern std::vector<Sprite*> gSpriteBatch;
 
 #endif
