@@ -13,8 +13,8 @@ class Player : public Sprite {
         int xAccel;
         int yAccel;
 
-        //unsigned int frame;
-        //int animState;
+        unsigned int frame;
+        int animState;
         std::vector<SDL_Rect> anims[14];
 
         directionEnum facing;

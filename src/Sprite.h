@@ -7,9 +7,6 @@ class Sprite {
     protected:
         SDL_Rect hitbox;
         SDL_Rect* srcClip;
-        unsigned int frame;
-        int animState;
-        //std::vector<SDL_Rect> anims[0];
 
         int xVel;
         int yVel;
