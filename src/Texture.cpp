@@ -1,5 +1,6 @@
 #include "Texture.h"
 #include "globals.h"
+#include "SDL_image.h"
 
 Texture::Texture() {
     // Init

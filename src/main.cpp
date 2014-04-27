@@ -1,10 +1,8 @@
 #include <iostream>
 
-#include "Texture.h"
 #include "globals.h"
 #include "helpers.h"
 #include "Timer.h"
-#include "Sprite.h"
 #include "Player.h"
 #include "BlasterShot.h"
 

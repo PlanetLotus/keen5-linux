@@ -1,8 +1,7 @@
-//#include <string>
-
 #include "helpers.h"
 #include "Texture.h"
 #include "globals.h"
+#include "SDL_image.h"
 
 #include <stdio.h>
 #include <string>

@@ -1,4 +1,5 @@
 #include "BlasterShot.h"
+#include "globals.h"
 
 using namespace std;
 
