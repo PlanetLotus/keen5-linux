@@ -11,8 +11,8 @@ class Sprite {
         int xVel;
         int yVel;
     public:
+        virtual ~Sprite();
         virtual void update();
-        void animate(int nextState);
         virtual void draw();
         void CheckCollision();
         void CheckTBCollision();

@@ -3,6 +3,10 @@
 #include "Sprite.h"
 #include "Tile.h"
 
+Sprite::~Sprite() {
+    delete srcClip;
+}
+
 void Sprite::update() {}
 
 void Sprite::draw() {}

@@ -1,5 +1,7 @@
+#include <algorithm>
 #include "BlasterShot.h"
 #include "globals.h"
+#include "helpers.h"
 
 using namespace std;
 
@@ -39,9 +41,23 @@ BlasterShot::BlasterShot(int startX, int startY, int velocityX, int velocityY) {
     anims[1] = collide_anim;
 }
 
+BlasterShot::~BlasterShot() {
+    delete srcClip;
+
+    // Erase this BlasterShot from gSpriteBatch
+    vector<Sprite*>::iterator it = find(gSpriteBatch.begin(), gSpriteBatch.end(), this);
+
+    if (it != gSpriteBatch.end()) {
+        printf("BlasterShot erased from gSpriteBatch!\n");
+        gSpriteBatch.erase(it);
+    }
+}
+
 void BlasterShot::update() {
-    // Check collision
+    CheckCollision();
+
     animate(0);
+    delete this;
 }
 
 void BlasterShot::animate(int nextState) {
