@@ -222,12 +222,8 @@ bool Player::IsBottomColliding(SDL_Rect a, SDL_Rect b) {
     int bottomA = a.y + a.h;
     int topB = b.y;
 
-    if (bottomA <= topB) {
-        isOnGround = false;
-        return false;
-    }
+    if (bottomA <= topB) return false;
 
-    isOnGround = true;
     return true;
 }
 
@@ -306,7 +302,7 @@ void Player::CheckBottomCollision() {
 
             if (tile != NULL &&
                 tile->CollideTop() &&
-                IsBottomColliding(nextHitbox, tile->getBox())) {
+                (isOnGround = IsBottomColliding(nextHitbox, tile->getBox()))) {
 
                 // Set yVel to the distance between the player and the
                 // tile he's colliding with
