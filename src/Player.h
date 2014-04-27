@@ -1,9 +1,9 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
+#include <vector>
 #include "SDL.h"
 #include "Sprite.h"
-#include <vector>
 
 enum directionEnum {LEFT, RIGHT, UP, DOWN, STOP};
 

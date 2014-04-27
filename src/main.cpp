@@ -1,10 +1,9 @@
 #include <iostream>
-
+#include "BlasterShot.h"
 #include "globals.h"
 #include "helpers.h"
-#include "Timer.h"
 #include "Player.h"
-#include "BlasterShot.h"
+#include "Timer.h"
 
 using namespace std;
 

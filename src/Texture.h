@@ -1,9 +1,9 @@
 #ifndef TEXTURE_H
 #define TEXTURE_H
 
+#include <string>
 #include "SDL.h"
 #include "SDL_ttf.h"
-#include <string>
 
 class Texture
 {

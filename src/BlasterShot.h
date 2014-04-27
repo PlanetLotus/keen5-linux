@@ -1,9 +1,9 @@
 #ifndef BLASTERSHOT_H
 #define BLASTERSHOT_H
 
+#include <vector>
 #include "SDL.h"
 #include "Sprite.h"
-#include <vector>
 
 class BlasterShot : public Sprite {
     private:

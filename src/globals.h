@@ -1,12 +1,12 @@
 #ifndef GLOBALS_H
 #define GLOBALS_H
 
+#include <vector>
+#include "Controller.h"
 #include "SDL.h"
 #include "Sprite.h"
 #include "Texture.h"
 #include "Tile.h"
-#include "Controller.h"
-#include <vector>
 
 // Screen attributes
 extern const int SCREEN_WIDTH;

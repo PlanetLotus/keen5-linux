@@ -1,12 +1,11 @@
-#include "helpers.h"
-#include "Texture.h"
-#include "globals.h"
-#include "SDL_image.h"
-
+#include <fstream>
 #include <stdio.h>
 #include <string>
-#include <fstream>
 #include <sstream>
+#include "globals.h"
+#include "helpers.h"
+#include "SDL_image.h"
+#include "Texture.h"
 
 using namespace std;
 

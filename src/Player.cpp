@@ -1,7 +1,7 @@
-#include "Player.h"
+#include "BlasterShot.h"
 #include "globals.h"
 #include "helpers.h"
-#include "BlasterShot.h"
+#include "Player.h"
 
 using namespace std;
 
