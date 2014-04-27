@@ -96,10 +96,26 @@ Player::Player() {
     anims[12] = jumpShootL_anim; anims[13] = jumpShootR_anim;
 }
 
-void Player::shoot() {
+void Player::shoot(bool isPressingUp, bool isPressingDown) {
+    int animVal = 10 + facing;
+
     if (!isShooting) {
         // Create shot
-        new BlasterShot(hitbox.x + TILE_WIDTH*3/2, hitbox.y + TILE_HEIGHT/3, 0, 0);
+        // Determine direction of shot
+        int xShotVel = 0;
+        int yShotVel = 0;
+
+        if (isPressingUp) {
+            yShotVel = -1;
+            animVal = isOnGround ? 10 : 12; // Correct values not yet implemented
+        } else if (isPressingDown && !isOnGround) {
+            yShotVel = 1;
+            animVal = 10; // Correct value not yet implemented
+        } else {
+            xShotVel = facing == 0 ? -1 : 1;
+        }
+
+        new BlasterShot(hitbox.x + TILE_WIDTH*3/2, hitbox.y + TILE_HEIGHT/3, xShotVel, yShotVel);
     }
 
     if (shootingFrameCount >= 4) {
@@ -112,7 +128,7 @@ void Player::shoot() {
 
     if (isOnGround) xVel = 0;
 
-    animate(10 + facing);
+    animate(animVal);
 }
 
 void Player::walk(directionEnum dir) {
@@ -260,10 +276,10 @@ void Player::update() {
     }
 
     if (state[SDL_SCANCODE_SPACE] && !gController.IsHoldingSpace) {
-        shoot();
+        shoot(state[SDL_SCANCODE_UP], state[SDL_SCANCODE_DOWN]);
         gController.IsHoldingSpace = true;
     } else if (isShooting) {    // Would prefer this logic elsewhere
-        shoot();
+        shoot(false, false);
     }
 
     // Apply gravity

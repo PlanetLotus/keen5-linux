@@ -11,8 +11,8 @@ BlasterShot::BlasterShot(int startX, int startY, int velocityX, int velocityY) {
     hitbox.w = TILE_WIDTH;
     hitbox.h = TILE_HEIGHT;
 
-    xVel = velocityX;
-    yVel = velocityY;
+    xVel = velocityX * 20;
+    yVel = velocityY * 20;
 
     frame = 0;
     animState = 0;
@@ -57,7 +57,6 @@ void BlasterShot::update() {
     CheckCollision();
 
     animate(0);
-    delete this;
 }
 
 void BlasterShot::animate(int nextState) {

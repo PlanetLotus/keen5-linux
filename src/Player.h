@@ -26,7 +26,7 @@ class Player : public Sprite {
         bool isShooting;
     public:
         Player();
-        void shoot();
+        void shoot(bool isPressingUp, bool isPressingDown);
         void walk(directionEnum dir);
         void stopwalk();
         void jump();
