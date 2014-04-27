@@ -16,6 +16,7 @@ class Player : public Sprite {
         unsigned int frame;
         int animState;
         std::vector<SDL_Rect> anims[17];
+        bool isAnimLocked;
 
         directionEnum facing;
         bool idle;

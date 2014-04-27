@@ -19,6 +19,7 @@ Player::Player() {
     hitbox.w = TILE_WIDTH;
     hitbox.h = TILE_HEIGHT * 2;
 
+    isAnimLocked = false;
     frame = 0;
     animState = 2;
     facing = LEFT;
@@ -133,13 +134,17 @@ void Player::shoot(bool isPressingUp, bool isPressingDown) {
         }
 
         new BlasterShot(xStart, yStart, xShotVel, yShotVel);
-    }
 
-    if (shootingFrameCount >= 4) {
+        animate(animVal);
+
+        isShooting = true;
+        isAnimLocked = true;
+        shootingFrameCount = 1;
+    } else if (shootingFrameCount >= 4) {
         isShooting = false;
+        isAnimLocked = false;
         shootingFrameCount = 0;
     } else {
-        isShooting = true;
         shootingFrameCount++;
     }
 
@@ -154,11 +159,6 @@ void Player::walk(directionEnum dir) {
 
     if (isOnGround) {
         xAccel = 0;
-
-        if (isShooting) {
-            xVel = 0;
-            return;
-        }
 
         xVel = dir == LEFT ? -5 : 5;
         animate(2 + facing);
@@ -238,10 +238,6 @@ void Player::fall() {
         } else {
             animate(4 + facing);
         }
-
-        // Shooting takes animation precedence over jumping/falling
-        if (isShooting)
-            animate(12 + facing);
     }
 }
 
@@ -306,6 +302,8 @@ void Player::update() {
 }
 
 void Player::animate(int nextState) {
+    if (isAnimLocked) return;
+
     if (animState == nextState) {
         // Get next frame
         frame++;
