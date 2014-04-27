@@ -54,7 +54,7 @@ Player::Player() {
 
     SDL_Rect shootL0 = {0, TILE_HEIGHT * 6, TILE_WIDTH * 3, TILE_HEIGHT * 2};
     SDL_Rect shootR0 = {0, TILE_HEIGHT * 4, TILE_WIDTH * 3, TILE_HEIGHT * 2};
-    SDL_Rect shootU0 = {10, TILE_HEIGHT * 4, TILE_WIDTH * 2, TILE_HEIGHT * 3};
+    SDL_Rect shootU0 = {TILE_WIDTH * 10, TILE_HEIGHT * 4, TILE_WIDTH * 2, TILE_HEIGHT * 3};
 
     SDL_Rect jumpShootL0 = {TILE_WIDTH * 3, TILE_HEIGHT * 6, TILE_WIDTH * 3, TILE_HEIGHT * 2};
     SDL_Rect jumpShootR0 = {TILE_WIDTH * 3, TILE_HEIGHT * 4, TILE_WIDTH * 3, TILE_HEIGHT * 2};
@@ -149,8 +149,6 @@ void Player::shoot(bool isPressingUp, bool isPressingDown) {
     }
 
     if (isOnGround) xVel = 0;
-
-    animate(animVal);
 }
 
 void Player::walk(directionEnum dir) {
