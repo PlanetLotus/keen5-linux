@@ -168,6 +168,42 @@ bool set_tiles() {
     return true;
 }
 
+bool IsTopColliding(SDL_Rect a, SDL_Rect b) {
+    int topA = a.y;
+    int bottomB = b.y + b.h;
+
+    if (topA >= bottomB) return false;
+
+    return true;
+}
+
+bool IsBottomColliding(SDL_Rect a, SDL_Rect b) {
+    int bottomA = a.y + a.h;
+    int topB = b.y;
+
+    if (bottomA <= topB) return false;
+
+    return true;
+}
+
+bool IsLeftColliding(SDL_Rect a, SDL_Rect b) {
+    int leftA = a.x;
+    int rightB = b.x + b.w;
+
+    if (leftA >= rightB) return false;
+
+    return true;
+}
+
+bool IsRightColliding(SDL_Rect a, SDL_Rect b) {
+    int rightA = a.x + a.w;
+    int leftB = b.x;
+
+    if (rightA <= leftB) return false;
+
+    return true;
+}
+
 void clean_up() {
     gKeenTexture->free();
     gMaskTexture->free();

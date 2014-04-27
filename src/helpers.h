@@ -13,7 +13,10 @@ bool load_files();
 
 bool set_tiles();
 
-void set_clips();
+bool IsTopColliding(SDL_Rect a, SDL_Rect b);
+bool IsBottomColliding(SDL_Rect a, SDL_Rect b);
+bool IsLeftColliding(SDL_Rect a, SDL_Rect b);
+bool IsRightColliding(SDL_Rect a, SDL_Rect b);
 
 void clean_up();
 
