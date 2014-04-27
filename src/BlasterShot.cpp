@@ -14,6 +14,9 @@ BlasterShot::BlasterShot(int startX, int startY, int velocityX, int velocityY) {
 
     srcClip = NULL;
 
+    // Add self to sprite batch
+    gSpriteBatch.push_back(this);
+
     // Animation instantiation
     SDL_Rect move0 = {TILE_WIDTH * 6, TILE_HEIGHT * 7, TILE_WIDTH, TILE_HEIGHT};
     SDL_Rect move1 = {TILE_WIDTH * 7, TILE_HEIGHT * 7, TILE_WIDTH, TILE_HEIGHT};

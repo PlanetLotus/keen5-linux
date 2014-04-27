@@ -96,8 +96,7 @@ Player::Player() {
 void Player::shoot() {
     if (!isShooting) {
         // Create shot
-        Sprite* blasterShot = new BlasterShot(hitbox.x + TILE_WIDTH*3/2, hitbox.y + TILE_HEIGHT/3, 0, 0);
-        gSpriteBatch.push_back(blasterShot);
+        new BlasterShot(hitbox.x + TILE_WIDTH*3/2, hitbox.y + TILE_HEIGHT/3, 0, 0);
     }
 
     if (shootingFrameCount >= 4) {
