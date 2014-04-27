@@ -1,5 +1,7 @@
 #include "BlasterShot.h"
 
+using namespace std;
+
 BlasterShot::BlasterShot(int startX, int startY, int velocityX, int velocityY) {
     hitbox.x = startX;
     hitbox.y = startY;

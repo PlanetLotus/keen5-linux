@@ -6,8 +6,6 @@
 
 enum directionEnum {LEFT, RIGHT, UP, DOWN, STOP};
 
-using namespace std;
-
 class Player : public Sprite {
     private:
         int ammo;
@@ -21,7 +19,7 @@ class Player : public Sprite {
 
         unsigned int frame;
         int animState;
-        vector<SDL_Rect> anims[14];
+        std::vector<SDL_Rect> anims[14];
 
         directionEnum facing;
         bool idle;

@@ -2,6 +2,8 @@
 #include "BlasterShot.h"
 #include "Player.h"
 
+using namespace std;
+
 Player::Player() {
     ammo = 5;
     xVel = 0;
