@@ -10,16 +10,11 @@ enum directionEnum {LEFT, RIGHT, UP, DOWN, STOP};
 class Player : public Sprite {
     private:
         int ammo;
-        int xVel;
-        int yVel;
         int xAccel;
         int yAccel;
 
-        SDL_Rect* srcClip;
-        SDL_Rect hitbox;
-
-        unsigned int frame;
-        int animState;
+        //unsigned int frame;
+        //int animState;
         std::vector<SDL_Rect> anims[14];
 
         directionEnum facing;
@@ -40,13 +35,7 @@ class Player : public Sprite {
         void climb(directionEnum dir);
         void enter_door();
         void fall();
-        void CheckTBCollision();
-        void CheckTopCollision(int minCol, int maxCol, int row, SDL_Rect nextHitbox);
         void CheckBottomCollision(int minCol, int maxCol, int row, SDL_Rect nextHitbox);
-        void CheckLRCollision();
-        void CheckLeftCollision(int col, int minRow, int maxRow, SDL_Rect nextHitbox);
-        void CheckRightCollision(int col, int minRow, int maxRow, SDL_Rect nextHitbox);
-        bool IsCollidingWithTiles();
         void update();
         void animate(int nextState);
         void draw();
