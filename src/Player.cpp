@@ -53,9 +53,12 @@ Player::Player() {
 
     SDL_Rect shootL0 = {0, TILE_HEIGHT * 6, TILE_WIDTH * 3, TILE_HEIGHT * 2};
     SDL_Rect shootR0 = {0, TILE_HEIGHT * 4, TILE_WIDTH * 3, TILE_HEIGHT * 2};
+    SDL_Rect shootU0 = {10, TILE_HEIGHT * 4, TILE_WIDTH * 2, TILE_HEIGHT * 3};
 
     SDL_Rect jumpShootL0 = {TILE_WIDTH * 3, TILE_HEIGHT * 6, TILE_WIDTH * 3, TILE_HEIGHT * 2};
     SDL_Rect jumpShootR0 = {TILE_WIDTH * 3, TILE_HEIGHT * 4, TILE_WIDTH * 3, TILE_HEIGHT * 2};
+    SDL_Rect jumpShootU0 = {TILE_WIDTH * 8, TILE_HEIGHT * 4, TILE_WIDTH * 2, TILE_HEIGHT * 3};
+    SDL_Rect jumpShootD0 = {TILE_WIDTH * 6, TILE_HEIGHT * 4, TILE_WIDTH * 2, TILE_HEIGHT * 2};
 
     SDL_Rect standL_array[1] = { standL0 };
     SDL_Rect standR_array[1] = { standR0 };
@@ -69,8 +72,11 @@ Player::Player() {
     SDL_Rect fallR_array[1] = { fallR0 };
     SDL_Rect shootL_array[1] = { shootL0 };
     SDL_Rect shootR_array[1] = { shootR0 };
+    SDL_Rect shootU_array[1] = { shootU0 };
     SDL_Rect jumpShootL_array[1] = { jumpShootL0 };
     SDL_Rect jumpShootR_array[1] = { jumpShootR0 };
+    SDL_Rect jumpShootU_array[1] = { jumpShootU0 };
+    SDL_Rect jumpShootD_array[1] = { jumpShootD0 };
 
     vector<SDL_Rect> standL_anim(standL_array, standL_array + sizeof(standL_array) / sizeof(SDL_Rect));
     vector<SDL_Rect> standR_anim(standR_array, standR_array + sizeof(standR_array) / sizeof(SDL_Rect));
@@ -84,16 +90,20 @@ Player::Player() {
     vector<SDL_Rect> fallR_anim(fallR_array, fallR_array + sizeof(fallR_array) / sizeof(SDL_Rect));
     vector<SDL_Rect> shootL_anim(shootL_array, shootL_array + sizeof(shootL_array) / sizeof(SDL_Rect));
     vector<SDL_Rect> shootR_anim(shootR_array, shootR_array + sizeof(shootR_array) / sizeof(SDL_Rect));
+    vector<SDL_Rect> shootU_anim(shootU_array, shootU_array + sizeof(shootU_array) / sizeof(SDL_Rect));
     vector<SDL_Rect> jumpShootL_anim(jumpShootL_array, jumpShootL_array + sizeof(jumpShootL_array) / sizeof(SDL_Rect));
     vector<SDL_Rect> jumpShootR_anim(jumpShootR_array, jumpShootR_array + sizeof(jumpShootR_array) / sizeof(SDL_Rect));
+    vector<SDL_Rect> jumpShootU_anim(jumpShootU_array, jumpShootU_array + sizeof(jumpShootU_array) / sizeof(SDL_Rect));
+    vector<SDL_Rect> jumpShootD_anim(jumpShootD_array, jumpShootD_array + sizeof(jumpShootD_array) / sizeof(SDL_Rect));
 
     anims[0] = standL_anim; anims[1] = standR_anim;
     anims[2] = walkL_anim; anims[3] = walkR_anim;
     anims[4] = jumpL_anim; anims[5] = jumpR_anim;
     anims[6] = floatL_anim; anims[7] = floatR_anim;
     anims[8] = fallL_anim; anims[9] = fallR_anim;
-    anims[10] = shootL_anim; anims[11] = shootR_anim;
-    anims[12] = jumpShootL_anim; anims[13] = jumpShootR_anim;
+    anims[10] = shootL_anim; anims[11] = shootR_anim; anims[12] = shootU_anim;
+    anims[13] = jumpShootL_anim; anims[14] = jumpShootR_anim;
+    anims[15] = jumpShootU_anim; anims[16] = jumpShootD_anim;
 }
 
 void Player::shoot(bool isPressingUp, bool isPressingDown) {
@@ -110,12 +120,12 @@ void Player::shoot(bool isPressingUp, bool isPressingDown) {
             xStart = hitbox.x;
             yStart = hitbox.y - TILE_HEIGHT;
             yShotVel = -1;
-            animVal = isOnGround ? 10 : 12; // Correct values not yet implemented
+            animVal = isOnGround ? 12 : 15;
         } else if (isPressingDown && !isOnGround) {
             xStart = hitbox.x;
             yStart = hitbox.y + TILE_HEIGHT;
             yShotVel = 1;
-            animVal = 10; // Correct value not yet implemented
+            animVal = 16;
         } else {
             xStart = facing == 0 ? hitbox.x - TILE_WIDTH : hitbox.x + TILE_WIDTH;
             yStart = hitbox.y + TILE_HEIGHT / 3;
@@ -220,7 +230,7 @@ void Player::fall() {
 
     yVel += yAccel;
 
-    if (!isOnGround) { // Implies that he's either falling or jumping
+    if (!isOnGround && !isShooting) { // Implies that he's either falling or jumping
         if (yVel > 0) {
             animate(8 + facing);
         } else if (yVel == 0) {
@@ -320,7 +330,11 @@ void Player::draw() {
     int offsetX = srcClip->w / 2 - TILE_WIDTH / 2;
     int destX = hitbox.x - offsetX;
 
-    gKeenTexture->render(destX, hitbox.y, srcClip);
+    // Bottom-align the hitbox for taller vertical frames
+    int offsetY = srcClip->h - TILE_HEIGHT * 2;
+    int destY = hitbox.y - offsetY;
+
+    gKeenTexture->render(destX, destY, srcClip);
 }
 
 // Getters and setters
