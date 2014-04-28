@@ -7,21 +7,18 @@
 
 class BlasterShot : public Sprite {
     private:
-        int xVel;
-        int yVel;
-
-        SDL_Rect* srcClip;
-        SDL_Rect hitbox;
+        int expireTimer;
 
         unsigned int frame;
         int animState;
         std::vector<SDL_Rect> anims[2];
     public:
         BlasterShot(int startX, int startY, int velocityX, int velocityY);
-        ~BlasterShot();
         void update();
         void animate(int nextState);
         void draw();
+        void expire();
+        void die();
 };
 
 #endif

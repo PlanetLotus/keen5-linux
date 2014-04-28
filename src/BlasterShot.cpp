@@ -14,6 +14,8 @@ BlasterShot::BlasterShot(int startX, int startY, int velocityX, int velocityY) {
     xVel = velocityX * 20;
     yVel = velocityY * 20;
 
+    expireTimer = 0;
+
     frame = 0;
     animState = 0;
 
@@ -41,22 +43,18 @@ BlasterShot::BlasterShot(int startX, int startY, int velocityX, int velocityY) {
     anims[1] = collide_anim;
 }
 
-BlasterShot::~BlasterShot() {
-    delete srcClip;
-
-    // Erase this BlasterShot from gSpriteBatch
-    vector<Sprite*>::iterator it = find(gSpriteBatch.begin(), gSpriteBatch.end(), this);
-
-    if (it != gSpriteBatch.end()) {
-        printf("BlasterShot erased from gSpriteBatch!\n");
-        gSpriteBatch.erase(it);
-    }
-}
-
 void BlasterShot::update() {
     CheckCollision();
 
-    animate(0);
+    // HACK: This is how I get around the lack of info I get from CheckCollision
+    // Long term I should really reconsider how to generalize collision detection
+    // so that all objects can benefit from its helpers but get different types of info from it
+    if (xVel == 0 && yVel == 0) {
+        expire();
+        animate(1);
+    } else {
+        animate(0);
+    }
 }
 
 void BlasterShot::animate(int nextState) {
@@ -80,4 +78,22 @@ void BlasterShot::draw() {
     hitbox.y += yVel;
 
     gKeenTexture->render(hitbox.x, hitbox.y, srcClip);
+}
+
+void BlasterShot::expire() {
+    if (expireTimer / FRAMETIME >= 2) {
+        die();
+        return;
+    }
+
+    expireTimer++;
+}
+
+void BlasterShot::die() {
+    // Erase this BlasterShot from gSpriteBatch
+    // This calls the destructor internally
+    vector<Sprite*>::iterator it = find(gSpriteBatch.begin(), gSpriteBatch.end(), this);
+
+    if (it != gSpriteBatch.end())
+        gSpriteBatch.erase(it);
 }
