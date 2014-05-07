@@ -8,6 +8,8 @@ class Sprite {
         SDL_Rect hitbox;
         SDL_Rect* srcClip;
 
+        bool isCollidingThisTurn;
+
         int xVel;
         int yVel;
     public:

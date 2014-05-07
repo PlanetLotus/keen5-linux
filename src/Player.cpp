@@ -25,6 +25,8 @@ Player::Player() {
     facing = LEFT;
     idle = true;
 
+    isCollidingThisTurn = false;
+
     isOnGround = true;
 
     shootingFrameCount = 0;

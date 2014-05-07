@@ -14,6 +14,8 @@ BlasterShot::BlasterShot(int startX, int startY, int velocityX, int velocityY) {
     xVel = velocityX * 20;
     yVel = velocityY * 20;
 
+    isCollidingThisTurn = false;
+
     expireTimer = 0;
 
     frame = 0;
@@ -76,6 +78,9 @@ void BlasterShot::animate(int nextState) {
 void BlasterShot::draw() {
     hitbox.x += xVel;
     hitbox.y += yVel;
+
+    // Reset velocity if collision
+    if (isCollidingThisTurn) xVel = 0;
 
     gKeenTexture->render(hitbox.x, hitbox.y, srcClip);
 }

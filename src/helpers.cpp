@@ -193,13 +193,18 @@ bool IsLeftColliding(SDL_Rect a, SDL_Rect b) {
     return true;
 }
 
-bool IsRightColliding(SDL_Rect a, SDL_Rect b) {
-    int rightA = a.x + a.w;
-    int leftB = b.x;
+bool IsRightColliding(SDL_Rect before, SDL_Rect after, SDL_Rect obstacle) {
+    //int rightBefore = before.x + before.w;
+    int rightAfter = after.x + after.w;
+    int rightObstacle = obstacle.x + obstacle.w;
+    //int rightA = a.x + a.w;
+    //int leftB = b.x;
 
-    if (rightA <= leftB) return false;
+    if (before.x <= obstacle.x && rightObstacle <= rightAfter) return true;
 
-    return true;
+    if (rightAfter > obstacle.x) return true;
+
+    return false;
 }
 
 void clean_up() {

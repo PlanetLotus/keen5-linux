@@ -119,11 +119,12 @@ void Sprite::CheckRightCollision(int col, int minRow, int maxRow, SDL_Rect nextH
 
             if (tile != NULL &&
                 tile->CollideLeft() &&
-                IsRightColliding(nextHitbox, tile->getBox())) {
+                IsRightColliding(hitbox, nextHitbox, tile->getBox())) {
 
                 // Set xVel to the distance between the player and the
                 // tile he's colliding with
                 xVel = tile->getBox().x - (hitbox.x + hitbox.w);
+                isCollidingThisTurn = true;
                 return;
             }
         }
