@@ -53,7 +53,7 @@ void Sprite::CheckLRCollision() {
     int col = nextHitbox.x / TILE_WIDTH;
 
     if (xVel > 0)
-        CheckRightCollision(col, minRow, maxRow, nextHitbox);
+        isRightColliding = CheckRightCollision(col, minRow, maxRow, nextHitbox);
     else
         CheckLeftCollision(col, minRow, maxRow, nextHitbox);
 }
@@ -112,7 +112,7 @@ void Sprite::CheckLeftCollision(int col, int minRow, int maxRow, SDL_Rect nextHi
     }
 }
 
-void Sprite::CheckRightCollision(int col, int minRow, int maxRow, SDL_Rect nextHitbox) {
+bool Sprite::CheckRightCollision(int col, int minRow, int maxRow, SDL_Rect nextHitbox) {
     for (unsigned int i = col; i < gTiles.size(); i++) {
         for (int j = minRow; j <= maxRow; j++) {
             Tile* tile = gTiles[i][j];
@@ -124,14 +124,17 @@ void Sprite::CheckRightCollision(int col, int minRow, int maxRow, SDL_Rect nextH
                 // Set xVel to the distance between the player and the
                 // tile he's colliding with
                 xVel = tile->getBox().x - (hitbox.x + hitbox.w);
-                isCollidingThisTurn = true;
-                return;
+                return true;
             }
         }
     }
+    return false;
 }
 
 void Sprite::CheckCollision() {
+    // Reset flags from last turn
+    isRightColliding = false;
+
     bool xChange = xVel != 0;
     bool yChange = yVel != 0;
 

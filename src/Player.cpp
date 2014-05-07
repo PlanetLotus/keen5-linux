@@ -25,7 +25,7 @@ Player::Player() {
     facing = LEFT;
     idle = true;
 
-    isCollidingThisTurn = false;
+    isRightColliding = false;
 
     isOnGround = true;
 
@@ -322,9 +322,13 @@ void Player::animate(int nextState) {
 }
 
 void Player::draw() {
+    // Update hitbox in draw because there's a delay between update() and draw()
     // Now that all decisions have been made, finally update player location
     hitbox.x += xVel;
     hitbox.y += yVel;
+
+    // Reset velocity if collision
+    if (isRightColliding) xVel = 0;
 
     // Center the hitbox (horizontally) inside the displayed frame
     int offsetX = srcClip->w / 2 - TILE_WIDTH / 2;
