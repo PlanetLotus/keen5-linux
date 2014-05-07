@@ -133,6 +133,8 @@ void Player::shoot(bool isPressingUp, bool isPressingDown) {
             xStart = facing == 0 ? hitbox.x - TILE_WIDTH : hitbox.x + TILE_WIDTH;
             yStart = hitbox.y + TILE_HEIGHT / 3;
             xShotVel = facing == 0 ? -1 : 1;
+
+            if (!isOnGround) animVal = 13 + facing;
         }
 
         new BlasterShot(xStart, yStart, xShotVel, yShotVel);
