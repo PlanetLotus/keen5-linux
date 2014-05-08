@@ -51,10 +51,7 @@ BlasterShot::BlasterShot(int startX, int startY, int velocityX, int velocityY) {
 void BlasterShot::update() {
     CheckCollision();
 
-    // HACK: This is how I get around the lack of info I get from CheckCollision
-    // Long term I should really reconsider how to generalize collision detection
-    // so that all objects can benefit from its helpers but get different types of info from it
-    if (xVel == 0 && yVel == 0) {
+    if (isTopColliding || isBottomColliding || isLeftColliding || isRightColliding) {
         expire();
         animate(1);
     } else {

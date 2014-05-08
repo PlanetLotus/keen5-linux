@@ -25,6 +25,8 @@ Player::Player() {
     facing = LEFT;
     idle = true;
 
+    // These are meant for a per-loop basis
+    // They are not meant to hold value beyond one loop
     isTopColliding = false;
     isBottomColliding = false;
     isLeftColliding = false;
