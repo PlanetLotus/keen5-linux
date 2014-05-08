@@ -9,9 +9,9 @@ bool load_files();
 
 bool set_tiles();
 
-bool IsTopColliding(SDL_Rect a, SDL_Rect b);
-bool IsBottomColliding(SDL_Rect a, SDL_Rect b);
-bool IsLeftColliding(SDL_Rect a, SDL_Rect b);
+bool IsTopColliding(SDL_Rect before, SDL_Rect after, SDL_Rect obstacle);
+bool IsBottomColliding(SDL_Rect before, SDL_Rect after, SDL_Rect obstacle);
+bool IsLeftColliding(SDL_Rect before, SDL_Rect after, SDL_Rect obstacle);
 bool IsRightColliding(SDL_Rect before, SDL_Rect after, SDL_Rect obstacle);
 
 void clean_up();

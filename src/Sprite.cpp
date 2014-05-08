@@ -26,12 +26,10 @@ void Sprite::CheckTBCollision() {
     // Don't let maxCol go out of bounds
     if (maxCol > TILES_WIDE-1) maxCol = TILES_WIDE-1;
 
-    int row = nextHitbox.y / TILE_HEIGHT;
-
     if (yVel > 0)
-        CheckBottomCollision(minCol, maxCol, row, nextHitbox);
+        isBottomColliding = CheckBottomCollision(minCol, maxCol, nextHitbox);
     else
-        CheckTopCollision(minCol, maxCol, row, nextHitbox);
+        isTopColliding = CheckTopCollision(minCol, maxCol, nextHitbox);
 }
 
 void Sprite::CheckLRCollision() {
@@ -50,69 +48,78 @@ void Sprite::CheckLRCollision() {
     // Don't let maxRow go out of bounds
     if (maxRow > TILES_TALL-1) maxRow = TILES_TALL-1;
 
-    int col = nextHitbox.x / TILE_WIDTH;
-
     if (xVel > 0)
-        isRightColliding = CheckRightCollision(col, minRow, maxRow, nextHitbox);
+        isRightColliding = CheckRightCollision(minRow, maxRow, nextHitbox);
     else
-        CheckLeftCollision(col, minRow, maxRow, nextHitbox);
+        isLeftColliding = CheckLeftCollision(minRow, maxRow, nextHitbox);
 }
 
-void Sprite::CheckTopCollision(int minCol, int maxCol, int row, SDL_Rect nextHitbox) {
+bool Sprite::CheckTopCollision(int minCol, int maxCol, SDL_Rect nextHitbox) {
+    int row = (nextHitbox.y + nextHitbox.h) / TILE_HEIGHT;
+
     for (int i = minCol; i <= maxCol; i++) {
         for (int j = row; j >= 0; j--) {
             Tile* tile = gTiles[i][j];
 
             if (tile != NULL &&
                 tile->CollideBottom() &&
-                IsTopColliding(nextHitbox, tile->getBox())) {
+                IsTopColliding(hitbox, nextHitbox, tile->getBox())) {
 
                 // Set yVel to the distance between the player and the
                 // tile he's colliding with
                 yVel = (tile->getBox().y + tile->getBox().h) - hitbox.y;
-                return;
+                return true;
             }
         }
     }
+    return false;
 }
 
-void Sprite::CheckBottomCollision(int minCol, int maxCol, int row, SDL_Rect nextHitbox) {
+bool Sprite::CheckBottomCollision(int minCol, int maxCol, SDL_Rect nextHitbox) {
+    int row = nextHitbox.y / TILE_HEIGHT;
+
     for (int i = minCol; i <= maxCol; i++) {
         for (unsigned int j = row; j < gTiles[i].size(); j++) {
             Tile* tile = gTiles[i][j];
 
             if (tile != NULL &&
                 tile->CollideTop() &&
-                IsBottomColliding(nextHitbox, tile->getBox())) {
+                IsBottomColliding(hitbox, nextHitbox, tile->getBox())) {
 
                 // Set yVel to the distance between the player and the
                 // tile he's colliding with
                 yVel = tile->getBox().y - (hitbox.y + hitbox.h);
-                return;
+                return true;
             }
         }
     }
+    return false;
 }
 
-void Sprite::CheckLeftCollision(int col, int minRow, int maxRow, SDL_Rect nextHitbox) {
+bool Sprite::CheckLeftCollision(int minRow, int maxRow, SDL_Rect nextHitbox) {
+    int col = (nextHitbox.x + nextHitbox.w) / TILE_WIDTH;
+
     for (int i = col; i >= 0; i--) {
         for (int j = minRow; j <= maxRow; j++) {
             Tile* tile = gTiles[i][j];
 
             if (tile != NULL &&
                 tile->CollideRight() &&
-                IsLeftColliding(nextHitbox, tile->getBox())) {
+                IsLeftColliding(hitbox, nextHitbox, tile->getBox())) {
 
                 // Set xVel to the distance between the player and the
                 // tile he's colliding with
                 xVel = (tile->getBox().x + tile->getBox().w) - hitbox.x;
-                return;
+                return true;
             }
         }
     }
+    return false;
 }
 
-bool Sprite::CheckRightCollision(int col, int minRow, int maxRow, SDL_Rect nextHitbox) {
+bool Sprite::CheckRightCollision(int minRow, int maxRow, SDL_Rect nextHitbox) {
+    int col = nextHitbox.x / TILE_WIDTH;
+
     for (unsigned int i = col; i < gTiles.size(); i++) {
         for (int j = minRow; j <= maxRow; j++) {
             Tile* tile = gTiles[i][j];
@@ -133,6 +140,9 @@ bool Sprite::CheckRightCollision(int col, int minRow, int maxRow, SDL_Rect nextH
 
 void Sprite::CheckCollision() {
     // Reset flags from last turn
+    isTopColliding = false;
+    isBottomColliding = false;
+    isLeftColliding = false;
     isRightColliding = false;
 
     bool xChange = xVel != 0;

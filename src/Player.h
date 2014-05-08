@@ -36,7 +36,7 @@ class Player : public Sprite {
         void climb(directionEnum dir);
         void enter_door();
         void fall();
-        void CheckBottomCollision(int minCol, int maxCol, int row, SDL_Rect nextHitbox);
+        bool CheckBottomCollision(int minCol, int maxCol, SDL_Rect nextHitbox);
         void update();
         void animate(int nextState);
         void draw();

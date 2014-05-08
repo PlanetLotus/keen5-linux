@@ -166,42 +166,53 @@ bool set_tiles() {
     return true;
 }
 
-bool IsTopColliding(SDL_Rect a, SDL_Rect b) {
-    int topA = a.y;
-    int bottomB = b.y + b.h;
+bool IsTopColliding(SDL_Rect before, SDL_Rect after, SDL_Rect obstacle) {
+    int bottomBefore = before.y + before.h;
+    int bottomObstacle = obstacle.y + obstacle.h;
 
-    if (topA >= bottomB) return false;
+    // Handles "teleporting" and bad spawning
+    if (bottomBefore >= bottomObstacle && obstacle.y >= after.y) return true;
 
-    return true;
+    // "Normal" collision
+    if (after.y < bottomObstacle) return true;
+
+    return false;
 }
 
-bool IsBottomColliding(SDL_Rect a, SDL_Rect b) {
-    int bottomA = a.y + a.h;
-    int topB = b.y;
+bool IsBottomColliding(SDL_Rect before, SDL_Rect after, SDL_Rect obstacle) {
+    int bottomAfter = after.y + after.h;
+    int bottomObstacle = obstacle.y + obstacle.h;
 
-    if (bottomA <= topB) return false;
+    // Handles "teleporting" and bad spawning
+    if (before.y <= obstacle.y && bottomObstacle <= bottomAfter) return true;
 
-    return true;
+    // "Normal" collision
+    if (bottomAfter > obstacle.y) return true;
+
+    return false;
 }
 
-bool IsLeftColliding(SDL_Rect a, SDL_Rect b) {
-    int leftA = a.x;
-    int rightB = b.x + b.w;
+bool IsLeftColliding(SDL_Rect before, SDL_Rect after, SDL_Rect obstacle) {
+    int rightBefore = before.x + before.w;
+    int rightObstacle = obstacle.x + obstacle.w;
 
-    if (leftA >= rightB) return false;
+    // Handles "teleporting" and bad spawning
+    if (rightBefore >= rightObstacle && obstacle.x >= after.x) return true;
 
-    return true;
+    // "Normal" collision
+    if (after.x < rightObstacle) return true;
+
+    return false;
 }
 
 bool IsRightColliding(SDL_Rect before, SDL_Rect after, SDL_Rect obstacle) {
-    //int rightBefore = before.x + before.w;
     int rightAfter = after.x + after.w;
     int rightObstacle = obstacle.x + obstacle.w;
-    //int rightA = a.x + a.w;
-    //int leftB = b.x;
 
+    // Handles "teleporting" and bad spawning
     if (before.x <= obstacle.x && rightObstacle <= rightAfter) return true;
 
+    // "Normal" collision
     if (rightAfter > obstacle.x) return true;
 
     return false;

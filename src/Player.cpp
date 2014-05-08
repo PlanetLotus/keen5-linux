@@ -25,6 +25,9 @@ Player::Player() {
     facing = LEFT;
     idle = true;
 
+    isTopColliding = false;
+    isBottomColliding = false;
+    isLeftColliding = false;
     isRightColliding = false;
 
     isOnGround = true;
@@ -246,22 +249,25 @@ void Player::fall() {
 // Redefined this in Player because we need to know isOnGround
 // This will be necessary for some other classes too so maybe this will
 // eventually call for another base class (subclass of Sprite)
-void Player::CheckBottomCollision(int minCol, int maxCol, int row, SDL_Rect nextHitbox) {
+bool Player::CheckBottomCollision(int minCol, int maxCol, SDL_Rect nextHitbox) {
+    int row = nextHitbox.y / TILE_HEIGHT;
+
     for (int i = minCol; i <= maxCol; i++) {
         for (unsigned int j = row; j < gTiles[i].size(); j++) {
             Tile* tile = gTiles[i][j];
 
             if (tile != NULL &&
                 tile->CollideTop() &&
-                (isOnGround = IsBottomColliding(nextHitbox, tile->getBox()))) {
+                (isOnGround = IsBottomColliding(hitbox, nextHitbox, tile->getBox()))) {
 
                 // Set yVel to the distance between the player and the
                 // tile he's colliding with
                 yVel = tile->getBox().y - (hitbox.y + hitbox.h);
-                return;
+                return true;
             }
         }
     }
+    return false;
 }
 
 void Player::update() {
