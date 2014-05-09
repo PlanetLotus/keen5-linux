@@ -5,8 +5,7 @@ modification (and delusional goals).
 
 <h2>Next steps</h2>
 
-<ol>
-    <li>Add player 'shoot' capability</li>
+<ul>
     <li>Add pogo stick jumping (and idling)</li>
     <li>Add hanging from ledge</li>
     <li>Add pole climbing</li>
@@ -17,14 +16,14 @@ modification (and delusional goals).
     <li>Look up/down</li>
     <li>Write basic enemy AI (animation optional)</li>
     <li>Pit the player against the basic enemy AI</li>
-</ol>
+</ul>
 
 <h2>Noteworthy progress</h2>
 
 Level editor outputs a file that the game then reads in. Tile placement and tile collision info are included.
 Level editor is also capable of loading saved files and overwriting them.
 
-Left/right movement and jump implemented.
+Left/right movement, jump, and shoot implemented with animations.
 
 Basic collision implemented against the static tiles. No slopes yet, no moving objects yet.
 
