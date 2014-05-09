@@ -51,7 +51,7 @@ BlasterShot::BlasterShot(int startX, int startY, int velocityX, int velocityY) {
 void BlasterShot::update() {
     CheckCollision();
 
-    if (isTopColliding || isBottomColliding || isLeftColliding || isRightColliding) {
+    if (xVel == 0 && yVel == 0) {
         expire();
         animate(1);
     } else {
