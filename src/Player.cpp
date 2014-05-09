@@ -68,6 +68,11 @@ Player::Player() {
     SDL_Rect jumpShootU0 = {TILE_WIDTH * 8, TILE_HEIGHT * 4, TILE_WIDTH * 2, TILE_HEIGHT * 3};
     SDL_Rect jumpShootD0 = {TILE_WIDTH * 6, TILE_HEIGHT * 4, TILE_WIDTH * 2, TILE_HEIGHT * 2};
 
+    SDL_Rect pogoStraightL = {TILE_WIDTH * 3, TILE_HEIGHT * 8, TILE_WIDTH, TILE_HEIGHT * 2};
+    SDL_Rect pogoStraightR = {0, TILE_HEIGHT * 8, TILE_WIDTH, TILE_HEIGHT * 2};
+    SDL_Rect pogoBentL = {TILE_WIDTH * 4, TILE_HEIGHT * 8, TILE_WIDTH * 2, TILE_HEIGHT * 2};
+    SDL_Rect pogoBentR = {TILE_WIDTH, TILE_HEIGHT * 8, TILE_WIDTH * 2, TILE_HEIGHT * 2};
+
     SDL_Rect standL_array[1] = { standL0 };
     SDL_Rect standR_array[1] = { standR0 };
     SDL_Rect walkL_array[4] = { walkL0, walkL1, walkL2, walkL3 };
@@ -85,6 +90,10 @@ Player::Player() {
     SDL_Rect jumpShootR_array[1] = { jumpShootR0 };
     SDL_Rect jumpShootU_array[1] = { jumpShootU0 };
     SDL_Rect jumpShootD_array[1] = { jumpShootD0 };
+    SDL_Rect pogoStraightL_array[1] = { pogoStraightL };
+    SDL_Rect pogoStraightR_array[1] = { pogoStraightR };
+    SDL_Rect pogoBentL_array[1] = { pogoBentL };
+    SDL_Rect pogoBentR_array[1] = { pogoBentR };
 
     vector<SDL_Rect> standL_anim(standL_array, standL_array + sizeof(standL_array) / sizeof(SDL_Rect));
     vector<SDL_Rect> standR_anim(standR_array, standR_array + sizeof(standR_array) / sizeof(SDL_Rect));
@@ -103,6 +112,10 @@ Player::Player() {
     vector<SDL_Rect> jumpShootR_anim(jumpShootR_array, jumpShootR_array + sizeof(jumpShootR_array) / sizeof(SDL_Rect));
     vector<SDL_Rect> jumpShootU_anim(jumpShootU_array, jumpShootU_array + sizeof(jumpShootU_array) / sizeof(SDL_Rect));
     vector<SDL_Rect> jumpShootD_anim(jumpShootD_array, jumpShootD_array + sizeof(jumpShootD_array) / sizeof(SDL_Rect));
+    vector<SDL_Rect> pogoStraightL_anim(pogoStraightL_array, pogoStraightL_array + sizeof(pogoStraightL_array) / sizeof(SDL_Rect));
+    vector<SDL_Rect> pogoStraightR_anim(pogoStraightR_array, pogoStraightR_array + sizeof(pogoStraightR_array) / sizeof(SDL_Rect));
+    vector<SDL_Rect> pogoBentL_anim(pogoBentL_array, pogoBentL_array + sizeof(pogoBentL_array) / sizeof(SDL_Rect));
+    vector<SDL_Rect> pogoBentR_anim(pogoBentR_array, pogoBentR_array + sizeof(pogoBentR_array) / sizeof(SDL_Rect));
 
     anims[0] = standL_anim; anims[1] = standR_anim;
     anims[2] = walkL_anim; anims[3] = walkR_anim;
@@ -112,6 +125,8 @@ Player::Player() {
     anims[10] = shootL_anim; anims[11] = shootR_anim; anims[12] = shootU_anim;
     anims[13] = jumpShootL_anim; anims[14] = jumpShootR_anim;
     anims[15] = jumpShootU_anim; anims[16] = jumpShootD_anim;
+    anims[17] = pogoStraightL_anim; anims[18] = pogoStraightR_anim;
+    anims[19] = pogoBentL_anim; anims[20] = pogoBentR_anim;
 }
 
 void Player::shoot(bool isPressingUp, bool isPressingDown) {
@@ -201,10 +216,6 @@ void Player::stopwalk() {
     }
 }
 
-void Player::pogo() {
-    return;
-}
-
 void Player::look(directionEnum dir) {
     return;
 }
@@ -214,6 +225,10 @@ void Player::climb(directionEnum dir) {
 }
 
 void Player::enter_door() {
+    return;
+}
+
+void Player::pogo() {
     return;
 }
 
@@ -286,6 +301,10 @@ void Player::update() {
     // Read in current keyboard state and update object accordingly
     const Uint8* state = SDL_GetKeyboardState(NULL);
 
+    if (state[SDL_SCANCODE_LALT]) {
+        pogo();
+    }
+
     if (state[SDL_SCANCODE_LCTRL]) {
         jump();
     }
@@ -334,9 +353,6 @@ void Player::draw() {
     // Now that all decisions have been made, finally update player location
     hitbox.x += xVel;
     hitbox.y += yVel;
-
-    // Reset velocity if collision
-    if (isRightColliding) xVel = 0;
 
     // Center the hitbox (horizontally) inside the displayed frame
     int offsetX = srcClip->w / 2 - TILE_WIDTH / 2;
