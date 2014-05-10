@@ -25,6 +25,8 @@ class Player : public Sprite {
 
         int shootingFrameCount;
         bool isShooting;
+
+        void processKeyboard(); // Call player actions based on keyboard input
     public:
         Player();
         void shoot(bool isPressingUp, bool isPressingDown);

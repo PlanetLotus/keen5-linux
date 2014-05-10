@@ -287,17 +287,7 @@ bool Player::CheckBottomCollision(int minCol, int maxCol, SDL_Rect nextHitbox) {
     return false;
 }
 
-void Player::update() {
-    // Process in this order
-    // 1) User actions
-    // 2) AI actions
-    // 3) Environment consequences (gravity, other static things)
-    // 4) Collision
-    // 3 & 4 might need mixed or reversed in some situations
-    // Handle animations at any step - Some steps can overwrite other steps' animation
-    // e.g. Collision while walking
-    // Other animations are only done via keypress e.g. shooting but also are preventable by collision, like dying
-
+void Player::processKeyboard() {
     // Read in current keyboard state and update object accordingly
     const Uint8* state = SDL_GetKeyboardState(NULL);
 
@@ -320,11 +310,27 @@ void Player::update() {
     if (state[SDL_SCANCODE_SPACE] && !gController.IsHoldingSpace) {
         shoot(state[SDL_SCANCODE_UP], state[SDL_SCANCODE_DOWN]);
         gController.IsHoldingSpace = true;
-    } else if (isShooting) {    // Would prefer this logic elsewhere
-        shoot(false, false);
     }
+}
 
-    // Apply gravity
+void Player::update() {
+    // Process in this order
+    // 1) User actions
+    // 2) AI actions
+    // 3) Environment consequences (gravity, other static things)
+    // 4) Collision
+    // 3 & 4 might need mixed or reversed in some situations
+    // Handle animations at any step - Some steps can overwrite other steps' animation
+    // e.g. Collision while walking
+    // Other animations are only done via keypress e.g. shooting but also are preventable by collision, like dying
+
+    // Check any "blocking" actions before processing more input
+    if (isShooting)
+        shoot(false, false);
+    else
+        processKeyboard();
+
+    // Apply gravity and relevant animations
     fall();
 
     CheckCollision();
