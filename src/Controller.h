@@ -6,6 +6,7 @@ class Controller {
         Controller();
         bool IsHoldingSpace;
         bool IsHoldingCtrl;
+        bool IsHoldingAlt;
 };
 
 #endif

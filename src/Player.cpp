@@ -291,8 +291,9 @@ void Player::processKeyboard() {
     // Read in current keyboard state and update object accordingly
     const Uint8* state = SDL_GetKeyboardState(NULL);
 
-    if (state[SDL_SCANCODE_LALT]) {
+    if (state[SDL_SCANCODE_LALT] && !gController.IsHoldingAlt) {
         pogo();
+        gController.IsHoldingAlt = true;
     }
 
     if (state[SDL_SCANCODE_LCTRL]) {

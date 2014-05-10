@@ -50,6 +50,7 @@ int main (int argc, char **args) {
                 switch (event.key.keysym.sym) {
                     case SDLK_LCTRL: gController.IsHoldingCtrl = false; break;
                     case SDLK_SPACE: gController.IsHoldingSpace = false; break;
+                    case SDLK_LALT: gController.IsHoldingAlt = false; break;
                 }
             }
             // If the user X'd out of the window
