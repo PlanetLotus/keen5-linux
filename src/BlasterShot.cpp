@@ -5,7 +5,7 @@
 
 using namespace std;
 
-BlasterShot::BlasterShot(int startX, int startY, int velocityX, int velocityY) {
+BlasterShot::BlasterShot(int startX, int startY, float velocityX, float velocityY) {
     hitbox.x = startX;
     hitbox.y = startY;
     hitbox.w = TILE_WIDTH;

@@ -13,7 +13,7 @@ void Sprite::draw() {}
 
 void Sprite::CheckTBCollision() {
     // Hitbox after update in y-direction
-    SDL_Rect nextHitbox = { hitbox.x + xVel, hitbox.y + yVel, hitbox.w, hitbox.h };
+    SDL_Rect nextHitbox = { hitbox.x + (int)xVel, hitbox.y + (int)yVel, hitbox.w, hitbox.h };
 
     int minCol = nextHitbox.x / TILE_WIDTH;
     int maxCol = (nextHitbox.x + nextHitbox.w) / TILE_WIDTH;
@@ -35,7 +35,7 @@ void Sprite::CheckTBCollision() {
 void Sprite::CheckLRCollision() {
     // Hitbox after update in x-direction
     // Does not include new yVel
-    SDL_Rect nextHitbox = { hitbox.x + xVel, hitbox.y, hitbox.w, hitbox.h };
+    SDL_Rect nextHitbox = { hitbox.x + (int)xVel, hitbox.y, hitbox.w, hitbox.h };
 
     int minRow = nextHitbox.y / TILE_HEIGHT;
     int maxRow = (nextHitbox.y + nextHitbox.h) / TILE_HEIGHT;

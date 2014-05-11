@@ -384,6 +384,8 @@ void Player::draw() {
     hitbox.x += xVel;
     hitbox.y += yVel;
 
+    printf("%f, %f\n", xVel, yVel);
+
     // Center the hitbox (horizontally) inside the displayed frame
     int offsetX = srcClip->w / 2 - TILE_WIDTH / 2;
     int destX = hitbox.x - offsetX;
@@ -392,21 +394,15 @@ void Player::draw() {
     int offsetY = srcClip->h - TILE_HEIGHT * 2;
     int destY = hitbox.y - offsetY;
 
-    printf("%d\n", yVel);
-
     gKeenTexture->render(destX, destY, srcClip);
 }
 
 // Getters and setters
 
 void Player::set_ammo(int x) { ammo = x; }
-void Player::set_xVel(int x) { xVel = x; }
-void Player::set_yVel(int y) { yVel = y; }
 void Player::set_state(int x) { animState = x; }
 
 int Player::get_ammo() { return ammo; }
-int Player::get_xVel() { return xVel; }
-int Player::get_yVel() { return yVel; }
 int Player::get_state() { return animState; }
 
 SDL_Rect Player::get_hitbox() { return hitbox; }

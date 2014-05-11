@@ -10,8 +10,8 @@ enum directionEnum {LEFT, RIGHT, UP, DOWN, STOP};
 class Player : public Sprite {
     private:
         int ammo;
-        int xAccel;
-        int yAccel;
+        float xAccel;
+        float yAccel;
 
         unsigned int frame;
         int animState;
@@ -47,13 +47,9 @@ class Player : public Sprite {
 
         // Getters and setters
         void set_ammo(int x);
-        void set_xVel(int x);
-        void set_yVel(int y);
         void set_state(int x);
 
         int get_ammo();
-        int get_xVel();
-        int get_yVel();
         int get_state();
 
         SDL_Rect get_hitbox();

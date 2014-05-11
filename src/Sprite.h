@@ -13,8 +13,10 @@ class Sprite {
         bool isLeftColliding;
         bool isRightColliding;
 
-        int xVel;
-        int yVel;
+        float xVel;
+        float yVel;
+        float xVelRem;
+        float yVelRem;
     public:
         virtual ~Sprite();
         virtual void update();

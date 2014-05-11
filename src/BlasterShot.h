@@ -13,7 +13,7 @@ class BlasterShot : public Sprite {
         int animState;
         std::vector<SDL_Rect> anims[2];
     public:
-        BlasterShot(int startX, int startY, int velocityX, int velocityY);
+        BlasterShot(int startX, int startY, float velocityX, float velocityY);
         void update();
         void animate(int nextState);
         void draw();
