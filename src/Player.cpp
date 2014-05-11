@@ -243,8 +243,7 @@ void Player::pogo() {
     // Continue idly jumping while on pogo
     //jump();
     if (isOnGround) {
-        yAccel = -22;
-        yVel += yAccel;
+        yVel = -22;
         isOnGround = false; // This isn't ideal. It's assuming nothing stopped the jump.
     }
 
@@ -392,6 +391,8 @@ void Player::draw() {
     // Bottom-align the hitbox for taller vertical frames
     int offsetY = srcClip->h - TILE_HEIGHT * 2;
     int destY = hitbox.y - offsetY;
+
+    printf("%d\n", yVel);
 
     gKeenTexture->render(destX, destY, srcClip);
 }
