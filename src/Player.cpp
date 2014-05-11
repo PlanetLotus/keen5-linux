@@ -33,6 +33,7 @@ Player::Player() {
     isRightColliding = false;
 
     isOnGround = true;
+    isOnPogo = false;
 
     shootingFrameCount = 0;
     isShooting = false;
@@ -228,8 +229,23 @@ void Player::enter_door() {
     return;
 }
 
+void Player::togglePogo() {
+    if (!isOnPogo) {
+        isOnPogo = true;
+        jump();
+    } else {
+        isOnPogo = false;
+    }
+}
+
 void Player::pogo() {
-    return;
+    // Continue idly jumping while on pogo
+    jump();
+
+    if (yVel >= 0)
+        animate(17 + facing);
+    else
+        animate(19 + facing);
 }
 
 void Player::jump() {
@@ -238,7 +254,6 @@ void Player::jump() {
         yVel += yAccel;
     } else if (isOnGround) {
         yAccel = -20;
-        gController.IsHoldingCtrl = true;
         yVel += yAccel;
         isOnGround = false; // This isn't ideal. It's assuming nothing stopped the jump.
     }
@@ -252,7 +267,7 @@ void Player::fall() {
 
     yVel += yAccel;
 
-    if (!isOnGround && !isShooting) { // Implies that he's either falling or jumping
+    if (!isOnGround && !isShooting && !isOnPogo) { // Implies that he's either falling or jumping
         if (yVel > 0) {
             animate(8 + facing);
         } else if (yVel == 0) {
@@ -292,12 +307,15 @@ void Player::processKeyboard() {
     const Uint8* state = SDL_GetKeyboardState(NULL);
 
     if (state[SDL_SCANCODE_LALT] && !gController.IsHoldingAlt) {
-        pogo();
+        togglePogo();
         gController.IsHoldingAlt = true;
+    } else if (isOnPogo) {
+        pogo();
     }
 
     if (state[SDL_SCANCODE_LCTRL]) {
         jump();
+        gController.IsHoldingCtrl = true;
     }
 
     if (state[SDL_SCANCODE_LEFT]) {

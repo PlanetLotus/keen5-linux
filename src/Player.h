@@ -22,6 +22,7 @@ class Player : public Sprite {
         bool idle;
 
         bool isOnGround;
+        bool isOnPogo;
 
         int shootingFrameCount;
         bool isShooting;
@@ -33,6 +34,7 @@ class Player : public Sprite {
         void walk(directionEnum dir);
         void stopwalk();
         void jump();
+        void togglePogo();
         void pogo();
         void look(directionEnum dir);
         void climb(directionEnum dir);
