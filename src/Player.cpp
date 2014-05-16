@@ -176,7 +176,10 @@ void Player::shoot(bool isPressingUp, bool isPressingDown) {
         shootingFrameCount++;
     }
 
-    if (isOnGround) xVel = 0;
+    if (isOnGround) {
+        xVel = 0;
+        xVelRem = 0;
+    }
 }
 
 void Player::walk(directionEnum dir) {
@@ -190,12 +193,12 @@ void Player::walk(directionEnum dir) {
         animate(2 + facing);
     } else {
         // Walking in the air
-        xAccel = dir == LEFT ? -1 : 1;
+        xAccel = dir == LEFT ? -1.7 : 1.7;
         xVel += xAccel;
 
-        // Limit velocity, but let him go a little too fast briefly
-        if (xVel > 7) xVel = 6;
-        else if (xVel < -7) xVel = -6;
+        // Limit velocity
+        if (xVel > 5) xVel = 5;
+        else if (xVel < -5) xVel = -5;
     }
 }
 
@@ -206,17 +209,23 @@ void Player::stopwalk() {
     if (isOnGround) {
         xAccel = 0;
         xVel = 0;
-        animate(facing);    // Make sure shooting gets priority over this
+        xVelRem = 0;
+        animate(facing);
     } else {
-        // Currently not using this section (drag). Keen should stop moving without drag.
-        // Falling
-        int drag = facing == LEFT ? 1 : -1;
-        xAccel = drag;
-        //xVel += xAccel;
+        // Falling with drag
+        float drag = facing == LEFT ? 0.8 : -0.8;
+        xVel += drag;
+
+        // Make sure remainder is applied in direction opposite movement
+        //if ((facing == LEFT && xVelRem < 0) || (facing == RIGHT && xVelRem > 0))
+        //    xVelRem *= -1;
+        xVelRem = 0;
 
         // Limit velocity
-        if (facing == LEFT && xVel > 0) xVel = 0;
-        else if (facing == RIGHT && xVel < 0) xVel = 0;
+        if ((facing == LEFT && xVel > 0) || (facing == RIGHT && xVel < 0)) {
+            xVel = 0;
+            xVelRem = 0;
+        }
     }
 }
 
@@ -392,16 +401,17 @@ void Player::draw() {
     xVel += xVelRem;
     yVel += abs(yVelRem);
 
-    printf("%f, %f, %f\n", xVel, yVel, yVelRem);
+    if (xVel != 0)
+        printf("%f, %f, %f, %f\n", xVel, xVelRem, yVel, yVelRem);
 
     // Add int part of vel to pos
     hitbox.x += xVel;
     hitbox.y += yVel;
 
     // Set fractional part of vel to rem
-    double temp;
-    xVelRem = modf(xVel, &temp);
-    yVelRem = modf(yVel, &temp);
+    double intPart;
+    xVelRem = modf(xVel, &intPart);
+    yVelRem = modf(yVel, &intPart);
 
     // Reset velocity if collision
     if (isTopColliding || isBottomColliding) {
