@@ -235,8 +235,8 @@ void Player::enter_door() {
 void Player::togglePogo() {
     if (!isOnPogo) {
         isOnPogo = true;
-        yVel -= 2;  // Provide a slightly stronger initial jump
         pogo();
+        yVel -= 2;  // Provide a slightly stronger initial jump
     } else {
         isOnPogo = false;
     }
@@ -246,7 +246,7 @@ void Player::pogo() {
     // Continue idly jumping while on pogo
     //jump();
     if (isOnGround) {
-        yVel = -22;
+        yVel = -24;
         isOnGround = false; // This isn't ideal. It's assuming nothing stopped the jump.
     }
 
@@ -258,7 +258,10 @@ void Player::pogo() {
 
 void Player::jump() {
     if (gController.IsHoldingCtrl && yVel < 0) {
-        yAccel = -1.3;
+        if (isOnPogo)
+            yAccel = -1.5;
+        else
+            yAccel = -1.3;
         yVel += yAccel;
     } else if (isOnGround && !gController.IsHoldingCtrl) {
         yAccel = -21;
