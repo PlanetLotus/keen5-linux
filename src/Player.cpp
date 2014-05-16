@@ -1,3 +1,4 @@
+#include <math.h>
 #include "BlasterShot.h"
 #include "globals.h"
 #include "helpers.h"
@@ -9,6 +10,8 @@ Player::Player() {
     ammo = 5;
     xVel = 0;
     yVel = 0;
+    xVelRem = 0;
+    yVelRem = 0;
     xAccel = 0;
     yAccel = 0;
 
@@ -255,17 +258,17 @@ void Player::pogo() {
 
 void Player::jump() {
     if (gController.IsHoldingCtrl && yVel < 0) {
-        yAccel = -1;
+        yAccel = -1.3;
         yVel += yAccel;
-    } else if (isOnGround) {
-        yAccel = -20;
+    } else if (isOnGround && !gController.IsHoldingCtrl) {
+        yAccel = -21;
         yVel += yAccel;
         isOnGround = false; // This isn't ideal. It's assuming nothing stopped the jump.
     }
 }
 
 void Player::fall() {
-    yAccel = 2;
+    yAccel = 2.6;
 
     if (yVel >= 20)
         return;
@@ -381,10 +384,31 @@ void Player::animate(int nextState) {
 void Player::draw() {
     // Update hitbox in draw because there's a delay between update() and draw()
     // Now that all decisions have been made, finally update player location
+
+    // Add back remainder
+    xVel += xVelRem;
+    yVel += abs(yVelRem);
+
+    printf("%f, %f, %f\n", xVel, yVel, yVelRem);
+
+    // Add int part of vel to pos
     hitbox.x += xVel;
     hitbox.y += yVel;
 
-    printf("%f, %f\n", xVel, yVel);
+    // Set fractional part of vel to rem
+    double temp;
+    xVelRem = modf(xVel, &temp);
+    yVelRem = modf(yVel, &temp);
+
+    // Reset velocity if collision
+    if (isTopColliding || isBottomColliding) {
+        yVel = 0;
+        yVelRem = 0;
+    }
+    if (isLeftColliding || isRightColliding) {
+        xVel = 0;
+        xVelRem = 0;
+    }
 
     // Center the hitbox (horizontally) inside the displayed frame
     int offsetX = srcClip->w / 2 - TILE_WIDTH / 2;
