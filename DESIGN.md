@@ -6,7 +6,6 @@ modification (and delusional goals).
 <h2>Next steps</h2>
 
 <ul>
-    <li>Add pogo stick jumping (and idling)</li>
     <li>Add hanging from ledge</li>
     <li>Add pole climbing</li>
     <li>Shoot from poles</li>
@@ -23,8 +22,8 @@ modification (and delusional goals).
 Level editor outputs a file that the game then reads in. Tile placement and tile collision info are included.
 Level editor is also capable of loading saved files and overwriting them.
 
-Left/right movement, jump, and shoot implemented with animations.
+Left/right movement, jump, pogo and shoot implemented with animations.
 
 Basic collision implemented against the static tiles. No slopes yet, no moving objects yet.
 
-Basic physics (gravity) implemented.
+Physics implemented using floats for integrating position and ints for rendering position.
