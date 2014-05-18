@@ -86,6 +86,7 @@ bool set_tiles() {
     int xSrc = -1;
     int ySrc = -1;
     int collideVal = -1;
+    int propertyVal = -1;
     bool collideT = false;
     bool collideR = false;
     bool collideB = false;
@@ -157,7 +158,15 @@ bool set_tiles() {
         iss >> collideVal;
         collideL = collideVal == 1 ? true : false;
 
-        gTiles[x][y] = new Tile(xSrc, ySrc, x * TILE_WIDTH, y * TILE_HEIGHT, collideT, collideR, collideB, collideL);
+        iss >> propertyVal;
+        bool isPole = false;
+        bool hidesKeen = false;
+        if (propertyVal == 1)
+            isPole = true;
+        else if (propertyVal == 2)
+            hidesKeen = true;
+
+        gTiles[x][y] = new Tile(xSrc, ySrc, x * TILE_WIDTH, y * TILE_HEIGHT, collideT, collideR, collideB, collideL, isPole, hidesKeen);
 
         x++;
     }

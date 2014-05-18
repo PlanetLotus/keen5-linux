@@ -1,7 +1,8 @@
 #include "globals.h"
 #include "Tile.h"
 
-Tile::Tile(int srcX, int srcY, int destX, int destY, bool collideT, bool collideR, bool collideB, bool collideL) {
+Tile::Tile(int srcX, int srcY, int destX, int destY, bool collideT, bool collideR, bool collideB, bool collideL,
+        bool isPole=false, bool hidesKeen=false) {
     srcBox.x = srcX;
     srcBox.y = srcY;
 
@@ -20,6 +21,9 @@ Tile::Tile(int srcX, int srcY, int destX, int destY, bool collideT, bool collide
     collideLeft = collideL;
 
     hasCollision = collideT || collideR || collideB || collideL ? true : false;
+
+    IsPole = isPole;
+    HidesKeen = hidesKeen;
 }
 
 void Tile::render(int destX, int destY, SDL_Rect& camera) {
