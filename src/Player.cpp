@@ -37,6 +37,7 @@ Player::Player() {
 
     isOnGround = true;
     isOnPogo = false;
+    isOnPole = false;
 
     shootingFrameCount = 0;
     isShooting = false;
@@ -229,6 +230,13 @@ void Player::stopwalk() {
     }
 }
 
+void Player::processUpArrow() {
+    if (isOnPole)
+        climb(UP);
+    else
+        look(UP);
+}
+
 void Player::look(directionEnum dir) {
     return;
 }
@@ -344,6 +352,10 @@ void Player::processKeyboard() {
         walk(RIGHT);
     } else {
         stopwalk();
+    }
+
+    if (state[SDL_SCANCODE_UP]) {
+        processUpArrow();
     }
 
     if (state[SDL_SCANCODE_SPACE] && !gController.IsHoldingSpace) {
