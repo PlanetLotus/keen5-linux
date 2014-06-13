@@ -14,10 +14,12 @@ BlasterShot::BlasterShot(int startX, int startY, float velocityX, float velocity
     xVel = velocityX * 20;
     yVel = velocityY * 20;
 
+    /*
     isTopColliding = false;
     isBottomColliding = false;
     isLeftColliding = false;
     isRightColliding = false;
+    */
 
     expireTimer = 0;
 
@@ -48,8 +50,8 @@ BlasterShot::BlasterShot(int startX, int startY, float velocityX, float velocity
     anims[1] = collide_anim;
 }
 
-void BlasterShot::update() {
-    CheckCollision();
+TileCollisionInfo BlasterShot::update() {
+    TileCollisionInfo tci = CheckTileCollision();
 
     if (xVel == 0 && yVel == 0) {
         expire();
@@ -57,6 +59,24 @@ void BlasterShot::update() {
     } else {
         animate(0);
     }
+
+    if (tci.IsTopColliding()) {
+        Tile* tile = gTiles[tci.TileCollidingWithTop.first][tci.TileCollidingWithTop.second];
+        yVel = (tile->getBox().y + tile->getBox().h) - hitbox.y;
+    } else if (tci.IsBottomColliding()) {
+        Tile* tile = gTiles[tci.TileCollidingWithBottom.first][tci.TileCollidingWithBottom.second];
+        yVel = tile->getBox().y - (hitbox.y + hitbox.h);
+    }
+
+    if (tci.IsLeftColliding()) {
+        Tile* tile = gTiles[tci.TileCollidingWithLeft.first][tci.TileCollidingWithLeft.second];
+        xVel = (tile->getBox().x + tile->getBox().w) - hitbox.x;
+    } else if (tci.IsRightColliding()) {
+        Tile* tile = gTiles[tci.TileCollidingWithRight.first][tci.TileCollidingWithRight.second];
+        xVel = tile->getBox().x - (hitbox.x + hitbox.w);
+    }
+
+    return tci;
 }
 
 void BlasterShot::animate(int nextState) {
@@ -75,13 +95,13 @@ void BlasterShot::animate(int nextState) {
     srcClip = &anims[animState][frame / FRAMETIME];
 }
 
-void BlasterShot::draw() {
+void BlasterShot::draw(TileCollisionInfo tci) {
     hitbox.x += xVel;
     hitbox.y += yVel;
 
     // Reset velocity if collision
-    if (isTopColliding || isBottomColliding) yVel = 0;
-    if (isLeftColliding || isRightColliding) xVel = 0;
+    if (tci.IsTopColliding() || tci.IsBottomColliding()) yVel = 0;
+    if (tci.IsLeftColliding() || tci.IsRightColliding()) xVel = 0;
 
     gKeenTexture->render(hitbox.x, hitbox.y, srcClip);
 }

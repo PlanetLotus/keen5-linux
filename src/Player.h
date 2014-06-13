@@ -42,10 +42,10 @@ class Player : public Sprite {
         void climb(directionEnum dir);
         void enter_door();
         void fall();
-        bool CheckBottomCollision(int minCol, int maxCol, SDL_Rect nextHitbox);
-        void update();
+        //bool CheckBottomCollision(int minCol, int maxCol, SDL_Rect nextHitbox);
+        TileCollisionInfo update();
         void animate(int nextState);
-        void draw();
+        void draw(TileCollisionInfo tci);
 
         // Getters and setters
         void set_ammo(int x);

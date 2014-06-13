@@ -72,14 +72,17 @@ int main (int argc, char **args) {
             }
         }
 
+        unsigned int numSprites = gSpriteBatch.size();
+        vector<TileCollisionInfo> collisionInfoBatch(numSprites);
+
         // Update units and draw them
         // Later this will probably be done in a batch
         // Be sure to update THEN draw. Don't let the order get messed up across several units
         // All logic should be handled before any of the units on-screen get updated
-        for (unsigned int i = 0; i < gSpriteBatch.size(); i++)
-            gSpriteBatch[i]->update();
-        for (unsigned int i = 0; i < gSpriteBatch.size(); i++)
-            gSpriteBatch[i]->draw();
+        for (unsigned int i = 0; i < numSprites; i++)
+            collisionInfoBatch[i] = gSpriteBatch[i]->update();
+        for (unsigned int i = 0; i < numSprites; i++)
+            gSpriteBatch[i]->draw(collisionInfoBatch[i]);
 
         // Update screen
         SDL_RenderPresent(renderer);

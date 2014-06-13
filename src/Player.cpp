@@ -30,10 +30,12 @@ Player::Player() {
 
     // These are meant for a per-loop basis
     // They are not meant to hold value beyond one loop
+    /*
     isTopColliding = false;
     isBottomColliding = false;
     isLeftColliding = false;
     isRightColliding = false;
+    */
 
     isOnGround = true;
     isOnPogo = false;
@@ -309,6 +311,7 @@ void Player::fall() {
 // Redefined this in Player because we need to know isOnGround
 // This will be necessary for some other classes too so maybe this will
 // eventually call for another base class (subclass of Sprite)
+/*
 bool Player::CheckBottomCollision(int minCol, int maxCol, SDL_Rect nextHitbox) {
     int row = nextHitbox.y / TILE_HEIGHT;
 
@@ -329,6 +332,7 @@ bool Player::CheckBottomCollision(int minCol, int maxCol, SDL_Rect nextHitbox) {
     }
     return false;
 }
+*/
 
 void Player::processKeyboard() {
     // Read in current keyboard state and update object accordingly
@@ -364,7 +368,7 @@ void Player::processKeyboard() {
     }
 }
 
-void Player::update() {
+TileCollisionInfo Player::update() {
     // Process in this order
     // 1) User actions
     // 2) AI actions
@@ -384,7 +388,28 @@ void Player::update() {
     // Apply gravity and relevant animations
     fall();
 
-    CheckCollision();
+    TileCollisionInfo tci = CheckTileCollision();
+
+    if (tci.IsBottomChecked)
+        isOnGround = tci.IsBottomColliding();
+
+    if (tci.IsTopColliding()) {
+        Tile* tile = gTiles[tci.TileCollidingWithTop.first][tci.TileCollidingWithTop.second];
+        yVel = (tile->getBox().y + tile->getBox().h) - hitbox.y;
+    } else if (tci.IsBottomColliding()) {
+        Tile* tile = gTiles[tci.TileCollidingWithBottom.first][tci.TileCollidingWithBottom.second];
+        yVel = tile->getBox().y - (hitbox.y + hitbox.h);
+    }
+
+    if (tci.IsLeftColliding()) {
+        Tile* tile = gTiles[tci.TileCollidingWithLeft.first][tci.TileCollidingWithLeft.second];
+        xVel = (tile->getBox().x + tile->getBox().w) - hitbox.x;
+    } else if (tci.IsRightColliding()) {
+        Tile* tile = gTiles[tci.TileCollidingWithRight.first][tci.TileCollidingWithRight.second];
+        xVel = tile->getBox().x - (hitbox.x + hitbox.w);
+    }
+
+    return tci;
 }
 
 void Player::animate(int nextState) {
@@ -405,7 +430,7 @@ void Player::animate(int nextState) {
     srcClip = &anims[animState][frame / FRAMETIME];
 }
 
-void Player::draw() {
+void Player::draw(TileCollisionInfo tci) {
     // Update hitbox in draw because there's a delay between update() and draw()
     // Now that all decisions have been made, finally update player location
 
@@ -426,11 +451,11 @@ void Player::draw() {
     yVelRem = modf(yVel, &intPart);
 
     // Reset velocity if collision
-    if (isTopColliding || isBottomColliding) {
+    if (tci.IsTopColliding() || tci.IsBottomColliding()) {
         yVel = 0;
         yVelRem = 0;
     }
-    if (isLeftColliding || isRightColliding) {
+    if (tci.IsLeftColliding() || tci.IsRightColliding()) {
         xVel = 0;
         xVelRem = 0;
     }
