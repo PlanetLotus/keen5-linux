@@ -40,37 +40,11 @@ TileCollisionInfo Sprite::CheckTileCollisionLR() {
         if (xVel > 0) {
             // Check R collision
             tci.IsRightChecked = true;
-            int col = nextHitbox.x / TILE_WIDTH;
-
-            for (unsigned int i = col; i < gTiles.size(); i++) {
-                for (int j = minRow; j <= maxRow; j++) {
-                    Tile* tile = gTiles[i][j];
-
-                    if (tile != NULL &&
-                        tile->CollideLeft() &&
-                        IsRightColliding(hitbox, nextHitbox, tile->getBox())) {
-
-                        tci.TileCollidingWithRight = tile;
-                    }
-                }
-            }
+            tci.TileCollidingWithRight = GetTileCollidingWithRight(minRow, maxRow, nextHitbox);
         } else {
             // Check L collision
             tci.IsLeftChecked = true;
-            int col = (nextHitbox.x + nextHitbox.w) / TILE_WIDTH;
-
-            for (int i = col; i >= 0; i--) {
-                for (int j = minRow; j <= maxRow; j++) {
-                    Tile* tile = gTiles[i][j];
-
-                    if (tile != NULL &&
-                        tile->CollideRight() &&
-                        IsLeftColliding(hitbox, nextHitbox, tile->getBox())) {
-
-                        tci.TileCollidingWithLeft = tile;
-                    }
-                }
-            }
+            tci.TileCollidingWithLeft = GetTileCollidingWithLeft(minRow, maxRow, nextHitbox);
         }
     }
     return tci;
@@ -96,38 +70,84 @@ TileCollisionInfo Sprite::CheckTileCollisionTB() {
         if (yVel > 0) {
             // Check B collision
             tci.IsBottomChecked = true;
-            int row = nextHitbox.y / TILE_HEIGHT;
-
-            for (int i = minCol; i <= maxCol; i++) {
-                for (unsigned int j = row; j < gTiles[i].size(); j++) {
-                    Tile* tile = gTiles[i][j];
-
-                    if (tile != NULL &&
-                        tile->CollideTop() &&
-                        IsBottomColliding(hitbox, nextHitbox, tile->getBox())) {
-
-                        tci.TileCollidingWithBottom = tile;
-                    }
-                }
-            }
+            tci.TileCollidingWithBottom = GetTileCollidingWithBottom(minCol, maxCol, nextHitbox);
         } else {
             // Check T collision
             tci.IsTopChecked = true;
-            int row = (nextHitbox.y + nextHitbox.h) / TILE_HEIGHT;
-
-            for (int i = minCol; i <= maxCol; i++) {
-                for (int j = row; j >= 0; j--) {
-                    Tile* tile = gTiles[i][j];
-
-                    if (tile != NULL &&
-                        tile->CollideBottom() &&
-                        IsTopColliding(hitbox, nextHitbox, tile->getBox())) {
-
-                        tci.TileCollidingWithTop = tile;
-                    }
-                }
-            }
+            tci.TileCollidingWithTop = GetTileCollidingWithTop(minCol, maxCol, nextHitbox);
         }
     }
     return tci;
+}
+
+Tile* Sprite::GetTileCollidingWithRight(int minRow, int maxRow, SDL_Rect nextHitbox) {
+    int col = nextHitbox.x / TILE_WIDTH;
+
+    for (unsigned int i = col; i < gTiles.size(); i++) {
+        for (int j = minRow; j <= maxRow; j++) {
+            Tile* tile = gTiles[i][j];
+
+            if (tile != NULL &&
+                tile->CollideLeft() &&
+                IsRightColliding(hitbox, nextHitbox, tile->getBox())) {
+
+                return tile;
+            }
+        }
+    }
+    return NULL;
+}
+
+Tile* Sprite::GetTileCollidingWithLeft(int minRow, int maxRow, SDL_Rect nextHitbox) {
+    int col = (nextHitbox.x + nextHitbox.w) / TILE_WIDTH;
+
+    for (int i = col; i >= 0; i--) {
+        for (int j = minRow; j <= maxRow; j++) {
+            Tile* tile = gTiles[i][j];
+
+            if (tile != NULL &&
+                tile->CollideRight() &&
+                IsLeftColliding(hitbox, nextHitbox, tile->getBox())) {
+
+                return tile;
+            }
+        }
+    }
+    return NULL;
+}
+
+Tile* Sprite::GetTileCollidingWithBottom(int minCol, int maxCol, SDL_Rect nextHitbox) {
+    int row = nextHitbox.y / TILE_HEIGHT;
+
+    for (int i = minCol; i <= maxCol; i++) {
+        for (unsigned int j = row; j < gTiles[i].size(); j++) {
+            Tile* tile = gTiles[i][j];
+
+            if (tile != NULL &&
+                tile->CollideTop() &&
+                IsBottomColliding(hitbox, nextHitbox, tile->getBox())) {
+
+                return tile;
+            }
+        }
+    }
+    return NULL;
+}
+
+Tile* Sprite::GetTileCollidingWithTop(int minCol, int maxCol, SDL_Rect nextHitbox) {
+    int row = (nextHitbox.y + nextHitbox.h) / TILE_HEIGHT;
+
+    for (int i = minCol; i <= maxCol; i++) {
+        for (int j = row; j >= 0; j--) {
+            Tile* tile = gTiles[i][j];
+
+            if (tile != NULL &&
+                tile->CollideBottom() &&
+                IsTopColliding(hitbox, nextHitbox, tile->getBox())) {
+
+                return tile;
+            }
+        }
+    }
+    return NULL;
 }
