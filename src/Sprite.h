@@ -9,13 +9,6 @@ class Sprite {
         SDL_Rect hitbox;
         SDL_Rect* srcClip;
 
-        /*
-        bool isTopColliding;
-        bool isBottomColliding;
-        bool isLeftColliding;
-        bool isRightColliding;
-        */
-
         float xVel;
         float yVel;
         float xVelRem;
@@ -26,14 +19,6 @@ class Sprite {
         virtual void draw(TileCollisionInfo tci);
         TileCollisionInfo CheckTileCollisionLR();
         TileCollisionInfo CheckTileCollisionTB();
-        /*
-        void CheckTBCollision();
-        void CheckLRCollision();
-        bool CheckTopCollision(int minCol, int maxCol, SDL_Rect nextHitbox);
-        virtual bool CheckBottomCollision(int minCol, int maxCol, SDL_Rect nextHitbox);
-        bool CheckLeftCollision(int minRow, int maxRow, SDL_Rect nextHitbox);
-        bool CheckRightCollision(int minRow, int maxRow, SDL_Rect nextHitbox);
-        */
 };
 
 #endif

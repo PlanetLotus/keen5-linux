@@ -14,13 +14,6 @@ BlasterShot::BlasterShot(int startX, int startY, float velocityX, float velocity
     xVel = velocityX * 20;
     yVel = velocityY * 20;
 
-    /*
-    isTopColliding = false;
-    isBottomColliding = false;
-    isLeftColliding = false;
-    isRightColliding = false;
-    */
-
     expireTimer = 0;
 
     frame = 0;
@@ -51,16 +44,20 @@ BlasterShot::BlasterShot(int startX, int startY, float velocityX, float velocity
 }
 
 TileCollisionInfo BlasterShot::update() {
+    // Check left/right collision
     TileCollisionInfo tciLR = CheckTileCollisionLR();
 
+    // Set properties based on x-collision
     if (tciLR.IsLeftColliding()) {
         xVel = (tciLR.TileCollidingWithLeft->getBox().x + tciLR.TileCollidingWithLeft->getBox().w) - hitbox.x;
     } else if (tciLR.IsRightColliding()) {
         xVel = tciLR.TileCollidingWithRight->getBox().x - (hitbox.x + hitbox.w);
     }
 
+    // Check top/bottom collision
     TileCollisionInfo tciTB = CheckTileCollisionTB();
 
+    // Set properties based on y-collision
     if (tciTB.IsTopColliding()) {
         yVel = (tciTB.TileCollidingWithTop->getBox().y + tciTB.TileCollidingWithTop->getBox().h) - hitbox.y;
     } else if (tciTB.IsBottomColliding()) {

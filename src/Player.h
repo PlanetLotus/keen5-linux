@@ -9,7 +9,6 @@ enum directionEnum {LEFT, RIGHT, UP, DOWN, STOP};
 
 class Player : public Sprite {
     private:
-        int ammo;
         float xAccel;
         float yAccel;
 
@@ -42,19 +41,9 @@ class Player : public Sprite {
         void climb(directionEnum dir);
         void enter_door();
         void fall();
-        //bool CheckBottomCollision(int minCol, int maxCol, SDL_Rect nextHitbox);
         TileCollisionInfo update();
         void animate(int nextState);
         void draw(TileCollisionInfo tci);
-
-        // Getters and setters
-        void set_ammo(int x);
-        void set_state(int x);
-
-        int get_ammo();
-        int get_state();
-
-        SDL_Rect get_hitbox();
 };
 
 #endif

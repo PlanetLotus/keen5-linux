@@ -7,7 +7,6 @@
 using namespace std;
 
 Player::Player() {
-    ammo = 5;
     xVel = 0;
     yVel = 0;
     xVelRem = 0;
@@ -27,15 +26,6 @@ Player::Player() {
     animState = 2;
     facing = LEFT;
     idle = true;
-
-    // These are meant for a per-loop basis
-    // They are not meant to hold value beyond one loop
-    /*
-    isTopColliding = false;
-    isBottomColliding = false;
-    isLeftColliding = false;
-    isRightColliding = false;
-    */
 
     isOnGround = true;
     isOnPogo = false;
@@ -308,32 +298,6 @@ void Player::fall() {
     }
 }
 
-// Redefined this in Player because we need to know isOnGround
-// This will be necessary for some other classes too so maybe this will
-// eventually call for another base class (subclass of Sprite)
-/*
-bool Player::CheckBottomCollision(int minCol, int maxCol, SDL_Rect nextHitbox) {
-    int row = nextHitbox.y / TILE_HEIGHT;
-
-    for (int i = minCol; i <= maxCol; i++) {
-        for (unsigned int j = row; j < gTiles[i].size(); j++) {
-            Tile* tile = gTiles[i][j];
-
-            if (tile != NULL &&
-                tile->CollideTop() &&
-                (isOnGround = IsBottomColliding(hitbox, nextHitbox, tile->getBox()))) {
-
-                // Set yVel to the distance between the player and the
-                // tile he's colliding with
-                yVel = tile->getBox().y - (hitbox.y + hitbox.h);
-                return true;
-            }
-        }
-    }
-    return false;
-}
-*/
-
 void Player::processKeyboard() {
     // Read in current keyboard state and update object accordingly
     const Uint8* state = SDL_GetKeyboardState(NULL);
@@ -388,16 +352,20 @@ TileCollisionInfo Player::update() {
     // Apply gravity and relevant animations
     fall();
 
+    // Check left/right collision
     TileCollisionInfo tciLR = CheckTileCollisionLR();
 
+    // Set properties based on x-collision
     if (tciLR.IsLeftColliding()) {
         xVel = (tciLR.TileCollidingWithLeft->getBox().x + tciLR.TileCollidingWithLeft->getBox().w) - hitbox.x;
     } else if (tciLR.IsRightColliding()) {
         xVel = tciLR.TileCollidingWithRight->getBox().x - (hitbox.x + hitbox.w);
     }
 
+    // Check top/bottom collision
     TileCollisionInfo tciTB = CheckTileCollisionTB();
 
+    // Set properties based on y-collision
     if (tciTB.IsBottomChecked)
         isOnGround = tciTB.IsBottomColliding();
 
@@ -481,13 +449,3 @@ void Player::draw(TileCollisionInfo tci) {
 
     gKeenTexture->render(destX, destY, srcClip);
 }
-
-// Getters and setters
-
-void Player::set_ammo(int x) { ammo = x; }
-void Player::set_state(int x) { animState = x; }
-
-int Player::get_ammo() { return ammo; }
-int Player::get_state() { return animState; }
-
-SDL_Rect Player::get_hitbox() { return hitbox; }
