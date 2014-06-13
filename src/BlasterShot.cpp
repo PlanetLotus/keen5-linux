@@ -51,19 +51,34 @@ BlasterShot::BlasterShot(int startX, int startY, float velocityX, float velocity
 }
 
 TileCollisionInfo BlasterShot::update() {
-    TileCollisionInfo tci = CheckTileCollision();
+    TileCollisionInfo tciLR = CheckTileCollisionLR();
 
-    if (tci.IsTopColliding()) {
-        yVel = (tci.TileCollidingWithTop->getBox().y + tci.TileCollidingWithTop->getBox().h) - hitbox.y;
-    } else if (tci.IsBottomColliding()) {
-        yVel = tci.TileCollidingWithBottom->getBox().y - (hitbox.y + hitbox.h);
+    if (tciLR.IsLeftColliding()) {
+        xVel = (tciLR.TileCollidingWithLeft->getBox().x + tciLR.TileCollidingWithLeft->getBox().w) - hitbox.x;
+    } else if (tciLR.IsRightColliding()) {
+        xVel = tciLR.TileCollidingWithRight->getBox().x - (hitbox.x + hitbox.w);
     }
 
-    if (tci.IsLeftColliding()) {
-        xVel = (tci.TileCollidingWithLeft->getBox().x + tci.TileCollidingWithLeft->getBox().w) - hitbox.x;
-    } else if (tci.IsRightColliding()) {
-        xVel = tci.TileCollidingWithRight->getBox().x - (hitbox.x + hitbox.w);
+    TileCollisionInfo tciTB = CheckTileCollisionTB();
+
+    if (tciTB.IsTopColliding()) {
+        yVel = (tciTB.TileCollidingWithTop->getBox().y + tciTB.TileCollidingWithTop->getBox().h) - hitbox.y;
+    } else if (tciTB.IsBottomColliding()) {
+        yVel = tciTB.TileCollidingWithBottom->getBox().y - (hitbox.y + hitbox.h);
     }
+
+    // Combine the TileCollisionInfo objects
+    // TODO: If this idea works out, write a constructor for TCI that takes a LR and
+    // TB TCI that combines them and returns a complete one.
+    TileCollisionInfo tci;
+    tci.IsLeftChecked = tciLR.IsLeftChecked;
+    tci.IsRightChecked = tciLR.IsRightChecked;
+    tci.IsTopChecked = tciTB.IsTopChecked;
+    tci.IsBottomChecked = tciTB.IsBottomChecked;
+    tci.TileCollidingWithLeft = tciLR.TileCollidingWithLeft;
+    tci.TileCollidingWithRight = tciLR.TileCollidingWithRight;
+    tci.TileCollidingWithTop = tciLR.TileCollidingWithTop;
+    tci.TileCollidingWithBottom = tciLR.TileCollidingWithBottom;
 
     if (xVel == 0 && yVel == 0) {
         expire();

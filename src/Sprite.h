@@ -24,7 +24,8 @@ class Sprite {
         virtual ~Sprite();
         virtual TileCollisionInfo update();
         virtual void draw(TileCollisionInfo tci);
-        TileCollisionInfo CheckTileCollision();
+        TileCollisionInfo CheckTileCollisionLR();
+        TileCollisionInfo CheckTileCollisionTB();
         /*
         void CheckTBCollision();
         void CheckLRCollision();

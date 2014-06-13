@@ -147,7 +147,7 @@ bool Sprite::CheckRightCollision(int minRow, int maxRow, SDL_Rect nextHitbox) {
 }
 */
 
-TileCollisionInfo Sprite::CheckTileCollision() {
+TileCollisionInfo Sprite::CheckTileCollisionLR() {
     // Reset flags from last turn
     /*
     isTopColliding = false;
@@ -195,7 +195,7 @@ TileCollisionInfo Sprite::CheckTileCollision() {
                 }
             }
             //return false;
-        } else if (xVel < 0) {
+        } else {
             // Check L collision
             tci.IsLeftChecked = true;
             int col = (nextHitbox.x + nextHitbox.w) / TILE_WIDTH;
@@ -219,8 +219,12 @@ TileCollisionInfo Sprite::CheckTileCollision() {
             //return false;
         }
     }
+    return tci;
+}
 
-    // Set up TB collision detection
+TileCollisionInfo Sprite::CheckTileCollisionTB() {
+    TileCollisionInfo tci;
+
     if (yVel != 0) {
         SDL_Rect nextHitbox = { hitbox.x + (int)xVel, hitbox.y + (int)yVel, hitbox.w, hitbox.h };
 
@@ -257,7 +261,7 @@ TileCollisionInfo Sprite::CheckTileCollision() {
                 }
             }
             //return false;
-        } else if (yVel < 0) {
+        } else {
             // Check T collision
             tci.IsTopChecked = true;
             int row = (nextHitbox.y + nextHitbox.h) / TILE_HEIGHT;
