@@ -64,19 +64,6 @@ TileCollisionInfo BlasterShot::update() {
         yVel = tciTB.TileCollidingWithBottom->getBox().y - (hitbox.y + hitbox.h);
     }
 
-    // Combine the TileCollisionInfo objects
-    // TODO: If this idea works out, write a constructor for TCI that takes a LR and
-    // TB TCI that combines them and returns a complete one.
-    TileCollisionInfo tci;
-    tci.IsLeftChecked = tciLR.IsLeftChecked;
-    tci.IsRightChecked = tciLR.IsRightChecked;
-    tci.IsTopChecked = tciTB.IsTopChecked;
-    tci.IsBottomChecked = tciTB.IsBottomChecked;
-    tci.TileCollidingWithLeft = tciLR.TileCollidingWithLeft;
-    tci.TileCollidingWithRight = tciLR.TileCollidingWithRight;
-    tci.TileCollidingWithTop = tciLR.TileCollidingWithTop;
-    tci.TileCollidingWithBottom = tciLR.TileCollidingWithBottom;
-
     if (xVel == 0 && yVel == 0) {
         expire();
         animate(1);
@@ -84,7 +71,8 @@ TileCollisionInfo BlasterShot::update() {
         animate(0);
     }
 
-    return tci;
+    // Combine the TileCollisionInfo objects
+    return TileCollisionInfo(tciLR, tciTB);
 }
 
 void BlasterShot::animate(int nextState) {

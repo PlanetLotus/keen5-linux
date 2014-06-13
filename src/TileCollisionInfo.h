@@ -6,6 +6,7 @@
 class TileCollisionInfo {
     public:
         TileCollisionInfo();
+        TileCollisionInfo(TileCollisionInfo tciLR, TileCollisionInfo tciTB);
 
         bool IsTopChecked;
         bool IsBottomChecked;

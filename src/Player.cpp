@@ -376,19 +376,7 @@ TileCollisionInfo Player::update() {
     }
 
     // Combine the TileCollisionInfo objects
-    // TODO: If this idea works out, write a constructor for TCI that takes a LR and
-    // TB TCI that combines them and returns a complete one.
-    TileCollisionInfo tci;
-    tci.IsLeftChecked = tciLR.IsLeftChecked;
-    tci.IsRightChecked = tciLR.IsRightChecked;
-    tci.IsTopChecked = tciTB.IsTopChecked;
-    tci.IsBottomChecked = tciTB.IsBottomChecked;
-    tci.TileCollidingWithLeft = tciLR.TileCollidingWithLeft;
-    tci.TileCollidingWithRight = tciLR.TileCollidingWithRight;
-    tci.TileCollidingWithTop = tciLR.TileCollidingWithTop;
-    tci.TileCollidingWithBottom = tciLR.TileCollidingWithBottom;
-
-    return tci;
+    return TileCollisionInfo(tciLR, tciTB);
 }
 
 void Player::animate(int nextState) {
