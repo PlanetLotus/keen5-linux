@@ -190,7 +190,7 @@ TileCollisionInfo Sprite::CheckTileCollision() {
                         // tile he's colliding with
                         //xVel = tile->getBox().x - (hitbox.x + hitbox.w);
                         //return true;
-                        tci.TileCollidingWithRight = make_pair(i, j);
+                        tci.TileCollidingWithRight = tile;
                     }
                 }
             }
@@ -212,7 +212,7 @@ TileCollisionInfo Sprite::CheckTileCollision() {
                         // tile he's colliding with
                         //xVel = (tile->getBox().x + tile->getBox().w) - hitbox.x;
                         //return true;
-                        tci.TileCollidingWithLeft = make_pair(i, j);
+                        tci.TileCollidingWithLeft = tile;
                     }
                 }
             }
@@ -252,7 +252,7 @@ TileCollisionInfo Sprite::CheckTileCollision() {
                         // tile he's colliding with
                         //yVel = tile->getBox().y - (hitbox.y + hitbox.h);
                         //return true;
-                        tci.TileCollidingWithBottom = make_pair(i, j);
+                        tci.TileCollidingWithBottom = tile;
                     }
                 }
             }
@@ -274,7 +274,7 @@ TileCollisionInfo Sprite::CheckTileCollision() {
                         // tile he's colliding with
                         //yVel = (tile->getBox().y + tile->getBox().h) - hitbox.y;
                         //return true;
-                        tci.TileCollidingWithTop = make_pair(i, j);
+                        tci.TileCollidingWithTop = tile;
                     }
                 }
             }

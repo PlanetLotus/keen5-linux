@@ -8,24 +8,24 @@ TileCollisionInfo::TileCollisionInfo() {
     IsRightChecked = false;
     IsLeftChecked = false;
 
-    TileCollidingWithTop = make_pair(-1, -1);
-    TileCollidingWithBottom = make_pair(-1, -1);
-    TileCollidingWithLeft = make_pair(-1, -1);
-    TileCollidingWithRight = make_pair(-1, -1);
+    TileCollidingWithTop = NULL;
+    TileCollidingWithBottom = NULL;
+    TileCollidingWithLeft = NULL;
+    TileCollidingWithRight = NULL;
 }
 
 bool TileCollisionInfo::IsTopColliding() {
-    return TileCollidingWithTop.first != -1;
+    return TileCollidingWithTop != NULL;
 }
 
 bool TileCollisionInfo::IsBottomColliding() {
-    return TileCollidingWithBottom.first != -1;
+    return TileCollidingWithBottom != NULL;
 }
 
 bool TileCollisionInfo::IsRightColliding() {
-    return TileCollidingWithRight.first != -1;
+    return TileCollidingWithRight != NULL;
 }
 
 bool TileCollisionInfo::IsLeftColliding() {
-    return TileCollidingWithLeft.first != -1;
+    return TileCollidingWithLeft != NULL;
 }

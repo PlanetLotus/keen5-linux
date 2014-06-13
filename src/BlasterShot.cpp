@@ -53,27 +53,23 @@ BlasterShot::BlasterShot(int startX, int startY, float velocityX, float velocity
 TileCollisionInfo BlasterShot::update() {
     TileCollisionInfo tci = CheckTileCollision();
 
+    if (tci.IsTopColliding()) {
+        yVel = (tci.TileCollidingWithTop->getBox().y + tci.TileCollidingWithTop->getBox().h) - hitbox.y;
+    } else if (tci.IsBottomColliding()) {
+        yVel = tci.TileCollidingWithBottom->getBox().y - (hitbox.y + hitbox.h);
+    }
+
+    if (tci.IsLeftColliding()) {
+        xVel = (tci.TileCollidingWithLeft->getBox().x + tci.TileCollidingWithLeft->getBox().w) - hitbox.x;
+    } else if (tci.IsRightColliding()) {
+        xVel = tci.TileCollidingWithRight->getBox().x - (hitbox.x + hitbox.w);
+    }
+
     if (xVel == 0 && yVel == 0) {
         expire();
         animate(1);
     } else {
         animate(0);
-    }
-
-    if (tci.IsTopColliding()) {
-        Tile* tile = gTiles[tci.TileCollidingWithTop.first][tci.TileCollidingWithTop.second];
-        yVel = (tile->getBox().y + tile->getBox().h) - hitbox.y;
-    } else if (tci.IsBottomColliding()) {
-        Tile* tile = gTiles[tci.TileCollidingWithBottom.first][tci.TileCollidingWithBottom.second];
-        yVel = tile->getBox().y - (hitbox.y + hitbox.h);
-    }
-
-    if (tci.IsLeftColliding()) {
-        Tile* tile = gTiles[tci.TileCollidingWithLeft.first][tci.TileCollidingWithLeft.second];
-        xVel = (tile->getBox().x + tile->getBox().w) - hitbox.x;
-    } else if (tci.IsRightColliding()) {
-        Tile* tile = gTiles[tci.TileCollidingWithRight.first][tci.TileCollidingWithRight.second];
-        xVel = tile->getBox().x - (hitbox.x + hitbox.w);
     }
 
     return tci;

@@ -1,7 +1,7 @@
 #ifndef TILECOLLISIONINFO_H
 #define TILECOLLISIONINFO_h
 
-#include <utility>
+#include "Tile.h"
 
 class TileCollisionInfo {
     public:
@@ -17,10 +17,10 @@ class TileCollisionInfo {
         bool IsRightColliding();
         bool IsLeftColliding();
 
-        std::pair<int, int> TileCollidingWithTop;
-        std::pair<int, int> TileCollidingWithBottom;
-        std::pair<int, int> TileCollidingWithLeft;
-        std::pair<int, int> TileCollidingWithRight;
+        Tile* TileCollidingWithTop;
+        Tile* TileCollidingWithBottom;
+        Tile* TileCollidingWithLeft;
+        Tile* TileCollidingWithRight;
 };
 
 #endif
