@@ -332,7 +332,7 @@ void Player::processKeyboard() {
     }
 }
 
-TileCollisionInfo Player::update() {
+void Player::update() {
     // Process in this order
     // 1) User actions
     // 2) AI actions
@@ -375,8 +375,34 @@ TileCollisionInfo Player::update() {
         yVel = tciTB.TileCollidingWithBottom->getBox().y - (hitbox.y + hitbox.h);
     }
 
-    // Combine the TileCollisionInfo objects
-    return TileCollisionInfo(tciLR, tciTB);
+    // Update hitbox //
+    // Add back remainder
+    xVel += xVelRem;
+    yVel += abs(yVelRem);
+
+    /*
+    if (xVel != 0)
+        printf("%f, %f, %f, %f\n", xVel, xVelRem, yVel, yVelRem);
+    */
+
+    // Add int part of vel to pos
+    hitbox.x += xVel;
+    hitbox.y += yVel;
+
+    // Set fractional part of vel to rem
+    double intPart;
+    xVelRem = modf(xVel, &intPart);
+    yVelRem = modf(yVel, &intPart);
+
+    // Reset velocity if collision
+    if (tciTB.IsTopColliding() || tciTB.IsBottomColliding()) {
+        yVel = 0;
+        yVelRem = 0;
+    }
+    if (tciLR.IsLeftColliding() || tciLR.IsRightColliding()) {
+        xVel = 0;
+        xVelRem = 0;
+    }
 }
 
 void Player::animate(int nextState) {
@@ -397,36 +423,7 @@ void Player::animate(int nextState) {
     srcClip = &anims[animState][frame / FRAMETIME];
 }
 
-void Player::draw(TileCollisionInfo tci) {
-    // Update hitbox in draw because there's a delay between update() and draw()
-    // Now that all decisions have been made, finally update player location
-
-    // Add back remainder
-    xVel += xVelRem;
-    yVel += abs(yVelRem);
-
-    if (xVel != 0)
-        printf("%f, %f, %f, %f\n", xVel, xVelRem, yVel, yVelRem);
-
-    // Add int part of vel to pos
-    hitbox.x += xVel;
-    hitbox.y += yVel;
-
-    // Set fractional part of vel to rem
-    double intPart;
-    xVelRem = modf(xVel, &intPart);
-    yVelRem = modf(yVel, &intPart);
-
-    // Reset velocity if collision
-    if (tci.IsTopColliding() || tci.IsBottomColliding()) {
-        yVel = 0;
-        yVelRem = 0;
-    }
-    if (tci.IsLeftColliding() || tci.IsRightColliding()) {
-        xVel = 0;
-        xVelRem = 0;
-    }
-
+void Player::draw() {
     // Center the hitbox (horizontally) inside the displayed frame
     int offsetX = srcClip->w / 2 - TILE_WIDTH / 2;
     int destX = hitbox.x - offsetX;

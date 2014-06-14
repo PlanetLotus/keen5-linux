@@ -15,8 +15,8 @@ class Sprite {
         float yVelRem;
     public:
         virtual ~Sprite();
-        virtual TileCollisionInfo update();
-        virtual void draw(TileCollisionInfo tci);
+        virtual void update();
+        virtual void draw();
         TileCollisionInfo CheckTileCollisionLR();
         TileCollisionInfo CheckTileCollisionTB();
         Tile* GetTileCollidingWithRight(int minRow, int maxRow, SDL_Rect nextHitbox);

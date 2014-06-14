@@ -43,7 +43,7 @@ BlasterShot::BlasterShot(int startX, int startY, float velocityX, float velocity
     anims[1] = collide_anim;
 }
 
-TileCollisionInfo BlasterShot::update() {
+void BlasterShot::update() {
     // Check left/right collision
     TileCollisionInfo tciLR = CheckTileCollisionLR();
 
@@ -71,8 +71,13 @@ TileCollisionInfo BlasterShot::update() {
         animate(0);
     }
 
-    // Combine the TileCollisionInfo objects
-    return TileCollisionInfo(tciLR, tciTB);
+    // Update hitbox
+    hitbox.x += xVel;
+    hitbox.y += yVel;
+
+    // Reset velocity if collision
+    if (tciTB.IsTopColliding() || tciTB.IsBottomColliding()) yVel = 0;
+    if (tciLR.IsLeftColliding() || tciLR.IsRightColliding()) xVel = 0;
 }
 
 void BlasterShot::animate(int nextState) {
@@ -91,14 +96,7 @@ void BlasterShot::animate(int nextState) {
     srcClip = &anims[animState][frame / FRAMETIME];
 }
 
-void BlasterShot::draw(TileCollisionInfo tci) {
-    hitbox.x += xVel;
-    hitbox.y += yVel;
-
-    // Reset velocity if collision
-    if (tci.IsTopColliding() || tci.IsBottomColliding()) yVel = 0;
-    if (tci.IsLeftColliding() || tci.IsRightColliding()) xVel = 0;
-
+void BlasterShot::draw() {
     gKeenTexture->render(hitbox.x, hitbox.y, srcClip);
 }
 

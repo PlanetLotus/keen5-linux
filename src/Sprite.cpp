@@ -9,14 +9,9 @@ Sprite::~Sprite() {
     delete srcClip;
 }
 
-TileCollisionInfo Sprite::update() {
-    // Dummy implementation just to avoid compiler warning
-    // This method should (currently) be overwritten in every derived class
-    TileCollisionInfo tci;
-    return tci;
-}
+void Sprite::update() {}
 
-void Sprite::draw(TileCollisionInfo tci) {}
+void Sprite::draw() {}
 
 TileCollisionInfo Sprite::CheckTileCollisionLR() {
     TileCollisionInfo tci;

@@ -14,9 +14,9 @@ class BlasterShot : public Sprite {
         std::vector<SDL_Rect> anims[2];
     public:
         BlasterShot(int startX, int startY, float velocityX, float velocityY);
-        TileCollisionInfo update();
+        void update();
         void animate(int nextState);
-        void draw(TileCollisionInfo tci);
+        void draw();
         void expire();
         void die();
 };

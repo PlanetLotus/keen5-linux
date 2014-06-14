@@ -41,9 +41,9 @@ class Player : public Sprite {
         void climb(directionEnum dir);
         void enter_door();
         void fall();
-        TileCollisionInfo update();
+        void update();
         void animate(int nextState);
-        void draw(TileCollisionInfo tci);
+        void draw();
 };
 
 #endif
