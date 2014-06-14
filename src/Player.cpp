@@ -190,8 +190,13 @@ void Player::walk(directionEnum dir) {
         xVel += xAccel;
 
         // Limit velocity
-        if (xVel > 5) xVel = 5;
-        else if (xVel < -5) xVel = -5;
+        if (xVel > 7) {
+            xVel = 6;
+            xVelRem = 0;
+        } else if (xVel < -7) {
+            xVel = -6;
+            xVelRem = 0;
+        }
     }
 }
 
@@ -206,8 +211,10 @@ void Player::stopwalk() {
         animate(facing);
     } else {
         // Falling with drag
-        float drag = facing == LEFT ? 0.8 : -0.8;
-        xVel += drag;
+        if (!isOnPogo) {
+            float drag = facing == LEFT ? 0.8 : -0.8;
+            xVel += drag;
+        }
 
         // Make sure remainder is applied in direction opposite movement
         //if ((facing == LEFT && xVelRem < 0) || (facing == RIGHT && xVelRem > 0))
