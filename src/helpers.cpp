@@ -82,10 +82,13 @@ bool set_tiles() {
 
     int tilesWide = -1;
     int tilesTall = -1;
+    int tileCountLayer1 = -1;
+    int tileCountLayer2 = -1;
 
     int xSrc = -1;
     int ySrc = -1;
     int collideVal = -1;
+    int layerVal = -1;
     int propertyVal = -1;
     bool collideT = false;
     bool collideR = false;
@@ -95,18 +98,21 @@ bool set_tiles() {
     int x = 0;
     int y = 0;
 
-    ifstream map("../data/level2");
+    ifstream map("../data/layertestlevel");
     string line;
     istringstream iss;
 
-    // Special case: First line contains # of tiles wide, # tiles tall, and tileCount
+    // Special case: First line contains # of tiles wide, # tiles tall, and # tiles (non-blank) per layer
+    // For now, it's assumed the number of layers is known (hardcoded)
     // Maybe use a "level" class??
     getline(map, line);
     iss.str(line);
     iss >> tilesWide;
     iss >> tilesTall;
-    if (iss.fail() || tilesWide == -1 || tilesTall == -1) {
-        printf("Error getting number of tiles from line 1.\n");
+    iss >> tileCountLayer1;
+    iss >> tileCountLayer2;
+    if (iss.fail() || tilesWide == -1 || tilesTall == -1 || tileCountLayer1 == -1 || tileCountLayer2 == -1) {
+        printf("Error getting metadata from line 1.\n");
         return false;
     }
 
@@ -122,7 +128,7 @@ bool set_tiles() {
     // This is slow because it inits every element when we don't need to
     // Figure out how to assign to it in the code below
     gTiles.resize(tilesWide);
-    for (unsigned int iter = 0; iter < gTiles.size(); iter++)
+    for (int iter = 0; iter < tilesWide; iter++)
         gTiles[iter].resize(tilesTall);
 
     // Loop through each line
@@ -160,13 +166,12 @@ bool set_tiles() {
 
         iss >> propertyVal;
         bool isPole = false;
-        bool hidesKeen = false;
         if (propertyVal == 1)
             isPole = true;
-        else if (propertyVal == 2)
-            hidesKeen = true;
 
-        gTiles[x][y] = new Tile(xSrc, ySrc, x * TILE_WIDTH, y * TILE_HEIGHT, collideT, collideR, collideB, collideL, isPole, hidesKeen);
+        iss >> layerVal;
+
+        gTiles[x][y] = new Tile(xSrc, ySrc, x * TILE_WIDTH, y * TILE_HEIGHT, collideT, collideR, collideB, collideL, layerVal, isPole);
 
         x++;
     }

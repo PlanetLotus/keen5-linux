@@ -20,10 +20,10 @@ class Tile {
 
     public:
         // Inits position and type
-        Tile(int srcX, int srcY, int destX, int destY, bool collideT, bool collideR, bool collideB, bool collideL, bool isPole, bool hidesKeen);
+        Tile(int srcX, int srcY, int destX, int destY, bool collideT, bool collideR, bool collideB, bool collideL, int layer, bool isPole);
 
         // Shows the tile
-        void render(int destX, int destY, SDL_Rect& camera);
+        void render(SDL_Rect& camera);
 
         SDL_Rect getBox();
         bool HasCollision();
@@ -33,7 +33,7 @@ class Tile {
         bool CollideLeft();
 
         bool IsPole;
-        bool HidesKeen;
+        int Layer;
 };
 
 #endif

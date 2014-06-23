@@ -62,13 +62,13 @@ int main (int argc, char **args) {
         // Clear screen
         SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0xFF);
         SDL_RenderClear(renderer);
-
-        // Render masks
         SDL_Rect camera = {32, 32, 32, 32};
+
+        // Render tiles - Layer 0 (Before units)
         for (unsigned int i=0; i<gTiles.size(); i++) {
             for (unsigned int j=0; j<gTiles[i].size(); j++) {
-                if (gTiles[i][j] != NULL)
-                    gTiles[i][j]->render(0, 0, camera);
+                if (gTiles[i][j] != NULL && gTiles[i][j]->Layer == 0)
+                    gTiles[i][j]->render(camera);
             }
         }
 
@@ -79,6 +79,14 @@ int main (int argc, char **args) {
             gSpriteBatch[i]->update();
         for (unsigned int i = 0; i < gSpriteBatch.size(); i++) {
             gSpriteBatch[i]->draw();
+        }
+
+        // Render tiles - Layer 1 (After units)
+        for (unsigned int i=0; i<gTiles.size(); i++) {
+            for (unsigned int j=0; j<gTiles[i].size(); j++) {
+                if (gTiles[i][j] != NULL && gTiles[i][j]->Layer == 1)
+                    gTiles[i][j]->render(camera);
+            }
         }
 
         // Update screen

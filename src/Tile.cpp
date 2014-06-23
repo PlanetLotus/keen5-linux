@@ -2,7 +2,7 @@
 #include "Tile.h"
 
 Tile::Tile(int srcX, int srcY, int destX, int destY, bool collideT, bool collideR, bool collideB, bool collideL,
-        bool isPole=false, bool hidesKeen=false) {
+    int layer, bool isPole=false) {
     srcBox.x = srcX;
     srcBox.y = srcY;
 
@@ -22,11 +22,12 @@ Tile::Tile(int srcX, int srcY, int destX, int destY, bool collideT, bool collide
 
     hasCollision = collideT || collideR || collideB || collideL ? true : false;
 
+    Layer = layer;
+
     IsPole = isPole;
-    HidesKeen = hidesKeen;
 }
 
-void Tile::render(int destX, int destY, SDL_Rect& camera) {
+void Tile::render(SDL_Rect& camera) {
     gMaskTexture->render(destBox.x, destBox.y, &srcBox);
 }
 
