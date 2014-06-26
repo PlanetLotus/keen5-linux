@@ -16,31 +16,27 @@ void Sprite::draw() {}
 TileCollisionInfo Sprite::CheckTileCollisionLR() {
     TileCollisionInfo tci;
 
-    // For tiles, check per-axis collision only if we're moving on that axis
-    // Set up LR collision detection
-    if (xVel != 0) {
-        SDL_Rect nextHitbox = { hitbox.x + (int)xVel, hitbox.y, hitbox.w, hitbox.h };
+    SDL_Rect nextHitbox = { hitbox.x + (int)xVel, hitbox.y, hitbox.w, hitbox.h };
 
-        int minRow = nextHitbox.y / TILE_HEIGHT;
-        int maxRow = (nextHitbox.y + nextHitbox.h) / TILE_HEIGHT;
+    int minRow = nextHitbox.y / TILE_HEIGHT;
+    int maxRow = (nextHitbox.y + nextHitbox.h) / TILE_HEIGHT;
 
-        // TODO: Fix this logic. Currently this addresses the case where, if the bottommost point
-        // of player and topmost point of tile are equal, it should NOT check this row.
-        if ((nextHitbox.y + nextHitbox.h) % TILE_WIDTH == 0 && maxRow > 0)
-            maxRow--;
+    // TODO: Fix this logic. Currently this addresses the case where, if the bottommost point
+    // of player and topmost point of tile are equal, it should NOT check this row.
+    if ((nextHitbox.y + nextHitbox.h) % TILE_WIDTH == 0 && maxRow > 0)
+        maxRow--;
 
-        // Don't let maxRow go out of bounds
-        if (maxRow > TILES_TALL-1) maxRow = TILES_TALL-1;
+    // Don't let maxRow go out of bounds
+    if (maxRow > TILES_TALL-1) maxRow = TILES_TALL-1;
 
-        if (xVel > 0) {
-            // Check R collision
-            tci.IsRightChecked = true;
-            tci.TileCollidingWithRight = GetTileCollidingWithRight(minRow, maxRow, nextHitbox);
-        } else {
-            // Check L collision
-            tci.IsLeftChecked = true;
-            tci.TileCollidingWithLeft = GetTileCollidingWithLeft(minRow, maxRow, nextHitbox);
-        }
+    if (xVel > 0) {
+        // Check R collision
+        tci.IsRightChecked = true;
+        tci.TileCollidingWithRight = GetTileCollidingWithRight(minRow, maxRow, nextHitbox);
+    } else {
+        // Check L collision
+        tci.IsLeftChecked = true;
+        tci.TileCollidingWithLeft = GetTileCollidingWithLeft(minRow, maxRow, nextHitbox);
     }
     return tci;
 }
@@ -48,29 +44,27 @@ TileCollisionInfo Sprite::CheckTileCollisionLR() {
 TileCollisionInfo Sprite::CheckTileCollisionTB() {
     TileCollisionInfo tci;
 
-    if (yVel != 0) {
-        SDL_Rect nextHitbox = { hitbox.x + (int)xVel, hitbox.y + (int)yVel, hitbox.w, hitbox.h };
+    SDL_Rect nextHitbox = { hitbox.x + (int)xVel, hitbox.y + (int)yVel, hitbox.w, hitbox.h };
 
-        int minCol = nextHitbox.x / TILE_WIDTH;
-        int maxCol = (nextHitbox.x + nextHitbox.w) / TILE_WIDTH;
+    int minCol = nextHitbox.x / TILE_WIDTH;
+    int maxCol = (nextHitbox.x + nextHitbox.w) / TILE_WIDTH;
 
-        // TODO: Fix this logic. Currently this addresses the case where, if the rightmost point
-        // of player and leftmost point of tile are equal, it should NOT check this column.
-        if ((nextHitbox.x + nextHitbox.w) % TILE_WIDTH == 0 && maxCol > 0)
-            maxCol--;
+    // TODO: Fix this logic. Currently this addresses the case where, if the rightmost point
+    // of player and leftmost point of tile are equal, it should NOT check this column.
+    if ((nextHitbox.x + nextHitbox.w) % TILE_WIDTH == 0 && maxCol > 0)
+        maxCol--;
 
-        // Don't let maxCol go out of bounds
-        if (maxCol > TILES_WIDE-1) maxCol = TILES_WIDE-1;
+    // Don't let maxCol go out of bounds
+    if (maxCol > TILES_WIDE-1) maxCol = TILES_WIDE-1;
 
-        if (yVel > 0) {
-            // Check B collision
-            tci.IsBottomChecked = true;
-            tci.TileCollidingWithBottom = GetTileCollidingWithBottom(minCol, maxCol, nextHitbox);
-        } else {
-            // Check T collision
-            tci.IsTopChecked = true;
-            tci.TileCollidingWithTop = GetTileCollidingWithTop(minCol, maxCol, nextHitbox);
-        }
+    if (yVel > 0) {
+        // Check B collision
+        tci.IsBottomChecked = true;
+        tci.TileCollidingWithBottom = GetTileCollidingWithBottom(minCol, maxCol, nextHitbox);
+    } else {
+        // Check T collision
+        tci.IsTopChecked = true;
+        tci.TileCollidingWithTop = GetTileCollidingWithTop(minCol, maxCol, nextHitbox);
     }
     return tci;
 }

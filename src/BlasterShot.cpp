@@ -45,23 +45,29 @@ BlasterShot::BlasterShot(int startX, int startY, float velocityX, float velocity
 
 void BlasterShot::update() {
     // Check left/right collision
-    TileCollisionInfo tciLR = CheckTileCollisionLR();
+    TileCollisionInfo tciLR;
+    if (xVel != 0) {
+        tciLR = CheckTileCollisionLR();
 
-    // Set properties based on x-collision
-    if (tciLR.IsLeftColliding()) {
-        xVel = (tciLR.TileCollidingWithLeft->getBox().x + tciLR.TileCollidingWithLeft->getBox().w) - hitbox.x;
-    } else if (tciLR.IsRightColliding()) {
-        xVel = tciLR.TileCollidingWithRight->getBox().x - (hitbox.x + hitbox.w);
+        // Set properties based on x-collision
+        if (tciLR.IsLeftColliding()) {
+            xVel = (tciLR.TileCollidingWithLeft->getBox().x + tciLR.TileCollidingWithLeft->getBox().w) - hitbox.x;
+        } else if (tciLR.IsRightColliding()) {
+            xVel = tciLR.TileCollidingWithRight->getBox().x - (hitbox.x + hitbox.w);
+        }
     }
 
     // Check top/bottom collision
-    TileCollisionInfo tciTB = CheckTileCollisionTB();
+    TileCollisionInfo tciTB;
+    if (yVel != 0) {
+        tciTB = CheckTileCollisionTB();
 
-    // Set properties based on y-collision
-    if (tciTB.IsTopColliding()) {
-        yVel = (tciTB.TileCollidingWithTop->getBox().y + tciTB.TileCollidingWithTop->getBox().h) - hitbox.y;
-    } else if (tciTB.IsBottomColliding()) {
-        yVel = tciTB.TileCollidingWithBottom->getBox().y - (hitbox.y + hitbox.h);
+        // Set properties based on y-collision
+        if (tciTB.IsTopColliding()) {
+            yVel = (tciTB.TileCollidingWithTop->getBox().y + tciTB.TileCollidingWithTop->getBox().h) - hitbox.y;
+        } else if (tciTB.IsBottomColliding()) {
+            yVel = tciTB.TileCollidingWithBottom->getBox().y - (hitbox.y + hitbox.h);
+        }
     }
 
     if (xVel == 0 && yVel == 0) {
