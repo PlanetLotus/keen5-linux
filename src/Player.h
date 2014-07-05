@@ -28,6 +28,7 @@ class Player : public Sprite {
         bool isShooting;
 
         void processKeyboard(); // Call player actions based on keyboard input
+        Tile* GetCollidingPoleTile();
     public:
         Player();
         void shoot(bool isPressingUp, bool isPressingDown);

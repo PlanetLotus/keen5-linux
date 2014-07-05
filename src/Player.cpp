@@ -230,10 +230,33 @@ void Player::stopwalk() {
 }
 
 void Player::processUpArrow() {
-    if (isOnPole)
+    if (isOnPole) {
         climb(UP);
-    else
-        look(UP);
+        return;
+    }
+    printf("processUpArrow()\n");
+
+    Tile* pole = GetCollidingPoleTile();
+    if (pole != NULL) {
+        printf("Pole\n");
+    }
+
+    look(UP);
+}
+
+Tile* Player::GetCollidingPoleTile() {
+    vector<Tile*> leftTiles = GetTilesToLeft();
+    SDL_Rect nextHitbox = { hitbox.x + (int)xVel, hitbox.y, hitbox.w, hitbox.h };
+
+    for (unsigned int i = 0; i < leftTiles.size(); i++) {
+        if (leftTiles[i]->IsPole &&
+            IsLeftColliding(hitbox, nextHitbox, leftTiles[i]->getBox()))
+            return leftTiles[i];
+    }
+
+    // Now do same for rightTiles
+
+    return NULL;
 }
 
 void Player::look(directionEnum dir) {

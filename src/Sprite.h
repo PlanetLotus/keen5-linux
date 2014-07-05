@@ -19,6 +19,7 @@ class Sprite {
         virtual void draw();
         TileCollisionInfo CheckTileCollisionLR();
         TileCollisionInfo CheckTileCollisionTB();
+        std::vector<Tile*> GetTilesToLeft();
         Tile* GetTileCollidingWithRight(int minRow, int maxRow, SDL_Rect nextHitbox);
         Tile* GetTileCollidingWithLeft(int minRow, int maxRow, SDL_Rect nextHitbox);
         Tile* GetTileCollidingWithBottom(int minCol, int maxCol, SDL_Rect nextHitbox);

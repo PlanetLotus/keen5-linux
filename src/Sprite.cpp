@@ -13,6 +13,35 @@ void Sprite::update() {}
 
 void Sprite::draw() {}
 
+vector<Tile*> Sprite::GetTilesToLeft() {
+    SDL_Rect nextHitbox = { hitbox.x + (int)xVel, hitbox.y, hitbox.w, hitbox.h };
+
+    int col = (nextHitbox.x + nextHitbox.w) / TILE_WIDTH;
+    int minRow = nextHitbox.y / TILE_HEIGHT;
+    int maxRow = (nextHitbox.y + nextHitbox.h) / TILE_HEIGHT;
+
+    // TODO: Fix this logic. Currently this addresses the case where, if the bottommost point
+    // of player and topmost point of tile are equal, it should NOT check this row.
+    if ((nextHitbox.y + nextHitbox.h) % TILE_WIDTH == 0 && maxRow > 0)
+        maxRow--;
+
+    // Don't let maxRow go out of bounds
+    if (maxRow > TILES_TALL-1) maxRow = TILES_TALL-1;
+
+    vector<Tile*> tilesToLeft;
+
+    for (int i = col; i >= 0; i--) {
+        for (int j = minRow; j <= maxRow; j++) {
+            Tile* tile = gTiles[i][j];
+
+            if (tile != NULL)
+                tilesToLeft.push_back(tile);
+        }
+    }
+
+    return tilesToLeft;
+}
+
 TileCollisionInfo Sprite::CheckTileCollisionLR() {
     TileCollisionInfo tci;
 
