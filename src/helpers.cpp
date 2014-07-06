@@ -188,7 +188,7 @@ bool IsTopColliding(SDL_Rect before, SDL_Rect after, SDL_Rect obstacle) {
     if (bottomBefore >= bottomObstacle && obstacle.y >= after.y) return true;
 
     // "Normal" collision
-    if (after.y < bottomObstacle) return true;
+    if (after.y < bottomObstacle && after.y > obstacle.y) return true;
 
     return false;
 }
@@ -201,7 +201,7 @@ bool IsBottomColliding(SDL_Rect before, SDL_Rect after, SDL_Rect obstacle) {
     if (before.y <= obstacle.y && bottomObstacle <= bottomAfter) return true;
 
     // "Normal" collision
-    if (bottomAfter > obstacle.y) return true;
+    if (bottomAfter > obstacle.y && bottomAfter < bottomObstacle) return true;
 
     return false;
 }
@@ -214,7 +214,7 @@ bool IsLeftColliding(SDL_Rect before, SDL_Rect after, SDL_Rect obstacle) {
     if (rightBefore >= rightObstacle && obstacle.x >= after.x) return true;
 
     // "Normal" collision
-    if (after.x < rightObstacle) return true;
+    if (after.x < rightObstacle && after.x > obstacle.x) return true;
 
     return false;
 }
@@ -227,7 +227,7 @@ bool IsRightColliding(SDL_Rect before, SDL_Rect after, SDL_Rect obstacle) {
     if (before.x <= obstacle.x && rightObstacle <= rightAfter) return true;
 
     // "Normal" collision
-    if (rightAfter > obstacle.x) return true;
+    if (rightAfter > obstacle.x && rightAfter < rightObstacle) return true;
 
     return false;
 }
