@@ -9,8 +9,6 @@ class Sprite {
         SDL_Rect hitbox;
         SDL_Rect* srcClip;
 
-        enum TileProperty { LEFT, RIGHT, TOP, BOTTOM, ISPOLE };
-
         float xVel;
         float yVel;
         float xVelRem;
@@ -21,7 +19,6 @@ class Sprite {
         virtual void draw();
         TileCollisionInfo CheckTileCollisionLR();
         TileCollisionInfo CheckTileCollisionTB();
-        bool IsTileColliding(Tile* tile, TileProperty tileProperty);
         std::vector<Tile*> GetTilesToLeft();
         std::vector<Tile*> GetTilesToRight();
         std::vector<Tile*> GetTilesToTop();

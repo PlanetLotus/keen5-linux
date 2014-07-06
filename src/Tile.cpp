@@ -1,4 +1,5 @@
 #include "globals.h"
+#include "helpers.h"
 #include "Tile.h"
 
 Tile::Tile(int srcX, int srcY, int destX, int destY, bool collideT, bool collideR, bool collideB, bool collideL,
@@ -29,6 +30,27 @@ Tile::Tile(int srcX, int srcY, int destX, int destY, bool collideT, bool collide
 
 void Tile::render(SDL_Rect& camera) {
     gMaskTexture->render(destBox.x, destBox.y, &srcBox);
+}
+
+bool Tile::IsColliding(TileProperty tileProperty, SDL_Rect hitbox, SDL_Rect nextHitbox) {
+    if (tileProperty == ISPOLE) {
+        return IsPole && (IsRightColliding(hitbox, nextHitbox, destBox) ||
+            IsLeftColliding(hitbox, nextHitbox, destBox));
+    }
+
+    if (tileProperty == LEFT)
+        return collideLeft && IsRightColliding(hitbox, nextHitbox, destBox);
+
+    if (tileProperty == RIGHT)
+        return collideRight && IsLeftColliding(hitbox, nextHitbox, destBox);
+
+    if (tileProperty == TOP)
+        return collideTop && IsBottomColliding(hitbox, nextHitbox, destBox);
+
+    if (tileProperty == BOTTOM)
+        return collideBottom && IsTopColliding(hitbox, nextHitbox, destBox);
+
+    return false;
 }
 
 SDL_Rect Tile::getBox() { return destBox; }

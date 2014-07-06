@@ -19,6 +19,8 @@ class Tile {
         bool collideLeft;
 
     public:
+        enum TileProperty { LEFT, RIGHT, TOP, BOTTOM, ISPOLE };
+
         // Inits position and type
         Tile(int srcX, int srcY, int destX, int destY, bool collideT, bool collideR, bool collideB, bool collideL, int layer, bool isPole);
 
@@ -26,6 +28,7 @@ class Tile {
         void render(SDL_Rect& camera);
 
         SDL_Rect getBox();
+        bool IsColliding(TileProperty tileProperty, SDL_Rect hitbox, SDL_Rect nextHitbox);
         bool HasCollision();
         bool CollideTop();
         bool CollideRight();
