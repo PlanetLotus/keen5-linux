@@ -28,8 +28,8 @@ class Sprite {
         std::vector<Tile*> GetTilesToBottom();
         Tile* GetTileCollidingWithRight();
         Tile* GetTileCollidingWithLeft();
-        Tile* GetTileCollidingWithBottom(int minCol, int maxCol, SDL_Rect nextHitbox);
-        Tile* GetTileCollidingWithTop(int minCol, int maxCol, SDL_Rect nextHitbox);
+        Tile* GetTileCollidingWithBottom();
+        Tile* GetTileCollidingWithTop();
 };
 
 #endif

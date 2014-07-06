@@ -100,6 +100,64 @@ vector<Tile*> Sprite::GetTilesToRight() {
     return tilesToRight;
 }
 
+vector<Tile*> Sprite::GetTilesToTop() {
+    SDL_Rect nextHitbox = { hitbox.x + (int)xVel, hitbox.y + (int)yVel, hitbox.w, hitbox.h };
+
+    int row = (nextHitbox.y + nextHitbox.h) / TILE_HEIGHT;
+    int minCol = nextHitbox.x / TILE_WIDTH;
+    int maxCol = (nextHitbox.x + nextHitbox.w) / TILE_WIDTH;
+
+    // TODO: Fix this logic. Currently this addresses the case where, if the rightmost point
+    // of player and leftmost point of tile are equal, it should NOT check this column.
+    if ((nextHitbox.x + nextHitbox.w) % TILE_WIDTH == 0 && maxCol > 0)
+        maxCol--;
+
+    // Don't let maxCol go out of bounds
+    if (maxCol > TILES_WIDE-1) maxCol = TILES_WIDE-1;
+
+    vector<Tile*> tilesToTop;
+
+    for (int i = minCol; i <= maxCol; i++) {
+        for (int j = row; j >= 0; j--) {
+            Tile* tile = gTiles[i][j];
+
+            if (tile != NULL)
+                tilesToTop.push_back(tile);
+        }
+    }
+
+    return tilesToTop;
+}
+
+vector<Tile*> Sprite::GetTilesToBottom() {
+    SDL_Rect nextHitbox = { hitbox.x + (int)xVel, hitbox.y + (int)yVel, hitbox.w, hitbox.h };
+
+    int row = nextHitbox.y / TILE_HEIGHT;
+    int minCol = nextHitbox.x / TILE_WIDTH;
+    int maxCol = (nextHitbox.x + nextHitbox.w) / TILE_WIDTH;
+
+    // TODO: Fix this logic. Currently this addresses the case where, if the rightmost point
+    // of player and leftmost point of tile are equal, it should NOT check this column.
+    if ((nextHitbox.x + nextHitbox.w) % TILE_WIDTH == 0 && maxCol > 0)
+        maxCol--;
+
+    // Don't let maxCol go out of bounds
+    if (maxCol > TILES_WIDE-1) maxCol = TILES_WIDE-1;
+
+    vector<Tile*> tilesToBottom;
+
+    for (int i = minCol; i <= maxCol; i++) {
+        for (unsigned int j = row; j < gTiles[i].size(); j++) {
+            Tile* tile = gTiles[i][j];
+
+            if (tile != NULL)
+                tilesToBottom.push_back(tile);
+        }
+    }
+
+    return tilesToBottom;
+}
+
 TileCollisionInfo Sprite::CheckTileCollisionLR() {
     TileCollisionInfo tci;
 
@@ -118,27 +176,14 @@ TileCollisionInfo Sprite::CheckTileCollisionLR() {
 TileCollisionInfo Sprite::CheckTileCollisionTB() {
     TileCollisionInfo tci;
 
-    SDL_Rect nextHitbox = { hitbox.x + (int)xVel, hitbox.y + (int)yVel, hitbox.w, hitbox.h };
-
-    int minCol = nextHitbox.x / TILE_WIDTH;
-    int maxCol = (nextHitbox.x + nextHitbox.w) / TILE_WIDTH;
-
-    // TODO: Fix this logic. Currently this addresses the case where, if the rightmost point
-    // of player and leftmost point of tile are equal, it should NOT check this column.
-    if ((nextHitbox.x + nextHitbox.w) % TILE_WIDTH == 0 && maxCol > 0)
-        maxCol--;
-
-    // Don't let maxCol go out of bounds
-    if (maxCol > TILES_WIDE-1) maxCol = TILES_WIDE-1;
-
     if (yVel > 0) {
         // Check B collision
         tci.IsBottomChecked = true;
-        tci.TileCollidingWithBottom = GetTileCollidingWithBottom(minCol, maxCol, nextHitbox);
+        tci.TileCollidingWithBottom = GetTileCollidingWithBottom();
     } else {
         // Check T collision
         tci.IsTopChecked = true;
-        tci.TileCollidingWithTop = GetTileCollidingWithTop(minCol, maxCol, nextHitbox);
+        tci.TileCollidingWithTop = GetTileCollidingWithTop();
     }
     return tci;
 }
@@ -163,38 +208,22 @@ Tile* Sprite::GetTileCollidingWithLeft() {
     return NULL;
 }
 
-Tile* Sprite::GetTileCollidingWithBottom(int minCol, int maxCol, SDL_Rect nextHitbox) {
-    int row = nextHitbox.y / TILE_HEIGHT;
+Tile* Sprite::GetTileCollidingWithBottom() {
+    vector<Tile*> tiles = GetTilesToBottom();
 
-    for (int i = minCol; i <= maxCol; i++) {
-        for (unsigned int j = row; j < gTiles[i].size(); j++) {
-            Tile* tile = gTiles[i][j];
-
-            if (tile != NULL &&
-                tile->CollideTop() &&
-                IsBottomColliding(hitbox, nextHitbox, tile->getBox())) {
-
-                return tile;
-            }
-        }
+    for (unsigned int i = 0; i < tiles.size(); i++) {
+        if (IsTileColliding(tiles[i], TOP))
+            return tiles[i];
     }
     return NULL;
 }
 
-Tile* Sprite::GetTileCollidingWithTop(int minCol, int maxCol, SDL_Rect nextHitbox) {
-    int row = (nextHitbox.y + nextHitbox.h) / TILE_HEIGHT;
+Tile* Sprite::GetTileCollidingWithTop() {
+    vector<Tile*> tiles = GetTilesToTop();
 
-    for (int i = minCol; i <= maxCol; i++) {
-        for (int j = row; j >= 0; j--) {
-            Tile* tile = gTiles[i][j];
-
-            if (tile != NULL &&
-                tile->CollideBottom() &&
-                IsTopColliding(hitbox, nextHitbox, tile->getBox())) {
-
-                return tile;
-            }
-        }
+    for (unsigned int i = 0; i < tiles.size(); i++) {
+        if (IsTileColliding(tiles[i], BOTTOM))
+            return tiles[i];
     }
     return NULL;
 }
