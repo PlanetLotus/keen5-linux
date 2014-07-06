@@ -13,6 +13,35 @@ void Sprite::update() {}
 
 void Sprite::draw() {}
 
+bool Sprite::IsTileColliding(Tile* tile, TileProperty tileProperty) {
+    if (tileProperty == ISPOLE) {
+        SDL_Rect nextHitbox = { hitbox.x + (int)xVel, hitbox.y, hitbox.w, hitbox.h };
+        return tile->IsPole && (IsRightColliding(hitbox, nextHitbox, tile->getBox()) ||
+            IsLeftColliding(hitbox, nextHitbox, tile->getBox()));
+    }
+
+    if (tileProperty == LEFT) {
+        SDL_Rect nextHitbox = { hitbox.x + (int)xVel, hitbox.y, hitbox.w, hitbox.h };
+        return tile->CollideLeft() && IsRightColliding(hitbox, nextHitbox, tile->getBox());
+    }
+
+    if (tileProperty == RIGHT) {
+        SDL_Rect nextHitbox = { hitbox.x + (int)xVel, hitbox.y, hitbox.w, hitbox.h };
+        return tile->CollideRight() && IsLeftColliding(hitbox, nextHitbox, tile->getBox());
+    }
+
+    if (tileProperty == TOP) {
+        SDL_Rect nextHitbox = { hitbox.x + (int)xVel, hitbox.y + (int)yVel, hitbox.w, hitbox.h };
+        return tile->CollideTop() && IsBottomColliding(hitbox, nextHitbox, tile->getBox());
+    }
+
+    if (tileProperty == BOTTOM) {
+        SDL_Rect nextHitbox = { hitbox.x + (int)xVel, hitbox.y + (int)yVel, hitbox.w, hitbox.h };
+        return tile->CollideBottom() && IsTopColliding(hitbox, nextHitbox, tile->getBox());
+    }
+    return false;
+}
+
 vector<Tile*> Sprite::GetTilesToLeft() {
     SDL_Rect nextHitbox = { hitbox.x + (int)xVel, hitbox.y, hitbox.w, hitbox.h };
 
@@ -42,11 +71,10 @@ vector<Tile*> Sprite::GetTilesToLeft() {
     return tilesToLeft;
 }
 
-TileCollisionInfo Sprite::CheckTileCollisionLR() {
-    TileCollisionInfo tci;
-
+vector<Tile*> Sprite::GetTilesToRight() {
     SDL_Rect nextHitbox = { hitbox.x + (int)xVel, hitbox.y, hitbox.w, hitbox.h };
 
+    int col = nextHitbox.x / TILE_WIDTH;
     int minRow = nextHitbox.y / TILE_HEIGHT;
     int maxRow = (nextHitbox.y + nextHitbox.h) / TILE_HEIGHT;
 
@@ -58,14 +86,31 @@ TileCollisionInfo Sprite::CheckTileCollisionLR() {
     // Don't let maxRow go out of bounds
     if (maxRow > TILES_TALL-1) maxRow = TILES_TALL-1;
 
+    vector<Tile*> tilesToRight;
+
+    for (unsigned int i = col; i < gTiles.size(); i++) {
+        for (int j = minRow; j <= maxRow; j++) {
+            Tile* tile = gTiles[i][j];
+
+            if (tile != NULL)
+                tilesToRight.push_back(tile);
+        }
+    }
+
+    return tilesToRight;
+}
+
+TileCollisionInfo Sprite::CheckTileCollisionLR() {
+    TileCollisionInfo tci;
+
     if (xVel > 0) {
         // Check R collision
         tci.IsRightChecked = true;
-        tci.TileCollidingWithRight = GetTileCollidingWithRight(minRow, maxRow, nextHitbox);
+        tci.TileCollidingWithRight = GetTileCollidingWithRight();
     } else {
         // Check L collision
         tci.IsLeftChecked = true;
-        tci.TileCollidingWithLeft = GetTileCollidingWithLeft(minRow, maxRow, nextHitbox);
+        tci.TileCollidingWithLeft = GetTileCollidingWithLeft();
     }
     return tci;
 }
@@ -98,38 +143,22 @@ TileCollisionInfo Sprite::CheckTileCollisionTB() {
     return tci;
 }
 
-Tile* Sprite::GetTileCollidingWithRight(int minRow, int maxRow, SDL_Rect nextHitbox) {
-    int col = nextHitbox.x / TILE_WIDTH;
+Tile* Sprite::GetTileCollidingWithRight() {
+    vector<Tile*> tiles = GetTilesToRight();
 
-    for (unsigned int i = col; i < gTiles.size(); i++) {
-        for (int j = minRow; j <= maxRow; j++) {
-            Tile* tile = gTiles[i][j];
-
-            if (tile != NULL &&
-                tile->CollideLeft() &&
-                IsRightColliding(hitbox, nextHitbox, tile->getBox())) {
-
-                return tile;
-            }
-        }
+    for (unsigned int i = 0; i < tiles.size(); i++) {
+        if (IsTileColliding(tiles[i], LEFT))
+            return tiles[i];
     }
     return NULL;
 }
 
-Tile* Sprite::GetTileCollidingWithLeft(int minRow, int maxRow, SDL_Rect nextHitbox) {
-    int col = (nextHitbox.x + nextHitbox.w) / TILE_WIDTH;
+Tile* Sprite::GetTileCollidingWithLeft() {
+    vector<Tile*> tiles = GetTilesToLeft();
 
-    for (int i = col; i >= 0; i--) {
-        for (int j = minRow; j <= maxRow; j++) {
-            Tile* tile = gTiles[i][j];
-
-            if (tile != NULL &&
-                tile->CollideRight() &&
-                IsLeftColliding(hitbox, nextHitbox, tile->getBox())) {
-
-                return tile;
-            }
-        }
+    for (unsigned int i = 0; i < tiles.size(); i++) {
+        if (IsTileColliding(tiles[i], RIGHT))
+            return tiles[i];
     }
     return NULL;
 }

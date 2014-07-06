@@ -246,15 +246,20 @@ void Player::processUpArrow() {
 
 Tile* Player::GetCollidingPoleTile() {
     vector<Tile*> leftTiles = GetTilesToLeft();
-    SDL_Rect nextHitbox = { hitbox.x + (int)xVel, hitbox.y, hitbox.w, hitbox.h };
+    //SDL_Rect nextHitbox = { hitbox.x + (int)xVel, hitbox.y, hitbox.w, hitbox.h };
 
     for (unsigned int i = 0; i < leftTiles.size(); i++) {
-        if (leftTiles[i]->IsPole &&
-            IsLeftColliding(hitbox, nextHitbox, leftTiles[i]->getBox()))
+        if (IsTileColliding(leftTiles[i], ISPOLE))
             return leftTiles[i];
     }
 
     // Now do same for rightTiles
+    vector<Tile*> rightTiles = GetTilesToRight();
+
+    for (unsigned int i = 0; i < rightTiles.size(); i++) {
+        if (IsTileColliding(rightTiles[i], ISPOLE))
+            return rightTiles[i];
+    }
 
     return NULL;
 }

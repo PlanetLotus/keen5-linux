@@ -5,10 +5,10 @@
 #include "SDL.h"
 #include "Sprite.h"
 
-enum directionEnum {LEFT, RIGHT, UP, DOWN, STOP};
-
 class Player : public Sprite {
     private:
+        enum directionEnum {LEFT, RIGHT, UP, DOWN, STOP};
+
         float xAccel;
         float yAccel;
 
