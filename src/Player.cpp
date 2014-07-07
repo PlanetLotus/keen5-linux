@@ -6,126 +6,6 @@
 
 using namespace std;
 
-Player::Player() {
-    xVel = 0;
-    yVel = 0;
-    xVelRem = 0;
-    yVelRem = 0;
-    xAccel = 0;
-    yAccel = 0;
-
-    srcClip = NULL;
-
-    hitbox.x = TILE_WIDTH;
-    hitbox.y = TILE_HEIGHT * 3;
-    hitbox.w = TILE_WIDTH;
-    hitbox.h = TILE_HEIGHT * 2;
-
-    isAnimLocked = false;
-    frame = 0;
-    animState = 2;
-    facing = LEFT;
-    idle = true;
-
-    isOnGround = true;
-    isOnPogo = false;
-    isOnPole = false;
-
-    shootingFrameCount = 0;
-    isShooting = false;
-
-    // Animation data
-    SDL_Rect standL0 = {0, TILE_HEIGHT * 2, TILE_WIDTH, TILE_HEIGHT * 2};
-    SDL_Rect standR0 = {0, 0, TILE_WIDTH, TILE_HEIGHT * 2};
-
-    SDL_Rect walkL0 = {TILE_WIDTH, TILE_HEIGHT * 2, TILE_WIDTH * 2, TILE_HEIGHT * 2};
-    SDL_Rect walkL1 = {TILE_WIDTH * 3, TILE_HEIGHT * 2, TILE_WIDTH * 2, TILE_HEIGHT * 2};
-    SDL_Rect walkL2 = {TILE_WIDTH * 5, TILE_HEIGHT * 2, TILE_WIDTH, TILE_HEIGHT * 2};
-    SDL_Rect walkL3 = {TILE_WIDTH * 6, TILE_HEIGHT * 2, TILE_WIDTH * 2, TILE_HEIGHT * 2};
-
-    SDL_Rect walkR0 = {TILE_WIDTH, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2};
-    SDL_Rect walkR1 = {TILE_WIDTH * 3, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2};
-    SDL_Rect walkR2 = {TILE_WIDTH * 5, 0, TILE_WIDTH, TILE_HEIGHT * 2};
-    SDL_Rect walkR3 = {TILE_WIDTH * 6, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2};
-
-    SDL_Rect jumpL0 = {TILE_WIDTH * 8, TILE_HEIGHT * 2, TILE_WIDTH * 2, TILE_HEIGHT * 2};
-    SDL_Rect floatL0 = {TILE_WIDTH * 10, TILE_HEIGHT * 2, TILE_WIDTH * 2, TILE_HEIGHT * 2};
-    SDL_Rect fallL0 = {TILE_WIDTH * 12, TILE_HEIGHT * 2, TILE_WIDTH * 2, TILE_HEIGHT * 2};
-
-    SDL_Rect jumpR0 = {TILE_WIDTH * 8, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2};
-    SDL_Rect floatR0 = {TILE_WIDTH * 10, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2};
-    SDL_Rect fallR0 = {TILE_WIDTH * 12, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2};
-
-    SDL_Rect shootL0 = {0, TILE_HEIGHT * 6, TILE_WIDTH * 3, TILE_HEIGHT * 2};
-    SDL_Rect shootR0 = {0, TILE_HEIGHT * 4, TILE_WIDTH * 3, TILE_HEIGHT * 2};
-    SDL_Rect shootU0 = {TILE_WIDTH * 10, TILE_HEIGHT * 4, TILE_WIDTH * 2, TILE_HEIGHT * 3};
-
-    SDL_Rect jumpShootL0 = {TILE_WIDTH * 3, TILE_HEIGHT * 6, TILE_WIDTH * 3, TILE_HEIGHT * 2};
-    SDL_Rect jumpShootR0 = {TILE_WIDTH * 3, TILE_HEIGHT * 4, TILE_WIDTH * 3, TILE_HEIGHT * 2};
-    SDL_Rect jumpShootU0 = {TILE_WIDTH * 8, TILE_HEIGHT * 4, TILE_WIDTH * 2, TILE_HEIGHT * 3};
-    SDL_Rect jumpShootD0 = {TILE_WIDTH * 6, TILE_HEIGHT * 4, TILE_WIDTH * 2, TILE_HEIGHT * 2};
-
-    SDL_Rect pogoStraightL = {TILE_WIDTH * 3, TILE_HEIGHT * 8, TILE_WIDTH, TILE_HEIGHT * 2};
-    SDL_Rect pogoStraightR = {0, TILE_HEIGHT * 8, TILE_WIDTH, TILE_HEIGHT * 2};
-    SDL_Rect pogoBentL = {TILE_WIDTH * 4, TILE_HEIGHT * 8, TILE_WIDTH * 2, TILE_HEIGHT * 2};
-    SDL_Rect pogoBentR = {TILE_WIDTH, TILE_HEIGHT * 8, TILE_WIDTH * 2, TILE_HEIGHT * 2};
-
-    SDL_Rect standL_array[1] = { standL0 };
-    SDL_Rect standR_array[1] = { standR0 };
-    SDL_Rect walkL_array[4] = { walkL0, walkL1, walkL2, walkL3 };
-    SDL_Rect walkR_array[4] = { walkR0, walkR1, walkR2, walkR3 };
-    SDL_Rect jumpL_array[1] = { jumpL0 };
-    SDL_Rect floatL_array[1] = { floatL0 };
-    SDL_Rect fallL_array[1] = { fallL0 };
-    SDL_Rect jumpR_array[1] = { jumpR0 };
-    SDL_Rect floatR_array[1] = { floatR0 };
-    SDL_Rect fallR_array[1] = { fallR0 };
-    SDL_Rect shootL_array[1] = { shootL0 };
-    SDL_Rect shootR_array[1] = { shootR0 };
-    SDL_Rect shootU_array[1] = { shootU0 };
-    SDL_Rect jumpShootL_array[1] = { jumpShootL0 };
-    SDL_Rect jumpShootR_array[1] = { jumpShootR0 };
-    SDL_Rect jumpShootU_array[1] = { jumpShootU0 };
-    SDL_Rect jumpShootD_array[1] = { jumpShootD0 };
-    SDL_Rect pogoStraightL_array[1] = { pogoStraightL };
-    SDL_Rect pogoStraightR_array[1] = { pogoStraightR };
-    SDL_Rect pogoBentL_array[1] = { pogoBentL };
-    SDL_Rect pogoBentR_array[1] = { pogoBentR };
-
-    vector<SDL_Rect> standL_anim(standL_array, standL_array + sizeof(standL_array) / sizeof(SDL_Rect));
-    vector<SDL_Rect> standR_anim(standR_array, standR_array + sizeof(standR_array) / sizeof(SDL_Rect));
-    vector<SDL_Rect> walkL_anim(walkL_array, walkL_array + sizeof(walkL_array) / sizeof(SDL_Rect));
-    vector<SDL_Rect> walkR_anim(walkR_array, walkR_array + sizeof(walkR_array) / sizeof(SDL_Rect));
-    vector<SDL_Rect> jumpL_anim(jumpL_array, jumpL_array + sizeof(jumpL_array) / sizeof(SDL_Rect));
-    vector<SDL_Rect> floatL_anim(floatL_array, floatL_array + sizeof(floatL_array) / sizeof(SDL_Rect));
-    vector<SDL_Rect> fallL_anim(fallL_array, fallL_array + sizeof(fallL_array) / sizeof(SDL_Rect));
-    vector<SDL_Rect> jumpR_anim(jumpR_array, jumpR_array + sizeof(jumpR_array) / sizeof(SDL_Rect));
-    vector<SDL_Rect> floatR_anim(floatR_array, floatR_array + sizeof(floatR_array) / sizeof(SDL_Rect));
-    vector<SDL_Rect> fallR_anim(fallR_array, fallR_array + sizeof(fallR_array) / sizeof(SDL_Rect));
-    vector<SDL_Rect> shootL_anim(shootL_array, shootL_array + sizeof(shootL_array) / sizeof(SDL_Rect));
-    vector<SDL_Rect> shootR_anim(shootR_array, shootR_array + sizeof(shootR_array) / sizeof(SDL_Rect));
-    vector<SDL_Rect> shootU_anim(shootU_array, shootU_array + sizeof(shootU_array) / sizeof(SDL_Rect));
-    vector<SDL_Rect> jumpShootL_anim(jumpShootL_array, jumpShootL_array + sizeof(jumpShootL_array) / sizeof(SDL_Rect));
-    vector<SDL_Rect> jumpShootR_anim(jumpShootR_array, jumpShootR_array + sizeof(jumpShootR_array) / sizeof(SDL_Rect));
-    vector<SDL_Rect> jumpShootU_anim(jumpShootU_array, jumpShootU_array + sizeof(jumpShootU_array) / sizeof(SDL_Rect));
-    vector<SDL_Rect> jumpShootD_anim(jumpShootD_array, jumpShootD_array + sizeof(jumpShootD_array) / sizeof(SDL_Rect));
-    vector<SDL_Rect> pogoStraightL_anim(pogoStraightL_array, pogoStraightL_array + sizeof(pogoStraightL_array) / sizeof(SDL_Rect));
-    vector<SDL_Rect> pogoStraightR_anim(pogoStraightR_array, pogoStraightR_array + sizeof(pogoStraightR_array) / sizeof(SDL_Rect));
-    vector<SDL_Rect> pogoBentL_anim(pogoBentL_array, pogoBentL_array + sizeof(pogoBentL_array) / sizeof(SDL_Rect));
-    vector<SDL_Rect> pogoBentR_anim(pogoBentR_array, pogoBentR_array + sizeof(pogoBentR_array) / sizeof(SDL_Rect));
-
-    anims[0] = standL_anim; anims[1] = standR_anim;
-    anims[2] = walkL_anim; anims[3] = walkR_anim;
-    anims[4] = jumpL_anim; anims[5] = jumpR_anim;
-    anims[6] = floatL_anim; anims[7] = floatR_anim;
-    anims[8] = fallL_anim; anims[9] = fallR_anim;
-    anims[10] = shootL_anim; anims[11] = shootR_anim; anims[12] = shootU_anim;
-    anims[13] = jumpShootL_anim; anims[14] = jumpShootR_anim;
-    anims[15] = jumpShootU_anim; anims[16] = jumpShootD_anim;
-    anims[17] = pogoStraightL_anim; anims[18] = pogoStraightR_anim;
-    anims[19] = pogoBentL_anim; anims[20] = pogoBentR_anim;
-}
-
 void Player::shoot(bool isPressingUp, bool isPressingDown) {
     int animVal = 10 + facing;
 
@@ -238,7 +118,8 @@ void Player::processUpArrow() {
 
     Tile* pole = GetCollidingPoleTile();
     if (pole != NULL) {
-        printf("Pole\n");
+        // "Snap" to the pole horizontally, locking movement in x-direction
+        isOnPole = true;
     }
 
     look(UP);
@@ -498,4 +379,142 @@ void Player::draw() {
     int destY = hitbox.y - offsetY;
 
     gKeenTexture->render(destX, destY, srcClip);
+}
+
+Player::Player() {
+    xVel = 0;
+    yVel = 0;
+    xVelRem = 0;
+    yVelRem = 0;
+    xAccel = 0;
+    yAccel = 0;
+
+    srcClip = NULL;
+
+    hitbox.x = TILE_WIDTH;
+    hitbox.y = TILE_HEIGHT * 3;
+    hitbox.w = TILE_WIDTH;
+    hitbox.h = TILE_HEIGHT * 2;
+
+    isAnimLocked = false;
+    frame = 0;
+    animState = 2;
+    facing = LEFT;
+    idle = true;
+
+    isOnGround = true;
+    isOnPogo = false;
+    isOnPole = false;
+
+    shootingFrameCount = 0;
+    isShooting = false;
+
+    // Animation data
+    SDL_Rect standL0 = {0, TILE_HEIGHT * 2, TILE_WIDTH, TILE_HEIGHT * 2};
+    SDL_Rect standR0 = {0, 0, TILE_WIDTH, TILE_HEIGHT * 2};
+
+    SDL_Rect walkL0 = {TILE_WIDTH, TILE_HEIGHT * 2, TILE_WIDTH * 2, TILE_HEIGHT * 2};
+    SDL_Rect walkL1 = {TILE_WIDTH * 3, TILE_HEIGHT * 2, TILE_WIDTH * 2, TILE_HEIGHT * 2};
+    SDL_Rect walkL2 = {TILE_WIDTH * 5, TILE_HEIGHT * 2, TILE_WIDTH, TILE_HEIGHT * 2};
+    SDL_Rect walkL3 = {TILE_WIDTH * 6, TILE_HEIGHT * 2, TILE_WIDTH * 2, TILE_HEIGHT * 2};
+
+    SDL_Rect walkR0 = {TILE_WIDTH, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2};
+    SDL_Rect walkR1 = {TILE_WIDTH * 3, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2};
+    SDL_Rect walkR2 = {TILE_WIDTH * 5, 0, TILE_WIDTH, TILE_HEIGHT * 2};
+    SDL_Rect walkR3 = {TILE_WIDTH * 6, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2};
+
+    SDL_Rect jumpL0 = {TILE_WIDTH * 8, TILE_HEIGHT * 2, TILE_WIDTH * 2, TILE_HEIGHT * 2};
+    SDL_Rect floatL0 = {TILE_WIDTH * 10, TILE_HEIGHT * 2, TILE_WIDTH * 2, TILE_HEIGHT * 2};
+    SDL_Rect fallL0 = {TILE_WIDTH * 12, TILE_HEIGHT * 2, TILE_WIDTH * 2, TILE_HEIGHT * 2};
+
+    SDL_Rect jumpR0 = {TILE_WIDTH * 8, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2};
+    SDL_Rect floatR0 = {TILE_WIDTH * 10, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2};
+    SDL_Rect fallR0 = {TILE_WIDTH * 12, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2};
+
+    SDL_Rect shootL0 = {0, TILE_HEIGHT * 6, TILE_WIDTH * 3, TILE_HEIGHT * 2};
+    SDL_Rect shootR0 = {0, TILE_HEIGHT * 4, TILE_WIDTH * 3, TILE_HEIGHT * 2};
+    SDL_Rect shootU0 = {TILE_WIDTH * 10, TILE_HEIGHT * 4, TILE_WIDTH * 2, TILE_HEIGHT * 3};
+
+    SDL_Rect jumpShootL0 = {TILE_WIDTH * 3, TILE_HEIGHT * 6, TILE_WIDTH * 3, TILE_HEIGHT * 2};
+    SDL_Rect jumpShootR0 = {TILE_WIDTH * 3, TILE_HEIGHT * 4, TILE_WIDTH * 3, TILE_HEIGHT * 2};
+    SDL_Rect jumpShootU0 = {TILE_WIDTH * 8, TILE_HEIGHT * 4, TILE_WIDTH * 2, TILE_HEIGHT * 3};
+    SDL_Rect jumpShootD0 = {TILE_WIDTH * 6, TILE_HEIGHT * 4, TILE_WIDTH * 2, TILE_HEIGHT * 2};
+
+    SDL_Rect pogoStraightL = {TILE_WIDTH * 3, TILE_HEIGHT * 8, TILE_WIDTH, TILE_HEIGHT * 2};
+    SDL_Rect pogoStraightR = {0, TILE_HEIGHT * 8, TILE_WIDTH, TILE_HEIGHT * 2};
+    SDL_Rect pogoBentL = {TILE_WIDTH * 4, TILE_HEIGHT * 8, TILE_WIDTH * 2, TILE_HEIGHT * 2};
+    SDL_Rect pogoBentR = {TILE_WIDTH, TILE_HEIGHT * 8, TILE_WIDTH * 2, TILE_HEIGHT * 2};
+
+    SDL_Rect climbL0 = { TILE_WIDTH * 11, TILE_HEIGHT * 10, TILE_WIDTH, TILE_HEIGHT * 2 };
+    SDL_Rect climbL1 = { TILE_WIDTH * 12, TILE_HEIGHT * 10, TILE_WIDTH, TILE_HEIGHT * 2 };
+    SDL_Rect climbL2 = { TILE_WIDTH * 13, TILE_HEIGHT * 10, TILE_WIDTH, TILE_HEIGHT * 2 };
+    SDL_Rect climbR0 = { 0, TILE_HEIGHT * 10, TILE_WIDTH, TILE_HEIGHT * 2 };
+    SDL_Rect climbR1 = { TILE_WIDTH, TILE_HEIGHT * 10, TILE_WIDTH, TILE_HEIGHT * 2 };
+    SDL_Rect climbR2 = { TILE_WIDTH * 2, TILE_HEIGHT * 10, TILE_WIDTH, TILE_HEIGHT * 2 };
+    SDL_Rect climbDown0 = { TILE_WIDTH * 3, TILE_HEIGHT * 10, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
+    SDL_Rect climbDown1 = { TILE_WIDTH * 5, TILE_HEIGHT * 10, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
+    SDL_Rect climbDown2 = { TILE_WIDTH * 7, TILE_HEIGHT * 10, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
+    SDL_Rect climbDown3 = { TILE_WIDTH * 9, TILE_HEIGHT * 10, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
+
+    SDL_Rect standL_array[1] = { standL0 };
+    SDL_Rect standR_array[1] = { standR0 };
+    SDL_Rect walkL_array[4] = { walkL0, walkL1, walkL2, walkL3 };
+    SDL_Rect walkR_array[4] = { walkR0, walkR1, walkR2, walkR3 };
+    SDL_Rect jumpL_array[1] = { jumpL0 };
+    SDL_Rect floatL_array[1] = { floatL0 };
+    SDL_Rect fallL_array[1] = { fallL0 };
+    SDL_Rect jumpR_array[1] = { jumpR0 };
+    SDL_Rect floatR_array[1] = { floatR0 };
+    SDL_Rect fallR_array[1] = { fallR0 };
+    SDL_Rect shootL_array[1] = { shootL0 };
+    SDL_Rect shootR_array[1] = { shootR0 };
+    SDL_Rect shootU_array[1] = { shootU0 };
+    SDL_Rect jumpShootL_array[1] = { jumpShootL0 };
+    SDL_Rect jumpShootR_array[1] = { jumpShootR0 };
+    SDL_Rect jumpShootU_array[1] = { jumpShootU0 };
+    SDL_Rect jumpShootD_array[1] = { jumpShootD0 };
+    SDL_Rect pogoStraightL_array[1] = { pogoStraightL };
+    SDL_Rect pogoStraightR_array[1] = { pogoStraightR };
+    SDL_Rect pogoBentL_array[1] = { pogoBentL };
+    SDL_Rect pogoBentR_array[1] = { pogoBentR };
+    SDL_Rect climbL_array[3] = { climbL0, climbL1, climbL2 };
+    SDL_Rect climbR_array[3] = { climbR0, climbR1, climbR2 };
+    SDL_Rect climbDown_array[4] = { climbDown0, climbDown1, climbDown2, climbDown3 };
+
+    vector<SDL_Rect> standL_anim(standL_array, standL_array + sizeof(standL_array) / sizeof(SDL_Rect));
+    vector<SDL_Rect> standR_anim(standR_array, standR_array + sizeof(standR_array) / sizeof(SDL_Rect));
+    vector<SDL_Rect> walkL_anim(walkL_array, walkL_array + sizeof(walkL_array) / sizeof(SDL_Rect));
+    vector<SDL_Rect> walkR_anim(walkR_array, walkR_array + sizeof(walkR_array) / sizeof(SDL_Rect));
+    vector<SDL_Rect> jumpL_anim(jumpL_array, jumpL_array + sizeof(jumpL_array) / sizeof(SDL_Rect));
+    vector<SDL_Rect> floatL_anim(floatL_array, floatL_array + sizeof(floatL_array) / sizeof(SDL_Rect));
+    vector<SDL_Rect> fallL_anim(fallL_array, fallL_array + sizeof(fallL_array) / sizeof(SDL_Rect));
+    vector<SDL_Rect> jumpR_anim(jumpR_array, jumpR_array + sizeof(jumpR_array) / sizeof(SDL_Rect));
+    vector<SDL_Rect> floatR_anim(floatR_array, floatR_array + sizeof(floatR_array) / sizeof(SDL_Rect));
+    vector<SDL_Rect> fallR_anim(fallR_array, fallR_array + sizeof(fallR_array) / sizeof(SDL_Rect));
+    vector<SDL_Rect> shootL_anim(shootL_array, shootL_array + sizeof(shootL_array) / sizeof(SDL_Rect));
+    vector<SDL_Rect> shootR_anim(shootR_array, shootR_array + sizeof(shootR_array) / sizeof(SDL_Rect));
+    vector<SDL_Rect> shootU_anim(shootU_array, shootU_array + sizeof(shootU_array) / sizeof(SDL_Rect));
+    vector<SDL_Rect> jumpShootL_anim(jumpShootL_array, jumpShootL_array + sizeof(jumpShootL_array) / sizeof(SDL_Rect));
+    vector<SDL_Rect> jumpShootR_anim(jumpShootR_array, jumpShootR_array + sizeof(jumpShootR_array) / sizeof(SDL_Rect));
+    vector<SDL_Rect> jumpShootU_anim(jumpShootU_array, jumpShootU_array + sizeof(jumpShootU_array) / sizeof(SDL_Rect));
+    vector<SDL_Rect> jumpShootD_anim(jumpShootD_array, jumpShootD_array + sizeof(jumpShootD_array) / sizeof(SDL_Rect));
+    vector<SDL_Rect> pogoStraightL_anim(pogoStraightL_array, pogoStraightL_array + sizeof(pogoStraightL_array) / sizeof(SDL_Rect));
+    vector<SDL_Rect> pogoStraightR_anim(pogoStraightR_array, pogoStraightR_array + sizeof(pogoStraightR_array) / sizeof(SDL_Rect));
+    vector<SDL_Rect> pogoBentL_anim(pogoBentL_array, pogoBentL_array + sizeof(pogoBentL_array) / sizeof(SDL_Rect));
+    vector<SDL_Rect> pogoBentR_anim(pogoBentR_array, pogoBentR_array + sizeof(pogoBentR_array) / sizeof(SDL_Rect));
+    vector<SDL_Rect> climbL_anim(climbL_array, climbL_array + sizeof(climbL_array) / sizeof(SDL_Rect));
+    vector<SDL_Rect> climbR_anim(climbR_array, climbR_array + sizeof(climbR_array) / sizeof(SDL_Rect));
+    vector<SDL_Rect> climbDown_anim(climbDown_array, climbDown_array + sizeof(climbDown_array) / sizeof(SDL_Rect));
+
+    anims[0] = standL_anim; anims[1] = standR_anim;
+    anims[2] = walkL_anim; anims[3] = walkR_anim;
+    anims[4] = jumpL_anim; anims[5] = jumpR_anim;
+    anims[6] = floatL_anim; anims[7] = floatR_anim;
+    anims[8] = fallL_anim; anims[9] = fallR_anim;
+    anims[10] = shootL_anim; anims[11] = shootR_anim; anims[12] = shootU_anim;
+    anims[13] = jumpShootL_anim; anims[14] = jumpShootR_anim;
+    anims[15] = jumpShootU_anim; anims[16] = jumpShootD_anim;
+    anims[17] = pogoStraightL_anim; anims[18] = pogoStraightR_anim;
+    anims[19] = pogoBentL_anim; anims[20] = pogoBentR_anim;
+    anims[21] = climbL_anim; anims[22] = climbR_anim; anims[23] = climbDown_anim;
 }
