@@ -17,7 +17,6 @@ vector<Tile*> Sprite::GetTilesToLeft() {
     SDL_Rect nextHitbox = { hitbox.x + (int)xVel, hitbox.y, hitbox.w, hitbox.h };
 
     int col = (nextHitbox.x + nextHitbox.w) / TILE_WIDTH;
-    if ((nextHitbox.x + nextHitbox.w) % TILE_WIDTH != 0) col--;
     int minRow = nextHitbox.y / TILE_HEIGHT;
     int maxRow = (nextHitbox.y + nextHitbox.h) / TILE_HEIGHT;
 
@@ -47,7 +46,6 @@ vector<Tile*> Sprite::GetTilesToRight() {
     SDL_Rect nextHitbox = { hitbox.x + (int)xVel, hitbox.y, hitbox.w, hitbox.h };
 
     int col = nextHitbox.x / TILE_WIDTH;
-    if (nextHitbox.x % TILE_WIDTH != 0) col++;
     int minRow = nextHitbox.y / TILE_HEIGHT;
     int maxRow = (nextHitbox.y + nextHitbox.h) / TILE_HEIGHT;
 
@@ -77,7 +75,6 @@ vector<Tile*> Sprite::GetTilesToTop() {
     SDL_Rect nextHitbox = { hitbox.x + (int)xVel, hitbox.y + (int)yVel, hitbox.w, hitbox.h };
 
     int row = (nextHitbox.y + nextHitbox.h) / TILE_HEIGHT;
-    if ((nextHitbox.y + nextHitbox.h) % TILE_WIDTH != 0) row--;
     int minCol = nextHitbox.x / TILE_WIDTH;
     int maxCol = (nextHitbox.x + nextHitbox.w) / TILE_WIDTH;
 
@@ -107,7 +104,6 @@ vector<Tile*> Sprite::GetTilesToBottom() {
     SDL_Rect nextHitbox = { hitbox.x + (int)xVel, hitbox.y + (int)yVel, hitbox.w, hitbox.h };
 
     int row = nextHitbox.y / TILE_HEIGHT;
-    if (nextHitbox.y % TILE_WIDTH != 0) row++;
     int minCol = nextHitbox.x / TILE_WIDTH;
     int maxCol = (nextHitbox.x + nextHitbox.w) / TILE_WIDTH;
 

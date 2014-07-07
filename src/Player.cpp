@@ -252,9 +252,10 @@ Tile* Player::GetCollidingPoleTile() {
         if (leftTiles[i]->IsColliding(Tile::ISPOLE, hitbox, nextHitbox)) {
             SDL_Rect poleBox = leftTiles[i]->getBox();
             int poleRight = poleBox.x + poleBox.w;
+            int playerRight = hitbox.x + hitbox.w;
 
             // Must be in center of pole
-            if (hitbox.x < poleRight - TILE_WIDTH / 4) {
+            if (hitbox.x < poleRight - TILE_WIDTH / 4 && playerRight >= TILE_WIDTH / 4 + poleBox.x) {
                 printf("returning leftTile\n");
                 return leftTiles[i];
             } else {
@@ -271,9 +272,10 @@ Tile* Player::GetCollidingPoleTile() {
         if (rightTiles[i]->IsColliding(Tile::ISPOLE, hitbox, nextHitbox)) {
             int playerRight = hitbox.x + hitbox.w;
             SDL_Rect poleBox = rightTiles[i]->getBox();
+            int poleRight = poleBox.x + poleBox.w;
 
             // Must be in center of pole
-            if (playerRight >= TILE_WIDTH / 4 + poleBox.x) {
+            if (hitbox.x < poleRight - TILE_WIDTH / 4 && playerRight >= TILE_WIDTH / 4 + poleBox.x) {
                 printf("returning rightTile\n");
                 return rightTiles[i];
             } else {
