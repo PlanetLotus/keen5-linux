@@ -249,16 +249,38 @@ Tile* Player::GetCollidingPoleTile() {
     vector<Tile*> leftTiles = GetTilesToLeft();
 
     for (unsigned int i = 0; i < leftTiles.size(); i++) {
-        if (leftTiles[i]->IsColliding(Tile::ISPOLE, hitbox, nextHitbox))
-            return leftTiles[i];
+        if (leftTiles[i]->IsColliding(Tile::ISPOLE, hitbox, nextHitbox)) {
+            SDL_Rect poleBox = leftTiles[i]->getBox();
+            int poleRight = poleBox.x + poleBox.w;
+
+            // Must be in center of pole
+            if (hitbox.x < poleRight - TILE_WIDTH / 4) {
+                printf("returning leftTile\n");
+                return leftTiles[i];
+            } else {
+                printf("not in pole center\n");
+                break;
+            }
+        }
     }
 
     // Now do same for rightTiles
     vector<Tile*> rightTiles = GetTilesToRight();
 
     for (unsigned int i = 0; i < rightTiles.size(); i++) {
-        if (rightTiles[i]->IsColliding(Tile::ISPOLE, hitbox, nextHitbox))
-            return rightTiles[i];
+        if (rightTiles[i]->IsColliding(Tile::ISPOLE, hitbox, nextHitbox)) {
+            int playerRight = hitbox.x + hitbox.w;
+            SDL_Rect poleBox = rightTiles[i]->getBox();
+
+            // Must be in center of pole
+            if (playerRight >= TILE_WIDTH / 4 + poleBox.x) {
+                printf("returning rightTile\n");
+                return rightTiles[i];
+            } else {
+                printf("checking rightTiles - not in pole center\n");
+                return NULL;
+            }
+        }
     }
 
     return NULL;
