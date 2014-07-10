@@ -114,12 +114,20 @@ void Player::processUpArrow() {
         climb(UP);
         return;
     }
-    printf("processUpArrow()\n");
 
     Tile* pole = GetCollidingPoleTile();
     if (pole != NULL) {
         // "Snap" to the pole horizontally, locking movement in x-direction
+        if (facing == LEFT)
+            xVel = pole->getBox().x + TILE_WIDTH / 4 - hitbox.x;
+        else
+            xVel = pole->getBox().x - TILE_WIDTH / 4 - hitbox.x;
+
         isOnPole = true;
+
+        // Set animation
+        animate(21 + facing);
+        return;
     }
 
     look(UP);
@@ -242,7 +250,7 @@ void Player::processKeyboard() {
     // Read in current keyboard state and update object accordingly
     const Uint8* state = SDL_GetKeyboardState(NULL);
 
-    if (state[SDL_SCANCODE_LALT] && !gController.IsHoldingAlt) {
+    if (state[SDL_SCANCODE_LALT] && !gController.IsHoldingAlt && !isOnPole) {
         togglePogo();
         gController.IsHoldingAlt = true;
     } else if (isOnPogo) {
@@ -258,11 +266,11 @@ void Player::processKeyboard() {
         walk(LEFT);
     } else if (state[SDL_SCANCODE_RIGHT]) {
         walk(RIGHT);
-    } else {
+    } else if (!isOnPole) {
         stopwalk();
     }
 
-    if (state[SDL_SCANCODE_UP]) {
+    if (state[SDL_SCANCODE_UP] & !isOnPogo) {
         processUpArrow();
     }
 
@@ -290,7 +298,8 @@ void Player::update() {
         processKeyboard();
 
     // Apply gravity and relevant animations
-    fall();
+    if (!isOnPole)
+        fall();
 
     // Check left/right collision
     TileCollisionInfo tciLR;
@@ -340,7 +349,7 @@ void Player::update() {
     xVelRem = modf(xVel, &intPart);
     yVelRem = modf(yVel, &intPart);
 
-    // Reset velocity if collision
+    // Reset velocity if collision or on pole
     if (tciTB.IsTopColliding() || tciTB.IsBottomColliding()) {
         yVel = 0;
         yVelRem = 0;
@@ -348,6 +357,12 @@ void Player::update() {
     if (tciLR.IsLeftColliding() || tciLR.IsRightColliding()) {
         xVel = 0;
         xVelRem = 0;
+    }
+    if (isOnPole) {
+        xVel = 0;
+        xVelRem = 0;
+        yVel = 0;
+        yVelRem = 0;
     }
 }
 
@@ -391,7 +406,7 @@ Player::Player() {
 
     srcClip = NULL;
 
-    hitbox.x = TILE_WIDTH;
+    hitbox.x = TILE_WIDTH * 14;
     hitbox.y = TILE_HEIGHT * 3;
     hitbox.w = TILE_WIDTH;
     hitbox.h = TILE_HEIGHT * 2;
@@ -445,9 +460,9 @@ Player::Player() {
     SDL_Rect pogoBentL = {TILE_WIDTH * 4, TILE_HEIGHT * 8, TILE_WIDTH * 2, TILE_HEIGHT * 2};
     SDL_Rect pogoBentR = {TILE_WIDTH, TILE_HEIGHT * 8, TILE_WIDTH * 2, TILE_HEIGHT * 2};
 
-    SDL_Rect climbL0 = { TILE_WIDTH * 11, TILE_HEIGHT * 10, TILE_WIDTH, TILE_HEIGHT * 2 };
-    SDL_Rect climbL1 = { TILE_WIDTH * 12, TILE_HEIGHT * 10, TILE_WIDTH, TILE_HEIGHT * 2 };
-    SDL_Rect climbL2 = { TILE_WIDTH * 13, TILE_HEIGHT * 10, TILE_WIDTH, TILE_HEIGHT * 2 };
+    SDL_Rect climbL0 = { TILE_WIDTH * 10, TILE_HEIGHT * 10, TILE_WIDTH, TILE_HEIGHT * 2 };
+    SDL_Rect climbL1 = { TILE_WIDTH * 11, TILE_HEIGHT * 10, TILE_WIDTH, TILE_HEIGHT * 2 };
+    SDL_Rect climbL2 = { TILE_WIDTH * 12, TILE_HEIGHT * 10, TILE_WIDTH, TILE_HEIGHT * 2 };
     SDL_Rect climbR0 = { 0, TILE_HEIGHT * 10, TILE_WIDTH, TILE_HEIGHT * 2 };
     SDL_Rect climbR1 = { TILE_WIDTH, TILE_HEIGHT * 10, TILE_WIDTH, TILE_HEIGHT * 2 };
     SDL_Rect climbR2 = { TILE_WIDTH * 2, TILE_HEIGHT * 10, TILE_WIDTH, TILE_HEIGHT * 2 };
