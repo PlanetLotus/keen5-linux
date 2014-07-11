@@ -491,6 +491,13 @@ Player::Player() {
     SDL_Rect climbDown2 = { TILE_WIDTH * 7, TILE_HEIGHT * 10, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
     SDL_Rect climbDown3 = { TILE_WIDTH * 9, TILE_HEIGHT * 10, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
 
+    SDL_Rect poleShootDownL = { TILE_WIDTH * 12, TILE_HEIGHT * 12, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
+    SDL_Rect poleShootDownR = { 0, TILE_HEIGHT * 12, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
+    SDL_Rect poleShootL = { TILE_WIDTH * 9, TILE_HEIGHT * 12, TILE_WIDTH * 3, TILE_HEIGHT * 2 };
+    SDL_Rect poleShootR = { TILE_WIDTH * 2, TILE_HEIGHT * 12, TILE_WIDTH * 3, TILE_HEIGHT * 2 };
+    SDL_Rect poleShootUpL = { TILE_WIDTH * 7, TILE_HEIGHT * 12, TILE_WIDTH * 2, TILE_HEIGHT * 3 };
+    SDL_Rect poleShootUpR = { TILE_WIDTH * 5, TILE_HEIGHT * 12, TILE_WIDTH * 2, TILE_HEIGHT * 3 };
+
     SDL_Rect standL_array[1] = { standL0 };
     SDL_Rect standR_array[1] = { standR0 };
     SDL_Rect walkL_array[4] = { walkL0, walkL1, walkL2, walkL3 };
@@ -515,6 +522,12 @@ Player::Player() {
     SDL_Rect climbL_array[3] = { climbL0, climbL1, climbL2 };
     SDL_Rect climbR_array[3] = { climbR0, climbR1, climbR2 };
     SDL_Rect climbDown_array[4] = { climbDown0, climbDown1, climbDown2, climbDown3 };
+    SDL_Rect poleShootDownL_array[1] = { poleShootDownL };
+    SDL_Rect poleShootDownR_array[1] = { poleShootDownR };
+    SDL_Rect poleShootL_array[1] = { poleShootL };
+    SDL_Rect poleShootR_array[1] = { poleShootR };
+    SDL_Rect poleShootUpL_array[1] = { poleShootUpL };
+    SDL_Rect poleShootUpR_array[1] = { poleShootUpR };
 
     vector<SDL_Rect> standL_anim(standL_array, standL_array + sizeof(standL_array) / sizeof(SDL_Rect));
     vector<SDL_Rect> standR_anim(standR_array, standR_array + sizeof(standR_array) / sizeof(SDL_Rect));
@@ -540,6 +553,12 @@ Player::Player() {
     vector<SDL_Rect> climbL_anim(climbL_array, climbL_array + sizeof(climbL_array) / sizeof(SDL_Rect));
     vector<SDL_Rect> climbR_anim(climbR_array, climbR_array + sizeof(climbR_array) / sizeof(SDL_Rect));
     vector<SDL_Rect> climbDown_anim(climbDown_array, climbDown_array + sizeof(climbDown_array) / sizeof(SDL_Rect));
+    vector<SDL_Rect> poleShootDownL_anim(poleShootDownL_array, poleShootDownL_array + sizeof(poleShootDownL_array) / sizeof(SDL_Rect));
+    vector<SDL_Rect> poleShootDownR_anim(poleShootDownR_array, poleShootDownR_array + sizeof(poleShootDownR_array) / sizeof(SDL_Rect));
+    vector<SDL_Rect> poleShootL_anim(poleShootL_array, poleShootL_array + sizeof(poleShootL_array) / sizeof(SDL_Rect));
+    vector<SDL_Rect> poleShootR_anim(poleShootR_array, poleShootR_array + sizeof(poleShootR_array) / sizeof(SDL_Rect));
+    vector<SDL_Rect> poleShootUpL_anim(poleShootUpL_array, poleShootUpL_array + sizeof(poleShootUpL_array) / sizeof(SDL_Rect));
+    vector<SDL_Rect> poleShootUpR_anim(poleShootUpR_array, poleShootUpR_array + sizeof(poleShootUpR_array) / sizeof(SDL_Rect));
 
     anims[0] = standL_anim; anims[1] = standR_anim;
     anims[2] = walkL_anim; anims[3] = walkR_anim;
@@ -552,4 +571,7 @@ Player::Player() {
     anims[17] = pogoStraightL_anim; anims[18] = pogoStraightR_anim;
     anims[19] = pogoBentL_anim; anims[20] = pogoBentR_anim;
     anims[21] = climbL_anim; anims[22] = climbR_anim; anims[23] = climbDown_anim;
+    anims[24] = poleShootDownL_anim; anims[25] = poleShootDownR_anim;
+    anims[26] = poleShootL_anim; anims[27] = poleShootR_anim;
+    anims[28] = poleShootUpL_anim; anims[29] = poleShootUpR_anim;
 }
