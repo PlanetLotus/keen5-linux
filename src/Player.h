@@ -28,6 +28,7 @@ class Player : public Sprite {
         bool isShooting;
 
         void processKeyboard(); // Call player actions based on keyboard input
+        void snapToPole(Tile* pole, directionEnum facing);
         Tile* GetCollidingPoleTile();
     public:
         Player();

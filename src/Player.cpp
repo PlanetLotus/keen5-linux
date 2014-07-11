@@ -57,9 +57,16 @@ void Player::shoot(bool isPressingUp, bool isPressingDown) {
 
 void Player::walk(directionEnum dir) {
     // TODO: Enforce dir being only left or right
+    bool isFacingChanging = dir != facing;
     facing = dir == LEFT ? LEFT : RIGHT;
 
-    if (isOnGround) {
+    // Does this special case warrant a change of method name to something more general?
+    if (isOnPole) {
+        if (isFacingChanging) {
+            Tile* pole = GetCollidingPoleTile();
+            snapToPole(pole, facing);
+        }
+    } else if (isOnGround) {
         xAccel = 0;
 
         xVel = dir == LEFT ? -5 : 5;
@@ -117,20 +124,29 @@ void Player::processUpArrow() {
 
     Tile* pole = GetCollidingPoleTile();
     if (pole != NULL) {
-        // "Snap" to the pole horizontally, locking movement in x-direction
-        if (facing == LEFT)
-            xVel = pole->getBox().x + TILE_WIDTH / 4 - hitbox.x;
-        else
-            xVel = pole->getBox().x - TILE_WIDTH / 4 - hitbox.x;
-
-        isOnPole = true;
-
-        // Set animation
-        animate(21 + facing);
+        snapToPole(pole, facing);
         return;
     }
 
     look(UP);
+}
+
+void Player::snapToPole(Tile* pole, directionEnum facing) {
+    if (pole == NULL) {
+        printf("NULL POLE!\n");
+        return;
+    }
+
+    // "Snap" to the pole horizontally, locking movement in x-direction
+    if (facing == LEFT)
+        xVel = pole->getBox().x + TILE_WIDTH / 4 - hitbox.x;
+    else
+        xVel = pole->getBox().x - TILE_WIDTH / 4 - hitbox.x;
+
+    isOnPole = true;
+
+    // Set animation
+    animate(21 + facing);
 }
 
 Tile* Player::GetCollidingPoleTile() {
