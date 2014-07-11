@@ -240,6 +240,10 @@ void Player::jump() {
         yAccel = -21;
         yVel += yAccel;
         isOnGround = false; // This isn't ideal. It's assuming nothing stopped the jump.
+    } else if (isOnPole) {
+        yAccel = -12;
+        yVel += yAccel;
+        isOnPole = false;
     }
 }
 
