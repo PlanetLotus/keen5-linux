@@ -16,11 +16,17 @@ void Player::shoot(bool isPressingUp, bool isPressingDown) {
         int xShotVel = 0;
         int yShotVel = 0;
 
-        if (isPressingUp) {
+        if (isOnPole && isPressingDown) {
+            xStart = hitbox.x;
+            yStart = hitbox.y + TILE_HEIGHT;
+            yShotVel = 1;
+            animVal = 24 + facing;
+        } else if (isPressingUp) {
             xStart = hitbox.x;
             yStart = hitbox.y - TILE_HEIGHT;
             yShotVel = -1;
             animVal = isOnGround ? 12 : 15;
+            if (isOnPole) animVal = 28 + facing;
         } else if (isPressingDown && !isOnGround) {
             xStart = hitbox.x;
             yStart = hitbox.y + TILE_HEIGHT;
@@ -32,6 +38,7 @@ void Player::shoot(bool isPressingUp, bool isPressingDown) {
             xShotVel = facing == 0 ? -1 : 1;
 
             if (!isOnGround) animVal = 13 + facing;
+            else if (isOnPole) animVal = 26 + facing;
         }
 
         new BlasterShot(xStart, yStart, xShotVel, yShotVel);
@@ -96,6 +103,11 @@ void Player::stopwalk() {
         xVel = 0;
         xVelRem = 0;
         animate(facing);
+    } else if (isOnPole && animState != 21 + facing) {
+        xAccel = 0;
+        xVel = 0;
+        xVelRem = 0;
+        animate(21 + facing);
     } else {
         // Falling with drag
         if (!isOnPogo) {
@@ -286,7 +298,7 @@ void Player::processKeyboard() {
         walk(LEFT);
     } else if (state[SDL_SCANCODE_RIGHT]) {
         walk(RIGHT);
-    } else if (!isOnPole) {
+    } else {
         stopwalk();
     }
 
