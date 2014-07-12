@@ -72,6 +72,7 @@ void Player::walk(directionEnum dir) {
         if (isFacingChanging) {
             Tile* pole = GetCollidingPoleTile();
             snapToPole(pole, facing);
+            animate(21 + facing);
         }
     } else if (isOnGround) {
         xAccel = 0;
@@ -103,11 +104,6 @@ void Player::stopwalk() {
         xVel = 0;
         xVelRem = 0;
         animate(facing);
-    } else if (isOnPole && animState != 21 + facing) {
-        xAccel = 0;
-        xVel = 0;
-        xVelRem = 0;
-        animate(21 + facing);
     } else {
         // Falling with drag
         if (!isOnPogo) {
@@ -128,6 +124,18 @@ void Player::stopwalk() {
     }
 }
 
+void Player::stopClimb() {
+    if (animState != 21 + facing) {
+        Tile* pole = GetCollidingPoleTile();
+        snapToPole(pole, facing);
+        animate(21 + facing);
+    } else if (frame / FRAMETIME != 0) {
+        // Hack: Force a frame reset
+        frame = anims[animState].size() * FRAMETIME - 1;
+        animate(21 + facing);
+    }
+}
+
 void Player::processUpArrow() {
     if (isOnPole) {
         climb(UP);
@@ -137,10 +145,18 @@ void Player::processUpArrow() {
     Tile* pole = GetCollidingPoleTile();
     if (pole != NULL) {
         snapToPole(pole, facing);
+        animate(21 + facing);
         return;
     }
 
     look(UP);
+}
+
+void Player::processDownArrow() {
+    if (isOnPole)
+        climb(DOWN);
+    else
+        look(DOWN);
 }
 
 void Player::snapToPole(Tile* pole, directionEnum facing) {
@@ -156,9 +172,6 @@ void Player::snapToPole(Tile* pole, directionEnum facing) {
         xVel = pole->getBox().x - TILE_WIDTH / 4 - hitbox.x;
 
     isOnPole = true;
-
-    // Set animation
-    animate(21 + facing);
 }
 
 Tile* Player::GetCollidingPoleTile() {
@@ -210,7 +223,22 @@ void Player::look(directionEnum dir) {
 }
 
 void Player::climb(directionEnum dir) {
-    return;
+    if (dir == UP) {
+        yVel = -3;
+        animate(21 + facing, 3);
+    } else if (dir == DOWN) {
+        yVel = 7;
+        int frametime = 3;
+        animate(23, frametime);
+
+        if (frame / frametime == 0) {
+            Tile* pole = GetCollidingPoleTile();
+            snapToPole(pole, RIGHT);
+        } else if (frame / frametime == 2) {
+            Tile* pole = GetCollidingPoleTile();
+            snapToPole(pole, LEFT);
+        }
+    }
 }
 
 void Player::enter_door() {
@@ -298,12 +326,16 @@ void Player::processKeyboard() {
         walk(LEFT);
     } else if (state[SDL_SCANCODE_RIGHT]) {
         walk(RIGHT);
-    } else {
+    } else if (!isOnPole) {
         stopwalk();
     }
 
-    if (state[SDL_SCANCODE_UP] & !isOnPogo) {
+    if (state[SDL_SCANCODE_UP] && !isOnPogo) {
         processUpArrow();
+    } else if (state[SDL_SCANCODE_DOWN] && !isOnPogo) {
+        processDownArrow();
+    } else if (isOnPole) {
+        stopClimb();
     }
 
     if (state[SDL_SCANCODE_SPACE] && !gController.IsHoldingSpace) {
@@ -398,7 +430,7 @@ void Player::update() {
     }
 }
 
-void Player::animate(int nextState) {
+void Player::animate(int nextState, int frametime) {
     if (isAnimLocked) return;
 
     if (animState == nextState) {
@@ -410,10 +442,10 @@ void Player::animate(int nextState) {
         animState = nextState;
     }
 
-    if (frame == anims[animState].size() * FRAMETIME)
+    if (frame == anims[animState].size() * frametime)
         frame = 0;
 
-    srcClip = &anims[animState][frame / FRAMETIME];
+    srcClip = &anims[animState][frame / frametime];
 }
 
 void Player::draw() {
@@ -501,7 +533,7 @@ Player::Player() {
     SDL_Rect climbDown0 = { TILE_WIDTH * 3, TILE_HEIGHT * 10, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
     SDL_Rect climbDown1 = { TILE_WIDTH * 5, TILE_HEIGHT * 10, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
     SDL_Rect climbDown2 = { TILE_WIDTH * 7, TILE_HEIGHT * 10, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
-    SDL_Rect climbDown3 = { TILE_WIDTH * 9, TILE_HEIGHT * 10, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
+    SDL_Rect climbDown3 = { TILE_WIDTH * 9, TILE_HEIGHT * 10, TILE_WIDTH, TILE_HEIGHT * 2 };
 
     SDL_Rect poleShootDownL = { TILE_WIDTH * 12, TILE_HEIGHT * 12, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
     SDL_Rect poleShootDownR = { 0, TILE_HEIGHT * 12, TILE_WIDTH * 2, TILE_HEIGHT * 2 };

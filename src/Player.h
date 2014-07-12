@@ -28,23 +28,25 @@ class Player : public Sprite {
         bool isShooting;
 
         void processKeyboard(); // Call player actions based on keyboard input
+        void processUpArrow();
+        void processDownArrow();
+        void stopwalk();
+        void stopClimb();
         void snapToPole(Tile* pole, directionEnum facing);
         Tile* GetCollidingPoleTile();
     public:
         Player();
         void shoot(bool isPressingUp, bool isPressingDown);
         void walk(directionEnum dir);
-        void stopwalk();
         void jump();
         void togglePogo();
         void pogo();
         void look(directionEnum dir);
-        void processUpArrow();
         void climb(directionEnum dir);
         void enter_door();
         void fall();
         void update();
-        void animate(int nextState);
+        void animate(int nextState, int frametime = FRAMETIME);
         void draw();
 };
 
