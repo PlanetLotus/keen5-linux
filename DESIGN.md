@@ -7,8 +7,6 @@ modification (and delusional goals).
 
 <ul>
     <li>Add hanging from ledge</li>
-    <li>Add pole climbing</li>
-    <li>Shoot from poles</li>
     <li>"Jump down" from platformers that have top but not bottom collision</li>
     <li>Add sloped tiles and their collision properties</li>
     <li>Add camera scrolling (make level bigger than camera)</li>
@@ -22,7 +20,7 @@ modification (and delusional goals).
 Level editor outputs a file that the game then reads in. Tile placement and tile collision info are included.
 Level editor is also capable of loading saved files and overwriting them.
 
-Left/right movement, jump, pogo and shoot implemented with animations.
+Left/right movement, jump, pogo, climb and shoot implemented with animations.
 
 Basic collision implemented against the static tiles. No slopes yet, no moving objects yet.
 
