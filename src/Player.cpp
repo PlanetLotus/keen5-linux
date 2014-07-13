@@ -38,7 +38,7 @@ void Player::shoot(bool isPressingUp, bool isPressingDown) {
             xShotVel = facing == 0 ? -1 : 1;
 
             if (!isOnGround) animVal = 13 + facing;
-            else if (isOnPole) animVal = 26 + facing;
+            if (isOnPole) animVal = 26 + facing;
         }
 
         new BlasterShot(xStart, yStart, xShotVel, yShotVel);
@@ -131,6 +131,7 @@ void Player::stopClimb() {
         animate(21 + facing);
     } else if (frame / FRAMETIME != 0) {
         // Hack: Force a frame reset
+        // Could add an optional param to animate to reset frame
         frame = anims[animState].size() * FRAMETIME - 1;
         animate(21 + facing);
     }
@@ -172,6 +173,11 @@ void Player::snapToPole(Tile* pole, directionEnum facing) {
         xVel = pole->getBox().x - TILE_WIDTH / 4 - hitbox.x;
 
     isOnPole = true;
+
+    if (isOnGround) {
+        yVel = -2;
+        isOnGround = false;
+    }
 }
 
 Tile* Player::GetCollidingPoleTile() {
@@ -317,11 +323,6 @@ void Player::processKeyboard() {
         pogo();
     }
 
-    if (state[SDL_SCANCODE_LCTRL]) {
-        jump();
-        gController.IsHoldingCtrl = true;
-    }
-
     if (state[SDL_SCANCODE_LEFT]) {
         walk(LEFT);
     } else if (state[SDL_SCANCODE_RIGHT]) {
@@ -330,7 +331,11 @@ void Player::processKeyboard() {
         stopwalk();
     }
 
-    if (state[SDL_SCANCODE_UP] && !isOnPogo) {
+
+    if (state[SDL_SCANCODE_LCTRL]) {
+        jump();
+        gController.IsHoldingCtrl = true;
+    } else if (state[SDL_SCANCODE_UP] && !isOnPogo) {
         processUpArrow();
     } else if (state[SDL_SCANCODE_DOWN] && !isOnPogo) {
         processDownArrow();
@@ -427,6 +432,9 @@ void Player::update() {
         xVelRem = 0;
         yVel = 0;
         yVelRem = 0;
+
+        if (tciTB.IsBottomColliding())
+            isOnPole = false;
     }
 }
 
