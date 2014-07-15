@@ -394,7 +394,7 @@ void Player::update() {
 
         if (tciTB.IsTopColliding()) {
             yVel = (tciTB.TileCollidingWithTop->getBox().y + tciTB.TileCollidingWithTop->getBox().h) - hitbox.y;
-        } else if (tciTB.IsBottomColliding()) {
+        } else if (tciTB.IsBottomColliding() && (!isOnPole || tciTB.TileCollidingWithBottom->CollideBottom())) {
             yVel = tciTB.TileCollidingWithBottom->getBox().y - (hitbox.y + hitbox.h);
         }
     }
@@ -433,7 +433,7 @@ void Player::update() {
         yVel = 0;
         yVelRem = 0;
 
-        if (tciTB.IsBottomColliding())
+        if (tciTB.IsBottomColliding() && (!isOnPole || tciTB.TileCollidingWithBottom->CollideBottom()))
             isOnPole = false;
     }
 }
