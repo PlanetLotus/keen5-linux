@@ -154,17 +154,27 @@ void Player::processUpArrow() {
 }
 
 void Player::processDownArrow() {
-    if (isOnPole)
+    if (isOnPole) {
         climb(DOWN);
-    else
-        look(DOWN);
+        return;
+    }
+
+    Tile* pole = GetCollidingPoleTile();
+    if (pole != NULL) {
+        Tile* tileCollidingWithBottom = GetTileCollidingWithBottom(true);
+        if (tileCollidingWithBottom != NULL && !tileCollidingWithBottom->CollideBottom()) {
+            snapToPole(pole, facing);
+            animate(21 + facing);
+            return;
+        }
+    }
+
+    look(DOWN);
 }
 
 void Player::snapToPole(Tile* pole, directionEnum facing) {
-    if (pole == NULL) {
-        printf("NULL POLE!\n");
+    if (pole == NULL)
         return;
-    }
 
     // "Snap" to the pole horizontally, locking movement in x-direction
     if (facing == LEFT)

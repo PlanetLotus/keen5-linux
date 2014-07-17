@@ -53,6 +53,22 @@ bool Tile::IsColliding(TileProperty tileProperty, SDL_Rect hitbox, SDL_Rect next
     return false;
 }
 
+bool Tile::IsTouching(TileProperty tileProperty, SDL_Rect nextHitbox) {
+    if (tileProperty == LEFT)
+        return destBox.x == nextHitbox.x + nextHitbox.w;
+
+    if (tileProperty == RIGHT)
+        return destBox.x + destBox.w == nextHitbox.x;
+
+    if (tileProperty == TOP)
+        return destBox.y == nextHitbox.y + nextHitbox.h;
+
+    if (tileProperty == BOTTOM)
+        return destBox.y + destBox.h  == nextHitbox.y;
+
+    return false;
+}
+
 SDL_Rect Tile::getBox() { return destBox; }
 bool Tile::HasCollision() { return hasCollision; }
 bool Tile::CollideTop() { return collideTop; }

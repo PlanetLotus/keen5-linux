@@ -181,13 +181,20 @@ Tile* Sprite::GetTileCollidingWithLeft() {
     return NULL;
 }
 
-Tile* Sprite::GetTileCollidingWithBottom() {
+Tile* Sprite::GetTileCollidingWithBottom(bool checkOnlyTouching) {
     SDL_Rect nextHitbox = { hitbox.x + (int)xVel, hitbox.y + (int)yVel, hitbox.w, hitbox.h };
     vector<Tile*> tiles = GetTilesToBottom();
 
-    for (unsigned int i = 0; i < tiles.size(); i++) {
-        if (tiles[i]->IsColliding(Tile::TOP, hitbox, nextHitbox))
-            return tiles[i];
+    if (checkOnlyTouching) {
+        for (unsigned int i = 0; i < tiles.size(); i++) {
+            if (tiles[i]->IsTouching(Tile::TOP, nextHitbox))
+                return tiles[i];
+        }
+    } else {
+        for (unsigned int i = 0; i < tiles.size(); i++) {
+            if (tiles[i]->IsColliding(Tile::TOP, hitbox, nextHitbox))
+                return tiles[i];
+        }
     }
     return NULL;
 }

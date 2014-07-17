@@ -29,6 +29,7 @@ class Tile {
 
         SDL_Rect getBox();
         bool IsColliding(TileProperty tileProperty, SDL_Rect hitbox, SDL_Rect nextHitbox);
+        bool IsTouching(TileProperty tileProperty, SDL_Rect nextHitbox);
         bool HasCollision();
         bool CollideTop();
         bool CollideRight();

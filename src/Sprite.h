@@ -25,7 +25,7 @@ class Sprite {
         std::vector<Tile*> GetTilesToBottom();
         Tile* GetTileCollidingWithRight();
         Tile* GetTileCollidingWithLeft();
-        Tile* GetTileCollidingWithBottom();
+        Tile* GetTileCollidingWithBottom(bool checkOnlyTouching = false);
         Tile* GetTileCollidingWithTop();
 };
 
