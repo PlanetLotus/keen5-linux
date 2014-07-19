@@ -2,8 +2,8 @@
 #include "helpers.h"
 #include "Tile.h"
 
-Tile::Tile(int srcX, int srcY, int destX, int destY, bool collideT, bool collideR, bool collideB, bool collideL,
-    int layer, bool isPole=false) {
+Tile::Tile(int srcX, int srcY, int destX, int destY, int lHeight, int rHeight,
+    bool collideT, bool collideR, bool collideB, bool collideL, int layer, bool isPole=false) {
     srcBox.x = srcX;
     srcBox.y = srcY;
 
@@ -16,11 +16,15 @@ Tile::Tile(int srcX, int srcY, int destX, int destY, bool collideT, bool collide
     destBox.w = TILE_WIDTH;
     destBox.h = TILE_HEIGHT;
 
+    leftHeight = lHeight;
+    rightHeight = rHeight;
+
     collideTop = collideT;
     collideRight = collideR;
     collideBottom = collideB;
     collideLeft = collideL;
 
+    isSloped = leftHeight != 0 || rightHeight != 0;
     hasCollision = collideT || collideR || collideB || collideL ? true : false;
 
     Layer = layer;
@@ -70,6 +74,7 @@ bool Tile::IsTouching(TileProperty tileProperty, SDL_Rect nextHitbox) {
 }
 
 SDL_Rect Tile::getBox() { return destBox; }
+bool Tile::IsSloped() { return isSloped; }
 bool Tile::HasCollision() { return hasCollision; }
 bool Tile::CollideTop() { return collideTop; }
 bool Tile::CollideRight() { return collideRight; }
