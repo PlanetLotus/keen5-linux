@@ -27,6 +27,11 @@ Tile::Tile(int srcX, int srcY, int destX, int destY, int lHeight, int rHeight,
     isSloped = leftHeight != 0 || rightHeight != 0;
     hasCollision = collideT || collideR || collideB || collideL ? true : false;
 
+    if (isSloped)
+        slope = (float)(rightHeight - leftHeight) / (float)TILE_HEIGHT;
+    else
+        slope = 0;
+
     Layer = layer;
 
     IsPole = isPole;
@@ -74,6 +79,9 @@ bool Tile::IsTouching(TileProperty tileProperty, SDL_Rect nextHitbox) {
 }
 
 SDL_Rect Tile::getBox() { return destBox; }
+float Tile::GetSlope() { return slope; }
+int Tile::GetLeftHeight() { return leftHeight; }
+int Tile::GetRightHeight() { return rightHeight; }
 bool Tile::IsSloped() { return isSloped; }
 bool Tile::HasCollision() { return hasCollision; }
 bool Tile::CollideTop() { return collideTop; }

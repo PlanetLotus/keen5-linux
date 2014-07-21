@@ -405,7 +405,18 @@ void Player::update() {
         if (tciTB.IsTopColliding()) {
             yVel = (tciTB.TileCollidingWithTop->getBox().y + tciTB.TileCollidingWithTop->getBox().h) - hitbox.y;
         } else if (tciTB.IsBottomColliding() && (!isOnPole || tciTB.TileCollidingWithBottom->CollideBottom())) {
-            yVel = tciTB.TileCollidingWithBottom->getBox().y - (hitbox.y + hitbox.h);
+            Tile* tile = tciTB.TileCollidingWithBottom;
+            yVel = tile->getBox().y - (hitbox.y + hitbox.h);
+
+            if (tile->IsSloped()) {
+                int xPosInTile = (hitbox.x + (int)xVel) - tile->getBox().x;
+                //printf("%d = %d - %d\n", xPosInTile, hitbox.x + (int)xVel, tile->getBox().x);
+
+                // y = mx + b
+                float yDesiredPosInTile = tile->GetSlope() * xPosInTile + tile->GetLeftHeight();
+                yVel += (TILE_HEIGHT - yDesiredPosInTile);
+                printf("%f: %f = %f * %d + %d\n", yVel, yDesiredPosInTile, tile->GetSlope(), xPosInTile, tile->GetLeftHeight());
+            }
         }
     }
 
@@ -488,7 +499,7 @@ Player::Player() {
 
     srcClip = NULL;
 
-    hitbox.x = TILE_WIDTH * 14;
+    hitbox.x = TILE_WIDTH * 2;
     hitbox.y = TILE_HEIGHT * 3;
     hitbox.w = TILE_WIDTH;
     hitbox.h = TILE_HEIGHT * 2;

@@ -101,7 +101,7 @@ bool set_tiles() {
     int x = 0;
     int y = 0;
 
-    ifstream map("../data/layertestlevel");
+    ifstream map("../data/level1");
     string line;
     istringstream iss;
 
