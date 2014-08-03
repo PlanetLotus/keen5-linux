@@ -8,7 +8,6 @@ modification (and delusional goals).
 <ul>
     <li>Add hanging from ledge</li>
     <li>"Jump down" from platformers that have top but not bottom collision</li>
-    <li>Add sloped tiles and their collision properties</li>
     <li>Add camera scrolling (make level bigger than camera)</li>
     <li>Look up/down</li>
     <li>Write basic enemy AI (animation optional)</li>
@@ -22,6 +21,6 @@ Level editor is also capable of loading saved files and overwriting them.
 
 Left/right movement, jump, pogo, climb and shoot implemented with animations.
 
-Basic collision implemented against the static tiles. No slopes yet, no moving objects yet.
+Basic collision implemented against the static tiles. Sloped tiles are also mostly working but have a few visual problems.
 
 Physics implemented using floats for integrating position and ints for rendering position.
