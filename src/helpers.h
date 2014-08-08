@@ -14,6 +14,8 @@ bool IsBottomColliding(SDL_Rect before, SDL_Rect after, SDL_Rect obstacle);
 bool IsLeftColliding(SDL_Rect before, SDL_Rect after, SDL_Rect obstacle);
 bool IsRightColliding(SDL_Rect before, SDL_Rect after, SDL_Rect obstacle);
 
+void UpdateCamera(SDL_Rect* camera, SDL_Rect keenHitbox);
+
 void clean_up();
 
 #endif

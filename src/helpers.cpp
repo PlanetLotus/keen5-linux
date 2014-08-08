@@ -242,6 +242,23 @@ bool IsRightColliding(SDL_Rect before, SDL_Rect after, SDL_Rect obstacle) {
     return false;
 }
 
+void UpdateCamera(SDL_Rect* camera, SDL_Rect keenHitbox) {
+    // Center camera over Keen
+    camera->x = (keenHitbox.x + keenHitbox.w / 2) - SCREEN_WIDTH / 2;
+    camera->y = (keenHitbox.y + keenHitbox.h / 2) - SCREEN_HEIGHT / 2;
+
+    // Keep camera in level bounds
+    if (camera->x < 0)
+        camera->x = 0;
+    else if (camera->x > LEVEL_WIDTH - camera->w)
+        camera->x = LEVEL_WIDTH - camera->w;
+
+    if (camera->y < 0)
+        camera->y = 0;
+    else if (camera->y > LEVEL_HEIGHT - camera->h)
+        camera->y = LEVEL_HEIGHT - camera->h;
+}
+
 void clean_up() {
     gKeenTexture->free();
     gMaskTexture->free();

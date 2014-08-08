@@ -88,21 +88,7 @@ int main (int argc, char **args) {
             }
         }
 
-        // Center camera over Keen
-        SDL_Rect keenHitbox = character->GetBox();
-        camera.x = (keenHitbox.x + keenHitbox.w / 2) - SCREEN_WIDTH / 2;
-        camera.y = (keenHitbox.y + keenHitbox.h / 2) - SCREEN_HEIGHT / 2;
-
-        // Keep camera in level bounds
-        if (camera.x < 0)
-            camera.x = 0;
-        else if (camera.x > LEVEL_WIDTH - camera.w)
-            camera.x = LEVEL_WIDTH - camera.w;
-
-        if (camera.y < 0)
-            camera.y = 0;
-        else if (camera.y > LEVEL_HEIGHT - camera.h)
-            camera.y = LEVEL_HEIGHT - camera.h;
+        UpdateCamera(&camera, character->GetBox());
 
         // Update screen
         SDL_RenderPresent(renderer);
