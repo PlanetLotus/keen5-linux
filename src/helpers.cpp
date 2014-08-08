@@ -101,7 +101,7 @@ bool set_tiles() {
     int x = 0;
     int y = 0;
 
-    ifstream map("../data/level1");
+    ifstream map("../data/scrolltest");
     string line;
     istringstream iss;
 
@@ -120,7 +120,9 @@ bool set_tiles() {
     }
 
     TILES_WIDE = tilesWide;
+    LEVEL_WIDTH = TILES_WIDE * TILE_WIDTH;
     TILES_TALL = tilesTall;
+    LEVEL_HEIGHT = TILES_TALL * TILE_HEIGHT;
 
     // Special case: Second line contains source file absolute path
     // This is mostly used by the level editor. We only want the file name.

@@ -8,6 +8,8 @@ const int TEXTURE_COUNT = 3;
 
 int TILES_WIDE;
 int TILES_TALL;
+int LEVEL_WIDTH;
+int LEVEL_HEIGHT;
 
 SDL_Window* window = NULL;
 SDL_Renderer* renderer = NULL;

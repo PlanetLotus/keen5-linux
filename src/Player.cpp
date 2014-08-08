@@ -477,7 +477,7 @@ void Player::animate(int nextState, int frametime) {
     srcClip = &anims[animState][frame / frametime];
 }
 
-void Player::draw() {
+void Player::draw(SDL_Rect* camera) {
     // Center the hitbox (horizontally) inside the displayed frame
     int offsetX = srcClip->w / 2 - TILE_WIDTH / 2;
     int destX = hitbox.x - offsetX;
@@ -486,7 +486,7 @@ void Player::draw() {
     int offsetY = srcClip->h - TILE_HEIGHT * 2;
     int destY = hitbox.y - offsetY;
 
-    gKeenTexture->render(destX, destY, srcClip);
+    gKeenTexture->render(destX - camera->x, destY - camera->y, srcClip);
 }
 
 Player::Player() {

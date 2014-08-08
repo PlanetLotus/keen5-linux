@@ -16,7 +16,7 @@ class Sprite {
     public:
         virtual ~Sprite();
         virtual void update();
-        virtual void draw();
+        virtual void draw(SDL_Rect* camera);
         TileCollisionInfo CheckTileCollisionLR();
         TileCollisionInfo CheckTileCollisionTB();
         std::vector<Tile*> GetTilesToLeft();
@@ -27,6 +27,9 @@ class Sprite {
         Tile* GetTileCollidingWithLeft();
         Tile* GetTileCollidingWithBottom(bool checkOnlyTouching = false);
         Tile* GetTileCollidingWithTop();
+        int GetX();
+        int GetY();
+        SDL_Rect GetBox();
 };
 
 #endif

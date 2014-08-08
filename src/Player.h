@@ -47,7 +47,7 @@ class Player : public Sprite {
         void fall();
         void update();
         void animate(int nextState, int frametime = FRAMETIME);
-        void draw();
+        void draw(SDL_Rect* camera);
 };
 
 #endif

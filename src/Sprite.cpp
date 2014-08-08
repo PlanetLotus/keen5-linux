@@ -11,7 +11,7 @@ Sprite::~Sprite() {
 
 void Sprite::update() {}
 
-void Sprite::draw() {}
+void Sprite::draw(SDL_Rect* camera) {}
 
 vector<Tile*> Sprite::GetTilesToLeft() {
     SDL_Rect nextHitbox = { hitbox.x + (int)xVel, hitbox.y, hitbox.w, hitbox.h };
@@ -209,3 +209,7 @@ Tile* Sprite::GetTileCollidingWithTop() {
     }
     return NULL;
 }
+
+int Sprite::GetX() { return hitbox.x; }
+int Sprite::GetY() { return hitbox.y; }
+SDL_Rect Sprite::GetBox() { return hitbox; }

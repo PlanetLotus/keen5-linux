@@ -25,6 +25,7 @@ int main (int argc, char **args) {
     freopen("CON", "w", stderr);
     */
 
+    SDL_Rect camera = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
     Sprite* character = new Player();
     gSpriteBatch[0] = character;
 
@@ -62,13 +63,12 @@ int main (int argc, char **args) {
         // Clear screen
         SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0xFF);
         SDL_RenderClear(renderer);
-        SDL_Rect camera = {32, 32, 32, 32};
 
         // Render tiles - Layer 0 (Before units)
         for (unsigned int i=0; i<gTiles.size(); i++) {
             for (unsigned int j=0; j<gTiles[i].size(); j++) {
                 if (gTiles[i][j] != NULL && gTiles[i][j]->Layer == 0)
-                    gTiles[i][j]->render(camera);
+                    gTiles[i][j]->render(&camera);
             }
         }
 
@@ -77,17 +77,32 @@ int main (int argc, char **args) {
         // All logic should be handled before any of the units on-screen get updated
         for (unsigned int i = 0; i < gSpriteBatch.size(); i++)
             gSpriteBatch[i]->update();
-        for (unsigned int i = 0; i < gSpriteBatch.size(); i++) {
-            gSpriteBatch[i]->draw();
-        }
+        for (unsigned int i = 0; i < gSpriteBatch.size(); i++)
+            gSpriteBatch[i]->draw(&camera);
 
         // Render tiles - Layer 1 (After units)
         for (unsigned int i=0; i<gTiles.size(); i++) {
             for (unsigned int j=0; j<gTiles[i].size(); j++) {
                 if (gTiles[i][j] != NULL && gTiles[i][j]->Layer == 1)
-                    gTiles[i][j]->render(camera);
+                    gTiles[i][j]->render(&camera);
             }
         }
+
+        // Center camera over Keen
+        SDL_Rect keenHitbox = character->GetBox();
+        camera.x = (keenHitbox.x + keenHitbox.w / 2) - SCREEN_WIDTH / 2;
+        camera.y = (keenHitbox.y + keenHitbox.h / 2) - SCREEN_HEIGHT / 2;
+
+        // Keep camera in level bounds
+        if (camera.x < 0)
+            camera.x = 0;
+        else if (camera.x > LEVEL_WIDTH - camera.w)
+            camera.x = LEVEL_WIDTH - camera.w;
+
+        if (camera.y < 0)
+            camera.y = 0;
+        else if (camera.y > LEVEL_HEIGHT - camera.h)
+            camera.y = LEVEL_HEIGHT - camera.h;
 
         // Update screen
         SDL_RenderPresent(renderer);
