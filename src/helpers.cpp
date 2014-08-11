@@ -259,6 +259,19 @@ void UpdateCamera(SDL_Rect* camera, SDL_Rect keenHitbox) {
         camera->y = LEVEL_HEIGHT - camera->h;
 }
 
+bool IsTileOnScreen(SDL_Rect* tileBox, SDL_Rect* camera) {
+    if (tileBox->x + tileBox->w <= camera->x)
+        return false;
+    else if (tileBox->x >= camera->x + camera->w)
+        return false;
+
+    if (tileBox->y + tileBox->h <= camera->y)
+        return false;
+    else if (tileBox->y >= camera->y + camera->h)
+        return false;
+    return true;
+}
+
 void clean_up() {
     gKeenTexture->free();
     gMaskTexture->free();
