@@ -101,7 +101,7 @@ bool set_tiles() {
     int x = 0;
     int y = 0;
 
-    ifstream map("../data/scrolltest");
+    ifstream map("../data/nulltest");
     string line;
     istringstream iss;
 
@@ -152,9 +152,18 @@ bool set_tiles() {
             x = 0;
         }
 
-        if (xSrc == -1) {
-            gTiles[x][y] = NULL;
-            x++;
+        if (xSrc < 0) {
+            int nullCount = xSrc * -1;
+            for (int i = 0; i < nullCount; i++) {
+                // Check row position
+                if (x == tilesWide) {
+                    y++;
+                    x = 0;
+                }
+
+                gTiles[x][y] = NULL;
+                x++;
+            }
             continue;
         }
 
