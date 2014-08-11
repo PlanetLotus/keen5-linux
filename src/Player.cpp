@@ -253,12 +253,13 @@ void Player::climb(directionEnum dir) {
         int frametime = 3;
         animate(23, frametime);
 
-        Tile* pole = GetCollidingPoleTile();
-
-        if (frame / frametime == 0)
+        if (frame / frametime == 0) {
+            Tile* pole = GetCollidingPoleTile();
             snapToPole(pole, RIGHT);
-        else if (frame / frametime == 2)
+        } else if (frame / frametime == 2) {
+            Tile* pole = GetCollidingPoleTile();
             snapToPole(pole, LEFT);
+        }
     }
 }
 
@@ -558,16 +559,16 @@ Player::Player() {
     SDL_Rect pogoBentL = {TILE_WIDTH * 4, TILE_HEIGHT * 8, TILE_WIDTH * 2, TILE_HEIGHT * 2};
     SDL_Rect pogoBentR = {TILE_WIDTH, TILE_HEIGHT * 8, TILE_WIDTH * 2, TILE_HEIGHT * 2};
 
-    SDL_Rect climbL0 = { TILE_WIDTH * 10, TILE_HEIGHT * 10, TILE_WIDTH, TILE_HEIGHT * 2 };
-    SDL_Rect climbL1 = { TILE_WIDTH * 11, TILE_HEIGHT * 10, TILE_WIDTH, TILE_HEIGHT * 2 };
-    SDL_Rect climbL2 = { TILE_WIDTH * 12, TILE_HEIGHT * 10, TILE_WIDTH, TILE_HEIGHT * 2 };
+    SDL_Rect climbL0 = { TILE_WIDTH * 11, TILE_HEIGHT * 10, TILE_WIDTH, TILE_HEIGHT * 2 };
+    SDL_Rect climbL1 = { TILE_WIDTH * 12, TILE_HEIGHT * 10, TILE_WIDTH, TILE_HEIGHT * 2 };
+    SDL_Rect climbL2 = { TILE_WIDTH * 13, TILE_HEIGHT * 10, TILE_WIDTH, TILE_HEIGHT * 2 };
     SDL_Rect climbR0 = { 0, TILE_HEIGHT * 10, TILE_WIDTH, TILE_HEIGHT * 2 };
     SDL_Rect climbR1 = { TILE_WIDTH, TILE_HEIGHT * 10, TILE_WIDTH, TILE_HEIGHT * 2 };
     SDL_Rect climbR2 = { TILE_WIDTH * 2, TILE_HEIGHT * 10, TILE_WIDTH, TILE_HEIGHT * 2 };
     SDL_Rect climbDown0 = { TILE_WIDTH * 3, TILE_HEIGHT * 10, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
     SDL_Rect climbDown1 = { TILE_WIDTH * 5, TILE_HEIGHT * 10, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
     SDL_Rect climbDown2 = { TILE_WIDTH * 7, TILE_HEIGHT * 10, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
-    SDL_Rect climbDown3 = { TILE_WIDTH * 9, TILE_HEIGHT * 10, TILE_WIDTH, TILE_HEIGHT * 2 };
+    SDL_Rect climbDown3 = { TILE_WIDTH * 9, TILE_HEIGHT * 10, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
 
     SDL_Rect poleShootDownL = { TILE_WIDTH * 12, TILE_HEIGHT * 12, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
     SDL_Rect poleShootDownR = { 0, TILE_HEIGHT * 12, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
