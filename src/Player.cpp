@@ -195,7 +195,10 @@ Tile* Player::GetCollidingPoleTile() {
     vector<Tile*> leftTiles = GetTilesToLeft();
 
     for (unsigned int i = 0; i < leftTiles.size(); i++) {
-        if (leftTiles[i]->IsColliding(Tile::ISPOLE, hitbox, nextHitbox)) {
+        SDL_Rect tileBox = leftTiles[i]->getBox();
+        if (tileBox.y + tileBox.h > hitbox.y && hitbox.y >= tileBox.y &&
+            leftTiles[i]->IsColliding(Tile::ISPOLE, hitbox, nextHitbox)) {
+
             SDL_Rect poleBox = leftTiles[i]->getBox();
             int poleRight = poleBox.x + poleBox.w;
             int playerRight = hitbox.x + hitbox.w;
@@ -215,7 +218,10 @@ Tile* Player::GetCollidingPoleTile() {
     vector<Tile*> rightTiles = GetTilesToRight();
 
     for (unsigned int i = 0; i < rightTiles.size(); i++) {
-        if (rightTiles[i]->IsColliding(Tile::ISPOLE, hitbox, nextHitbox)) {
+        SDL_Rect tileBox = rightTiles[i]->getBox();
+        if (tileBox.y + tileBox.h > hitbox.y && hitbox.y >= tileBox.y &&
+            rightTiles[i]->IsColliding(Tile::ISPOLE, hitbox, nextHitbox)) {
+
             int playerRight = hitbox.x + hitbox.w;
             SDL_Rect poleBox = rightTiles[i]->getBox();
             int poleRight = poleBox.x + poleBox.w;
@@ -239,7 +245,7 @@ void Player::look(directionEnum dir) {
 }
 
 void Player::climb(directionEnum dir) {
-    if (dir == UP) {
+    if (dir == UP && GetCollidingPoleTile() != NULL) {
         yVel = -3;
         animate(21 + facing, 3);
     } else if (dir == DOWN) {
@@ -247,13 +253,12 @@ void Player::climb(directionEnum dir) {
         int frametime = 3;
         animate(23, frametime);
 
-        if (frame / frametime == 0) {
-            Tile* pole = GetCollidingPoleTile();
+        Tile* pole = GetCollidingPoleTile();
+
+        if (frame / frametime == 0)
             snapToPole(pole, RIGHT);
-        } else if (frame / frametime == 2) {
-            Tile* pole = GetCollidingPoleTile();
+        else if (frame / frametime == 2)
             snapToPole(pole, LEFT);
-        }
     }
 }
 
@@ -499,7 +504,7 @@ Player::Player() {
 
     srcClip = NULL;
 
-    hitbox.x = TILE_WIDTH * 2;
+    hitbox.x = TILE_WIDTH * 22;
     hitbox.y = TILE_HEIGHT * 3;
     hitbox.w = TILE_WIDTH;
     hitbox.h = TILE_HEIGHT * 2;
