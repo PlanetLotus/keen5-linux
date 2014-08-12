@@ -270,9 +270,11 @@ void UpdateCamera(SDL_Rect* camera, SDL_Rect keenHitbox, bool isOnGround) {
     camera->x = xBubbleStart - SCREEN_WIDTH / 3;
 
     // Center vertically if keen is on ground
-    if (isOnGround)
-        camera->y = (keenHitbox.y + keenHitbox.h / 2) - SCREEN_HEIGHT / 2;
-    else if (keenHitbox.y < cameraMarginTop)
+    if (isOnGround) {
+        int desiredY = (keenHitbox.y + keenHitbox.h / 2) - SCREEN_HEIGHT / 2;
+        const int smoothCameraUpdateFactor = 5;
+        camera->y -= (camera->y - desiredY) / smoothCameraUpdateFactor;
+    } else if (keenHitbox.y < cameraMarginTop)
         // if not on ground, update MARGIN ONLY if keen is at camera margin
         camera->y -= cameraMarginTop - keenHitbox.y;
     else if (keenHitbox.y + keenHitbox.h > cameraMarginBottom)
