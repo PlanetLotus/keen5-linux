@@ -241,7 +241,12 @@ Tile* Player::GetCollidingPoleTile() {
 }
 
 void Player::look(directionEnum dir) {
-    return;
+    if (!isOnGround) return;
+
+    // Needs a timer, probably based on frametime
+    // At maybe half a second (long after the animation has been held at its last frame),
+    //  the camera movement actually happens
+
 }
 
 void Player::climb(directionEnum dir) {
@@ -578,6 +583,9 @@ Player::Player() {
     SDL_Rect poleShootR = { TILE_WIDTH * 2, TILE_HEIGHT * 12, TILE_WIDTH * 3, TILE_HEIGHT * 2 };
     SDL_Rect poleShootUpL = { TILE_WIDTH * 7, TILE_HEIGHT * 12, TILE_WIDTH * 2, TILE_HEIGHT * 3 };
     SDL_Rect poleShootUpR = { TILE_WIDTH * 5, TILE_HEIGHT * 12, TILE_WIDTH * 2, TILE_HEIGHT * 3 };
+    SDL_Rect lookUp = { TILE_WIDTH * 6, TILE_HEIGHT * 8, TILE_WIDTH, TILE_HEIGHT * 2 };
+    SDL_Rect lookDown0 = { TILE_WIDTH * 7, TILE_HEIGHT * 8, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
+    SDL_Rect lookDown1 = { TILE_WIDTH * 9, TILE_HEIGHT * 8, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
 
     SDL_Rect standL_array[1] = { standL0 };
     SDL_Rect standR_array[1] = { standR0 };
@@ -609,6 +617,8 @@ Player::Player() {
     SDL_Rect poleShootR_array[1] = { poleShootR };
     SDL_Rect poleShootUpL_array[1] = { poleShootUpL };
     SDL_Rect poleShootUpR_array[1] = { poleShootUpR };
+    SDL_Rect lookUp_array[1] = { lookUp };
+    SDL_Rect lookDown_array[2] = { lookDown0, lookDown1 };
 
     vector<SDL_Rect> standL_anim(standL_array, standL_array + sizeof(standL_array) / sizeof(SDL_Rect));
     vector<SDL_Rect> standR_anim(standR_array, standR_array + sizeof(standR_array) / sizeof(SDL_Rect));
@@ -640,6 +650,8 @@ Player::Player() {
     vector<SDL_Rect> poleShootR_anim(poleShootR_array, poleShootR_array + sizeof(poleShootR_array) / sizeof(SDL_Rect));
     vector<SDL_Rect> poleShootUpL_anim(poleShootUpL_array, poleShootUpL_array + sizeof(poleShootUpL_array) / sizeof(SDL_Rect));
     vector<SDL_Rect> poleShootUpR_anim(poleShootUpR_array, poleShootUpR_array + sizeof(poleShootUpR_array) / sizeof(SDL_Rect));
+    vector<SDL_Rect> lookUp_anim(lookUp_array, lookUp_array + sizeof(lookUp_array) / sizeof(SDL_Rect));
+    vector<SDL_Rect> lookDown_anim(lookDown_array, lookDown_array + sizeof(lookDown_array) / sizeof(SDL_Rect));
 
     anims[0] = standL_anim; anims[1] = standR_anim;
     anims[2] = walkL_anim; anims[3] = walkR_anim;
@@ -655,4 +667,5 @@ Player::Player() {
     anims[24] = poleShootDownL_anim; anims[25] = poleShootDownR_anim;
     anims[26] = poleShootL_anim; anims[27] = poleShootR_anim;
     anims[28] = poleShootUpL_anim; anims[29] = poleShootUpR_anim;
+    anims[30] = lookUp_anim; anims[31] = lookDown_anim;
 }
