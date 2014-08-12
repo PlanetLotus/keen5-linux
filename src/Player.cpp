@@ -60,6 +60,8 @@ void Player::shoot(bool isPressingUp, bool isPressingDown) {
         xVel = 0;
         xVelRem = 0;
     }
+
+    isOnPogo = false;
 }
 
 void Player::walk(directionEnum dir) {
