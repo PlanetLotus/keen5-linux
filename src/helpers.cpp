@@ -252,8 +252,19 @@ bool IsRightColliding(SDL_Rect before, SDL_Rect after, SDL_Rect obstacle) {
 }
 
 void UpdateCamera(SDL_Rect* camera, SDL_Rect keenHitbox) {
-    // Center camera over Keen
-    camera->x = (keenHitbox.x + keenHitbox.w / 2) - SCREEN_WIDTH / 2;
+    int xBubbleStart = camera->x + SCREEN_WIDTH / 3;
+    int xBubbleEnd = camera->x + SCREEN_WIDTH * 2 / 3;
+
+    // Update bubble if Keen moves outside of it
+    if (keenHitbox.x < xBubbleStart) {
+        xBubbleStart = keenHitbox.x;
+    } else if (keenHitbox.x + keenHitbox.w > xBubbleEnd) {
+        xBubbleEnd = keenHitbox.x + keenHitbox.w;
+        xBubbleStart = xBubbleEnd - SCREEN_WIDTH / 3;
+    }
+
+    // Center camera horizontally over bubble, vertically over Keen
+    camera->x = xBubbleStart - SCREEN_WIDTH / 3;
     camera->y = (keenHitbox.y + keenHitbox.h / 2) - SCREEN_HEIGHT / 2;
 
     // Keep camera in level bounds
