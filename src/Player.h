@@ -48,6 +48,7 @@ class Player : public Sprite {
         void update();
         void animate(int nextState, int frametime = FRAMETIME);
         void draw(SDL_Rect* camera);
+        bool GetIsOnGround();
 };
 
 #endif

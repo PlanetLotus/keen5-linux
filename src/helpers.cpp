@@ -251,7 +251,7 @@ bool IsRightColliding(SDL_Rect before, SDL_Rect after, SDL_Rect obstacle) {
     return false;
 }
 
-void UpdateCamera(SDL_Rect* camera, SDL_Rect keenHitbox) {
+void UpdateCamera(SDL_Rect* camera, SDL_Rect keenHitbox, bool isOnGround) {
     int xBubbleStart = camera->x + SCREEN_WIDTH / 3;
     int xBubbleEnd = camera->x + SCREEN_WIDTH * 2 / 3;
 
@@ -263,9 +263,20 @@ void UpdateCamera(SDL_Rect* camera, SDL_Rect keenHitbox) {
         xBubbleStart = xBubbleEnd - SCREEN_WIDTH / 3;
     }
 
-    // Center camera horizontally over bubble, vertically over Keen
+    int cameraMarginTop = camera->y + SCREEN_HEIGHT / 20;
+    int cameraMarginBottom = camera->y + camera->h - SCREEN_HEIGHT / 20;
+
+    // Center camera horizontally over bubble
     camera->x = xBubbleStart - SCREEN_WIDTH / 3;
-    camera->y = (keenHitbox.y + keenHitbox.h / 2) - SCREEN_HEIGHT / 2;
+
+    // Center vertically if keen is on ground
+    if (isOnGround)
+        camera->y = (keenHitbox.y + keenHitbox.h / 2) - SCREEN_HEIGHT / 2;
+    else if (keenHitbox.y < cameraMarginTop)
+        // if not on ground, update MARGIN ONLY if keen is at camera margin
+        camera->y -= cameraMarginTop - keenHitbox.y;
+    else if (keenHitbox.y + keenHitbox.h > cameraMarginBottom)
+        camera->y += keenHitbox.y + keenHitbox.h - cameraMarginBottom;
 
     // Keep camera in level bounds
     if (camera->x < 0)

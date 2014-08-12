@@ -27,6 +27,7 @@ int main (int argc, char **args) {
 
     SDL_Rect camera = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
     Sprite* character = new Player();
+    Player* characterPlayerPtr = dynamic_cast<Player*>(character);
     gSpriteBatch[0] = character;
 
     while (running) {
@@ -88,7 +89,7 @@ int main (int argc, char **args) {
             }
         }
 
-        UpdateCamera(&camera, character->GetBox());
+        UpdateCamera(&camera, character->GetBox(), characterPlayerPtr->GetIsOnGround());
 
         // Update screen
         SDL_RenderPresent(renderer);

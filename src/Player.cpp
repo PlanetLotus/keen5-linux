@@ -495,6 +495,8 @@ void Player::draw(SDL_Rect* camera) {
     gKeenTexture->render(destX - camera->x, destY - camera->y, srcClip);
 }
 
+bool Player::GetIsOnGround() { return isOnGround; }
+
 Player::Player() {
     xVel = 0;
     yVel = 0;
