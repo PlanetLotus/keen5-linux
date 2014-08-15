@@ -14,7 +14,6 @@ bool IsBottomColliding(SDL_Rect before, SDL_Rect after, SDL_Rect obstacle);
 bool IsLeftColliding(SDL_Rect before, SDL_Rect after, SDL_Rect obstacle);
 bool IsRightColliding(SDL_Rect before, SDL_Rect after, SDL_Rect obstacle);
 
-void UpdateCamera(SDL_Rect* camera, SDL_Rect keenHitbox, bool isOnGround);
 bool IsTileOnScreen(SDL_Rect* tileBox, SDL_Rect* camera);
 
 void clean_up();

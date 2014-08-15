@@ -251,47 +251,6 @@ bool IsRightColliding(SDL_Rect before, SDL_Rect after, SDL_Rect obstacle) {
     return false;
 }
 
-void UpdateCamera(SDL_Rect* camera, SDL_Rect keenHitbox, bool isOnGround) {
-    int xBubbleStart = camera->x + SCREEN_WIDTH / 3;
-    int xBubbleEnd = camera->x + SCREEN_WIDTH * 2 / 3;
-
-    // Update bubble if Keen moves outside of it
-    if (keenHitbox.x < xBubbleStart) {
-        xBubbleStart = keenHitbox.x;
-    } else if (keenHitbox.x + keenHitbox.w > xBubbleEnd) {
-        xBubbleEnd = keenHitbox.x + keenHitbox.w;
-        xBubbleStart = xBubbleEnd - SCREEN_WIDTH / 3;
-    }
-
-    int cameraMarginTop = camera->y + SCREEN_HEIGHT / 20;
-    int cameraMarginBottom = camera->y + camera->h - SCREEN_HEIGHT / 20;
-
-    // Center camera horizontally over bubble
-    camera->x = xBubbleStart - SCREEN_WIDTH / 3;
-
-    // Center vertically if keen is on ground
-    if (isOnGround) {
-        int desiredY = (keenHitbox.y + keenHitbox.h / 2) - SCREEN_HEIGHT / 2;
-        const int smoothCameraUpdateFactor = 5;
-        camera->y -= (camera->y - desiredY) / smoothCameraUpdateFactor;
-    } else if (keenHitbox.y < cameraMarginTop)
-        // if not on ground, update MARGIN ONLY if keen is at camera margin
-        camera->y -= cameraMarginTop - keenHitbox.y;
-    else if (keenHitbox.y + keenHitbox.h > cameraMarginBottom)
-        camera->y += keenHitbox.y + keenHitbox.h - cameraMarginBottom;
-
-    // Keep camera in level bounds
-    if (camera->x < 0)
-        camera->x = 0;
-    else if (camera->x > LEVEL_WIDTH - camera->w)
-        camera->x = LEVEL_WIDTH - camera->w;
-
-    if (camera->y < 0)
-        camera->y = 0;
-    else if (camera->y > LEVEL_HEIGHT - camera->h)
-        camera->y = LEVEL_HEIGHT - camera->h;
-}
-
 bool IsTileOnScreen(SDL_Rect* tileBox, SDL_Rect* camera) {
     if (tileBox->x + tileBox->w <= camera->x)
         return false;
