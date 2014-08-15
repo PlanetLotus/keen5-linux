@@ -11,7 +11,7 @@ Sprite::~Sprite() {
 
 void Sprite::update() {}
 
-void Sprite::draw(SDL_Rect* camera) {}
+void Sprite::draw(SDL_Rect camera) {}
 
 vector<Tile*> Sprite::GetTilesToLeft() {
     SDL_Rect nextHitbox = { hitbox.x + (int)xVel, hitbox.y, hitbox.w, hitbox.h };

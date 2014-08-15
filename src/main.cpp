@@ -1,4 +1,5 @@
 #include <iostream>
+#include "Camera.h"
 #include "BlasterShot.h"
 #include "globals.h"
 #include "helpers.h"
@@ -25,7 +26,7 @@ int main (int argc, char **args) {
     freopen("CON", "w", stderr);
     */
 
-    SDL_Rect camera = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
+    Camera camera;
     Sprite* character = new Player();
     Player* characterPlayerPtr = dynamic_cast<Player*>(character);
     gSpriteBatch[0] = character;
@@ -69,7 +70,7 @@ int main (int argc, char **args) {
         for (unsigned int i=0; i<gTiles.size(); i++) {
             for (unsigned int j=0; j<gTiles[i].size(); j++) {
                 if (gTiles[i][j] != NULL && gTiles[i][j]->Layer == 0)
-                    gTiles[i][j]->render(&camera);
+                    gTiles[i][j]->render(camera.GetBox());
             }
         }
 
@@ -79,17 +80,17 @@ int main (int argc, char **args) {
         for (unsigned int i = 0; i < gSpriteBatch.size(); i++)
             gSpriteBatch[i]->update();
         for (unsigned int i = 0; i < gSpriteBatch.size(); i++)
-            gSpriteBatch[i]->draw(&camera);
+            gSpriteBatch[i]->draw(camera.GetBox());
 
         // Render tiles - Layer 1 (After units)
         for (unsigned int i=0; i<gTiles.size(); i++) {
             for (unsigned int j=0; j<gTiles[i].size(); j++) {
                 if (gTiles[i][j] != NULL && gTiles[i][j]->Layer == 1)
-                    gTiles[i][j]->render(&camera);
+                    gTiles[i][j]->render(camera.GetBox());
             }
         }
 
-        UpdateCamera(&camera, character->GetBox(), characterPlayerPtr->GetIsOnGround());
+        camera.Update(character->GetBox(), characterPlayerPtr->GetIsOnGround());
 
         // Update screen
         SDL_RenderPresent(renderer);
