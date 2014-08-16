@@ -2,6 +2,7 @@
 #define GLOBALS_H
 
 #include <vector>
+#include "Camera.h"
 #include "Controller.h"
 #include "SDL.h"
 #include "Sprite.h"
@@ -43,5 +44,7 @@ extern Controller gController;
 extern const int FRAMETIME;
 
 extern std::vector<Sprite*> gSpriteBatch;
+
+extern Camera camera;
 
 #endif

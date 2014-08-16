@@ -3,6 +3,7 @@
 #include "globals.h"
 #include "helpers.h"
 #include "Player.h"
+#include "Timer.h"
 
 using namespace std;
 
@@ -105,7 +106,9 @@ void Player::stopwalk() {
         xAccel = 0;
         xVel = 0;
         xVelRem = 0;
-        animate(facing);
+
+        if (lookTimer == 0)
+            animate(facing);
     } else {
         // Falling with drag
         if (!isOnPogo) {
@@ -245,10 +248,17 @@ Tile* Player::GetCollidingPoleTile() {
 void Player::look(directionEnum dir) {
     if (!isOnGround) return;
 
-    // Needs a timer, probably based on frametime
-    // At maybe half a second (long after the animation has been held at its last frame),
-    //  the camera movement actually happens
+    lookTimer++;
 
+    if (dir == UP) {
+        animate(30);
+    } else if (dir == DOWN) {
+        if (frame < 2)
+            animate(31);
+
+        if (lookTimer >= FRAMES_PER_SECOND / 2 && hitbox.y > camera.GetTopMargin())
+            camera.LookDown();
+    }
 }
 
 void Player::climb(directionEnum dir) {
@@ -354,16 +364,19 @@ void Player::processKeyboard() {
         stopwalk();
     }
 
-
     if (state[SDL_SCANCODE_LCTRL]) {
         jump();
+        lookTimer = 0;
         gController.IsHoldingCtrl = true;
     } else if (state[SDL_SCANCODE_UP] && !isOnPogo) {
         processUpArrow();
     } else if (state[SDL_SCANCODE_DOWN] && !isOnPogo) {
         processDownArrow();
     } else if (isOnPole) {
+        lookTimer = 0;
         stopClimb();
+    } else {
+        lookTimer = 0;
     }
 
     if (state[SDL_SCANCODE_SPACE] && !gController.IsHoldingSpace) {
@@ -524,6 +537,8 @@ Player::Player() {
     animState = 2;
     facing = LEFT;
     idle = true;
+
+    lookTimer = 0;
 
     isOnGround = true;
     isOnPogo = false;

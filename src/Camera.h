@@ -12,13 +12,18 @@ class Camera {
         int bottomMargin;
         int leftBubble;
         int rightBubble;
+        int yOffset;
 
     public:
         Camera();
         void Update(SDL_Rect keenHitbox, bool isOnGround);
         SDL_Rect GetBox();
+        void LookUp();
+        void LookDown();
         int GetX();
         int GetY();
+        int GetRight();
+        int GetBottom();
         int GetTopMargin();
         int GetBottomMargin();
 };

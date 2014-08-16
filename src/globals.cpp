@@ -31,3 +31,5 @@ std::vector<SDL_Rect> gTileClips(TOTAL_TILE_TYPES);
 const int FRAMETIME = 2;
 
 std::vector<Sprite*> gSpriteBatch(1);
+
+Camera camera;

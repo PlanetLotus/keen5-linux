@@ -11,6 +11,7 @@ Camera::Camera() {
     bottomMargin = box.y + box.h - SCREEN_HEIGHT / 20;
     leftBubble = box.x + SCREEN_WIDTH / 3;
     rightBubble = box.x + SCREEN_WIDTH * 2 / 3;
+    yOffset = 0;
 }
 
 void Camera::Update(SDL_Rect keenHitbox, bool isOnGround) {
@@ -34,12 +35,15 @@ void Camera::Update(SDL_Rect keenHitbox, bool isOnGround) {
     // Center vertically if keen is on ground
     if (isOnGround) {
         int desiredY = (keenHitbox.y + keenHitbox.h / 2) - SCREEN_HEIGHT / 2;
-        box.y -= (box.y - desiredY) / smoothUpdateFactor;
-    } else if (keenHitbox.y < topMargin)
+        box.y -= (box.y - desiredY - yOffset) / smoothUpdateFactor;
+    } else if (keenHitbox.y < topMargin) {
         // if not on ground, update MARGIN ONLY if keen is at camera margin
         box.y -= topMargin - keenHitbox.y;
-    else if (keenHitbox.y + keenHitbox.h > bottomMargin)
+        yOffset = 0;
+    } else if (keenHitbox.y + keenHitbox.h > bottomMargin) {
         box.y += keenHitbox.y + keenHitbox.h - bottomMargin;
+        yOffset = 0;
+    }
 
     // Keep camera in level bounds
     if (box.x < 0)
@@ -47,14 +51,26 @@ void Camera::Update(SDL_Rect keenHitbox, bool isOnGround) {
     else if (box.x > LEVEL_WIDTH - box.w)
         box.x = LEVEL_WIDTH - box.w;
 
-    if (box.y < 0)
+    if (box.y < 0) {
+        yOffset -= box.y;
         box.y = 0;
-    else if (box.y > LEVEL_HEIGHT - box.h)
+    } else if (box.y > LEVEL_HEIGHT - box.h) {
+        //yOffset += box.y;
         box.y = LEVEL_HEIGHT - box.h;
+    }
+}
+
+void Camera::LookUp() { }
+
+void Camera::LookDown() {
+    yOffset += 5;
+    printf("%d\n", yOffset);
 }
 
 SDL_Rect Camera::GetBox() { return box; }
 int Camera::GetX() { return box.x; }
 int Camera::GetY() { return box.y; }
+int Camera::GetRight() { return box.x + box.w; }
+int Camera::GetBottom() { return box.y + box.h; }
 int Camera::GetTopMargin() { return topMargin; }
 int Camera::GetBottomMargin() { return bottomMargin; }

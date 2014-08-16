@@ -26,7 +26,6 @@ int main (int argc, char **args) {
     freopen("CON", "w", stderr);
     */
 
-    Camera camera;
     Sprite* character = new Player();
     Player* characterPlayerPtr = dynamic_cast<Player*>(character);
     gSpriteBatch[0] = character;
@@ -66,6 +65,10 @@ int main (int argc, char **args) {
         SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0xFF);
         SDL_RenderClear(renderer);
 
+        // Update units
+        for (unsigned int i = 0; i < gSpriteBatch.size(); i++)
+            gSpriteBatch[i]->update();
+
         // Render tiles - Layer 0 (Before units)
         for (unsigned int i=0; i<gTiles.size(); i++) {
             for (unsigned int j=0; j<gTiles[i].size(); j++) {
@@ -74,11 +77,6 @@ int main (int argc, char **args) {
             }
         }
 
-        // Update units and draw them
-        // Be sure to update THEN draw. Don't let the order get messed up across several units
-        // All logic should be handled before any of the units on-screen get updated
-        for (unsigned int i = 0; i < gSpriteBatch.size(); i++)
-            gSpriteBatch[i]->update();
         for (unsigned int i = 0; i < gSpriteBatch.size(); i++)
             gSpriteBatch[i]->draw(camera.GetBox());
 

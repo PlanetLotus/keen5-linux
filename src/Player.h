@@ -17,6 +17,8 @@ class Player : public Sprite {
         std::vector<SDL_Rect> anims[32];
         bool isAnimLocked;
 
+        int lookTimer;
+
         directionEnum facing;
         bool idle;
 
