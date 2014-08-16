@@ -43,6 +43,8 @@ void Camera::Update(SDL_Rect keenHitbox, bool isOnGround) {
     } else if (keenHitbox.y + keenHitbox.h > bottomMargin) {
         box.y += keenHitbox.y + keenHitbox.h - bottomMargin;
         yOffset = 0;
+    } else {
+        yOffset = 0;
     }
 
     // Keep camera in level bounds
@@ -54,17 +56,18 @@ void Camera::Update(SDL_Rect keenHitbox, bool isOnGround) {
     if (box.y < 0) {
         yOffset -= box.y;
         box.y = 0;
-    } else if (box.y > LEVEL_HEIGHT - box.h) {
-        //yOffset += box.y;
+    } else if (box.y + box.h > LEVEL_HEIGHT) {
+        yOffset -= box.y + box.h - LEVEL_HEIGHT;
         box.y = LEVEL_HEIGHT - box.h;
     }
 }
 
-void Camera::LookUp() { }
+void Camera::LookUp() {
+    yOffset -= 5;
+}
 
 void Camera::LookDown() {
     yOffset += 5;
-    printf("%d\n", yOffset);
 }
 
 SDL_Rect Camera::GetBox() { return box; }

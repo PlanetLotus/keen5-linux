@@ -252,6 +252,9 @@ void Player::look(directionEnum dir) {
 
     if (dir == UP) {
         animate(30);
+
+        if (lookTimer >= FRAMES_PER_SECOND / 2 && hitbox.y + hitbox.h < camera.GetBottomMargin())
+            camera.LookUp();
     } else if (dir == DOWN) {
         if (frame < 2)
             animate(31);
