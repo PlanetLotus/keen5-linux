@@ -7,10 +7,9 @@ modification (and delusional goals).
 
 <ul>
     <li>Add hanging from ledge</li>
-    <li>"Jump down" from platformers that have top but not bottom collision</li>
-    <li>Look up/down</li>
-    <li>Write basic enemy AI (animation optional)</li>
-    <li>Pit the player against the basic enemy AI</li>
+    <li>"Jump down" from platforms that have top but not bottom collision</li>
+    <li>Moving platforms</li>
+    <li>Enemy AI</li>
 </ul>
 
 <h2>Noteworthy progress</h2>
@@ -18,7 +17,7 @@ modification (and delusional goals).
 Level editor outputs a file that the game then reads in. Tile placement and tile collision info are included.
 Level editor is also capable of loading saved files and overwriting them.
 
-Left/right movement, jump, pogo, climb and shoot implemented with animations.
+Left/right movement, look up/down, jump, pogo, climb and shoot implemented with animations.
 
 Camera scrolling - enables levels larger than the screen. Only actually renders what fits on the screen to save on processing cycles.
 
