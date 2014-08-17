@@ -14,12 +14,13 @@ all: $(PROG)
 
 $(PROG): $(OBJS)
 	$(CC) $(CFLAGS) $(INCLUDES) -o $(PROG) $(OBJS) $(LFLAGS) $(LIBS)
+	mv *.o ../obj/
 
 .cpp.o:
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 clean:
-	rm *.o $(PROG)
+	rm ../obj/*.o $(PROG)
 
 depend: $(SRCS)
 	makedepend $(INCLUDES) $^
