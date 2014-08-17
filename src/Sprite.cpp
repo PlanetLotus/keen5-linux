@@ -9,10 +9,6 @@ Sprite::~Sprite() {
     delete srcClip;
 }
 
-void Sprite::update() {}
-
-void Sprite::draw(SDL_Rect cameraBox) {}
-
 vector<Tile*> Sprite::getTilesToLeft() {
     SDL_Rect nextHitbox = { hitbox.x + (int)xVel, hitbox.y, hitbox.w, hitbox.h };
 

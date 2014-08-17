@@ -18,8 +18,8 @@ class Sprite {
         float yVelRem;
     public:
         virtual ~Sprite();
-        virtual void update();
-        virtual void draw(SDL_Rect cameraBox);
+        virtual void update() = 0;
+        virtual void draw(SDL_Rect cameraBox) = 0;
         TileCollisionInfo checkTileCollisionLR();
         TileCollisionInfo checkTileCollisionTB();
         std::vector<Tile*> getTilesToLeft();
