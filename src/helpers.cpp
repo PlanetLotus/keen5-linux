@@ -1,8 +1,4 @@
-#include "globals.h"
 #include "helpers.h"
-#include "Texture.h"
-
-using namespace std;
 
 bool isTopColliding(SDL_Rect before, SDL_Rect after, SDL_Rect obstacle) {
     int bottomBefore = before.y + before.h;

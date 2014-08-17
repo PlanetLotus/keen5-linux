@@ -113,11 +113,11 @@ bool init() {
 
     // Set up screen
     SDL_CreateWindowAndRenderer(
-                                SCREEN_WIDTH,
-                                SCREEN_HEIGHT,
-                                SDL_WINDOW_SHOWN,
-                                &gWindow,
-                                &gRenderer
+        SCREEN_WIDTH,
+        SCREEN_HEIGHT,
+        SDL_WINDOW_SHOWN,
+        &gWindow,
+        &gRenderer
     );
 
     // Make sure window was successfully set up
