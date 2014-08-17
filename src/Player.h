@@ -43,7 +43,6 @@ class Player : public Sprite {
         void pogo();
         void look(directionEnum dir);
         void climb(directionEnum dir);
-        void enter_door();
         void fall();
         void update();
         void animate(int nextState, int frametime = FRAMETIME);

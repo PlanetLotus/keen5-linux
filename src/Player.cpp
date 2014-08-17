@@ -283,10 +283,6 @@ void Player::climb(directionEnum dir) {
     }
 }
 
-void Player::enter_door() {
-    return;
-}
-
 void Player::togglePogo() {
     if (!isOnPogo) {
         isOnPogo = true;

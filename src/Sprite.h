@@ -30,8 +30,6 @@ class Sprite {
         Tile* GetTileCollidingWithLeft();
         Tile* GetTileCollidingWithBottom(bool checkOnlyTouching = false);
         Tile* GetTileCollidingWithTop();
-        int GetX();
-        int GetY();
         SDL_Rect GetBox();
 };
 

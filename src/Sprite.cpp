@@ -210,6 +210,4 @@ Tile* Sprite::GetTileCollidingWithTop() {
     return NULL;
 }
 
-int Sprite::GetX() { return hitbox.x; }
-int Sprite::GetY() { return hitbox.y; }
 SDL_Rect Sprite::GetBox() { return hitbox; }
