@@ -30,7 +30,7 @@ class Tile {
             bool collideT, bool collideR, bool collideB, bool collideL, int layer, bool isPole);
 
         // Shows the tile
-        void render(SDL_Rect camera);
+        void render(SDL_Rect cameraBox);
 
         SDL_Rect getBox();
         bool IsColliding(TileProperty tileProperty, SDL_Rect hitbox, SDL_Rect nextHitbox);

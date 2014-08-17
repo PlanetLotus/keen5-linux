@@ -19,7 +19,7 @@ class Sprite {
     public:
         virtual ~Sprite();
         virtual void update();
-        virtual void draw(SDL_Rect camera);
+        virtual void draw(SDL_Rect cameraBox);
         TileCollisionInfo CheckTileCollisionLR();
         TileCollisionInfo CheckTileCollisionTB();
         std::vector<Tile*> GetTilesToLeft();

@@ -14,7 +14,7 @@ class BlasterShot : public Sprite {
         BlasterShot(int startX, int startY, float velocityX, float velocityY);
         void update();
         void animate(int nextState);
-        void draw(SDL_Rect camera);
+        void draw(SDL_Rect cameraBox);
         void expire();
         void die();
 };

@@ -102,8 +102,8 @@ void BlasterShot::animate(int nextState) {
     srcClip = &anims[animState][frame / FRAMETIME];
 }
 
-void BlasterShot::draw(SDL_Rect camera) {
-    gKeenTexture->render(hitbox.x - camera.x, hitbox.y - camera.y, srcClip);
+void BlasterShot::draw(SDL_Rect cameraBox) {
+    gKeenTexture->render(hitbox.x - cameraBox.x, hitbox.y - cameraBox.y, srcClip);
 }
 
 void BlasterShot::expire() {

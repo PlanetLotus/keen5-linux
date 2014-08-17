@@ -37,9 +37,9 @@ Tile::Tile(int srcX, int srcY, int destX, int destY, int lHeight, int rHeight,
     IsPole = isPole;
 }
 
-void Tile::render(SDL_Rect camera) {
-    if (IsTileOnScreen(&destBox, &camera))
-        gMaskTexture->render(destBox.x - camera.x, destBox.y - camera.y, &srcBox);
+void Tile::render(SDL_Rect cameraBox) {
+    if (IsTileOnScreen(&destBox, &cameraBox))
+        gMaskTexture->render(destBox.x - cameraBox.x, destBox.y - cameraBox.y, &srcBox);
 }
 
 bool Tile::IsColliding(TileProperty tileProperty, SDL_Rect hitbox, SDL_Rect nextHitbox) {
