@@ -5,34 +5,28 @@
 #include "SDL.h"
 #include "SDL_ttf.h"
 
-class Texture
-{
+class Texture {
     public:
         Texture();
         ~Texture();
 
         // Loads image at specified path
-        bool loadFromFile( std::string path, bool doSetColorKey );
-
-        #ifdef _SDL_TTF_H
-        // Creates image from font string
-        bool loadFromRenderedText( std::string textureText, SDL_Color textColor );
-        #endif
+        bool loadFromFile(std::string path, bool doSetColorKey);
 
         // Deallocates texture
         void free();
 
         // Set color modulation
-        void setColor( Uint8 red, Uint8 green, Uint8 blue );
+        void setColor(Uint8 red, Uint8 green, Uint8 blue);
 
         // Set blending
-        void setBlendMode( SDL_BlendMode blending );
+        void setBlendMode(SDL_BlendMode blending);
 
         // Set alpha modulation
-        void setAlpha( Uint8 alpha );
+        void setAlpha(Uint8 alpha);
 
         // Renders texture at given point
-        void render( int destX, int destY, SDL_Rect* srcClip = NULL, double angle = 0.0, SDL_Point* center = NULL, SDL_RendererFlip flip = SDL_FLIP_NONE );
+        void render(int destX, int destY, SDL_Rect* srcClip = NULL, double angle = 0.0, SDL_Point* center = NULL, SDL_RendererFlip flip = SDL_FLIP_NONE);
 
         // Gets image dimensions
         int getWidth();
@@ -40,11 +34,11 @@ class Texture
 
     private:
         // The actual hardware texture
-        SDL_Texture* mTexture;
+        SDL_Texture* texture;
 
         // Image dimensions
-        int mWidth;
-        int mHeight;
+        int width;
+        int height;
 };
 
 #endif
