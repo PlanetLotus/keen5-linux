@@ -5,6 +5,7 @@
 #include "globals.h"
 #include "Player.h"
 #include "SDL_image.h"
+#include "Sparky.h"
 #include "Timer.h"
 
 using namespace std;
@@ -27,7 +28,9 @@ int main (int argc, char **args) {
 
     Sprite* character = new Player();
     Player* characterPlayerPtr = dynamic_cast<Player*>(character);
+    Sprite* sparky = new Sparky();
     gSpriteBatch[0] = character;
+    gSpriteBatch[1] = sparky;
 
     while (running) {
         // Start timer
