@@ -34,6 +34,7 @@ class Player : public Sprite {
         void stopClimb();
         void snapToPole(Tile* pole, directionEnum facing);
         Tile* getCollidingPoleTile();
+        void animate(int nextState, int frametime = FRAMETIME);
     public:
         Player();
         void shoot(bool isPressingUp, bool isPressingDown);
@@ -45,7 +46,6 @@ class Player : public Sprite {
         void climb(directionEnum dir);
         void fall();
         void update();
-        void animate(int nextState, int frametime = FRAMETIME);
         void draw(SDL_Rect cameraBox);
         bool getIsOnGround();
 };

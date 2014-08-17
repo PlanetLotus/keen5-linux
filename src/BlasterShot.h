@@ -10,10 +10,10 @@ class BlasterShot : public Sprite {
         int expireTimer;
 
         std::vector<SDL_Rect> anims[2];
+        void animate(int nextState);
     public:
         BlasterShot(int startX, int startY, float velocityX, float velocityY);
         void update();
-        void animate(int nextState);
         void draw(SDL_Rect cameraBox);
         void expire();
         void die();
