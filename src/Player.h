@@ -7,7 +7,7 @@
 
 class Player : public Sprite {
     private:
-        enum directionEnum {LEFT, RIGHT, UP, DOWN, STOP};
+        enum directionEnum { LEFT, RIGHT, UP, DOWN, STOP };
 
         float xAccel;
         float yAccel;
@@ -30,10 +30,10 @@ class Player : public Sprite {
         void processKeyboard(); // Call player actions based on keyboard input
         void processUpArrow();
         void processDownArrow();
-        void stopwalk();
+        void stopWalk();
         void stopClimb();
         void snapToPole(Tile* pole, directionEnum facing);
-        Tile* GetCollidingPoleTile();
+        Tile* getCollidingPoleTile();
     public:
         Player();
         void shoot(bool isPressingUp, bool isPressingDown);
@@ -47,7 +47,7 @@ class Player : public Sprite {
         void update();
         void animate(int nextState, int frametime = FRAMETIME);
         void draw(SDL_Rect cameraBox);
-        bool GetIsOnGround();
+        bool getIsOnGround();
 };
 
 #endif

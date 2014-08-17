@@ -1,7 +1,7 @@
 #include "Controller.h"
 
 Controller::Controller() {
-    IsHoldingSpace = false;
-    IsHoldingCtrl = false;
-    IsHoldingAlt = false;
+    isHoldingSpace = false;
+    isHoldingCtrl = false;
+    isHoldingAlt = false;
 }

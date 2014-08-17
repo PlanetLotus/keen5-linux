@@ -3,10 +3,10 @@
 
 #include "SDL.h"
 
-bool IsTopColliding(SDL_Rect before, SDL_Rect after, SDL_Rect obstacle);
-bool IsBottomColliding(SDL_Rect before, SDL_Rect after, SDL_Rect obstacle);
-bool IsLeftColliding(SDL_Rect before, SDL_Rect after, SDL_Rect obstacle);
-bool IsRightColliding(SDL_Rect before, SDL_Rect after, SDL_Rect obstacle);
-bool IsTileOnScreen(SDL_Rect* tileBox, SDL_Rect* cameraBox);
+bool isTopColliding(SDL_Rect before, SDL_Rect after, SDL_Rect obstacle);
+bool isBottomColliding(SDL_Rect before, SDL_Rect after, SDL_Rect obstacle);
+bool isLeftColliding(SDL_Rect before, SDL_Rect after, SDL_Rect obstacle);
+bool isRightColliding(SDL_Rect before, SDL_Rect after, SDL_Rect obstacle);
+bool isTileOnScreen(SDL_Rect* tileBox, SDL_Rect* cameraBox);
 
 #endif

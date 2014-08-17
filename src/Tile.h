@@ -33,20 +33,20 @@ class Tile {
         void render(SDL_Rect cameraBox);
 
         SDL_Rect getBox();
-        bool IsColliding(TileProperty tileProperty, SDL_Rect hitbox, SDL_Rect nextHitbox);
-        bool IsTouching(TileProperty tileProperty, SDL_Rect nextHitbox);
-        bool IsSloped();
-        float GetSlope();
-        int GetLeftHeight();
-        int GetRightHeight();
-        bool HasCollision();
-        bool CollideTop();
-        bool CollideRight();
-        bool CollideBottom();
-        bool CollideLeft();
+        bool isColliding(TileProperty tileProperty, SDL_Rect hitbox, SDL_Rect nextHitbox);
+        bool isTouching(TileProperty tileProperty, SDL_Rect nextHitbox);
+        bool getIsSloped();
+        float getSlope();
+        int getLeftHeight();
+        int getRightHeight();
+        bool getHasCollision();
+        bool getCollideTop();
+        bool getCollideRight();
+        bool getCollideBottom();
+        bool getCollideLeft();
 
-        bool IsPole;
-        int Layer;
+        bool isPole;
+        int layer;
 };
 
 #endif

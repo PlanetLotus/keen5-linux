@@ -14,7 +14,7 @@ Camera::Camera() {
     yOffset = 0;
 }
 
-void Camera::Update(SDL_Rect keenHitbox, bool isOnGround) {
+void Camera::update(SDL_Rect keenHitbox, bool isOnGround) {
     leftBubble = box.x + SCREEN_WIDTH / 3;
     rightBubble = box.x + SCREEN_WIDTH * 2 / 3;
 
@@ -62,18 +62,18 @@ void Camera::Update(SDL_Rect keenHitbox, bool isOnGround) {
     }
 }
 
-void Camera::LookUp() {
+void Camera::lookUp() {
     yOffset -= 5;
 }
 
-void Camera::LookDown() {
+void Camera::lookDown() {
     yOffset += 5;
 }
 
-SDL_Rect Camera::GetBox() { return box; }
-int Camera::GetX() { return box.x; }
-int Camera::GetY() { return box.y; }
-int Camera::GetRight() { return box.x + box.w; }
-int Camera::GetBottom() { return box.y + box.h; }
-int Camera::GetTopMargin() { return topMargin; }
-int Camera::GetBottomMargin() { return bottomMargin; }
+SDL_Rect Camera::getBox() { return box; }
+int Camera::getX() { return box.x; }
+int Camera::getY() { return box.y; }
+int Camera::getRight() { return box.x + box.w; }
+int Camera::getBottom() { return box.y + box.h; }
+int Camera::getTopMargin() { return topMargin; }
+int Camera::getBottomMargin() { return bottomMargin; }

@@ -47,26 +47,26 @@ void BlasterShot::update() {
     // Check left/right collision
     TileCollisionInfo tciLR;
     if (xVel != 0) {
-        tciLR = CheckTileCollisionLR();
+        tciLR = checkTileCollisionLR();
 
         // Set properties based on x-collision
-        if (tciLR.IsLeftColliding()) {
-            xVel = (tciLR.TileCollidingWithLeft->getBox().x + tciLR.TileCollidingWithLeft->getBox().w) - hitbox.x;
-        } else if (tciLR.IsRightColliding()) {
-            xVel = tciLR.TileCollidingWithRight->getBox().x - (hitbox.x + hitbox.w);
+        if (tciLR.isLeftColliding()) {
+            xVel = (tciLR.tileCollidingWithLeft->getBox().x + tciLR.tileCollidingWithLeft->getBox().w) - hitbox.x;
+        } else if (tciLR.isRightColliding()) {
+            xVel = tciLR.tileCollidingWithRight->getBox().x - (hitbox.x + hitbox.w);
         }
     }
 
     // Check top/bottom collision
     TileCollisionInfo tciTB;
     if (yVel != 0) {
-        tciTB = CheckTileCollisionTB();
+        tciTB = checkTileCollisionTB();
 
         // Set properties based on y-collision
-        if (tciTB.IsTopColliding()) {
-            yVel = (tciTB.TileCollidingWithTop->getBox().y + tciTB.TileCollidingWithTop->getBox().h) - hitbox.y;
-        } else if (tciTB.IsBottomColliding()) {
-            yVel = tciTB.TileCollidingWithBottom->getBox().y - (hitbox.y + hitbox.h);
+        if (tciTB.isTopColliding()) {
+            yVel = (tciTB.tileCollidingWithTop->getBox().y + tciTB.tileCollidingWithTop->getBox().h) - hitbox.y;
+        } else if (tciTB.isBottomColliding()) {
+            yVel = tciTB.tileCollidingWithBottom->getBox().y - (hitbox.y + hitbox.h);
         }
     }
 
@@ -82,8 +82,8 @@ void BlasterShot::update() {
     hitbox.y += yVel;
 
     // Reset velocity if collision
-    if (tciTB.IsTopColliding() || tciTB.IsBottomColliding()) yVel = 0;
-    if (tciLR.IsLeftColliding() || tciLR.IsRightColliding()) xVel = 0;
+    if (tciTB.isTopColliding() || tciTB.isBottomColliding()) yVel = 0;
+    if (tciLR.isLeftColliding() || tciLR.isRightColliding()) xVel = 0;
 }
 
 void BlasterShot::animate(int nextState) {

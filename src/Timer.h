@@ -20,10 +20,10 @@ class Timer {
         void pause();
         void unpause();
 
-        int get_ticks();
+        int getTicks();
 
-        bool is_started();
-        bool is_paused();
+        bool isStarted();
+        bool isPaused();
 };
 
 #endif

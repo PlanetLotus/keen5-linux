@@ -3,41 +3,41 @@
 using namespace std;
 
 TileCollisionInfo::TileCollisionInfo() {
-    IsTopChecked = false;
-    IsBottomChecked = false;
-    IsRightChecked = false;
-    IsLeftChecked = false;
+    isTopChecked = false;
+    isBottomChecked = false;
+    isRightChecked = false;
+    isLeftChecked = false;
 
-    TileCollidingWithTop = NULL;
-    TileCollidingWithBottom = NULL;
-    TileCollidingWithLeft = NULL;
-    TileCollidingWithRight = NULL;
+    tileCollidingWithTop = NULL;
+    tileCollidingWithBottom = NULL;
+    tileCollidingWithLeft = NULL;
+    tileCollidingWithRight = NULL;
 }
 
 TileCollisionInfo::TileCollisionInfo(TileCollisionInfo tciLR, TileCollisionInfo tciTB) {
-    IsLeftChecked = tciLR.IsLeftChecked;
-    IsRightChecked = tciLR.IsRightChecked;
-    IsTopChecked = tciTB.IsTopChecked;
-    IsBottomChecked = tciTB.IsBottomChecked;
+    isLeftChecked = tciLR.isLeftChecked;
+    isRightChecked = tciLR.isRightChecked;
+    isTopChecked = tciTB.isTopChecked;
+    isBottomChecked = tciTB.isBottomChecked;
 
-    TileCollidingWithLeft = tciLR.TileCollidingWithLeft;
-    TileCollidingWithRight = tciLR.TileCollidingWithRight;
-    TileCollidingWithTop = tciLR.TileCollidingWithTop;
-    TileCollidingWithBottom = tciLR.TileCollidingWithBottom;
+    tileCollidingWithLeft = tciLR.tileCollidingWithLeft;
+    tileCollidingWithRight = tciLR.tileCollidingWithRight;
+    tileCollidingWithTop = tciLR.tileCollidingWithTop;
+    tileCollidingWithBottom = tciLR.tileCollidingWithBottom;
 }
 
-bool TileCollisionInfo::IsTopColliding() {
-    return TileCollidingWithTop != NULL;
+bool TileCollisionInfo::isTopColliding() {
+    return tileCollidingWithTop != NULL;
 }
 
-bool TileCollisionInfo::IsBottomColliding() {
-    return TileCollidingWithBottom != NULL;
+bool TileCollisionInfo::isBottomColliding() {
+    return tileCollidingWithBottom != NULL;
 }
 
-bool TileCollisionInfo::IsRightColliding() {
-    return TileCollidingWithRight != NULL;
+bool TileCollisionInfo::isRightColliding() {
+    return tileCollidingWithRight != NULL;
 }
 
-bool TileCollisionInfo::IsLeftColliding() {
-    return TileCollidingWithLeft != NULL;
+bool TileCollisionInfo::isLeftColliding() {
+    return tileCollidingWithLeft != NULL;
 }

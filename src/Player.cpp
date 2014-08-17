@@ -73,7 +73,7 @@ void Player::walk(directionEnum dir) {
     // Does this special case warrant a change of method name to something more general?
     if (isOnPole) {
         if (isFacingChanging) {
-            Tile* pole = GetCollidingPoleTile();
+            Tile* pole = getCollidingPoleTile();
             snapToPole(pole, facing);
             animate(21 + facing);
         }
@@ -98,7 +98,7 @@ void Player::walk(directionEnum dir) {
     }
 }
 
-void Player::stopwalk() {
+void Player::stopWalk() {
     // This is not synonymous with idle. This is specifically NOT holding left or right arrow keys.
     // It's not idling because we could be falling, shooting, etc.
 
@@ -131,7 +131,7 @@ void Player::stopwalk() {
 
 void Player::stopClimb() {
     if (animState != 21 + facing) {
-        Tile* pole = GetCollidingPoleTile();
+        Tile* pole = getCollidingPoleTile();
         snapToPole(pole, facing);
         animate(21 + facing);
     } else if (frame / FRAMETIME != 0) {
@@ -148,7 +148,7 @@ void Player::processUpArrow() {
         return;
     }
 
-    Tile* pole = GetCollidingPoleTile();
+    Tile* pole = getCollidingPoleTile();
     if (pole != NULL) {
         snapToPole(pole, facing);
         animate(21 + facing);
@@ -164,10 +164,10 @@ void Player::processDownArrow() {
         return;
     }
 
-    Tile* pole = GetCollidingPoleTile();
+    Tile* pole = getCollidingPoleTile();
     if (pole != NULL) {
-        Tile* tileCollidingWithBottom = GetTileCollidingWithBottom(true);
-        if (tileCollidingWithBottom != NULL && !tileCollidingWithBottom->CollideBottom()) {
+        Tile* tileCollidingWithBottom = getTileCollidingWithBottom(true);
+        if (tileCollidingWithBottom != NULL && !tileCollidingWithBottom->getCollideBottom()) {
             snapToPole(pole, facing);
             animate(21 + facing);
             return;
@@ -195,14 +195,14 @@ void Player::snapToPole(Tile* pole, directionEnum facing) {
     }
 }
 
-Tile* Player::GetCollidingPoleTile() {
+Tile* Player::getCollidingPoleTile() {
     SDL_Rect nextHitbox = { hitbox.x + (int)xVel, hitbox.y, hitbox.w, hitbox.h };
-    vector<Tile*> leftTiles = GetTilesToLeft();
+    vector<Tile*> leftTiles = getTilesToLeft();
 
     for (unsigned int i = 0; i < leftTiles.size(); i++) {
         SDL_Rect tileBox = leftTiles[i]->getBox();
         if (tileBox.y + tileBox.h > hitbox.y && hitbox.y >= tileBox.y &&
-            leftTiles[i]->IsColliding(Tile::ISPOLE, hitbox, nextHitbox)) {
+            leftTiles[i]->isColliding(Tile::ISPOLE, hitbox, nextHitbox)) {
 
             SDL_Rect poleBox = leftTiles[i]->getBox();
             int poleRight = poleBox.x + poleBox.w;
@@ -220,12 +220,12 @@ Tile* Player::GetCollidingPoleTile() {
     }
 
     // Now do same for rightTiles
-    vector<Tile*> rightTiles = GetTilesToRight();
+    vector<Tile*> rightTiles = getTilesToRight();
 
     for (unsigned int i = 0; i < rightTiles.size(); i++) {
         SDL_Rect tileBox = rightTiles[i]->getBox();
         if (tileBox.y + tileBox.h > hitbox.y && hitbox.y >= tileBox.y &&
-            rightTiles[i]->IsColliding(Tile::ISPOLE, hitbox, nextHitbox)) {
+            rightTiles[i]->isColliding(Tile::ISPOLE, hitbox, nextHitbox)) {
 
             int playerRight = hitbox.x + hitbox.w;
             SDL_Rect poleBox = rightTiles[i]->getBox();
@@ -253,19 +253,19 @@ void Player::look(directionEnum dir) {
     if (dir == UP) {
         animate(30);
 
-        if (lookTimer >= FRAMES_PER_SECOND / 2 && hitbox.y + hitbox.h < camera.GetBottomMargin())
-            camera.LookUp();
+        if (lookTimer >= FRAMES_PER_SECOND / 2 && hitbox.y + hitbox.h < gCamera.getBottomMargin())
+            gCamera.lookUp();
     } else if (dir == DOWN) {
         if (frame < 2)
             animate(31);
 
-        if (lookTimer >= FRAMES_PER_SECOND / 2 && hitbox.y > camera.GetTopMargin())
-            camera.LookDown();
+        if (lookTimer >= FRAMES_PER_SECOND / 2 && hitbox.y > gCamera.getTopMargin())
+            gCamera.lookDown();
     }
 }
 
 void Player::climb(directionEnum dir) {
-    if (dir == UP && GetCollidingPoleTile() != NULL) {
+    if (dir == UP && getCollidingPoleTile() != NULL) {
         yVel = -3;
         animate(21 + facing, 3);
     } else if (dir == DOWN) {
@@ -274,10 +274,10 @@ void Player::climb(directionEnum dir) {
         animate(23, frametime);
 
         if (frame / frametime == 0) {
-            Tile* pole = GetCollidingPoleTile();
+            Tile* pole = getCollidingPoleTile();
             snapToPole(pole, RIGHT);
         } else if (frame / frametime == 2) {
-            Tile* pole = GetCollidingPoleTile();
+            Tile* pole = getCollidingPoleTile();
             snapToPole(pole, LEFT);
         }
     }
@@ -308,13 +308,13 @@ void Player::pogo() {
 }
 
 void Player::jump() {
-    if (gController.IsHoldingCtrl && yVel < 0) {
+    if (gController.isHoldingCtrl && yVel < 0) {
         if (isOnPogo)
             yAccel = -1.5;
         else
             yAccel = -1.3;
         yVel += yAccel;
-    } else if (isOnGround && !gController.IsHoldingCtrl) {
+    } else if (isOnGround && !gController.isHoldingCtrl) {
         yAccel = -21;
         yVel += yAccel;
         isOnGround = false; // This isn't ideal. It's assuming nothing stopped the jump.
@@ -348,9 +348,9 @@ void Player::processKeyboard() {
     // Read in current keyboard state and update object accordingly
     const Uint8* state = SDL_GetKeyboardState(NULL);
 
-    if (state[SDL_SCANCODE_LALT] && !gController.IsHoldingAlt && !isOnPole) {
+    if (state[SDL_SCANCODE_LALT] && !gController.isHoldingAlt && !isOnPole) {
         togglePogo();
-        gController.IsHoldingAlt = true;
+        gController.isHoldingAlt = true;
     } else if (isOnPogo) {
         pogo();
     }
@@ -360,13 +360,13 @@ void Player::processKeyboard() {
     } else if (state[SDL_SCANCODE_RIGHT]) {
         walk(RIGHT);
     } else if (!isOnPole) {
-        stopwalk();
+        stopWalk();
     }
 
     if (state[SDL_SCANCODE_LCTRL]) {
         jump();
         lookTimer = 0;
-        gController.IsHoldingCtrl = true;
+        gController.isHoldingCtrl = true;
     } else if (state[SDL_SCANCODE_UP] && !isOnPogo) {
         processUpArrow();
     } else if (state[SDL_SCANCODE_DOWN] && !isOnPogo) {
@@ -378,9 +378,9 @@ void Player::processKeyboard() {
         lookTimer = 0;
     }
 
-    if (state[SDL_SCANCODE_SPACE] && !gController.IsHoldingSpace) {
+    if (state[SDL_SCANCODE_SPACE] && !gController.isHoldingSpace) {
         shoot(state[SDL_SCANCODE_UP], state[SDL_SCANCODE_DOWN]);
-        gController.IsHoldingSpace = true;
+        gController.isHoldingSpace = true;
     }
 }
 
@@ -408,39 +408,39 @@ void Player::update() {
     // Check left/right collision
     TileCollisionInfo tciLR;
     if (xVel != 0) {
-        tciLR = CheckTileCollisionLR();
+        tciLR = checkTileCollisionLR();
 
         // Set properties based on x-collision
-        if (tciLR.IsLeftColliding()) {
-            xVel = (tciLR.TileCollidingWithLeft->getBox().x + tciLR.TileCollidingWithLeft->getBox().w) - hitbox.x;
-        } else if (tciLR.IsRightColliding()) {
-            xVel = tciLR.TileCollidingWithRight->getBox().x - (hitbox.x + hitbox.w);
+        if (tciLR.isLeftColliding()) {
+            xVel = (tciLR.tileCollidingWithLeft->getBox().x + tciLR.tileCollidingWithLeft->getBox().w) - hitbox.x;
+        } else if (tciLR.isRightColliding()) {
+            xVel = tciLR.tileCollidingWithRight->getBox().x - (hitbox.x + hitbox.w);
         }
     }
 
     // Check top/bottom collision
     TileCollisionInfo tciTB;
     if (yVel != 0) {
-        tciTB = CheckTileCollisionTB();
+        tciTB = checkTileCollisionTB();
 
         // Set properties based on y-collision
-        if (tciTB.IsBottomChecked)
-            isOnGround = tciTB.IsBottomColliding();
+        if (tciTB.isBottomChecked)
+            isOnGround = tciTB.isBottomColliding();
 
-        if (tciTB.IsTopColliding()) {
-            yVel = (tciTB.TileCollidingWithTop->getBox().y + tciTB.TileCollidingWithTop->getBox().h) - hitbox.y;
-        } else if (tciTB.IsBottomColliding() && (!isOnPole || tciTB.TileCollidingWithBottom->CollideBottom())) {
-            Tile* tile = tciTB.TileCollidingWithBottom;
+        if (tciTB.isTopColliding()) {
+            yVel = (tciTB.tileCollidingWithTop->getBox().y + tciTB.tileCollidingWithTop->getBox().h) - hitbox.y;
+        } else if (tciTB.isBottomColliding() && (!isOnPole || tciTB.tileCollidingWithBottom->getCollideBottom())) {
+            Tile* tile = tciTB.tileCollidingWithBottom;
             yVel = tile->getBox().y - (hitbox.y + hitbox.h);
 
-            if (tile->IsSloped()) {
+            if (tile->getIsSloped()) {
                 int xPosInTile = (hitbox.x + (int)xVel) - tile->getBox().x;
                 //printf("%d = %d - %d\n", xPosInTile, hitbox.x + (int)xVel, tile->getBox().x);
 
                 // y = mx + b
-                float yDesiredPosInTile = tile->GetSlope() * xPosInTile + tile->GetLeftHeight();
+                float yDesiredPosInTile = tile->getSlope() * xPosInTile + tile->getLeftHeight();
                 yVel += (TILE_HEIGHT - yDesiredPosInTile);
-                printf("%f: %f = %f * %d + %d\n", yVel, yDesiredPosInTile, tile->GetSlope(), xPosInTile, tile->GetLeftHeight());
+                printf("%f: %f = %f * %d + %d\n", yVel, yDesiredPosInTile, tile->getSlope(), xPosInTile, tile->getLeftHeight());
             }
         }
     }
@@ -465,11 +465,11 @@ void Player::update() {
     yVelRem = modf(yVel, &intPart);
 
     // Reset velocity if collision or on pole
-    if (tciTB.IsTopColliding() || tciTB.IsBottomColliding()) {
+    if (tciTB.isTopColliding() || tciTB.isBottomColliding()) {
         yVel = 0;
         yVelRem = 0;
     }
-    if (tciLR.IsLeftColliding() || tciLR.IsRightColliding()) {
+    if (tciLR.isLeftColliding() || tciLR.isRightColliding()) {
         xVel = 0;
         xVelRem = 0;
     }
@@ -479,7 +479,7 @@ void Player::update() {
         yVel = 0;
         yVelRem = 0;
 
-        if (tciTB.IsBottomColliding() && (!isOnPole || tciTB.TileCollidingWithBottom->CollideBottom()))
+        if (tciTB.isBottomColliding() && (!isOnPole || tciTB.tileCollidingWithBottom->getCollideBottom()))
             isOnPole = false;
     }
 }
@@ -514,7 +514,7 @@ void Player::draw(SDL_Rect cameraBox) {
     gKeenTexture->render(destX - cameraBox.x, destY - cameraBox.y, srcClip);
 }
 
-bool Player::GetIsOnGround() { return isOnGround; }
+bool Player::getIsOnGround() { return isOnGround; }
 
 Player::Player() {
     xVel = 0;

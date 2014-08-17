@@ -8,20 +8,20 @@ class TileCollisionInfo {
         TileCollisionInfo();
         TileCollisionInfo(TileCollisionInfo tciLR, TileCollisionInfo tciTB);
 
-        bool IsTopChecked;
-        bool IsBottomChecked;
-        bool IsRightChecked;
-        bool IsLeftChecked;
+        bool isTopChecked;
+        bool isBottomChecked;
+        bool isRightChecked;
+        bool isLeftChecked;
 
-        bool IsTopColliding();
-        bool IsBottomColliding();
-        bool IsRightColliding();
-        bool IsLeftColliding();
+        bool isTopColliding();
+        bool isBottomColliding();
+        bool isRightColliding();
+        bool isLeftColliding();
 
-        Tile* TileCollidingWithTop;
-        Tile* TileCollidingWithBottom;
-        Tile* TileCollidingWithLeft;
-        Tile* TileCollidingWithRight;
+        Tile* tileCollidingWithTop;
+        Tile* tileCollidingWithBottom;
+        Tile* tileCollidingWithLeft;
+        Tile* tileCollidingWithRight;
 };
 
 #endif

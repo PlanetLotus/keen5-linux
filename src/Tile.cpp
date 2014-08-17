@@ -32,38 +32,38 @@ Tile::Tile(int srcX, int srcY, int destX, int destY, int lHeight, int rHeight,
     else
         slope = 0;
 
-    Layer = layer;
+    this->layer = layer;
 
-    IsPole = isPole;
+    this->isPole = isPole;
 }
 
 void Tile::render(SDL_Rect cameraBox) {
-    if (IsTileOnScreen(&destBox, &cameraBox))
+    if (isTileOnScreen(&destBox, &cameraBox))
         gMaskTexture->render(destBox.x - cameraBox.x, destBox.y - cameraBox.y, &srcBox);
 }
 
-bool Tile::IsColliding(TileProperty tileProperty, SDL_Rect hitbox, SDL_Rect nextHitbox) {
+bool Tile::isColliding(TileProperty tileProperty, SDL_Rect hitbox, SDL_Rect nextHitbox) {
     if (tileProperty == ISPOLE) {
-        return IsPole && (IsRightColliding(hitbox, nextHitbox, destBox) ||
-            IsLeftColliding(hitbox, nextHitbox, destBox));
+        return isPole && (isRightColliding(hitbox, nextHitbox, destBox) ||
+            isLeftColliding(hitbox, nextHitbox, destBox));
     }
 
     if (tileProperty == LEFT)
-        return collideLeft && IsRightColliding(hitbox, nextHitbox, destBox);
+        return collideLeft && isRightColliding(hitbox, nextHitbox, destBox);
 
     if (tileProperty == RIGHT)
-        return collideRight && IsLeftColliding(hitbox, nextHitbox, destBox);
+        return collideRight && isLeftColliding(hitbox, nextHitbox, destBox);
 
     if (tileProperty == TOP)
-        return collideTop && IsBottomColliding(hitbox, nextHitbox, destBox);
+        return collideTop && isBottomColliding(hitbox, nextHitbox, destBox);
 
     if (tileProperty == BOTTOM)
-        return collideBottom && IsTopColliding(hitbox, nextHitbox, destBox);
+        return collideBottom && isTopColliding(hitbox, nextHitbox, destBox);
 
     return false;
 }
 
-bool Tile::IsTouching(TileProperty tileProperty, SDL_Rect nextHitbox) {
+bool Tile::isTouching(TileProperty tileProperty, SDL_Rect nextHitbox) {
     if (tileProperty == LEFT)
         return destBox.x == nextHitbox.x + nextHitbox.w;
 
@@ -80,12 +80,12 @@ bool Tile::IsTouching(TileProperty tileProperty, SDL_Rect nextHitbox) {
 }
 
 SDL_Rect Tile::getBox() { return destBox; }
-float Tile::GetSlope() { return slope; }
-int Tile::GetLeftHeight() { return leftHeight; }
-int Tile::GetRightHeight() { return rightHeight; }
-bool Tile::IsSloped() { return isSloped; }
-bool Tile::HasCollision() { return hasCollision; }
-bool Tile::CollideTop() { return collideTop; }
-bool Tile::CollideRight() { return collideRight; }
-bool Tile::CollideBottom() { return collideBottom; }
-bool Tile::CollideLeft() { return collideLeft; }
+float Tile::getSlope() { return slope; }
+int Tile::getLeftHeight() { return leftHeight; }
+int Tile::getRightHeight() { return rightHeight; }
+bool Tile::getIsSloped() { return isSloped; }
+bool Tile::getHasCollision() { return hasCollision; }
+bool Tile::getCollideTop() { return collideTop; }
+bool Tile::getCollideRight() { return collideRight; }
+bool Tile::getCollideBottom() { return collideBottom; }
+bool Tile::getCollideLeft() { return collideLeft; }

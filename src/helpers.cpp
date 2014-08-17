@@ -4,7 +4,7 @@
 
 using namespace std;
 
-bool IsTopColliding(SDL_Rect before, SDL_Rect after, SDL_Rect obstacle) {
+bool isTopColliding(SDL_Rect before, SDL_Rect after, SDL_Rect obstacle) {
     int bottomBefore = before.y + before.h;
     int bottomObstacle = obstacle.y + obstacle.h;
 
@@ -17,7 +17,7 @@ bool IsTopColliding(SDL_Rect before, SDL_Rect after, SDL_Rect obstacle) {
     return false;
 }
 
-bool IsBottomColliding(SDL_Rect before, SDL_Rect after, SDL_Rect obstacle) {
+bool isBottomColliding(SDL_Rect before, SDL_Rect after, SDL_Rect obstacle) {
     int bottomAfter = after.y + after.h;
     int bottomObstacle = obstacle.y + obstacle.h;
 
@@ -30,7 +30,7 @@ bool IsBottomColliding(SDL_Rect before, SDL_Rect after, SDL_Rect obstacle) {
     return false;
 }
 
-bool IsLeftColliding(SDL_Rect before, SDL_Rect after, SDL_Rect obstacle) {
+bool isLeftColliding(SDL_Rect before, SDL_Rect after, SDL_Rect obstacle) {
     int rightBefore = before.x + before.w;
     int rightObstacle = obstacle.x + obstacle.w;
 
@@ -43,7 +43,7 @@ bool IsLeftColliding(SDL_Rect before, SDL_Rect after, SDL_Rect obstacle) {
     return false;
 }
 
-bool IsRightColliding(SDL_Rect before, SDL_Rect after, SDL_Rect obstacle) {
+bool isRightColliding(SDL_Rect before, SDL_Rect after, SDL_Rect obstacle) {
     int rightAfter = after.x + after.w;
     int rightObstacle = obstacle.x + obstacle.w;
 
@@ -56,7 +56,7 @@ bool IsRightColliding(SDL_Rect before, SDL_Rect after, SDL_Rect obstacle) {
     return false;
 }
 
-bool IsTileOnScreen(SDL_Rect* tileBox, SDL_Rect* cameraBox) {
+bool isTileOnScreen(SDL_Rect* tileBox, SDL_Rect* cameraBox) {
     if (tileBox->x + tileBox->w <= cameraBox->x)
         return false;
     else if (tileBox->x >= cameraBox->x + cameraBox->w)

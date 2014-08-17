@@ -10,9 +10,9 @@
 using namespace std;
 
 bool init();
-bool load_files();
-bool set_tiles();
-void clean_up();
+bool loadFiles();
+bool setTiles();
+void cleanUp();
 
 int main (int argc, char **args) {
     // Initialize variables
@@ -22,8 +22,8 @@ int main (int argc, char **args) {
 
     // Initialize SDL
     if (!init()) return 1;
-    if (!load_files()) return 1;
-    if (!set_tiles()) return 1;
+    if (!loadFiles()) return 1;
+    if (!setTiles()) return 1;
 
     Sprite* character = new Player();
     Player* characterPlayerPtr = dynamic_cast<Player*>(character);
@@ -41,9 +41,9 @@ int main (int argc, char **args) {
                 }
             } else if (event.type == SDL_KEYUP) {
                 switch (event.key.keysym.sym) {
-                    case SDLK_LCTRL: gController.IsHoldingCtrl = false; break;
-                    case SDLK_SPACE: gController.IsHoldingSpace = false; break;
-                    case SDLK_LALT: gController.IsHoldingAlt = false; break;
+                    case SDLK_LCTRL: gController.isHoldingCtrl = false; break;
+                    case SDLK_SPACE: gController.isHoldingSpace = false; break;
+                    case SDLK_LALT: gController.isHoldingAlt = false; break;
                 }
             }
             // If the user X'd out of the window
@@ -53,8 +53,8 @@ int main (int argc, char **args) {
         }
 
         // Clear screen
-        SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0xFF);
-        SDL_RenderClear(renderer);
+        SDL_SetRenderDrawColor(gRenderer, 0x00, 0x00, 0x00, 0xFF);
+        SDL_RenderClear(gRenderer);
 
         // Update units
         for (unsigned int i = 0; i < gSpriteBatch.size(); i++)
@@ -63,33 +63,33 @@ int main (int argc, char **args) {
         // Render tiles - Layer 0 (Before units)
         for (unsigned int i=0; i<gTiles.size(); i++) {
             for (unsigned int j=0; j<gTiles[i].size(); j++) {
-                if (gTiles[i][j] != NULL && gTiles[i][j]->Layer == 0)
-                    gTiles[i][j]->render(camera.GetBox());
+                if (gTiles[i][j] != NULL && gTiles[i][j]->layer == 0)
+                    gTiles[i][j]->render(gCamera.getBox());
             }
         }
 
         for (unsigned int i = 0; i < gSpriteBatch.size(); i++)
-            gSpriteBatch[i]->draw(camera.GetBox());
+            gSpriteBatch[i]->draw(gCamera.getBox());
 
         // Render tiles - Layer 1 (After units)
         for (unsigned int i=0; i<gTiles.size(); i++) {
             for (unsigned int j=0; j<gTiles[i].size(); j++) {
-                if (gTiles[i][j] != NULL && gTiles[i][j]->Layer == 1)
-                    gTiles[i][j]->render(camera.GetBox());
+                if (gTiles[i][j] != NULL && gTiles[i][j]->layer == 1)
+                    gTiles[i][j]->render(gCamera.getBox());
             }
         }
 
-        camera.Update(character->GetBox(), characterPlayerPtr->GetIsOnGround());
+        gCamera.update(character->getBox(), characterPlayerPtr->getIsOnGround());
 
         // Update screen
-        SDL_RenderPresent(renderer);
+        SDL_RenderPresent(gRenderer);
 
         // Cap frame rate
-        if (fps.get_ticks() < 1000 / FRAMES_PER_SECOND)
-            SDL_Delay((1000/FRAMES_PER_SECOND) - fps.get_ticks());
+        if (fps.getTicks() < 1000 / FRAMES_PER_SECOND)
+            SDL_Delay((1000/FRAMES_PER_SECOND) - fps.getTicks());
     }
 
-    clean_up();
+    cleanUp();
     return 0;
 }
 
@@ -116,29 +116,29 @@ bool init() {
                                 SCREEN_WIDTH,
                                 SCREEN_HEIGHT,
                                 SDL_WINDOW_SHOWN,
-                                &window,
-                                &renderer
+                                &gWindow,
+                                &gRenderer
     );
 
     // Make sure window was successfully set up
-    if (window == NULL || renderer == NULL) {
+    if (gWindow == NULL || gRenderer == NULL) {
         printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
         return false;
     }
 
     // Init renderer color
-    SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
+    SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
 
     // Initialize SDL_ttf
     if (TTF_Init() == -1) return false;
 
     // Update screen
-    SDL_RenderPresent(renderer);
+    SDL_RenderPresent(gRenderer);
 
     return true;
 }
 
-bool load_files() {
+bool loadFiles() {
     string data = "../data/";
 
     // Load images
@@ -154,7 +154,7 @@ bool load_files() {
     return true;
 }
 
-bool set_tiles() {
+bool setTiles() {
     // Notes:
     // Does levelWidth / levelHeight matter? Yes, because we have to know when we're at the end of a "row" when reading the file
     // tileCount in file is currently UNUSED
@@ -278,7 +278,7 @@ bool set_tiles() {
     return true;
 }
 
-void clean_up() {
+void cleanUp() {
     gKeenTexture->free();
     gMaskTexture->free();
 
@@ -289,8 +289,8 @@ void clean_up() {
         }
     }
 
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
+    SDL_DestroyRenderer(gRenderer);
+    SDL_DestroyWindow(gWindow);
 
     IMG_Quit();
     TTF_Quit();

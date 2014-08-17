@@ -4,9 +4,9 @@
 class Controller {
     public:
         Controller();
-        bool IsHoldingSpace;
-        bool IsHoldingCtrl;
-        bool IsHoldingAlt;
+        bool isHoldingSpace;
+        bool isHoldingCtrl;
+        bool isHoldingAlt;
 };
 
 #endif

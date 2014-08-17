@@ -16,16 +16,16 @@ class Camera {
 
     public:
         Camera();
-        void Update(SDL_Rect keenHitbox, bool isOnGround);
-        SDL_Rect GetBox();
-        void LookUp();
-        void LookDown();
-        int GetX();
-        int GetY();
-        int GetRight();
-        int GetBottom();
-        int GetTopMargin();
-        int GetBottomMargin();
+        void update(SDL_Rect keenHitbox, bool isOnGround);
+        void lookUp();
+        void lookDown();
+        SDL_Rect getBox();
+        int getX();
+        int getY();
+        int getRight();
+        int getBottom();
+        int getTopMargin();
+        int getBottomMargin();
 };
 
 #endif

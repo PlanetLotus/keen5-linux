@@ -37,7 +37,7 @@ void Timer::unpause() {
     }
 }
 
-int Timer::get_ticks() {
+int Timer::getTicks() {
     if (started) {
         if (paused) {
             return pausedTicks;
@@ -48,5 +48,5 @@ int Timer::get_ticks() {
     return 0;
 }
 
-bool Timer::is_started() { return started; }
-bool Timer::is_paused() { return paused; }
+bool Timer::isStarted() { return started; }
+bool Timer::isPaused() { return paused; }

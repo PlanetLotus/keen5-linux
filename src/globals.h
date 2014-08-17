@@ -16,6 +16,9 @@ extern const int SCREEN_BPP;
 
 extern const int TEXTURE_COUNT;
 
+// Number of timer loops per animation frame
+extern const int FRAMETIME;
+
 // Level globals
 // These should really go in a "level" class
 extern int TILES_WIDE;
@@ -24,8 +27,8 @@ extern int LEVEL_WIDTH;
 extern int LEVEL_HEIGHT;
 
 // Window and renderer
-extern SDL_Window* window;
-extern SDL_Renderer* renderer;
+extern SDL_Window* gWindow;
+extern SDL_Renderer* gRenderer;
 
 // Global textures
 extern Texture* gKeenTexture;
@@ -36,11 +39,8 @@ extern std::vector< std::vector<Tile*> > gTiles;
 
 extern Controller gController;
 
-// Number of timer loops per animation frame
-extern const int FRAMETIME;
-
 extern std::vector<Sprite*> gSpriteBatch;
 
-extern Camera camera;
+extern Camera gCamera;
 
 #endif
