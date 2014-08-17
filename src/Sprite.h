@@ -9,6 +9,9 @@ class Sprite {
         SDL_Rect hitbox;
         SDL_Rect* srcClip;
 
+        unsigned int frame;
+        int animState;
+
         float xVel;
         float yVel;
         float xVelRem;

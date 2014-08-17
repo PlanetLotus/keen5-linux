@@ -9,8 +9,6 @@ class BlasterShot : public Sprite {
     private:
         int expireTimer;
 
-        unsigned int frame;
-        int animState;
         std::vector<SDL_Rect> anims[2];
     public:
         BlasterShot(int startX, int startY, float velocityX, float velocityY);

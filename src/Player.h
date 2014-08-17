@@ -12,8 +12,6 @@ class Player : public Sprite {
         float xAccel;
         float yAccel;
 
-        unsigned int frame;
-        int animState;
         std::vector<SDL_Rect> anims[32];
         bool isAnimLocked;
 
