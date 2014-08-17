@@ -15,7 +15,6 @@ extern const int SCREEN_HEIGHT;
 extern const int SCREEN_BPP;
 
 extern const int TEXTURE_COUNT;
-extern const int TOTAL_TILE_TYPES;
 
 // Level globals
 // These should really go in a "level" class
@@ -34,9 +33,6 @@ extern Texture* gMaskTexture;
 
 // 2D array of tiles describing a level
 extern std::vector< std::vector<Tile*> > gTiles;
-
-// Where to find each type of tile on the sprite sheet
-extern std::vector<SDL_Rect> gTileClips;
 
 extern Controller gController;
 
