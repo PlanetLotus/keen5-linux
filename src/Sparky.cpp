@@ -8,6 +8,7 @@ Sparky::Sparky() {
     hitbox.y = TILE_HEIGHT * 9;
     hitbox.w = TILE_WIDTH * 2;
     hitbox.h = TILE_HEIGHT * 2;
+    isClipping = true;
 
     xVel = 0;
     yVel = 0;
@@ -45,6 +46,11 @@ void Sparky::animate(int nextState, int frametime) {
         frame = 0;
 
     srcClip = &anims[animState][frame / frametime];
+}
+
+void Sparky::takeShotByPlayer() {
+    stunned = true;
+    isClipping = false;
 }
 
 void Sparky::update() {

@@ -72,6 +72,7 @@ int main (int argc, char **args) {
             }
         }
 
+        // Draw units
         player.draw(gCamera.getBox());
         for (unsigned int i = 0; i < gEnemyBatch.size(); i++)
             gEnemyBatch[i]->draw(gCamera.getBox());

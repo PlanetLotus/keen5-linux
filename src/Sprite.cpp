@@ -5,6 +5,8 @@
 
 using namespace std;
 
+void Sprite::takeShotByPlayer() {}
+
 vector<Tile*> Sprite::getTilesToLeft() {
     SDL_Rect nextHitbox = { hitbox.x + (int)xVel, hitbox.y, hitbox.w, hitbox.h };
 
@@ -222,3 +224,4 @@ bool Sprite::isUnitColliding(SDL_Rect unitBox) {
 }
 
 SDL_Rect Sprite::getBox() { return hitbox; }
+bool Sprite::getIsClipping() { return isClipping; }

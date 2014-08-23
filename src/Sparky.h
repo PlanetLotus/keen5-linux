@@ -13,6 +13,7 @@ class Sparky : public Sprite {
         Sparky();
         void update();
         void draw(SDL_Rect cameraBox);
+        void takeShotByPlayer();
 };
 
 #endif

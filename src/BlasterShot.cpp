@@ -9,6 +9,7 @@ BlasterShot::BlasterShot(int startX, int startY, float velocityX, float velocity
     hitbox.y = startY;
     hitbox.w = TILE_WIDTH;
     hitbox.h = TILE_HEIGHT;
+    isClipping = true;
 
     xVel = velocityX * 20;
     yVel = velocityY * 20;
@@ -77,17 +78,6 @@ void BlasterShot::update() {
         animate(0);
     }
 
-    // Check unit hit
-    Sprite* unit;
-    for (unsigned int i = 0; i < gEnemyBatch.size(); i++) {
-        unit = gEnemyBatch[i];
-        if (unit != NULL && isUnitColliding(unit->getBox())) {
-            expire();
-            //unit->collideWithUnit(this);
-            return;
-        }
-    }
-
     // Update hitbox
     hitbox.x += xVel;
     hitbox.y += yVel;
@@ -95,6 +85,15 @@ void BlasterShot::update() {
     // Reset velocity if collision
     if (tciTB.isTopColliding() || tciTB.isBottomColliding()) yVel = 0;
     if (tciLR.isLeftColliding() || tciLR.isRightColliding()) xVel = 0;
+
+    // Check unit hit
+    for (unsigned int i = 0; i < gEnemyBatch.size(); i++) {
+        Sprite* unit = gEnemyBatch[i];
+        if (unit != NULL && unit->getIsClipping() && isUnitColliding(unit->getBox())) {
+            expire();
+            unit->takeShotByPlayer();
+        }
+    }
 }
 
 void BlasterShot::animate(int nextState) {
