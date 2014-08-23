@@ -8,7 +8,7 @@ Sparky::Sparky() {
     hitbox.y = TILE_HEIGHT * 9;
     hitbox.w = TILE_WIDTH * 2;
     hitbox.h = TILE_HEIGHT * 2;
-    isClipping = true;
+    isStunned = false;
 
     xVel = 0;
     yVel = 0;
@@ -17,8 +17,6 @@ Sparky::Sparky() {
     animState = 0;
 
     srcClip = NULL;
-
-    stunned = false;
 
     SDL_Rect walkL0 = { TILE_WIDTH * 14, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
     SDL_Rect walkL1 = { TILE_WIDTH * 16, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
@@ -49,12 +47,11 @@ void Sparky::animate(int nextState, int frametime) {
 }
 
 void Sparky::takeShotByPlayer() {
-    stunned = true;
-    isClipping = false;
+    isStunned = true;
 }
 
 void Sparky::update() {
-    if (stunned) {
+    if (isStunned) {
         // Animate stunned
         return;
     }

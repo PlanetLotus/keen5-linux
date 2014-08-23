@@ -9,7 +9,7 @@ BlasterShot::BlasterShot(int startX, int startY, float velocityX, float velocity
     hitbox.y = startY;
     hitbox.w = TILE_WIDTH;
     hitbox.h = TILE_HEIGHT;
-    isClipping = true;
+    isStunned = false;
 
     xVel = velocityX * 20;
     yVel = velocityY * 20;
@@ -89,7 +89,7 @@ void BlasterShot::update() {
     // Check unit hit
     for (unsigned int i = 0; i < gEnemyBatch.size(); i++) {
         Sprite* unit = gEnemyBatch[i];
-        if (unit != NULL && unit->getIsClipping() && isUnitColliding(unit->getBox())) {
+        if (unit != NULL && !unit->getIsStunned() && isUnitColliding(unit->getBox())) {
             expire();
             unit->takeShotByPlayer();
         }

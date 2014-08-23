@@ -8,7 +8,7 @@ class Sprite {
     protected:
         SDL_Rect hitbox;
         SDL_Rect* srcClip;
-        bool isClipping;
+        bool isStunned;
 
         unsigned int frame;
         int animState;
@@ -34,7 +34,7 @@ class Sprite {
         Tile* getTileCollidingWithBottom(bool checkOnlyTouching = false);
         Tile* getTileCollidingWithTop();
         SDL_Rect getBox();
-        bool getIsClipping();
+        bool getIsStunned();
 };
 
 #endif

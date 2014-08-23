@@ -523,7 +523,7 @@ Player::Player() {
     yVelRem = 0;
     xAccel = 0;
     yAccel = 0;
-    isClipping = true;
+    isStunned = false;
 
     srcClip = NULL;
 

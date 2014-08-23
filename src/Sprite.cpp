@@ -224,4 +224,4 @@ bool Sprite::isUnitColliding(SDL_Rect unitBox) {
 }
 
 SDL_Rect Sprite::getBox() { return hitbox; }
-bool Sprite::getIsClipping() { return isClipping; }
+bool Sprite::getIsStunned() { return isStunned; }
