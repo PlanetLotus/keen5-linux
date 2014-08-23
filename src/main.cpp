@@ -26,11 +26,9 @@ int main (int argc, char **args) {
     if (!loadFiles()) return 1;
     if (!setTiles()) return 1;
 
-    Sprite* character = new Player();
-    Player* characterPlayerPtr = dynamic_cast<Player*>(character);
+    Player player;
     Sprite* sparky = new Sparky();
-    gSpriteBatch[0] = character;
-    gSpriteBatch[1] = sparky;
+    gEnemyBatch[0] = sparky;
 
     while (running) {
         // Start timer
@@ -60,8 +58,11 @@ int main (int argc, char **args) {
         SDL_RenderClear(gRenderer);
 
         // Update units
-        for (unsigned int i = 0; i < gSpriteBatch.size(); i++)
-            gSpriteBatch[i]->update();
+        player.update();
+        for (unsigned int i = 0; i < gEnemyBatch.size(); i++)
+            gEnemyBatch[i]->update();
+        for (unsigned int i = 0; i < gBlasterShotBatch.size(); i++)
+            gBlasterShotBatch[i]->update();
 
         // Render tiles - Layer 0 (Before units)
         for (unsigned int i=0; i<gTiles.size(); i++) {
@@ -71,8 +72,11 @@ int main (int argc, char **args) {
             }
         }
 
-        for (unsigned int i = 0; i < gSpriteBatch.size(); i++)
-            gSpriteBatch[i]->draw(gCamera.getBox());
+        player.draw(gCamera.getBox());
+        for (unsigned int i = 0; i < gEnemyBatch.size(); i++)
+            gEnemyBatch[i]->draw(gCamera.getBox());
+        for (unsigned int i = 0; i < gBlasterShotBatch.size(); i++)
+            gBlasterShotBatch[i]->draw(gCamera.getBox());
 
         // Render tiles - Layer 1 (After units)
         for (unsigned int i=0; i<gTiles.size(); i++) {
@@ -82,7 +86,7 @@ int main (int argc, char **args) {
             }
         }
 
-        gCamera.update(character->getBox(), characterPlayerPtr->getIsOnGround());
+        gCamera.update(player.getBox(), player.getIsOnGround());
 
         // Update screen
         SDL_RenderPresent(gRenderer);

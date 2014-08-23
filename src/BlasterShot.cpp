@@ -1,5 +1,4 @@
 #include <algorithm>
-#include "BlasterShot.h"
 #include "globals.h"
 #include "helpers.h"
 
@@ -22,7 +21,7 @@ BlasterShot::BlasterShot(int startX, int startY, float velocityX, float velocity
     srcClip = NULL;
 
     // Add self to sprite batch
-    gSpriteBatch.push_back(this);
+    gBlasterShotBatch.push_back(this);
 
     // Animation instantiation
     SDL_Rect move0 = {TILE_WIDTH * 6, TILE_HEIGHT * 7, TILE_WIDTH, TILE_HEIGHT};
@@ -80,11 +79,11 @@ void BlasterShot::update() {
 
     // Check unit hit
     Sprite* unit;
-    for (unsigned int i = 0; i < gSpriteBatch.size(); i++) {
-        unit = gSpriteBatch[i];
-        if (unit != NULL && unit != this && isUnitColliding(unit->getBox())) {
+    for (unsigned int i = 0; i < gEnemyBatch.size(); i++) {
+        unit = gEnemyBatch[i];
+        if (unit != NULL && isUnitColliding(unit->getBox())) {
             expire();
-            printf("hit unit!\n");
+            //unit->collideWithUnit(this);
             return;
         }
     }
@@ -131,10 +130,10 @@ void BlasterShot::expire() {
 }
 
 void BlasterShot::die() {
-    // Erase this BlasterShot from gSpriteBatch
+    // Erase this BlasterShot from gBlasterShotBatch
     // This calls the destructor internally
-    vector<Sprite*>::iterator it = find(gSpriteBatch.begin(), gSpriteBatch.end(), this);
+    vector<BlasterShot*>::iterator it = find(gBlasterShotBatch.begin(), gBlasterShotBatch.end(), this);
 
-    if (it != gSpriteBatch.end())
-        gSpriteBatch.erase(it);
+    if (it != gBlasterShotBatch.end())
+        gBlasterShotBatch.erase(it);
 }

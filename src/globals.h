@@ -2,6 +2,7 @@
 #define GLOBALS_H
 
 #include <vector>
+#include "BlasterShot.h"
 #include "Camera.h"
 #include "Controller.h"
 #include "SDL.h"
@@ -39,7 +40,8 @@ extern std::vector< std::vector<Tile*> > gTiles;
 
 extern Controller gController;
 
-extern std::vector<Sprite*> gSpriteBatch;
+extern std::vector<Sprite*> gEnemyBatch;
+extern std::vector<BlasterShot*> gBlasterShotBatch;
 
 extern Camera gCamera;
 

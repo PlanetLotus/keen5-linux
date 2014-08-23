@@ -19,7 +19,6 @@ class Sprite {
 
         bool isUnitColliding(SDL_Rect unitBox);
     public:
-        virtual ~Sprite();
         virtual void update() = 0;
         virtual void draw(SDL_Rect cameraBox) = 0;
         TileCollisionInfo checkTileCollisionLR();

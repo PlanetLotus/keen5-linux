@@ -5,10 +5,6 @@
 
 using namespace std;
 
-Sprite::~Sprite() {
-    delete srcClip;
-}
-
 vector<Tile*> Sprite::getTilesToLeft() {
     SDL_Rect nextHitbox = { hitbox.x + (int)xVel, hitbox.y, hitbox.w, hitbox.h };
 

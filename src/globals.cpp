@@ -24,6 +24,7 @@ std::vector< std::vector<Tile*> > gTiles;
 
 Controller gController;
 
-std::vector<Sprite*> gSpriteBatch(2);
+std::vector<Sprite*> gEnemyBatch(1);
+std::vector<BlasterShot*> gBlasterShotBatch;
 
 Camera gCamera;
