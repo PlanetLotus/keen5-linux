@@ -73,8 +73,20 @@ void BlasterShot::update() {
     if (xVel == 0 && yVel == 0) {
         expire();
         animate(1);
+        return;
     } else {
         animate(0);
+    }
+
+    // Check unit hit
+    Sprite* unit;
+    for (unsigned int i = 0; i < gSpriteBatch.size(); i++) {
+        unit = gSpriteBatch[i];
+        if (unit != NULL && unit != this && isUnitColliding(unit->getBox())) {
+            expire();
+            printf("hit unit!\n");
+            return;
+        }
     }
 
     // Update hitbox
@@ -107,6 +119,9 @@ void BlasterShot::draw(SDL_Rect cameraBox) {
 }
 
 void BlasterShot::expire() {
+    xVel = 0;
+    yVel = 0;
+
     if (expireTimer / FRAMETIME >= 2) {
         die();
         return;

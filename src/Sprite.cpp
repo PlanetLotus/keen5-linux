@@ -206,4 +206,23 @@ Tile* Sprite::getTileCollidingWithTop() {
     return NULL;
 }
 
+bool Sprite::isUnitColliding(SDL_Rect unitBox) {
+    int thisTop = hitbox.y;
+    int thisBottom = hitbox.y + hitbox.h;
+    int thisLeft = hitbox.x;
+    int thisRight = hitbox.x + hitbox.w;
+    int unitTop = unitBox.y;
+    int unitBottom = unitBox.y + unitBox.h;
+    int unitLeft = unitBox.x;
+    int unitRight = unitBox.x + unitBox.w;
+
+    // Check if any sides are outside unit
+    if (thisBottom <= unitTop) return false;
+    if (thisTop >= unitBottom) return false;
+    if (thisRight <= unitLeft) return false;
+    if (thisLeft >= unitRight) return false;
+
+    return true;
+}
+
 SDL_Rect Sprite::getBox() { return hitbox; }

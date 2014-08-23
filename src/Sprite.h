@@ -16,6 +16,8 @@ class Sprite {
         float yVel;
         float xVelRem;
         float yVelRem;
+
+        bool isUnitColliding(SDL_Rect unitBox);
     public:
         virtual ~Sprite();
         virtual void update() = 0;

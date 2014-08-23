@@ -17,6 +17,8 @@ Sparky::Sparky() {
 
     srcClip = NULL;
 
+    stunned = false;
+
     SDL_Rect walkL0 = { TILE_WIDTH * 14, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
     SDL_Rect walkL1 = { TILE_WIDTH * 16, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
     SDL_Rect walkL2 = { TILE_WIDTH * 18, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
@@ -46,7 +48,14 @@ void Sparky::animate(int nextState, int frametime) {
 }
 
 void Sparky::update() {
+    if (stunned) {
+        // Animate stunned
+        return;
+    }
+
     animate(0, 3);
+
+    // Check tile collision
 
     hitbox.x += xVel;
     hitbox.y += yVel;
