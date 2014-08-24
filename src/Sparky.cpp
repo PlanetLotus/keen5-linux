@@ -10,7 +10,7 @@ Sparky::Sparky() {
     hitbox.h = TILE_HEIGHT * 2;
     isStunned = false;
 
-    xVel = 0;
+    xVel = -2;
     yVel = 0;
 
     frame = 0;
@@ -70,14 +70,15 @@ void Sparky::fall() {
 void Sparky::update() {
     fall();
 
+    TileCollisionInfo tciLR;
+    TileCollisionInfo tciTB;
+
     if (isStunned) {
         animate(1, 3);
     } else {
         animate(0, 3);
 
         // Check left/right collision
-        /*
-        TileCollisionInfo tciLR;
         if (xVel != 0) {
             tciLR = checkTileCollisionLR();
 
@@ -88,11 +89,9 @@ void Sparky::update() {
                 xVel = tciLR.tileCollidingWithRight->getBox().x - (hitbox.x + hitbox.w);
             }
         }
-        */
     }
 
     // Check top/bottom collision
-    TileCollisionInfo tciTB;
     if (yVel != 0) {
         tciTB = checkTileCollisionTB();
 
@@ -105,7 +104,7 @@ void Sparky::update() {
     }
 
     // Add back remainder
-    //xVel += xVelRem;
+    xVel += xVelRem;
     yVel += abs(yVelRem);
 
     hitbox.x += xVel;
@@ -121,12 +120,10 @@ void Sparky::update() {
         yVel = 0;
         yVelRem = 0;
     }
-    /*
-    if (tciLR.isLeftColliding() || tciLR.isRightColliding()) {
+    if (!isStunned && (tciLR.isLeftColliding() || tciLR.isRightColliding())) {
         xVel = 0;
         xVelRem = 0;
     }
-    */
 }
 
 void Sparky::draw(SDL_Rect cameraBox) {

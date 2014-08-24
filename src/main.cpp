@@ -188,7 +188,7 @@ bool setTiles() {
     int x = 0;
     int y = 0;
 
-    ifstream map("../data/nulltest");
+    ifstream map("../data/scrolltest");
     string line;
     istringstream iss;
 
