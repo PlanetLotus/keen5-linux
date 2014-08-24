@@ -55,20 +55,78 @@ void Sparky::animate(int nextState, int frametime) {
 
 void Sparky::takeShotByPlayer() {
     isStunned = true;
+
+    // Enemies do a brief "hop" when stunned
+    yVel += -12;
+}
+
+void Sparky::fall() {
+    if (yVel >= 20)
+        return;
+
+    yVel += 2.6;
 }
 
 void Sparky::update() {
+    fall();
+
     if (isStunned) {
         animate(1, 3);
-        return;
+    } else {
+        animate(0, 3);
+
+        // Check left/right collision
+        /*
+        TileCollisionInfo tciLR;
+        if (xVel != 0) {
+            tciLR = checkTileCollisionLR();
+
+            // Set properties based on x-collision
+            if (tciLR.isLeftColliding()) {
+                xVel = (tciLR.tileCollidingWithLeft->getBox().x + tciLR.tileCollidingWithLeft->getBox().w) - hitbox.x;
+            } else if (tciLR.isRightColliding()) {
+                xVel = tciLR.tileCollidingWithRight->getBox().x - (hitbox.x + hitbox.w);
+            }
+        }
+        */
     }
 
-    animate(0, 3);
+    // Check top/bottom collision
+    TileCollisionInfo tciTB;
+    if (yVel != 0) {
+        tciTB = checkTileCollisionTB();
 
-    // Check tile collision
+        if (tciTB.isTopColliding()) {
+            yVel = (tciTB.tileCollidingWithTop->getBox().y + tciTB.tileCollidingWithTop->getBox().h) - hitbox.y;
+        } else if (tciTB.isBottomColliding()) {
+            Tile* tile = tciTB.tileCollidingWithBottom;
+            yVel = tile->getBox().y - (hitbox.y + hitbox.h);
+        }
+    }
+
+    // Add back remainder
+    //xVel += xVelRem;
+    yVel += abs(yVelRem);
 
     hitbox.x += xVel;
     hitbox.y += yVel;
+
+    // Set fractional part of vel to rem
+    double intPart;
+    xVelRem = modf(xVel, &intPart);
+    yVelRem = modf(yVel, &intPart);
+
+    // Reset velocity if collision or on pole
+    if (tciTB.isTopColliding() || tciTB.isBottomColliding()) {
+        yVel = 0;
+        yVelRem = 0;
+    }
+    /*
+    if (tciLR.isLeftColliding() || tciLR.isRightColliding()) {
+        xVel = 0;
+        xVelRem = 0;
+    }
+    */
 }
 
 void Sparky::draw(SDL_Rect cameraBox) {

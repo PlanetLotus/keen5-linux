@@ -5,6 +5,7 @@
 
 class Sparky : public Sprite {
     private:
+        void fall();
         std::vector<SDL_Rect> anims[2];
         void animate(int nextState, int frametime = FRAMETIME);
 
