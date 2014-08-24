@@ -58,11 +58,11 @@ int main (int argc, char **args) {
         SDL_RenderClear(gRenderer);
 
         // Update units
-        player.update();
         for (unsigned int i = 0; i < gEnemyBatch.size(); i++)
             gEnemyBatch[i]->update();
         for (unsigned int i = 0; i < gBlasterShotBatch.size(); i++)
             gBlasterShotBatch[i]->update();
+        player.update();
 
         // Render tiles - Layer 0 (Before units)
         for (unsigned int i=0; i<gTiles.size(); i++) {
@@ -73,11 +73,11 @@ int main (int argc, char **args) {
         }
 
         // Draw units
-        player.draw(gCamera.getBox());
         for (unsigned int i = 0; i < gEnemyBatch.size(); i++)
             gEnemyBatch[i]->draw(gCamera.getBox());
         for (unsigned int i = 0; i < gBlasterShotBatch.size(); i++)
             gBlasterShotBatch[i]->draw(gCamera.getBox());
+        player.draw(gCamera.getBox());
 
         // Render tiles - Layer 1 (After units)
         for (unsigned int i=0; i<gTiles.size(); i++) {

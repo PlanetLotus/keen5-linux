@@ -23,11 +23,18 @@ Sparky::Sparky() {
     SDL_Rect walkL2 = { TILE_WIDTH * 18, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
     SDL_Rect walkL3 = { TILE_WIDTH * 20, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
 
+    SDL_Rect die0 = { TILE_WIDTH * 16, TILE_HEIGHT * 2, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
+    SDL_Rect die1 = { TILE_WIDTH * 18, TILE_HEIGHT * 2, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
+    SDL_Rect die2 = { TILE_WIDTH * 20, TILE_HEIGHT * 2, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
+
     SDL_Rect walkLeftArray[4] = { walkL0, walkL1, walkL2, walkL3 };
+    SDL_Rect dieArray[3] = { die0, die1, die2 };
 
     vector<SDL_Rect> walkLeftAnim(walkLeftArray, walkLeftArray + sizeof(walkLeftArray) / sizeof(SDL_Rect));
+    vector<SDL_Rect> dieAnim(dieArray, dieArray + sizeof(dieArray) / sizeof(SDL_Rect));
 
     anims[0] = walkLeftAnim;
+    anims[1] = dieAnim;
 }
 
 void Sparky::animate(int nextState, int frametime) {
@@ -52,7 +59,7 @@ void Sparky::takeShotByPlayer() {
 
 void Sparky::update() {
     if (isStunned) {
-        // Animate stunned
+        animate(1, 3);
         return;
     }
 
