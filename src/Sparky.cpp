@@ -37,9 +37,9 @@ Sparky::Sparky() {
     SDL_Rect turn1 = { TILE_WIDTH * 24, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
     SDL_Rect turn2 = { TILE_WIDTH * 26, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
 
-    SDL_Rect die0 = { TILE_WIDTH * 19, TILE_HEIGHT * 2, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
-    SDL_Rect die1 = { TILE_WIDTH * 21, TILE_HEIGHT * 2, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
-    SDL_Rect die2 = { TILE_WIDTH * 23, TILE_HEIGHT * 2, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
+    SDL_Rect die0 = { TILE_WIDTH * 22, TILE_HEIGHT * 2, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
+    SDL_Rect die1 = { TILE_WIDTH * 24, TILE_HEIGHT * 2, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
+    SDL_Rect die2 = { TILE_WIDTH * 26, TILE_HEIGHT * 2, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
 
     SDL_Rect walkLeftArray[4] = { walkL0, walkL1, walkL2, walkL3 };
     SDL_Rect walkRightArray[4] = { walkR0, walkR1, walkR2, walkR3 };
@@ -97,7 +97,10 @@ void Sparky::patrol() {
     xVel = patrolSpeed * facing;
     TileCollisionInfo tciLR;
 
-    animate(0, 3);
+    if (facing == LEFT)
+        animate(0, 3);
+    else
+        animate(1, 3);
 
     // Check left/right collision
     tciLR = checkTileCollisionLR();
@@ -115,7 +118,10 @@ void Sparky::chase() {
     xVel = patrolSpeed * 2 * facing;
     TileCollisionInfo tciLR;
 
-    animate(0, 3);
+    if (facing == LEFT)
+        animate(0, 3);
+    else
+        animate(1, 3);
 
     // Check left/right collision
     tciLR = checkTileCollisionLR();
