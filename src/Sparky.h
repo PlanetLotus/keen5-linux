@@ -17,7 +17,7 @@ class Sparky : public Sprite {
         int patrolSpeed;
 
         void fall();
-        std::vector<SDL_Rect> anims[2];
+        std::vector<SDL_Rect> anims[5];
         void animate(int nextState, int frametime = FRAMETIME);
 
     public:

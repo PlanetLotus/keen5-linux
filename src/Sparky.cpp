@@ -4,12 +4,12 @@
 using namespace std;
 
 Sparky::Sparky() {
-    hitbox.x = TILE_WIDTH * 13;
-    hitbox.y = TILE_HEIGHT * 9;
+    hitbox.x = TILE_WIDTH * 24;
+    hitbox.y = TILE_HEIGHT * 4;
     hitbox.w = TILE_WIDTH * 2;
     hitbox.h = TILE_HEIGHT * 2;
 
-    facing = LEFT;
+    facing = RIGHT;
     patrolSpeed = 4;
     xVel = patrolSpeed * facing;
     yVel = 0;
@@ -28,18 +28,36 @@ Sparky::Sparky() {
     SDL_Rect walkL2 = { TILE_WIDTH * 18, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
     SDL_Rect walkL3 = { TILE_WIDTH * 20, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
 
-    SDL_Rect die0 = { TILE_WIDTH * 16, TILE_HEIGHT * 2, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
-    SDL_Rect die1 = { TILE_WIDTH * 18, TILE_HEIGHT * 2, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
-    SDL_Rect die2 = { TILE_WIDTH * 20, TILE_HEIGHT * 2, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
+    SDL_Rect walkR0 = { TILE_WIDTH * 14, TILE_HEIGHT * 2, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
+    SDL_Rect walkR1 = { TILE_WIDTH * 16, TILE_HEIGHT * 2, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
+    SDL_Rect walkR2 = { TILE_WIDTH * 18, TILE_HEIGHT * 2, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
+    SDL_Rect walkR3 = { TILE_WIDTH * 20, TILE_HEIGHT * 2, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
+
+    SDL_Rect turn0 = { TILE_WIDTH * 22, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
+    SDL_Rect turn1 = { TILE_WIDTH * 24, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
+    SDL_Rect turn2 = { TILE_WIDTH * 26, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
+
+    SDL_Rect die0 = { TILE_WIDTH * 19, TILE_HEIGHT * 2, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
+    SDL_Rect die1 = { TILE_WIDTH * 21, TILE_HEIGHT * 2, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
+    SDL_Rect die2 = { TILE_WIDTH * 23, TILE_HEIGHT * 2, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
 
     SDL_Rect walkLeftArray[4] = { walkL0, walkL1, walkL2, walkL3 };
+    SDL_Rect walkRightArray[4] = { walkR0, walkR1, walkR2, walkR3 };
+    SDL_Rect turnLeftArray[3] = { turn2, turn1, turn0 };
+    SDL_Rect turnRightArray[3] = { turn0, turn1, turn2 };
     SDL_Rect dieArray[3] = { die0, die1, die2 };
 
     vector<SDL_Rect> walkLeftAnim(walkLeftArray, walkLeftArray + sizeof(walkLeftArray) / sizeof(SDL_Rect));
+    vector<SDL_Rect> walkRightAnim(walkRightArray, walkRightArray + sizeof(walkRightArray) / sizeof(SDL_Rect));
+    vector<SDL_Rect> turnLeftAnim(turnLeftArray, turnLeftArray + sizeof(turnLeftArray) / sizeof(SDL_Rect));
+    vector<SDL_Rect> turnRightAnim(turnRightArray, turnRightArray + sizeof(turnRightArray) / sizeof(SDL_Rect));
     vector<SDL_Rect> dieAnim(dieArray, dieArray + sizeof(dieArray) / sizeof(SDL_Rect));
 
     anims[0] = walkLeftAnim;
-    anims[1] = dieAnim;
+    anims[1] = walkRightAnim;
+    anims[2] = turnLeftAnim;
+    anims[3] = turnRightAnim;
+    anims[4] = dieAnim;
 }
 
 void Sparky::animate(int nextState, int frametime) {
@@ -118,7 +136,7 @@ void Sparky::changeDirection() {
 }
 
 void Sparky::stunned() {
-    animate(1, 3);
+    animate(4, 3);
 }
 
 void Sparky::update() {
