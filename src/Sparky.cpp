@@ -111,7 +111,12 @@ void Sparky::patrol() {
         xVelRem = 0;
     }
 
-    // TODO: Look for Keen and switch to chase if detected
+    // Randomly scan for Keen
+    if (rand() % 100 == 0) {
+        state = SCAN;
+        xVel = 0;
+        xVelRem = 0;
+    }
 }
 
 void Sparky::chase() {
@@ -131,6 +136,13 @@ void Sparky::chase() {
         xVel = 0;
         xVelRem = 0;
     }
+}
+
+void Sparky::scan() {
+    printf("scanning...\n");
+    // Scan opposite way, look for Keen, chase if found
+    // Else, scan other way, look for Keen, chase if found
+    // Else, patrol
 }
 
 void Sparky::changeDirection() {
@@ -159,6 +171,8 @@ void Sparky::update() {
         patrol();
     else if (state == CHASE)
         chase();
+    else if (state == SCAN)
+        scan();
     else if (state == CHANGE_DIRECTION)
         changeDirection();
     else

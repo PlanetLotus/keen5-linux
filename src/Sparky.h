@@ -5,10 +5,11 @@
 
 class Sparky : public Sprite {
     private:
-        enum stateEnum { PATROL, CHASE, CHANGE_DIRECTION, STUNNED };
+        enum stateEnum { PATROL, CHASE, SCAN, CHANGE_DIRECTION, STUNNED };
         stateEnum state;
         void patrol();
         void chase();
+        void scan();
         void changeDirection();
         void stunned();
 
