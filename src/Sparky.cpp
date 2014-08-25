@@ -43,8 +43,8 @@ Sparky::Sparky() {
 
     SDL_Rect walkLeftArray[4] = { walkL0, walkL1, walkL2, walkL3 };
     SDL_Rect walkRightArray[4] = { walkR0, walkR1, walkR2, walkR3 };
-    SDL_Rect turnLeftArray[3] = { turn2, turn1, turn0 };
-    SDL_Rect turnRightArray[3] = { turn0, turn1, turn2 };
+    SDL_Rect turnLeftArray[4] = { turn2, turn1, turn0, walkL0 };
+    SDL_Rect turnRightArray[4] = { turn0, turn1, turn2, walkR0 };
     SDL_Rect dieArray[3] = { die0, die1, die2 };
 
     vector<SDL_Rect> walkLeftAnim(walkLeftArray, walkLeftArray + sizeof(walkLeftArray) / sizeof(SDL_Rect));

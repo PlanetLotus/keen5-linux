@@ -210,10 +210,8 @@ Tile* Player::getCollidingPoleTile() {
 
             // Must be in center of pole
             if (hitbox.x < poleRight - TILE_WIDTH / 4 && playerRight >= TILE_WIDTH / 4 + poleBox.x) {
-                printf("returning leftTile\n");
                 return leftTiles[i];
             } else {
-                printf("not in pole center\n");
                 break;
             }
         }
@@ -233,10 +231,8 @@ Tile* Player::getCollidingPoleTile() {
 
             // Must be in center of pole
             if (hitbox.x < poleRight - TILE_WIDTH / 4 && playerRight >= TILE_WIDTH / 4 + poleBox.x) {
-                printf("returning rightTile\n");
                 return rightTiles[i];
             } else {
-                printf("checking rightTiles - not in pole center\n");
                 return NULL;
             }
         }
@@ -523,12 +519,13 @@ Player::Player() {
     yVelRem = 0;
     xAccel = 0;
     yAccel = 0;
+
     isStunned = false;
 
     srcClip = NULL;
 
-    hitbox.x = TILE_WIDTH * 22;
-    hitbox.y = TILE_HEIGHT * 3;
+    hitbox.x = TILE_WIDTH * 20;
+    hitbox.y = TILE_HEIGHT * 9;
     hitbox.w = TILE_WIDTH;
     hitbox.h = TILE_HEIGHT * 2;
 
