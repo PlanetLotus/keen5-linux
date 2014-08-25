@@ -4,14 +4,19 @@
 using namespace std;
 
 Sparky::Sparky() {
-    hitbox.x = TILE_WIDTH * 20;
+    hitbox.x = TILE_WIDTH * 13;
     hitbox.y = TILE_HEIGHT * 9;
     hitbox.w = TILE_WIDTH * 2;
     hitbox.h = TILE_HEIGHT * 2;
+
+    facing = LEFT;
+    patrolSpeed = 4;
+    xVel = patrolSpeed * facing;
+    yVel = 0;
+
     isStunned = false;
 
-    xVel = -2;
-    yVel = 0;
+    state = PATROL;
 
     frame = 0;
     animState = 0;
@@ -55,6 +60,9 @@ void Sparky::animate(int nextState, int frametime) {
 
 void Sparky::takeShotByPlayer() {
     isStunned = true;
+    state = STUNNED;
+    xVel = 0;
+    xVelRem = 0;
 
     // Enemies do a brief "hop" when stunned
     yVel += -12;
@@ -67,29 +75,65 @@ void Sparky::fall() {
     yVel += 2.6;
 }
 
+void Sparky::patrol() {
+    xVel = patrolSpeed * facing;
+    TileCollisionInfo tciLR;
+
+    animate(0, 3);
+
+    // Check left/right collision
+    tciLR = checkTileCollisionLR();
+
+    if (tciLR.isLeftColliding() || tciLR.isRightColliding()) {
+        state = CHANGE_DIRECTION;
+        xVel = 0;
+        xVelRem = 0;
+    }
+
+    // TODO: Look for Keen and switch to chase if detected
+}
+
+void Sparky::chase() {
+    xVel = patrolSpeed * 2 * facing;
+    TileCollisionInfo tciLR;
+
+    animate(0, 3);
+
+    // Check left/right collision
+    tciLR = checkTileCollisionLR();
+
+    if (tciLR.isLeftColliding() || tciLR.isRightColliding()) {
+        state = CHANGE_DIRECTION;
+        xVel = 0;
+        xVelRem = 0;
+    }
+}
+
+void Sparky::changeDirection() {
+    // First, finish animating the direction change before moving
+
+    // Then, invert velocity
+    facing = facing == LEFT ? RIGHT : LEFT;
+    state = PATROL;
+}
+
+void Sparky::stunned() {
+    animate(1, 3);
+}
+
 void Sparky::update() {
     fall();
 
-    TileCollisionInfo tciLR;
+    if (state == PATROL)
+        patrol();
+    else if (state == CHASE)
+        chase();
+    else if (state == CHANGE_DIRECTION)
+        changeDirection();
+    else
+        stunned();
+
     TileCollisionInfo tciTB;
-
-    if (isStunned) {
-        animate(1, 3);
-    } else {
-        animate(0, 3);
-
-        // Check left/right collision
-        if (xVel != 0) {
-            tciLR = checkTileCollisionLR();
-
-            // Set properties based on x-collision
-            if (tciLR.isLeftColliding()) {
-                xVel = (tciLR.tileCollidingWithLeft->getBox().x + tciLR.tileCollidingWithLeft->getBox().w) - hitbox.x;
-            } else if (tciLR.isRightColliding()) {
-                xVel = tciLR.tileCollidingWithRight->getBox().x - (hitbox.x + hitbox.w);
-            }
-        }
-    }
 
     // Check top/bottom collision
     if (yVel != 0) {
@@ -119,10 +163,6 @@ void Sparky::update() {
     if (tciTB.isTopColliding() || tciTB.isBottomColliding()) {
         yVel = 0;
         yVelRem = 0;
-    }
-    if (!isStunned && (tciLR.isLeftColliding() || tciLR.isRightColliding())) {
-        xVel = 0;
-        xVelRem = 0;
     }
 }
 
