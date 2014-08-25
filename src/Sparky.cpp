@@ -135,10 +135,17 @@ void Sparky::chase() {
 
 void Sparky::changeDirection() {
     // First, finish animating the direction change before moving
+    int frametime = 4;
+    if (facing == LEFT)
+        animate(3, frametime);
+    else
+        animate(2, frametime);
 
     // Then, invert velocity
-    facing = facing == LEFT ? RIGHT : LEFT;
-    state = PATROL;
+    if (frame == anims[animState].size() * frametime - 1) {
+        facing = facing == LEFT ? RIGHT : LEFT;
+        state = PATROL;
+    }
 }
 
 void Sparky::stunned() {
