@@ -27,7 +27,7 @@ class Tile {
 
         // Inits position and type
         Tile(int srcX, int srcY, int destX, int destY, int lHeight, int rHeight,
-            bool collideT, bool collideR, bool collideB, bool collideL, int layer, bool isPole);
+            bool collideT, bool collideR, bool collideB, bool collideL, int layer, bool isPole, bool isEdge);
 
         // Shows the tile
         void render(SDL_Rect cameraBox);

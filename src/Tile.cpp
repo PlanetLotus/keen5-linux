@@ -3,7 +3,7 @@
 #include "Tile.h"
 
 Tile::Tile(int srcX, int srcY, int destX, int destY, int lHeight, int rHeight,
-    bool collideT, bool collideR, bool collideB, bool collideL, int layer, bool isPole=false) {
+    bool collideT, bool collideR, bool collideB, bool collideL, int layer, bool isPole=false, bool isEdge=false) {
     srcBox.x = srcX;
     srcBox.y = srcY;
 

@@ -177,6 +177,7 @@ bool setTiles() {
     int heightVal = -1;
     int collideVal = -1;
     int layerVal = -1;
+    int edgeVal = -1;
     int propertyVal = -1;
     int leftHeight = 0;
     int rightHeight = 0;
@@ -184,11 +185,12 @@ bool setTiles() {
     bool collideR = false;
     bool collideB = false;
     bool collideL = false;
+    bool isEdge = false;
 
     int x = 0;
     int y = 0;
 
-    ifstream map("../data/scrolltest");
+    ifstream map("../data/edgetest");
     string line;
     istringstream iss;
 
@@ -268,6 +270,8 @@ bool setTiles() {
         collideB = collideVal == 1 ? true : false;
         iss >> collideVal;
         collideL = collideVal == 1 ? true : false;
+        iss >> edgeVal;
+        isEdge = edgeVal == 1 ? true : false;
 
         iss >> propertyVal;
         bool isPole = false;
@@ -277,7 +281,7 @@ bool setTiles() {
         iss >> layerVal;
 
         gTiles[x][y] = new Tile(xSrc, ySrc, x * TILE_WIDTH, y * TILE_HEIGHT, leftHeight, rightHeight,
-            collideT, collideR, collideB, collideL, layerVal, isPole);
+            collideT, collideR, collideB, collideL, layerVal, isPole, isEdge);
 
         x++;
     }
