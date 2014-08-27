@@ -3,20 +3,25 @@
 
 using namespace std;
 
-Sparky::Sparky() {
-    hitbox.x = TILE_WIDTH * 24;
-    hitbox.y = TILE_HEIGHT * 4;
+Sparky::Sparky(Player* player) {
+    hitbox.x = TILE_WIDTH * 16;
+    hitbox.y = TILE_HEIGHT * 9;
     hitbox.w = TILE_WIDTH * 2;
     hitbox.h = TILE_HEIGHT * 2;
 
     facing = RIGHT;
     patrolSpeed = 4;
+    chaseSpeed = patrolSpeed * 2;
     xVel = patrolSpeed * facing;
     yVel = 0;
+
+    scanCount = 0;
+    keen = player;
 
     isStunned = false;
 
     state = PATROL;
+    prevState = PATROL;
 
     frame = 0;
     animState = 0;
@@ -78,7 +83,7 @@ void Sparky::animate(int nextState, int frametime) {
 
 void Sparky::takeShotByPlayer() {
     isStunned = true;
-    state = STUNNED;
+    changeState(STUNNED);
     xVel = 0;
     xVelRem = 0;
 
@@ -106,21 +111,21 @@ void Sparky::patrol() {
     tciLR = checkTileCollisionLR();
 
     if (tciLR.isLeftColliding() || tciLR.isRightColliding()) {
-        state = CHANGE_DIRECTION;
+        changeState(CHANGE_DIRECTION);
         xVel = 0;
         xVelRem = 0;
     }
 
     // Randomly scan for Keen
     if (rand() % 100 == 0) {
-        state = SCAN;
+        changeState(SCAN);
         xVel = 0;
         xVelRem = 0;
     }
 }
 
 void Sparky::chase() {
-    xVel = patrolSpeed * 2 * facing;
+    xVel = chaseSpeed * facing;
     TileCollisionInfo tciLR;
 
     if (facing == LEFT)
@@ -132,17 +137,37 @@ void Sparky::chase() {
     tciLR = checkTileCollisionLR();
 
     if (tciLR.isLeftColliding() || tciLR.isRightColliding()) {
-        state = CHANGE_DIRECTION;
+        changeState(CHANGE_DIRECTION);
+        changeState(PATROL);
         xVel = 0;
         xVelRem = 0;
     }
 }
 
 void Sparky::scan() {
-    printf("scanning...\n");
     // Scan opposite way, look for Keen, chase if found
     // Else, scan other way, look for Keen, chase if found
-    // Else, patrol
+    // Else, stop scanning
+
+    if (scanCount == 0) {
+        changeState(CHANGE_DIRECTION);
+        scanCount++;
+    } else if (scanCount == 1) {
+        if (canSeeKeen()) {
+            changeState(CHASE);
+            scanCount = 0;
+        } else {
+            changeState(CHANGE_DIRECTION);
+            scanCount++;
+        }
+    } else {
+        if (canSeeKeen()) {
+            changeState(CHASE);
+        } else {
+            changeState(prevState);
+        }
+        scanCount = 0;
+    }
 }
 
 void Sparky::changeDirection() {
@@ -156,12 +181,31 @@ void Sparky::changeDirection() {
     // Then, invert velocity
     if (frame == anims[animState].size() * frametime - 1) {
         facing = facing == LEFT ? RIGHT : LEFT;
-        state = PATROL;
+        changeState(prevState);
     }
 }
 
 void Sparky::stunned() {
     animate(4, 3);
+}
+
+bool Sparky::canSeeKeen() {
+    SDL_Rect keenHitbox = keen->getBox();
+
+    if (facing == LEFT && keenHitbox.x < hitbox.x) {
+        if (keenHitbox.y > hitbox.y - TILE_HEIGHT && keenHitbox.y < hitbox.y + TILE_HEIGHT)
+            return true;
+    } else if (facing == RIGHT && keenHitbox.x > hitbox.x) {
+        if (keenHitbox.y > hitbox.y - TILE_HEIGHT && keenHitbox.y < hitbox.y + TILE_HEIGHT)
+            return true;
+    }
+
+    return false;
+}
+
+void Sparky::changeState(stateEnum nextState) {
+    prevState = state;
+    state = nextState;
 }
 
 void Sparky::update() {

@@ -27,7 +27,7 @@ int main (int argc, char **args) {
     if (!setTiles()) return 1;
 
     Player player;
-    Sprite* sparky = new Sparky();
+    Sprite* sparky = new Sparky(&player);
     gEnemyBatch[0] = sparky;
 
     while (running) {
