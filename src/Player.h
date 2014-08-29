@@ -12,7 +12,7 @@ class Player : public Sprite {
         float xAccel;
         float yAccel;
 
-        std::vector<SDL_Rect> anims[32];
+        std::vector<SDL_Rect> anims[33];
         bool isAnimLocked;
 
         int lookTimer;
