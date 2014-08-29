@@ -35,6 +35,7 @@ class Player : public Sprite {
         void snapToPole(Tile* pole, directionEnum facing);
         Tile* getCollidingPoleTile();
         void animate(int nextState, int frametime = FRAMETIME);
+        Sprite* getCollidingEnemy();
         void die();
     public:
         Player();

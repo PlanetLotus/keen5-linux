@@ -392,10 +392,14 @@ void Player::update() {
     // Other animations are only done via keypress e.g. shooting but also are preventable by collision, like dying
 
     // Check any "blocking" actions before processing more input
-    if (isShooting)
+    if (isStunned) {
+        die();
+        return;
+    } else if (isShooting) {
         shoot(false, false);
-    else
+    } else {
         processKeyboard();
+    }
 
     // Apply gravity and relevant animations
     if (!isOnPole)
@@ -479,12 +483,14 @@ void Player::update() {
             isOnPole = false;
     }
 
-    // Check unit hit
-    for (unsigned int i = 0; i < gEnemyBatch.size(); i++) {
-        Sprite* unit = gEnemyBatch[i];
-        if (unit != NULL && !unit->getIsStunned() && isUnitColliding(unit->getBox())) {
-            die();
-        }
+    // Check enemy collision
+    if (getCollidingEnemy() != NULL) {
+        isStunned = true;
+        isOnGround = true;  // Animation hack
+        xVel = 0;
+        xVelRem = 0;
+        yVel = 0;
+        yVelRem = 0;
     }
 }
 
@@ -518,12 +524,32 @@ void Player::draw(SDL_Rect cameraBox) {
     gKeenTexture->render(destX - cameraBox.x, destY - cameraBox.y, srcClip);
 }
 
+Sprite* Player::getCollidingEnemy() {
+    for (unsigned int i = 0; i < gEnemyBatch.size(); i++) {
+        Sprite* unit = gEnemyBatch[i];
+        if (unit != NULL && !unit->getIsStunned() && isUnitColliding(unit->getBox())) {
+            return unit;
+        }
+    }
+    return NULL;
+}
+
 void Player::die() {
-    printf("He's dead, Jim.\n");
+    fall();
 
-    // Play death animation
+    // Play death animation for every enemy collision
+    // This call is redundant the first time it's called but easier
+    Sprite* enemy = getCollidingEnemy();
+    if (enemy != NULL) {
+        SDL_Rect enemyBox = enemy->getBox();
+        xVel = hitbox.x < enemyBox.x ? -5 : 5;
+        yVel += -8;
+        animate(32);
+    }
 
-    // Pause game loop
+    // Pause game loop after falling off screen
+    hitbox.x += xVel;
+    hitbox.y += yVel;
 
     // Show menu
 }
