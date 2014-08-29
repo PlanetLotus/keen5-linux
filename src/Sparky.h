@@ -16,6 +16,8 @@ class Sparky : public Sprite {
         void changeDirection();
         void stunned();
 
+        Tile* getTileUnderFeet();
+
         enum facingEnum { LEFT = -1, RIGHT = 1 };
         facingEnum facing;
         int patrolSpeed;

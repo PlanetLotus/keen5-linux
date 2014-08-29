@@ -35,6 +35,7 @@ Tile::Tile(int srcX, int srcY, int destX, int destY, int lHeight, int rHeight,
     this->layer = layer;
 
     this->isPole = isPole;
+    this->isEdge = isEdge;
 }
 
 void Tile::render(SDL_Rect cameraBox) {
@@ -84,6 +85,7 @@ float Tile::getSlope() { return slope; }
 int Tile::getLeftHeight() { return leftHeight; }
 int Tile::getRightHeight() { return rightHeight; }
 bool Tile::getIsSloped() { return isSloped; }
+bool Tile::getIsEdge() { return isEdge; }
 bool Tile::getHasCollision() { return hasCollision; }
 bool Tile::getCollideTop() { return collideTop; }
 bool Tile::getCollideRight() { return collideRight; }

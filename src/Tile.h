@@ -13,6 +13,7 @@ class Tile {
         SDL_Rect destBox;
 
         bool isSloped;
+        bool isEdge;
         float slope;
         bool hasCollision;
         int leftHeight;
@@ -36,6 +37,7 @@ class Tile {
         bool isColliding(TileProperty tileProperty, SDL_Rect hitbox, SDL_Rect nextHitbox);
         bool isTouching(TileProperty tileProperty, SDL_Rect nextHitbox);
         bool getIsSloped();
+        bool getIsEdge();
         float getSlope();
         int getLeftHeight();
         int getRightHeight();

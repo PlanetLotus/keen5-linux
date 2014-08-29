@@ -4,12 +4,12 @@
 using namespace std;
 
 Sparky::Sparky(Player* player) {
-    hitbox.x = TILE_WIDTH * 16;
-    hitbox.y = TILE_HEIGHT * 9;
+    hitbox.x = TILE_WIDTH * 24;
+    hitbox.y = TILE_HEIGHT * 4;
     hitbox.w = TILE_WIDTH * 2;
     hitbox.h = TILE_HEIGHT * 2;
 
-    facing = RIGHT;
+    facing = LEFT;
     patrolSpeed = 4;
     chaseSpeed = patrolSpeed * 2;
     xVel = patrolSpeed * facing;
@@ -117,11 +117,13 @@ void Sparky::patrol() {
     }
 
     // Randomly scan for Keen
+    /*
     if (rand() % 100 == 0) {
         changeState(SCAN);
         xVel = 0;
         xVelRem = 0;
     }
+    */
 }
 
 void Sparky::chase() {
@@ -172,6 +174,8 @@ void Sparky::scan() {
 
 void Sparky::changeDirection() {
     // First, finish animating the direction change before moving
+    changeState(prevState);
+
     int frametime = 4;
     if (facing == LEFT)
         animate(3, frametime);
@@ -208,6 +212,30 @@ void Sparky::changeState(stateEnum nextState) {
     state = nextState;
 }
 
+Tile* Sparky::getTileUnderFeet() {
+    int sparkyBottom = hitbox.y + hitbox.h;
+
+    if (sparkyBottom % TILE_HEIGHT != 0)
+        return NULL;
+
+    int sparkyRight = hitbox.x + hitbox.w;
+    unsigned int leftCol = hitbox.x / TILE_WIDTH;
+    unsigned int rightCol = (sparkyRight + TILE_WIDTH) / TILE_WIDTH;
+    int tileRow = sparkyBottom / TILE_HEIGHT;
+    Tile* tile = NULL;
+
+    // If moving left, return leftmost tile. If moving right, return rightmost
+    // If the unit is pushed by something else, will that mess up this logic?
+    for (unsigned int i = leftCol; i < rightCol; i++) {
+        tile = gTiles[i][tileRow];
+        if (tile != NULL) {
+            if (facing == LEFT)
+                return tile;
+        }
+    }
+    return tile;
+}
+
 void Sparky::update() {
     fall();
 
@@ -233,6 +261,15 @@ void Sparky::update() {
         } else if (tciTB.isBottomColliding()) {
             Tile* tile = tciTB.tileCollidingWithBottom;
             yVel = tile->getBox().y - (hitbox.y + hitbox.h);
+
+            if (xVel != 0) {
+                Tile* tileUnderFeet = getTileUnderFeet();
+                if (tileUnderFeet != NULL && tileUnderFeet->getIsEdge()) {
+                    changeState(CHANGE_DIRECTION);
+                    xVel = 0;
+                    xVelRem = 0;
+                }
+            }
         }
     }
 
