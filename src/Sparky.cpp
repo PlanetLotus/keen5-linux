@@ -4,8 +4,8 @@
 using namespace std;
 
 Sparky::Sparky(Player* player) {
-    hitbox.x = TILE_WIDTH * 24;
-    hitbox.y = TILE_HEIGHT * 4;
+    hitbox.x = TILE_WIDTH * 14;
+    hitbox.y = TILE_HEIGHT * 9;
     hitbox.w = TILE_WIDTH * 2;
     hitbox.h = TILE_HEIGHT * 2;
 

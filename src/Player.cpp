@@ -478,6 +478,14 @@ void Player::update() {
         if (tciTB.isBottomColliding() && (!isOnPole || tciTB.tileCollidingWithBottom->getCollideBottom()))
             isOnPole = false;
     }
+
+    // Check unit hit
+    for (unsigned int i = 0; i < gEnemyBatch.size(); i++) {
+        Sprite* unit = gEnemyBatch[i];
+        if (unit != NULL && !unit->getIsStunned() && isUnitColliding(unit->getBox())) {
+            die();
+        }
+    }
 }
 
 void Player::animate(int nextState, int frametime) {
@@ -510,6 +518,16 @@ void Player::draw(SDL_Rect cameraBox) {
     gKeenTexture->render(destX - cameraBox.x, destY - cameraBox.y, srcClip);
 }
 
+void Player::die() {
+    printf("He's dead, Jim.\n");
+
+    // Play death animation
+
+    // Pause game loop
+
+    // Show menu
+}
+
 bool Player::getIsOnGround() { return isOnGround; }
 
 Player::Player() {
@@ -524,7 +542,7 @@ Player::Player() {
 
     srcClip = NULL;
 
-    hitbox.x = TILE_WIDTH * 20;
+    hitbox.x = TILE_WIDTH * 10;
     hitbox.y = TILE_HEIGHT * 9;
     hitbox.w = TILE_WIDTH;
     hitbox.h = TILE_HEIGHT * 2;
