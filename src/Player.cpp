@@ -491,6 +491,7 @@ void Player::update() {
         xVelRem = 0;
         yVel = 0;
         yVelRem = 0;
+        gCamera.isDisabled = true;
     }
 }
 
@@ -547,10 +548,10 @@ void Player::die() {
         animate(32);
     }
 
-    // Pause game loop after falling off screen
     hitbox.x += xVel;
     hitbox.y += yVel;
 
+    // Pause game loop after falling off screen
     // Show menu
 }
 

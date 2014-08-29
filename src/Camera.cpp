@@ -12,9 +12,12 @@ Camera::Camera() {
     leftBubble = box.x + SCREEN_WIDTH / 3;
     rightBubble = box.x + SCREEN_WIDTH * 2 / 3;
     yOffset = 0;
+    isDisabled = false;
 }
 
 void Camera::update(SDL_Rect keenHitbox, bool isOnGround) {
+    if (isDisabled) return;
+
     leftBubble = box.x + SCREEN_WIDTH / 3;
     rightBubble = box.x + SCREEN_WIDTH * 2 / 3;
 

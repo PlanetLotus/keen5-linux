@@ -26,6 +26,7 @@ class Camera {
         int getBottom();
         int getTopMargin();
         int getBottomMargin();
+        bool isDisabled;
 };
 
 #endif
