@@ -174,8 +174,6 @@ void Sparky::scan() {
 
 void Sparky::changeDirection() {
     // First, finish animating the direction change before moving
-    changeState(prevState);
-
     int frametime = 4;
     if (facing == LEFT)
         animate(3, frametime);
