@@ -119,13 +119,11 @@ void Sparky::patrol() {
     }
 
     // Randomly scan for Keen
-    /*
     if (rand() % 100 == 0) {
         changeState(SCAN);
         xVel = 0;
         xVelRem = 0;
     }
-    */
 }
 
 void Sparky::chase() {
@@ -168,7 +166,7 @@ void Sparky::scan() {
         if (canSeeKeen()) {
             changeState(CHASE);
         } else {
-            changeState(prevState);
+            changeState(PATROL);
         }
         scanCount = 0;
     }
