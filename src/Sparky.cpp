@@ -14,6 +14,8 @@ Sparky::Sparky(Player* player) {
     chaseSpeed = patrolSpeed * 2;
     xVel = patrolSpeed * facing;
     yVel = 0;
+    xVelRem = 0;
+    yVelRem = 0;
 
     scanCount = 0;
     keen = player;
