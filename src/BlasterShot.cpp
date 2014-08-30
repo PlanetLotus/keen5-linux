@@ -95,6 +95,7 @@ void BlasterShot::update() {
         if (unit != NULL && !unit->getIsStunned() && isUnitColliding(unit->getBox())) {
             expire();
             unit->takeShotByPlayer();
+            break;
         }
     }
 }
