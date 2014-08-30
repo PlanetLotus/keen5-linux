@@ -4,6 +4,14 @@
     <li>Add hanging from ledge</li>
     <li>"Jump down" from platforms that have top but not bottom collision</li>
     <li>Moving platforms</li>
+    <li>Little Ampton</li>
+    <li>Add units to level info</li>
+    <li>Add items to level info</li>
+    <li>Add backgrounds to level info</li>
+    <li>Dropdown pause menu</li>
+    <li>Upper-left corner HUD</li>
+    <li>Stats: score, lives, ammo, vitalin</li>
+    <li>Save/load game</li>
 </ul>
 
 <h2>Noteworthy progress</h2>
