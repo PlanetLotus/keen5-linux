@@ -5,6 +5,7 @@
 #include "globals.h"
 #include "Player.h"
 #include "SDL_image.h"
+#include "Ampton.h"
 #include "Sparky.h"
 #include "Timer.h"
 
@@ -27,8 +28,9 @@ int main (int argc, char **args) {
     if (!setTiles()) return 1;
 
     Player player;
-    Sprite* sparky = new Sparky(&player);
-    gEnemyBatch[0] = sparky;
+    //Sprite* sparky = new Sparky(&player);
+    Sprite* ampton = new Ampton(&player);
+    gEnemyBatch[0] = ampton;
 
     while (running) {
         // Start timer

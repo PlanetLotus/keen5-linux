@@ -7,7 +7,17 @@
 
 class Ampton : public Sprite {
     private:
+        std::vector<SDL_Rect> anims[2];
         void animate(int nextState, int frametime = FRAMETIME);
+
+        enum facingEnum { LEFT = -1, RIGHT = 1 };
+        facingEnum facing;
+        int patrolSpeed;
+
+        enum stateEnum { PATROL, CLIMB_UP, CLIMB_DOWN, CHANGE_DIRECTION, FIX_MACHINE, STUNNED };
+        stateEnum state;
+
+        Player* keen;
 
     public:
         Ampton(Player* player);
