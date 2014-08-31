@@ -67,6 +67,10 @@ void Ampton::fall() {
     yVel += 2.6;
 }
 
+void Ampton::changeState(stateEnum nextState) {
+    state = nextState;
+}
+
 void Ampton::patrol() {
     xVel = patrolSpeed * facing;
     TileCollisionInfo tciLR;
@@ -80,15 +84,40 @@ void Ampton::patrol() {
     tciLR = checkTileCollisionLR();
 
     if (tciLR.isLeftColliding() || tciLR.isRightColliding()) {
-        //changeState(CHANGE_DIRECTION);
+        changeState(CHANGE_DIRECTION);
         xVel = 0;
         xVelRem = 0;
     }
 }
 
+void Ampton::changeDirection() {
+    // Need to add animations before this is practical
+    /*
+    // First, finish animating the direction change before moving
+    int frametime = 4;
+    if (facing == LEFT)
+        animate(3, frametime);
+    else
+        animate(2, frametime);
+
+    // Then, invert velocity
+    if (frame == anims[animState].size() * frametime - 1) {
+        facing = facing == LEFT ? RIGHT : LEFT;
+        changeState(prevState);
+    }
+    */
+
+    facing = facing == LEFT ? RIGHT : LEFT;
+    state = PATROL;
+}
+
 void Ampton::update() {
     fall();
-    patrol();
+
+    if (state == PATROL)
+        patrol();
+    else if (state == CHANGE_DIRECTION)
+        changeDirection();
 
     TileCollisionInfo tciTB;
 

@@ -20,7 +20,10 @@ class Ampton : public Sprite {
         Player* keen;
 
         void fall();
+        void changeState(stateEnum nextState);
         void patrol();
+        void changeDirection();
+        Tile* getTileUnderFeet();
 
     public:
         Ampton(Player* player);
