@@ -5,7 +5,7 @@ using namespace std;
 
 Ampton::Ampton(Player* player) {
     hitbox.x = TILE_WIDTH * 14;
-    hitbox.y = TILE_HEIGHT * 9;
+    hitbox.y = TILE_HEIGHT * 10;
     hitbox.w = TILE_WIDTH * 2;
     hitbox.h = TILE_HEIGHT;
 
@@ -60,8 +60,60 @@ void Ampton::animate(int nextState, int frametime) {
     srcClip = &anims[animState][frame / frametime];
 }
 
+void Ampton::fall() {
+    if (yVel >= 20)
+        return;
+
+    yVel += 2.6;
+}
+
+void Ampton::patrol() {
+    xVel = patrolSpeed * facing;
+    TileCollisionInfo tciLR;
+
+    if (facing == LEFT)
+        animate(0, 3);
+    else
+        animate(1, 3);
+
+    // Check left/right collision
+    tciLR = checkTileCollisionLR();
+
+    if (tciLR.isLeftColliding() || tciLR.isRightColliding()) {
+        //changeState(CHANGE_DIRECTION);
+        xVel = 0;
+        xVelRem = 0;
+    }
+}
+
 void Ampton::update() {
-    animate(0);
+    fall();
+    patrol();
+
+    TileCollisionInfo tciTB;
+
+    // Check top/bottom collision
+    if (yVel != 0) {
+        tciTB = checkTileCollisionTB();
+
+        if (tciTB.isTopColliding()) {
+            yVel = (tciTB.tileCollidingWithTop->getBox().y + tciTB.tileCollidingWithTop->getBox().h) - hitbox.y;
+        } else if (tciTB.isBottomColliding()) {
+            Tile* tile = tciTB.tileCollidingWithBottom;
+            yVel = tile->getBox().y - (hitbox.y + hitbox.h);
+
+            /*
+            if (xVel != 0) {
+                Tile* tileUnderFeet = getTileUnderFeet();
+                if (tileUnderFeet != NULL && tileUnderFeet->getIsEdge()) {
+                    changeState(CHANGE_DIRECTION);
+                    xVel = 0;
+                    xVelRem = 0;
+                }
+            }
+            */
+        }
+    }
 
     xVel += xVelRem;
     yVel += abs(yVelRem);
@@ -73,11 +125,17 @@ void Ampton::update() {
     double intPart;
     xVelRem = modf(xVel, &intPart);
     yVelRem = modf(yVel, &intPart);
+
+    // Reset velocity if collision or on pole
+    if (tciTB.isTopColliding() || tciTB.isBottomColliding()) {
+        yVel = 0;
+        yVelRem = 0;
+    }
 }
 
 void Ampton::draw(SDL_Rect cameraBox) {
     // Bottom-align the hitbox for tall frames
-    int offsetY = srcClip->h - TILE_HEIGHT * 2;
+    int offsetY = srcClip->h - TILE_HEIGHT;
     int destY = hitbox.y - offsetY;
 
     gKeenTexture->render(hitbox.x - cameraBox.x, destY - cameraBox.y, srcClip);

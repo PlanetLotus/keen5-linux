@@ -19,6 +19,9 @@ class Ampton : public Sprite {
 
         Player* keen;
 
+        void fall();
+        void patrol();
+
     public:
         Ampton(Player* player);
         void update();
