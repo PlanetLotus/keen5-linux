@@ -4,8 +4,8 @@
 using namespace std;
 
 Ampton::Ampton(Player* player) {
-    hitbox.x = TILE_WIDTH * 14;
-    hitbox.y = TILE_HEIGHT * 10;
+    hitbox.x = TILE_WIDTH * 26;
+    hitbox.y = TILE_HEIGHT * 3;
     hitbox.w = TILE_WIDTH * 2;
     hitbox.h = TILE_HEIGHT;
 
@@ -107,6 +107,30 @@ void Ampton::changeDirection() {
     }
 }
 
+Tile* Ampton::getTileUnderFeet() {
+    int amptonBottom = hitbox.y + hitbox.h;
+
+    if (amptonBottom % TILE_HEIGHT != 0)
+        return NULL;
+
+    int amptonRight = hitbox.x + hitbox.w;
+    unsigned int leftCol = hitbox.x / TILE_WIDTH;
+    unsigned int rightCol = (amptonRight + TILE_WIDTH) / TILE_WIDTH;
+    int tileRow = amptonBottom / TILE_HEIGHT;
+    Tile* tile = NULL;
+
+    // If moving left, return leftmost tile. If moving right, return rightmost
+    // If the unit is pushed by something else, will that mess up this logic?
+    for (unsigned int i = leftCol; i < rightCol; i++) {
+        tile = gTiles[i][tileRow];
+        if (tile != NULL) {
+            if (facing == LEFT)
+                return tile;
+        }
+    }
+    return tile;
+}
+
 void Ampton::update() {
     fall();
 
@@ -127,7 +151,6 @@ void Ampton::update() {
             Tile* tile = tciTB.tileCollidingWithBottom;
             yVel = tile->getBox().y - (hitbox.y + hitbox.h);
 
-            /*
             if (xVel != 0) {
                 Tile* tileUnderFeet = getTileUnderFeet();
                 if (tileUnderFeet != NULL && tileUnderFeet->getIsEdge()) {
@@ -136,7 +159,6 @@ void Ampton::update() {
                     xVelRem = 0;
                 }
             }
-            */
         }
     }
 
