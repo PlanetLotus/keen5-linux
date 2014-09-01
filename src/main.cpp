@@ -28,9 +28,10 @@ int main (int argc, char **args) {
     if (!setTiles()) return 1;
 
     Player player;
-    //Sprite* sparky = new Sparky(&player);
+    Sprite* sparky = new Sparky(&player);
     Sprite* ampton = new Ampton(&player);
     gEnemyBatch[0] = ampton;
+    gEnemyBatch.push_back(sparky);
 
     while (running) {
         // Start timer

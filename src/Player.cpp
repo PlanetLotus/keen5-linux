@@ -393,7 +393,9 @@ void Player::update() {
 
     // Check any "blocking" actions before processing more input
     if (isStunned) {
-        die();
+        fall();
+        hitbox.x += xVel;
+        hitbox.y += yVel;
         return;
     } else if (isShooting) {
         shoot(false, false);
@@ -482,17 +484,6 @@ void Player::update() {
         if (tciTB.isBottomColliding() && (!isOnPole || tciTB.tileCollidingWithBottom->getCollideBottom()))
             isOnPole = false;
     }
-
-    // Check enemy collision
-    if (getCollidingEnemy() != NULL) {
-        isStunned = true;
-        isOnGround = true;  // Animation hack
-        xVel = 0;
-        xVelRem = 0;
-        yVel = 0;
-        yVelRem = 0;
-        gCamera.isDisabled = true;
-    }
 }
 
 void Player::animate(int nextState, int frametime) {
@@ -525,28 +516,24 @@ void Player::draw(SDL_Rect cameraBox) {
     gKeenTexture->render(destX - cameraBox.x, destY - cameraBox.y, srcClip);
 }
 
-Sprite* Player::getCollidingEnemy() {
-    for (unsigned int i = 0; i < gEnemyBatch.size(); i++) {
-        Sprite* unit = gEnemyBatch[i];
-        if (unit != NULL && !unit->getIsStunned() && isUnitColliding(unit->getBox())) {
-            return unit;
-        }
+void Player::die(int collidingEnemyX) {
+    if (!isStunned) {
+        isOnGround = true;  // Animation hack
+        xVel = 0;
+        xVelRem = 0;
+        yVel = 0;
+        yVelRem = 0;
+        gCamera.isDisabled = true;
     }
-    return NULL;
-}
 
-void Player::die() {
+    isStunned = true;
+
     fall();
 
     // Play death animation for every enemy collision
-    // This call is redundant the first time it's called but easier
-    Sprite* enemy = getCollidingEnemy();
-    if (enemy != NULL) {
-        SDL_Rect enemyBox = enemy->getBox();
-        xVel = hitbox.x < enemyBox.x ? -5 : 5;
-        yVel += -8;
-        animate(32);
-    }
+    xVel = hitbox.x < collidingEnemyX ? -5 : 5;
+    yVel += -8;
+    animate(32);
 
     hitbox.x += xVel;
     hitbox.y += yVel;

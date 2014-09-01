@@ -205,6 +205,10 @@ bool Sparky::canSeeKeen() {
     return false;
 }
 
+bool Sparky::isCollidingWithPlayer() {
+    return isUnitColliding(keen->getBox());
+}
+
 void Sparky::changeState(stateEnum nextState) {
     prevState = state;
     state = nextState;
@@ -288,6 +292,9 @@ void Sparky::update() {
         yVel = 0;
         yVelRem = 0;
     }
+
+    if (isCollidingWithPlayer())
+        keen->die(hitbox.x);
 }
 
 void Sparky::draw(SDL_Rect cameraBox) {

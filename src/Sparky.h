@@ -26,6 +26,7 @@ class Sparky : public Sprite {
         int scanCount;
         bool canSeeKeen();
         Player* keen;
+        bool isCollidingWithPlayer();
 
         void fall();
         std::vector<SDL_Rect> anims[5];
