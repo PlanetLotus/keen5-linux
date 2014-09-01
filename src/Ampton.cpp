@@ -36,17 +36,24 @@ Ampton::Ampton(Player* player) {
 
     SDL_Rect turn0 = { TILE_WIDTH * 20, TILE_HEIGHT * 4, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
 
+    SDL_Rect stunned0 = { TILE_WIDTH * 20, TILE_HEIGHT * 6, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
+    SDL_Rect stunned1 = { TILE_WIDTH * 22, TILE_HEIGHT * 6, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
+    SDL_Rect stunned2 = { TILE_WIDTH * 24, TILE_HEIGHT * 6, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
+
     SDL_Rect walkLeftArray[4] = { walkL0, walkL1, walkL2, walkL3 };
     SDL_Rect walkRightArray[4] = { walkR0, walkR1, walkR2, walkR3 };
     SDL_Rect turnArray[1] = { turn0 };
+    SDL_Rect stunnedArray[3] = { stunned0, stunned1, stunned2 };
 
     vector<SDL_Rect> walkLeftAnim(walkLeftArray, walkLeftArray + sizeof(walkLeftArray) / sizeof(SDL_Rect));
     vector<SDL_Rect> walkRightAnim(walkRightArray, walkRightArray + sizeof(walkRightArray) / sizeof(SDL_Rect));
     vector<SDL_Rect> turnAnim(turnArray, turnArray + sizeof(turnArray) / sizeof(SDL_Rect));
+    vector<SDL_Rect> stunnedAnim(stunnedArray, stunnedArray + sizeof(stunnedArray) / sizeof(SDL_Rect));
 
     anims[0] = walkLeftAnim;
     anims[1] = walkRightAnim;
     anims[2] = turnAnim;
+    anims[3] = stunnedAnim;
 }
 
 void Ampton::animate(int nextState, int frametime) {
@@ -107,6 +114,20 @@ void Ampton::changeDirection() {
     }
 }
 
+void Ampton::stunned() {
+    animate(3, 3);
+}
+
+void Ampton::takeShotByPlayer() {
+    isStunned = true;
+    changeState(STUNNED);
+    xVel = 0;
+    xVelRem = 0;
+
+    // Enemies do a brief "hop" when stunned
+    yVel += -12;
+}
+
 Tile* Ampton::getTileUnderFeet() {
     int amptonBottom = hitbox.y + hitbox.h;
 
@@ -138,6 +159,8 @@ void Ampton::update() {
         patrol();
     else if (state == CHANGE_DIRECTION)
         changeDirection();
+    else
+        stunned();
 
     TileCollisionInfo tciTB;
 
