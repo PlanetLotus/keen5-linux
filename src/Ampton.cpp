@@ -34,14 +34,19 @@ Ampton::Ampton(Player* player) {
     SDL_Rect walkR2 = { TILE_WIDTH * 16, TILE_HEIGHT * 6, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
     SDL_Rect walkR3 = { TILE_WIDTH * 18, TILE_HEIGHT * 6, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
 
+    SDL_Rect turn0 = { TILE_WIDTH * 20, TILE_HEIGHT * 4, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
+
     SDL_Rect walkLeftArray[4] = { walkL0, walkL1, walkL2, walkL3 };
     SDL_Rect walkRightArray[4] = { walkR0, walkR1, walkR2, walkR3 };
+    SDL_Rect turnArray[1] = { turn0 };
 
     vector<SDL_Rect> walkLeftAnim(walkLeftArray, walkLeftArray + sizeof(walkLeftArray) / sizeof(SDL_Rect));
     vector<SDL_Rect> walkRightAnim(walkRightArray, walkRightArray + sizeof(walkRightArray) / sizeof(SDL_Rect));
+    vector<SDL_Rect> turnAnim(turnArray, turnArray + sizeof(turnArray) / sizeof(SDL_Rect));
 
     anims[0] = walkLeftAnim;
     anims[1] = walkRightAnim;
+    anims[2] = turnAnim;
 }
 
 void Ampton::animate(int nextState, int frametime) {
@@ -91,24 +96,15 @@ void Ampton::patrol() {
 }
 
 void Ampton::changeDirection() {
-    // Need to add animations before this is practical
-    /*
     // First, finish animating the direction change before moving
-    int frametime = 4;
-    if (facing == LEFT)
-        animate(3, frametime);
-    else
-        animate(2, frametime);
+    int frametime = 3;
+    animate(2, frametime);
 
     // Then, invert velocity
     if (frame == anims[animState].size() * frametime - 1) {
         facing = facing == LEFT ? RIGHT : LEFT;
-        changeState(prevState);
+        changeState(PATROL);
     }
-    */
-
-    facing = facing == LEFT ? RIGHT : LEFT;
-    state = PATROL;
 }
 
 void Ampton::update() {
