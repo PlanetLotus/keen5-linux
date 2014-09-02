@@ -18,6 +18,7 @@ class Ampton : public Sprite {
         stateEnum state;
 
         Player* keen;
+        bool isCollidingWithPlayer();
 
         void fall();
         void changeState(stateEnum nextState);

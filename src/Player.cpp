@@ -407,6 +407,10 @@ void Player::update() {
     if (!isOnPole)
         fall();
 
+    // Apply push from other units
+    xVel += xPush;
+    xPush = 0;
+
     // Check left/right collision
     TileCollisionInfo tciLR;
     if (xVel != 0) {
@@ -542,6 +546,10 @@ void Player::die(int collidingEnemyX) {
     // Show menu
 }
 
+void Player::push(int x) {
+    xPush += x;
+}
+
 bool Player::getIsOnGround() { return isOnGround; }
 
 Player::Player() {
@@ -549,6 +557,7 @@ Player::Player() {
     yVel = 0;
     xVelRem = 0;
     yVelRem = 0;
+    xPush = 0;
     xAccel = 0;
     yAccel = 0;
 
@@ -556,8 +565,8 @@ Player::Player() {
 
     srcClip = NULL;
 
-    hitbox.x = TILE_WIDTH * 10;
-    hitbox.y = TILE_HEIGHT * 9;
+    hitbox.x = TILE_WIDTH * 24;
+    hitbox.y = TILE_HEIGHT * 3;
     hitbox.w = TILE_WIDTH;
     hitbox.h = TILE_HEIGHT * 2;
 

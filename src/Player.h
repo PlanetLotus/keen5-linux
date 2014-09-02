@@ -9,6 +9,7 @@ class Player : public Sprite {
     private:
         enum directionEnum { LEFT, RIGHT, UP, DOWN, STOP };
 
+        int xPush;
         float xAccel;
         float yAccel;
 
@@ -46,6 +47,7 @@ class Player : public Sprite {
         void climb(directionEnum dir);
         void fall();
         void die(int collidingEnemyX);
+        void push(int x);
         void update();
         void draw(SDL_Rect cameraBox);
         bool getIsOnGround();

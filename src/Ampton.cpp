@@ -79,6 +79,10 @@ void Ampton::fall() {
     yVel += 2.6;
 }
 
+bool Ampton::isCollidingWithPlayer() {
+    return isUnitColliding(keen->getBox());
+}
+
 void Ampton::changeState(stateEnum nextState) {
     state = nextState;
 }
@@ -200,6 +204,13 @@ void Ampton::update() {
     if (tciTB.isTopColliding() || tciTB.isBottomColliding()) {
         yVel = 0;
         yVelRem = 0;
+    }
+
+    if (isCollidingWithPlayer()) {
+        if (state == CLIMB_UP || state == CLIMB_DOWN)
+            keen->die(hitbox.x);
+        else
+            keen->push(xVel);
     }
 }
 
