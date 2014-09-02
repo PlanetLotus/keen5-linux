@@ -408,8 +408,11 @@ void Player::update() {
         fall();
 
     // Apply push from other units
-    xVel += xPush;
-    xPush = 0;
+    if (xPush != 0) {
+        animate(0 + facing);
+        xVel += xPush;
+        xPush = 0;
+    }
 
     // Check left/right collision
     TileCollisionInfo tciLR;
