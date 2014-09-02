@@ -207,15 +207,13 @@ void Ampton::update() {
     }
 
     if (isCollidingWithPlayer()) {
+        SDL_Rect keenBox = keen->getBox();
         if (state == CLIMB_UP || state == CLIMB_DOWN)
             keen->die(hitbox.x);
-        else if (facing == LEFT) {
-            SDL_Rect keenBox = keen->getBox();
+        else if (facing == LEFT && hitbox.x > keenBox.x)
             keen->push(hitbox.x - (keenBox.x + keenBox.w));
-        } else {
-            SDL_Rect keenBox = keen->getBox();
+        else if (hitbox.x + hitbox.w < keenBox.x + keenBox.w)
             keen->push((hitbox.x + hitbox.w) - keenBox.x);
-        }
     }
 }
 

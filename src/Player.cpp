@@ -547,7 +547,8 @@ void Player::die(int collidingEnemyX) {
 }
 
 void Player::push(int x) {
-    xPush += x;
+    if (!isOnPole)
+        xPush += x;
 }
 
 bool Player::getIsOnGround() { return isOnGround; }
