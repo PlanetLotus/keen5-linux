@@ -6,7 +6,7 @@ using namespace std;
 Ampton::Ampton(Player* player) {
     hitbox.x = TILE_WIDTH * 26;
     hitbox.y = TILE_HEIGHT * 3;
-    hitbox.w = TILE_WIDTH * 2;
+    hitbox.w = TILE_WIDTH;
     hitbox.h = TILE_HEIGHT;
 
     facing = LEFT;
@@ -209,15 +209,24 @@ void Ampton::update() {
     if (isCollidingWithPlayer()) {
         if (state == CLIMB_UP || state == CLIMB_DOWN)
             keen->die(hitbox.x);
-        else
-            keen->push(xVel);
+        else if (facing == LEFT) {
+            SDL_Rect keenBox = keen->getBox();
+            keen->push(hitbox.x - (keenBox.x + keenBox.w));
+        } else {
+            SDL_Rect keenBox = keen->getBox();
+            keen->push((hitbox.x + hitbox.w) - keenBox.x);
+        }
     }
 }
 
 void Ampton::draw(SDL_Rect cameraBox) {
+    // Center the hitbox (horizontally) inside the displayed frame
+    int offsetX = srcClip->w / 2 - TILE_WIDTH / 2;
+    int destX = hitbox.x - offsetX;
+
     // Bottom-align the hitbox for tall frames
     int offsetY = srcClip->h - TILE_HEIGHT;
     int destY = hitbox.y - offsetY;
 
-    gKeenTexture->render(hitbox.x - cameraBox.x, destY - cameraBox.y, srcClip);
+    gKeenTexture->render(destX - cameraBox.x, destY - cameraBox.y, srcClip);
 }
