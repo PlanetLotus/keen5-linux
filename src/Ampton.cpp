@@ -206,7 +206,7 @@ void Ampton::update() {
         yVelRem = 0;
     }
 
-    if (isCollidingWithPlayer()) {
+    if (state != STUNNED && isCollidingWithPlayer()) {
         SDL_Rect keenBox = keen->getBox();
         if (state == CLIMB_UP || state == CLIMB_DOWN)
             keen->die(hitbox.x);

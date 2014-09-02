@@ -293,7 +293,7 @@ void Sparky::update() {
         yVelRem = 0;
     }
 
-    if (isCollidingWithPlayer())
+    if (state != STUNNED && isCollidingWithPlayer())
         keen->die(hitbox.x);
 }
 
