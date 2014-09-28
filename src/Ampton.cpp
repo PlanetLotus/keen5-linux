@@ -151,21 +151,14 @@ void Ampton::changeDirection() {
 }
 
 void Ampton::climbUp() {
-    // Not implemented
-    /*
+    if (getCollidingPoleTile() == NULL) {
+        changeState(CLIMB_DOWN);
+        return;
+    }
+
     xVel = 0;
     xVelRem = 0;
-    yVel = -3;
-
-    animate(3);
-    */
-}
-
-void Ampton::climbDown() {
-    xVel = 0;
-    xVelRem = 0;
-    yVel = 3;
-    yVelRem = 0;
+    yVel = patrolSpeed * -2;
 
     animate(3);
 
@@ -173,18 +166,37 @@ void Ampton::climbDown() {
 
     if (tciTB.isTopColliding()) {
         yVel = (tciTB.tileCollidingWithTop->getBox().y + tciTB.tileCollidingWithTop->getBox().h) - hitbox.y;
-    } else if (tciTB.isBottomColliding()) {
-        // TODO: Determine pole-leaving behavior for ground that isn't the end of the pole
+        changeState(CLIMB_DOWN);
+    }
+
+    updateHitbox();
+}
+
+void Ampton::climbDown() {
+    xVel = 0;
+    xVelRem = 0;
+    yVel = patrolSpeed * 2;
+    yVelRem = 0;
+
+    animate(3);
+
+    TileCollisionInfo tciTB = checkTileCollisionTB();
+
+    if (tciTB.isBottomColliding()) {
         Tile* tile = tciTB.tileCollidingWithBottom;
 
-        if (climbCooldownTimer > climbCooldown) {
-            climbCooldownTimer = 0;
-            yVel = tile->getBox().y - (hitbox.y + hitbox.h);
-            changeState(PATROL);
-        }
-
-        // If end of pole, always leave
+        // End of pole
         if (tile->getCollideBottom()) {
+            if (climbCooldownTimer > climbCooldown) {
+                climbCooldownTimer = 0;
+                yVel = tile->getBox().y - (hitbox.y + hitbox.h);
+                changeState(PATROL);
+            } else {
+                // If just starting, climb up instead!
+                yVel = tile->getBox().y - (hitbox.y + hitbox.h);
+                changeState(CLIMB_UP);
+            }
+        } else if (climbCooldownTimer > climbCooldown) {
             climbCooldownTimer = 0;
             yVel = tile->getBox().y - (hitbox.y + hitbox.h);
             changeState(PATROL);
