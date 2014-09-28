@@ -25,6 +25,7 @@ class Ampton : public Sprite {
         void patrol();
         void changeDirection();
         void climbUp();
+        void climbDown();
         void stunned();
         void takeShotByPlayer();
         Tile* getTileUnderFeet();

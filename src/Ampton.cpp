@@ -114,7 +114,7 @@ void Ampton::patrol() {
     Tile* pole = getCollidingPoleTile();
     if (pole != NULL) {
         snapToPole(pole);
-        changeState(CLIMB_UP);
+        changeState(CLIMB_DOWN);
     }
 }
 
@@ -133,6 +133,16 @@ void Ampton::changeDirection() {
 void Ampton::climbUp() {
     xVel = 0;
     xVelRem = 0;
+    yVel = -3;
+
+    animate(3);
+}
+
+void Ampton::climbDown() {
+    xVel = 0;
+    xVelRem = 0;
+    yVel = 3;
+
     animate(3);
 }
 
@@ -240,6 +250,8 @@ void Ampton::update() {
         changeDirection();
     else if (state == CLIMB_UP)
         climbUp();
+    else if (state == CLIMB_DOWN)
+        climbDown();
     else
         stunned();
 
@@ -251,7 +263,7 @@ void Ampton::update() {
 
         if (tciTB.isTopColliding()) {
             yVel = (tciTB.tileCollidingWithTop->getBox().y + tciTB.tileCollidingWithTop->getBox().h) - hitbox.y;
-        } else if (tciTB.isBottomColliding()) {
+        } else if (tciTB.isBottomColliding() && state != CLIMB_UP && state != CLIMB_DOWN) {
             Tile* tile = tciTB.tileCollidingWithBottom;
             yVel = tile->getBox().y - (hitbox.y + hitbox.h);
 
