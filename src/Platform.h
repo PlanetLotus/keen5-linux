@@ -1,6 +1,7 @@
 #ifndef PLATFORM_H
 #define PLATFORM_H
 
+#include "Player.h"
 #include "SDL.h"
 
 class Platform {
@@ -13,7 +14,7 @@ class Platform {
         float yVel;
 
     public:
-        Platform();
+        Platform(Player* player);
         void update();
         void draw(SDL_Rect cameraBox);
 };

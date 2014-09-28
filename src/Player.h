@@ -5,6 +5,9 @@
 #include "SDL.h"
 #include "Sprite.h"
 
+// This can't be the right way to do this, but it does work as intended...
+extern const int FRAMETIME;
+
 class Player : public Sprite {
     private:
         enum directionEnum { LEFT, RIGHT, UP, DOWN, STOP };

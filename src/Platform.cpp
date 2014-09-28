@@ -1,7 +1,7 @@
 #include "globals.h"
 #include "Platform.h"
 
-Platform::Platform() {
+Platform::Platform(Player* player) {
     hitbox.x = TILE_WIDTH * 23;
     hitbox.y = TILE_HEIGHT * 9;
     hitbox.w = TILE_WIDTH * 2;

@@ -29,7 +29,7 @@ int main (int argc, char **args) {
     if (!setTiles()) return 1;
 
     Player player;
-    Platform* platform = new Platform();
+    Platform* platform = new Platform(&player);
     Sprite* sparky = new Sparky(&player);
     Sprite* ampton = new Ampton(&player);
     gPlatformBatch[0] = platform;
