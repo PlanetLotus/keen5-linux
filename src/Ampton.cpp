@@ -1,5 +1,6 @@
 #include "Ampton.h"
 #include "globals.h"
+#include "Timer.h"
 
 using namespace std;
 
@@ -23,6 +24,9 @@ Ampton::Ampton(Player* player) {
 
     keen = player;
     isStunned = false;
+
+    climbCooldownTimer = 0;
+    climbCooldown = FRAMES_PER_SECOND / 2;
 
     SDL_Rect walkL0 = { TILE_WIDTH * 12, TILE_HEIGHT * 4, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
     SDL_Rect walkL1 = { TILE_WIDTH * 14, TILE_HEIGHT * 4, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
@@ -111,13 +115,17 @@ void Ampton::patrol() {
     }
 
     // If colliding with pole tile, climb it
-    Tile* pole = getCollidingPoleTile();
-    if (pole != NULL) {
-        snapToPole(pole);
-        changeState(CLIMB_DOWN);
+    if (climbCooldownTimer > climbCooldown) {
+        Tile* pole = getCollidingPoleTile();
+        if (pole != NULL) {
+            snapToPole(pole);
+            changeState(CLIMB_DOWN);
+            climbCooldownTimer = 0;
+        }
     }
 
     bool isTBColliding = setYVelIfTBCollision();
+
     updateVelsWithRemainder();
     updateHitbox();
     updateVelRems();
@@ -169,8 +177,15 @@ void Ampton::climbDown() {
         // TODO: Determine pole-leaving behavior for ground that isn't the end of the pole
         Tile* tile = tciTB.tileCollidingWithBottom;
 
-        // If end of pole, leave
+        if (climbCooldownTimer > climbCooldown) {
+            climbCooldownTimer = 0;
+            yVel = tile->getBox().y - (hitbox.y + hitbox.h);
+            changeState(PATROL);
+        }
+
+        // If end of pole, always leave
         if (tile->getCollideBottom()) {
+            climbCooldownTimer = 0;
             yVel = tile->getBox().y - (hitbox.y + hitbox.h);
             changeState(PATROL);
         }
@@ -348,6 +363,8 @@ void Ampton::update() {
         climbDown();
     else
         stunned();
+
+    climbCooldownTimer++;
 
     if (state != STUNNED && isCollidingWithPlayer()) {
         SDL_Rect keenBox = keen->getBox();

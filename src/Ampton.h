@@ -20,6 +20,9 @@ class Ampton : public Sprite {
         Player* keen;
         bool isCollidingWithPlayer();
 
+        int climbCooldownTimer;
+        int climbCooldown;
+
         void fall();
         void changeState(stateEnum nextState);
         void patrol();
