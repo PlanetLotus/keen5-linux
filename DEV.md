@@ -4,7 +4,6 @@
     <li>Add hanging from ledge</li>
     <li>"Jump down" from platforms that have top but not bottom collision</li>
     <li>Moving platforms</li>
-    <li>Little Ampton</li>
     <li>Add units to level info</li>
     <li>Add items to level info</li>
     <li>Add backgrounds to level info</li>
@@ -27,4 +26,4 @@ Basic collision implemented against the static tiles. Sloped tiles are also most
 
 Physics implemented using floats for integrating position and ints for rendering position.
 
-One enemy with basic AI implemented.
+Two enemies with basic AI implemented.
