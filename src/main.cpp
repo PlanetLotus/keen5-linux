@@ -32,6 +32,7 @@ int main (int argc, char **args) {
     Platform* platform = new Platform();
     Sprite* sparky = new Sparky(&player);
     Sprite* ampton = new Ampton(&player);
+    gPlatformBatch[0] = platform;
     gEnemyBatch[0] = ampton;
     gEnemyBatch.push_back(sparky);
 
@@ -63,7 +64,8 @@ int main (int argc, char **args) {
         SDL_RenderClear(gRenderer);
 
         // Update units
-        platform->update();
+        for (unsigned int i = 0; i < gPlatformBatch.size(); i++)
+            gPlatformBatch[i]->update();
         for (unsigned int i = 0; i < gEnemyBatch.size(); i++)
             gEnemyBatch[i]->update();
         for (unsigned int i = 0; i < gBlasterShotBatch.size(); i++)
@@ -79,7 +81,8 @@ int main (int argc, char **args) {
         }
 
         // Draw units
-        platform->draw(gCamera.getBox());
+        for (unsigned int i = 0; i < gPlatformBatch.size(); i++)
+            gPlatformBatch[i]->draw(gCamera.getBox());
         for (unsigned int i = 0; i < gEnemyBatch.size(); i++)
             gEnemyBatch[i]->draw(gCamera.getBox());
         for (unsigned int i = 0; i < gBlasterShotBatch.size(); i++)

@@ -26,5 +26,6 @@ Controller gController;
 
 std::vector<Sprite*> gEnemyBatch(1);
 std::vector<BlasterShot*> gBlasterShotBatch;
+std::vector<Platform*> gPlatformBatch(1);
 
 Camera gCamera;

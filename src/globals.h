@@ -9,6 +9,7 @@
 #include "Sprite.h"
 #include "Texture.h"
 #include "Tile.h"
+#include "Platform.h"
 
 // Screen attributes
 extern const int SCREEN_WIDTH;
@@ -42,6 +43,7 @@ extern Controller gController;
 
 extern std::vector<Sprite*> gEnemyBatch;
 extern std::vector<BlasterShot*> gBlasterShotBatch;
+extern std::vector<Platform*> gPlatformBatch;
 
 extern Camera gCamera;
 

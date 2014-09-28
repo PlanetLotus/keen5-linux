@@ -7,7 +7,10 @@ Platform::Platform() {
     hitbox.w = TILE_WIDTH * 2;
     hitbox.h = TILE_HEIGHT;
 
-    srcRect = { TILE_WIDTH * 14, TILE_HEIGHT * 8, TILE_WIDTH * 2, TILE_HEIGHT };
+    srcRect.x = TILE_WIDTH * 14;
+    srcRect.y = TILE_HEIGHT * 8;
+    srcRect.w = TILE_WIDTH * 2;
+    srcRect.h = TILE_HEIGHT;
 
     xVel = 0;
     yVel = 0;
