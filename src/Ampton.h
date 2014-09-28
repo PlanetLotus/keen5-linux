@@ -31,6 +31,12 @@ class Ampton : public Sprite {
         Tile* getTileUnderFeet();
         Tile* getCollidingPoleTile();
         void snapToPole(Tile* pole);
+        void changeDirectionIfOnEdge();
+        bool setYVelIfTBCollision();
+        void updateVelsWithRemainder();
+        void updateHitbox();
+        void updateVelRems();
+        void resetYVel(bool isTBColliding);
 
     public:
         Ampton(Player* player);

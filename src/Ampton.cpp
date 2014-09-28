@@ -116,6 +116,12 @@ void Ampton::patrol() {
         snapToPole(pole);
         changeState(CLIMB_DOWN);
     }
+
+    bool isTBColliding = setYVelIfTBCollision();
+    updateVelsWithRemainder();
+    updateHitbox();
+    updateVelRems();
+    resetYVel(isTBColliding);
 }
 
 void Ampton::changeDirection() {
@@ -128,26 +134,59 @@ void Ampton::changeDirection() {
         facing = facing == LEFT ? RIGHT : LEFT;
         changeState(PATROL);
     }
+
+    bool isTBColliding = setYVelIfTBCollision();
+    updateVelsWithRemainder();
+    updateHitbox();
+    updateVelRems();
+    resetYVel(isTBColliding);
 }
 
 void Ampton::climbUp() {
+    // Not implemented
+    /*
     xVel = 0;
     xVelRem = 0;
     yVel = -3;
 
     animate(3);
+    */
 }
 
 void Ampton::climbDown() {
     xVel = 0;
     xVelRem = 0;
     yVel = 3;
+    yVelRem = 0;
 
     animate(3);
+
+    TileCollisionInfo tciTB = checkTileCollisionTB();
+
+    if (tciTB.isTopColliding()) {
+        yVel = (tciTB.tileCollidingWithTop->getBox().y + tciTB.tileCollidingWithTop->getBox().h) - hitbox.y;
+    } else if (tciTB.isBottomColliding()) {
+        // TODO: Determine pole-leaving behavior for ground that isn't the end of the pole
+        Tile* tile = tciTB.tileCollidingWithBottom;
+
+        // If end of pole, leave
+        if (tile->getCollideBottom()) {
+            yVel = tile->getBox().y - (hitbox.y + hitbox.h);
+            changeState(PATROL);
+        }
+    }
+
+    updateHitbox();
 }
 
 void Ampton::stunned() {
     animate(4, 3);
+
+    bool isTBColliding = setYVelIfTBCollision();
+    updateVelsWithRemainder();
+    updateHitbox();
+    updateVelRems();
+    resetYVel(isTBColliding);
 }
 
 void Ampton::takeShotByPlayer() {
@@ -241,6 +280,61 @@ void Ampton::snapToPole(Tile* pole) {
         xVel = pole->getBox().x - hitbox.x;
 }
 
+void Ampton::changeDirectionIfOnEdge() {
+    if (xVel != 0) {
+        Tile* tileUnderFeet = getTileUnderFeet();
+        if (tileUnderFeet != NULL && tileUnderFeet->getIsEdge()) {
+            changeState(CHANGE_DIRECTION);
+            xVel = 0;
+            xVelRem = 0;
+        }
+    }
+}
+
+bool Ampton::setYVelIfTBCollision() {
+    if (yVel != 0) {
+        TileCollisionInfo tciTB = checkTileCollisionTB();
+
+        if (tciTB.isTopColliding()) {
+            yVel = (tciTB.tileCollidingWithTop->getBox().y + tciTB.tileCollidingWithTop->getBox().h) - hitbox.y;
+            return true;
+        } else if (tciTB.isBottomColliding()) {
+            Tile* tile = tciTB.tileCollidingWithBottom;
+            yVel = tile->getBox().y - (hitbox.y + hitbox.h);
+            changeDirectionIfOnEdge();
+            return true;
+        }
+
+        return false;
+    }
+    return false;
+}
+
+void Ampton::updateVelsWithRemainder() {
+    xVel += xVelRem;
+    yVel += abs(yVelRem);
+}
+
+void Ampton::updateHitbox() {
+    hitbox.x += xVel;
+    hitbox.y += yVel;
+}
+
+void Ampton::updateVelRems() {
+    // Set fractional part of vel to rem
+    double intPart;
+    xVelRem = modf(xVel, &intPart);
+    yVelRem = modf(yVel, &intPart);
+}
+
+void Ampton::resetYVel(bool isTBColliding) {
+    // Reset velocity if collision
+    if (isTBColliding) {
+        yVel = 0;
+        yVelRem = 0;
+    }
+}
+
 void Ampton::update() {
     fall();
 
@@ -254,46 +348,6 @@ void Ampton::update() {
         climbDown();
     else
         stunned();
-
-    TileCollisionInfo tciTB;
-
-    // Check top/bottom collision
-    if (yVel != 0) {
-        tciTB = checkTileCollisionTB();
-
-        if (tciTB.isTopColliding()) {
-            yVel = (tciTB.tileCollidingWithTop->getBox().y + tciTB.tileCollidingWithTop->getBox().h) - hitbox.y;
-        } else if (tciTB.isBottomColliding() && state != CLIMB_UP && state != CLIMB_DOWN) {
-            Tile* tile = tciTB.tileCollidingWithBottom;
-            yVel = tile->getBox().y - (hitbox.y + hitbox.h);
-
-            if (xVel != 0) {
-                Tile* tileUnderFeet = getTileUnderFeet();
-                if (tileUnderFeet != NULL && tileUnderFeet->getIsEdge()) {
-                    changeState(CHANGE_DIRECTION);
-                    xVel = 0;
-                    xVelRem = 0;
-                }
-            }
-        }
-    }
-
-    xVel += xVelRem;
-    yVel += abs(yVelRem);
-
-    hitbox.x += xVel;
-    hitbox.y += yVel;
-
-    // Set fractional part of vel to rem
-    double intPart;
-    xVelRem = modf(xVel, &intPart);
-    yVelRem = modf(yVel, &intPart);
-
-    // Reset velocity if collision or on pole
-    if (tciTB.isTopColliding() || tciTB.isBottomColliding()) {
-        yVel = 0;
-        yVelRem = 0;
-    }
 
     if (state != STUNNED && isCollidingWithPlayer()) {
         SDL_Rect keenBox = keen->getBox();
