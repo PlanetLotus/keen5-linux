@@ -6,7 +6,7 @@
 class Platform {
     private:
         SDL_Rect hitbox;
-        SDL_Rect* srcClip;
+        SDL_Rect srcRect;
 
         static const int speed = 4;
         float xVel;
