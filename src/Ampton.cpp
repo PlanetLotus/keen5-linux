@@ -36,6 +36,8 @@ Ampton::Ampton(Player* player) {
 
     SDL_Rect turn0 = { TILE_WIDTH * 20, TILE_HEIGHT * 4, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
 
+    SDL_Rect climb0 = { TILE_WIDTH * 24, TILE_HEIGHT * 4, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
+
     SDL_Rect stunned0 = { TILE_WIDTH * 20, TILE_HEIGHT * 6, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
     SDL_Rect stunned1 = { TILE_WIDTH * 22, TILE_HEIGHT * 6, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
     SDL_Rect stunned2 = { TILE_WIDTH * 24, TILE_HEIGHT * 6, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
@@ -43,17 +45,20 @@ Ampton::Ampton(Player* player) {
     SDL_Rect walkLeftArray[4] = { walkL0, walkL1, walkL2, walkL3 };
     SDL_Rect walkRightArray[4] = { walkR0, walkR1, walkR2, walkR3 };
     SDL_Rect turnArray[1] = { turn0 };
+    SDL_Rect climbArray[1] = { climb0 };
     SDL_Rect stunnedArray[3] = { stunned0, stunned1, stunned2 };
 
     vector<SDL_Rect> walkLeftAnim(walkLeftArray, walkLeftArray + sizeof(walkLeftArray) / sizeof(SDL_Rect));
     vector<SDL_Rect> walkRightAnim(walkRightArray, walkRightArray + sizeof(walkRightArray) / sizeof(SDL_Rect));
     vector<SDL_Rect> turnAnim(turnArray, turnArray + sizeof(turnArray) / sizeof(SDL_Rect));
+    vector<SDL_Rect> climbAnim(climbArray, climbArray + sizeof(climbArray) / sizeof(SDL_Rect));
     vector<SDL_Rect> stunnedAnim(stunnedArray, stunnedArray + sizeof(stunnedArray) / sizeof(SDL_Rect));
 
     anims[0] = walkLeftAnim;
     anims[1] = walkRightAnim;
     anims[2] = turnAnim;
-    anims[3] = stunnedAnim;
+    anims[3] = climbAnim;
+    anims[4] = stunnedAnim;
 }
 
 void Ampton::animate(int nextState, int frametime) {
@@ -104,6 +109,13 @@ void Ampton::patrol() {
         xVel = 0;
         xVelRem = 0;
     }
+
+    // If colliding with pole tile, climb it
+    Tile* pole = getCollidingPoleTile();
+    if (pole != NULL) {
+        snapToPole(pole);
+        changeState(CLIMB_UP);
+    }
 }
 
 void Ampton::changeDirection() {
@@ -118,8 +130,14 @@ void Ampton::changeDirection() {
     }
 }
 
+void Ampton::climbUp() {
+    xVel = 0;
+    xVelRem = 0;
+    animate(3);
+}
+
 void Ampton::stunned() {
-    animate(3, 3);
+    animate(4, 3);
 }
 
 void Ampton::takeShotByPlayer() {
@@ -156,6 +174,63 @@ Tile* Ampton::getTileUnderFeet() {
     return tile;
 }
 
+Tile* Ampton::getCollidingPoleTile() {
+    SDL_Rect nextHitbox = { hitbox.x + (int)xVel, hitbox.y, hitbox.w, hitbox.h };
+    vector<Tile*> leftTiles = getTilesToLeft();
+
+    for (unsigned int i = 0; i < leftTiles.size(); i++) {
+        SDL_Rect tileBox = leftTiles[i]->getBox();
+        if (tileBox.y + tileBox.h > hitbox.y && hitbox.y >= tileBox.y &&
+            leftTiles[i]->isColliding(Tile::ISPOLE, hitbox, nextHitbox)) {
+
+            SDL_Rect poleBox = leftTiles[i]->getBox();
+            int poleRight = poleBox.x + poleBox.w;
+            int amptonRight = hitbox.x + hitbox.w;
+
+            // Must be in center of pole
+            if (hitbox.x < poleRight - TILE_WIDTH / 4 && amptonRight >= TILE_WIDTH / 4 + poleBox.x) {
+                return leftTiles[i];
+            } else {
+                break;
+            }
+        }
+    }
+
+    // Now do same for rightTiles
+    vector<Tile*> rightTiles = getTilesToRight();
+
+    for (unsigned int i = 0; i < rightTiles.size(); i++) {
+        SDL_Rect tileBox = rightTiles[i]->getBox();
+        if (tileBox.y + tileBox.h > hitbox.y && hitbox.y >= tileBox.y &&
+            rightTiles[i]->isColliding(Tile::ISPOLE, hitbox, nextHitbox)) {
+
+            int amptonRight = hitbox.x + hitbox.w;
+            SDL_Rect poleBox = rightTiles[i]->getBox();
+            int poleRight = poleBox.x + poleBox.w;
+
+            // Must be in center of pole
+            if (hitbox.x < poleRight - TILE_WIDTH / 4 && amptonRight >= TILE_WIDTH / 4 + poleBox.x) {
+                return rightTiles[i];
+            } else {
+                return NULL;
+            }
+        }
+    }
+
+    return NULL;
+}
+
+void Ampton::snapToPole(Tile* pole) {
+    if (pole == NULL)
+        return;
+
+    // "Snap" to the pole horizontally, locking movement in x-direction
+    if (facing == LEFT)
+        xVel = pole->getBox().x - hitbox.x;
+    else
+        xVel = pole->getBox().x - hitbox.x;
+}
+
 void Ampton::update() {
     fall();
 
@@ -163,6 +238,8 @@ void Ampton::update() {
         patrol();
     else if (state == CHANGE_DIRECTION)
         changeDirection();
+    else if (state == CLIMB_UP)
+        climbUp();
     else
         stunned();
 

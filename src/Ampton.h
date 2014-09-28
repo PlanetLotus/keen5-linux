@@ -7,7 +7,7 @@
 
 class Ampton : public Sprite {
     private:
-        std::vector<SDL_Rect> anims[4];
+        std::vector<SDL_Rect> anims[5];
         void animate(int nextState, int frametime = FRAMETIME);
 
         enum facingEnum { LEFT = -1, RIGHT = 1 };
@@ -24,9 +24,12 @@ class Ampton : public Sprite {
         void changeState(stateEnum nextState);
         void patrol();
         void changeDirection();
+        void climbUp();
         void stunned();
         void takeShotByPlayer();
         Tile* getTileUnderFeet();
+        Tile* getCollidingPoleTile();
+        void snapToPole(Tile* pole);
 
     public:
         Ampton(Player* player);
