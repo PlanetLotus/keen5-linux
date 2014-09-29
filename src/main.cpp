@@ -17,6 +17,10 @@ bool loadFiles();
 bool setTiles();
 void cleanUp();
 
+// If I declare this as extern, it's undefined on the next line. Why?
+vector<Sprite*> enemyBatch(2);
+const vector<Sprite*>& BlasterShot::enemyBatchRef = enemyBatch;
+
 int main (int argc, char **args) {
     // Initialize variables
     bool running = true;
@@ -32,9 +36,11 @@ int main (int argc, char **args) {
     Platform* platform = new Platform(&player);
     Sprite* sparky = new Sparky(&player);
     Sprite* ampton = new Ampton(&player);
+
     gPlatformBatch[0] = platform;
-    gEnemyBatch[0] = ampton;
-    gEnemyBatch.push_back(sparky);
+
+    enemyBatch[0] = ampton;
+    enemyBatch[1] = sparky;
 
     while (running) {
         // Start timer
@@ -66,8 +72,8 @@ int main (int argc, char **args) {
         // Update units
         for (unsigned int i = 0; i < gPlatformBatch.size(); i++)
             gPlatformBatch[i]->update();
-        for (unsigned int i = 0; i < gEnemyBatch.size(); i++)
-            gEnemyBatch[i]->update();
+        for (unsigned int i = 0; i < enemyBatch.size(); i++)
+            enemyBatch[i]->update();
         for (unsigned int i = 0; i < gBlasterShotBatch.size(); i++)
             gBlasterShotBatch[i]->update();
         player.update();
@@ -83,8 +89,8 @@ int main (int argc, char **args) {
         // Draw units
         for (unsigned int i = 0; i < gPlatformBatch.size(); i++)
             gPlatformBatch[i]->draw(gCamera.getBox());
-        for (unsigned int i = 0; i < gEnemyBatch.size(); i++)
-            gEnemyBatch[i]->draw(gCamera.getBox());
+        for (unsigned int i = 0; i < enemyBatch.size(); i++)
+            enemyBatch[i]->draw(gCamera.getBox());
         for (unsigned int i = 0; i < gBlasterShotBatch.size(); i++)
             gBlasterShotBatch[i]->draw(gCamera.getBox());
         player.draw(gCamera.getBox());

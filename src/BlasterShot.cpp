@@ -90,8 +90,8 @@ void BlasterShot::update() {
     if (tciLR.isLeftColliding() || tciLR.isRightColliding()) xVel = 0;
 
     // Check unit hit
-    for (unsigned int i = 0; i < gEnemyBatch.size(); i++) {
-        Sprite* unit = gEnemyBatch[i];
+    for (unsigned int i = 0; i < enemyBatchRef.size(); i++) {
+        Sprite* unit = enemyBatchRef[i];
         if (unit != NULL && !unit->getIsStunned() && isUnitColliding(unit->getBox())) {
             expire();
             unit->takeShotByPlayer();

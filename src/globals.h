@@ -41,7 +41,6 @@ extern std::vector< std::vector<Tile*> > gTiles;
 
 extern Controller gController;
 
-extern std::vector<Sprite*> gEnemyBatch;
 extern std::vector<BlasterShot*> gBlasterShotBatch;
 extern std::vector<Platform*> gPlatformBatch;
 
