@@ -13,6 +13,8 @@ class BlasterShot : public Sprite {
         void animate(int nextState);
     public:
         static const std::vector<Sprite*>& enemyBatchRef;
+        static std::vector<BlasterShot*>& blasterShotBatchRef;
+
         BlasterShot(int startX, int startY, float velocityX, float velocityY);
         void update();
         void draw(SDL_Rect cameraBox);

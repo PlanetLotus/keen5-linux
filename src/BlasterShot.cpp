@@ -40,7 +40,7 @@ BlasterShot::BlasterShot(int startX, int startY, float velocityX, float velocity
     anims[1] = collide_anim;
 
     // Add self to sprite batch
-    gBlasterShotBatch.push_back(this);
+    blasterShotBatchRef.push_back(this);
 
     // Set animation default
     animate(0);
@@ -133,10 +133,10 @@ void BlasterShot::expire() {
 }
 
 void BlasterShot::die() {
-    // Erase this BlasterShot from gBlasterShotBatch
+    // Erase this BlasterShot from blasterShotBatch
     // This calls the destructor internally
-    vector<BlasterShot*>::iterator it = find(gBlasterShotBatch.begin(), gBlasterShotBatch.end(), this);
+    vector<BlasterShot*>::iterator it = find(blasterShotBatchRef.begin(), blasterShotBatchRef.end(), this);
 
-    if (it != gBlasterShotBatch.end())
-        gBlasterShotBatch.erase(it);
+    if (it != blasterShotBatchRef.end())
+        blasterShotBatchRef.erase(it);
 }

@@ -21,6 +21,9 @@ void cleanUp();
 vector<Sprite*> enemyBatch(2);
 const vector<Sprite*>& BlasterShot::enemyBatchRef = enemyBatch;
 
+vector<BlasterShot*> blasterShotBatch;
+vector<BlasterShot*>& BlasterShot::blasterShotBatchRef = blasterShotBatch;
+
 int main (int argc, char **args) {
     // Initialize variables
     bool running = true;
@@ -74,8 +77,8 @@ int main (int argc, char **args) {
             gPlatformBatch[i]->update();
         for (unsigned int i = 0; i < enemyBatch.size(); i++)
             enemyBatch[i]->update();
-        for (unsigned int i = 0; i < gBlasterShotBatch.size(); i++)
-            gBlasterShotBatch[i]->update();
+        for (unsigned int i = 0; i < blasterShotBatch.size(); i++)
+            blasterShotBatch[i]->update();
         player.update();
 
         // Render tiles - Layer 0 (Before units)
@@ -91,8 +94,8 @@ int main (int argc, char **args) {
             gPlatformBatch[i]->draw(gCamera.getBox());
         for (unsigned int i = 0; i < enemyBatch.size(); i++)
             enemyBatch[i]->draw(gCamera.getBox());
-        for (unsigned int i = 0; i < gBlasterShotBatch.size(); i++)
-            gBlasterShotBatch[i]->draw(gCamera.getBox());
+        for (unsigned int i = 0; i < blasterShotBatch.size(); i++)
+            blasterShotBatch[i]->draw(gCamera.getBox());
         player.draw(gCamera.getBox());
 
         // Render tiles - Layer 1 (After units)
