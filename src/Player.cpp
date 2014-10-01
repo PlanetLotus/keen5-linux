@@ -249,14 +249,14 @@ void Player::look(directionEnum dir) {
     if (dir == UP) {
         animate(30);
 
-        if (lookTimer >= FRAMES_PER_SECOND / 2 && hitbox.y + hitbox.h < gCamera.getBottomMargin())
-            gCamera.lookUp();
+        if (lookTimer >= FRAMES_PER_SECOND / 2 && hitbox.y + hitbox.h < cameraRef.getBottomMargin())
+            cameraRef.lookUp();
     } else if (dir == DOWN) {
         if (frame < 2)
             animate(31);
 
-        if (lookTimer >= FRAMES_PER_SECOND / 2 && hitbox.y > gCamera.getTopMargin())
-            gCamera.lookDown();
+        if (lookTimer >= FRAMES_PER_SECOND / 2 && hitbox.y > cameraRef.getTopMargin())
+            cameraRef.lookDown();
     }
 }
 
@@ -530,7 +530,7 @@ void Player::die(int collidingEnemyX) {
         xVelRem = 0;
         yVel = 0;
         yVelRem = 0;
-        gCamera.isDisabled = true;
+        cameraRef.isDisabled = true;
     }
 
     isStunned = true;

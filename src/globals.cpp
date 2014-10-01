@@ -19,5 +19,3 @@ std::vector< std::vector<Tile*> > gTiles;
 Controller gController;
 
 std::vector<Platform*> gPlatformBatch(1);
-
-Camera gCamera;

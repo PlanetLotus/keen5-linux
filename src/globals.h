@@ -35,6 +35,4 @@ extern Controller gController;
 
 extern std::vector<Platform*> gPlatformBatch;
 
-extern Camera gCamera;
-
 #endif

@@ -26,6 +26,9 @@ const vector<Sprite*>& BlasterShot::enemyBatchRef = enemyBatch;
 vector<BlasterShot*> blasterShotBatch;
 vector<BlasterShot*>& BlasterShot::blasterShotBatchRef = blasterShotBatch;
 
+Camera camera;
+Camera& Player::cameraRef = camera;
+
 int main (int argc, char **args) {
     // Initialize variables
     bool running = true;
@@ -93,28 +96,28 @@ int main (int argc, char **args) {
         for (unsigned int i=0; i<gTiles.size(); i++) {
             for (unsigned int j=0; j<gTiles[i].size(); j++) {
                 if (gTiles[i][j] != NULL && gTiles[i][j]->layer == 0)
-                    gTiles[i][j]->draw(maskTexture, gCamera.getBox());
+                    gTiles[i][j]->draw(maskTexture, camera.getBox());
             }
         }
 
         // Draw units
         for (unsigned int i = 0; i < gPlatformBatch.size(); i++)
-            gPlatformBatch[i]->draw(keenTexture, gCamera.getBox());
+            gPlatformBatch[i]->draw(keenTexture, camera.getBox());
         for (unsigned int i = 0; i < enemyBatch.size(); i++)
-            enemyBatch[i]->draw(keenTexture, gCamera.getBox());
+            enemyBatch[i]->draw(keenTexture, camera.getBox());
         for (unsigned int i = 0; i < blasterShotBatch.size(); i++)
-            blasterShotBatch[i]->draw(keenTexture, gCamera.getBox());
-        player->draw(keenTexture, gCamera.getBox());
+            blasterShotBatch[i]->draw(keenTexture, camera.getBox());
+        player->draw(keenTexture, camera.getBox());
 
         // Render tiles - Layer 1 (After units)
         for (unsigned int i=0; i<gTiles.size(); i++) {
             for (unsigned int j=0; j<gTiles[i].size(); j++) {
                 if (gTiles[i][j] != NULL && gTiles[i][j]->layer == 1)
-                    gTiles[i][j]->draw(maskTexture, gCamera.getBox());
+                    gTiles[i][j]->draw(maskTexture, camera.getBox());
             }
         }
 
-        gCamera.update(player->getBox(), player->getIsOnGround());
+        camera.update(player->getBox(), player->getIsOnGround());
 
         // Update screen
         SDL_RenderPresent(renderer);

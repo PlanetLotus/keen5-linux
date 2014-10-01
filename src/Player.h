@@ -39,9 +39,9 @@ class Player : public Sprite {
         void snapToPole(Tile* pole, directionEnum facing);
         Tile* getCollidingPoleTile();
         void animate(int nextState, int frametime = FRAMETIME);
+        static Camera& cameraRef;
     public:
         Player();
-        Texture* gKeenTexture;
         void shoot(bool isPressingUp, bool isPressingDown);
         void walk(directionEnum dir);
         void jump();
