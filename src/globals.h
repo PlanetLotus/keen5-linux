@@ -1,16 +1,6 @@
 #ifndef GLOBALS_H
 #define GLOBALS_H
 
-#include <vector>
-#include "BlasterShot.h"
-#include "Camera.h"
-#include "Controller.h"
-#include "SDL.h"
-#include "Sprite.h"
-#include "Texture.h"
-#include "Tile.h"
-#include "Platform.h"
-
 // Screen attributes
 extern const int SCREEN_WIDTH;
 extern const int SCREEN_HEIGHT;

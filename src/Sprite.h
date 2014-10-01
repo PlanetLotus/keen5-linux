@@ -1,6 +1,7 @@
 #ifndef SPRITE_H
 #define SPRITE_H
 
+#include <vector>
 #include "SDL.h"
 #include "TileCollisionInfo.h"
 

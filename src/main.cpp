@@ -1,6 +1,7 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
+#include "BlasterShot.h"
 #include "Camera.h"
 #include "globals.h"
 #include "Player.h"

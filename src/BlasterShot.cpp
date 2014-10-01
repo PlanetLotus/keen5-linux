@@ -1,4 +1,5 @@
 #include <algorithm>
+#include "BlasterShot.h"
 #include "globals.h"
 #include "helpers.h"
 
