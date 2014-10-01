@@ -1,7 +1,6 @@
 #include "globals.h"
 #include "helpers.h"
 #include "Sprite.h"
-#include "Tile.h"
 
 using namespace std;
 

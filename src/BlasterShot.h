@@ -4,7 +4,6 @@
 #include <vector>
 #include "SDL.h"
 #include "Sprite.h"
-#include "Texture.h"
 
 class BlasterShot : public Sprite {
     private:
