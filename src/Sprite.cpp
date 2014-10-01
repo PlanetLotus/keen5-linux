@@ -25,7 +25,7 @@ vector<Tile*> Sprite::getTilesToLeft() {
 
     for (int i = col; i >= 0; i--) {
         for (int j = minRow; j <= maxRow; j++) {
-            Tile* tile = gTiles[i][j];
+            Tile* tile = tilesRef[i][j];
 
             if (tile != NULL)
                 tilesToLeft.push_back(tile);
@@ -52,9 +52,9 @@ vector<Tile*> Sprite::getTilesToRight() {
 
     vector<Tile*> tilesToRight;
 
-    for (unsigned int i = col; i < gTiles.size(); i++) {
+    for (unsigned int i = col; i < tilesRef.size(); i++) {
         for (int j = minRow; j <= maxRow; j++) {
-            Tile* tile = gTiles[i][j];
+            Tile* tile = tilesRef[i][j];
 
             if (tile != NULL)
                 tilesToRight.push_back(tile);
@@ -83,7 +83,7 @@ vector<Tile*> Sprite::getTilesToTop() {
 
     for (int i = minCol; i <= maxCol; i++) {
         for (int j = row; j >= 0; j--) {
-            Tile* tile = gTiles[i][j];
+            Tile* tile = tilesRef[i][j];
 
             if (tile != NULL)
                 tilesToTop.push_back(tile);
@@ -111,8 +111,8 @@ vector<Tile*> Sprite::getTilesToBottom() {
     vector<Tile*> tilesToBottom;
 
     for (int i = minCol; i <= maxCol; i++) {
-        for (unsigned int j = row; j < gTiles[i].size(); j++) {
-            Tile* tile = gTiles[i][j];
+        for (unsigned int j = row; j < tilesRef[i].size(); j++) {
+            Tile* tile = tilesRef[i][j];
 
             if (tile != NULL)
                 tilesToBottom.push_back(tile);

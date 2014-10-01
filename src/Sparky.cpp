@@ -229,7 +229,7 @@ Tile* Sparky::getTileUnderFeet() {
     // If moving left, return leftmost tile. If moving right, return rightmost
     // If the unit is pushed by something else, will that mess up this logic?
     for (unsigned int i = leftCol; i < rightCol; i++) {
-        tile = gTiles[i][tileRow];
+        tile = tilesRef[i][tileRow];
         if (tile != NULL) {
             if (facing == LEFT)
                 return tile;

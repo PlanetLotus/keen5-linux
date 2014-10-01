@@ -20,6 +20,9 @@ bool loadFiles(Texture* keenTexture, Texture* maskTexture);
 bool setTiles(Texture* maskTexture);
 void cleanUp(SDL_Window* window, SDL_Renderer* renderer, Texture* keenTexture, Texture* maskTexture);
 
+vector< vector<Tile*> > tiles;
+const vector< vector<Tile*> >& Sprite::tilesRef = tiles;
+
 vector<Sprite*> enemyBatch(2);
 const vector<Sprite*>& BlasterShot::enemyBatchRef = enemyBatch;
 
@@ -96,10 +99,10 @@ int main (int argc, char **args) {
         player->update();
 
         // Draw tiles - Layer 0 (Before units)
-        for (unsigned int i=0; i<gTiles.size(); i++) {
-            for (unsigned int j=0; j<gTiles[i].size(); j++) {
-                if (gTiles[i][j] != NULL && gTiles[i][j]->layer == 0)
-                    gTiles[i][j]->draw(maskTexture, camera.getBox());
+        for (unsigned int i=0; i<tiles.size(); i++) {
+            for (unsigned int j=0; j<tiles[i].size(); j++) {
+                if (tiles[i][j] != NULL && tiles[i][j]->layer == 0)
+                    tiles[i][j]->draw(maskTexture, camera.getBox());
             }
         }
 
@@ -113,10 +116,10 @@ int main (int argc, char **args) {
         player->draw(keenTexture, camera.getBox());
 
         // Render tiles - Layer 1 (After units)
-        for (unsigned int i=0; i<gTiles.size(); i++) {
-            for (unsigned int j=0; j<gTiles[i].size(); j++) {
-                if (gTiles[i][j] != NULL && gTiles[i][j]->layer == 1)
-                    gTiles[i][j]->draw(maskTexture, camera.getBox());
+        for (unsigned int i=0; i<tiles.size(); i++) {
+            for (unsigned int j=0; j<tiles[i].size(); j++) {
+                if (tiles[i][j] != NULL && tiles[i][j]->layer == 1)
+                    tiles[i][j]->draw(maskTexture, camera.getBox());
             }
         }
 
@@ -268,9 +271,9 @@ bool setTiles(Texture* maskTexture) {
 
     // This is slow because it inits every element when we don't need to
     // Figure out how to assign to it in the code below
-    gTiles.resize(tilesWide);
+    tiles.resize(tilesWide);
     for (int iter = 0; iter < tilesWide; iter++)
-        gTiles[iter].resize(tilesTall);
+        tiles[iter].resize(tilesTall);
 
     // Loop through each line
     while (getline(map, line)) {
@@ -297,7 +300,7 @@ bool setTiles(Texture* maskTexture) {
                     x = 0;
                 }
 
-                gTiles[x][y] = NULL;
+                tiles[x][y] = NULL;
                 x++;
             }
             continue;
@@ -327,7 +330,7 @@ bool setTiles(Texture* maskTexture) {
 
         iss >> layerVal;
 
-        gTiles[x][y] = new Tile(xSrc, ySrc, x * TILE_WIDTH, y * TILE_HEIGHT, leftHeight, rightHeight,
+        tiles[x][y] = new Tile(xSrc, ySrc, x * TILE_WIDTH, y * TILE_HEIGHT, leftHeight, rightHeight,
             collideT, collideR, collideB, collideL, layerVal, isPole, isEdge);
 
         x++;
@@ -341,10 +344,10 @@ void cleanUp(SDL_Window* window, SDL_Renderer* renderer, Texture* keenTexture, T
     keenTexture->free();
     maskTexture->free();
 
-    for (unsigned int i=0; i<gTiles.size(); i++) {
-        for (unsigned int j=0; j<gTiles[i].size(); j++) {
-            if (gTiles[i][j] != NULL)
-                delete gTiles[i][j];
+    for (unsigned int i = 0; i < tiles.size(); i++) {
+        for (unsigned int j = 0; j < tiles[i].size(); j++) {
+            if (tiles[i][j] != NULL)
+                delete tiles[i][j];
         }
     }
 

@@ -19,6 +19,7 @@ class Sprite {
         float yVelRem;
 
         bool isUnitColliding(SDL_Rect unitBox);
+        static const std::vector< std::vector<Tile*> >& tilesRef;
     public:
         virtual void update() = 0;
         virtual void draw(Texture* texture, SDL_Rect cameraBox) = 0;
