@@ -14,7 +14,6 @@ int TILES_TALL;
 int LEVEL_WIDTH;
 int LEVEL_HEIGHT;
 
-SDL_Window* gWindow = NULL;
 SDL_Renderer* gRenderer = NULL;
 
 Texture* gKeenTexture = new Texture();

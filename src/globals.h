@@ -29,7 +29,6 @@ extern int LEVEL_WIDTH;
 extern int LEVEL_HEIGHT;
 
 // Window and renderer
-extern SDL_Window* gWindow;
 extern SDL_Renderer* gRenderer;
 
 // Global textures

@@ -12,12 +12,11 @@
 
 using namespace std;
 
-bool init();
+bool init(SDL_Window* window);
 bool loadFiles();
 bool setTiles();
-void cleanUp();
+void cleanUp(SDL_Window* window);
 
-// If I declare this as extern, it's undefined on the next line. Why?
 vector<Sprite*> enemyBatch(2);
 const vector<Sprite*>& BlasterShot::enemyBatchRef = enemyBatch;
 
@@ -30,8 +29,10 @@ int main (int argc, char **args) {
     SDL_Event event;
     Timer fps;
 
+    SDL_Window* window = NULL;
+
     // Initialize SDL
-    if (!init()) return 1;
+    if (!init(window)) return 1;
     if (!loadFiles()) return 1;
     if (!setTiles()) return 1;
 
@@ -116,11 +117,11 @@ int main (int argc, char **args) {
             SDL_Delay((1000/FRAMES_PER_SECOND) - fps.getTicks());
     }
 
-    cleanUp();
+    cleanUp(window);
     return 0;
 }
 
-bool init() {
+bool init(SDL_Window* window) {
     // Init all SDL subsystems
     if (SDL_Init( SDL_INIT_TIMER | SDL_INIT_AUDIO | SDL_INIT_VIDEO ) == -1) {
         printf("SDL couldn't be initialized. SDL_Error: %s\n", SDL_GetError());
@@ -143,12 +144,12 @@ bool init() {
         SCREEN_WIDTH,
         SCREEN_HEIGHT,
         SDL_WINDOW_SHOWN,
-        &gWindow,
+        &window,
         &gRenderer
     );
 
     // Make sure window was successfully set up
-    if (gWindow == NULL || gRenderer == NULL) {
+    if (window == NULL || gRenderer == NULL) {
         printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
         return false;
     }
@@ -309,7 +310,7 @@ bool setTiles() {
     return true;
 }
 
-void cleanUp() {
+void cleanUp(SDL_Window* window) {
     gKeenTexture->free();
     gMaskTexture->free();
 
@@ -321,7 +322,7 @@ void cleanUp() {
     }
 
     SDL_DestroyRenderer(gRenderer);
-    SDL_DestroyWindow(gWindow);
+    SDL_DestroyWindow(window);
 
     IMG_Quit();
     TTF_Quit();
