@@ -24,10 +24,11 @@ class Level {
             int tileCountLayer1, int tileCountLayer2,
             std::vector< std::vector<Tile*> > tiles
         );
-        int getWidth();
-        int getHeight();
-        int getTilesWide();
-        int getTilesTall();
+        int getWidth() const;
+        int getHeight() const;
+        int getTilesWide() const;
+        int getTilesTall() const;
+        std::vector< std::vector<Tile*> > getTiles() const;
 };
 
 #endif

@@ -2,6 +2,7 @@
 #define SPRITE_H
 
 #include <vector>
+#include "Level.h"
 #include "SDL.h"
 #include "TileCollisionInfo.h"
 
@@ -21,6 +22,7 @@ class Sprite {
 
         bool isUnitColliding(SDL_Rect unitBox);
         static const std::vector< std::vector<Tile*> >& tilesRef;
+        static Level*& currentLevelRef;
     public:
         virtual void update() = 0;
         virtual void draw(Texture* texture, SDL_Rect cameraBox) = 0;

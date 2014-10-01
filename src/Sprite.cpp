@@ -19,7 +19,8 @@ vector<Tile*> Sprite::getTilesToLeft() {
         maxRow--;
 
     // Don't let maxRow go out of bounds
-    if (maxRow > TILES_TALL-1) maxRow = TILES_TALL-1;
+    int tilesTall = currentLevelRef->getTilesTall();
+    if (maxRow > tilesTall - 1) maxRow = tilesTall - 1;
 
     vector<Tile*> tilesToLeft;
 
@@ -48,7 +49,8 @@ vector<Tile*> Sprite::getTilesToRight() {
         maxRow--;
 
     // Don't let maxRow go out of bounds
-    if (maxRow > TILES_TALL-1) maxRow = TILES_TALL-1;
+    int tilesTall = currentLevelRef->getTilesTall();
+    if (maxRow > tilesTall - 1) maxRow = tilesTall - 1;
 
     vector<Tile*> tilesToRight;
 
@@ -77,7 +79,8 @@ vector<Tile*> Sprite::getTilesToTop() {
         maxCol--;
 
     // Don't let maxCol go out of bounds
-    if (maxCol > TILES_WIDE-1) maxCol = TILES_WIDE-1;
+    int tilesWide = currentLevelRef->getTilesWide();
+    if (maxCol > tilesWide - 1) maxCol = tilesWide - 1;
 
     vector<Tile*> tilesToTop;
 
@@ -106,7 +109,8 @@ vector<Tile*> Sprite::getTilesToBottom() {
         maxCol--;
 
     // Don't let maxCol go out of bounds
-    if (maxCol > TILES_WIDE-1) maxCol = TILES_WIDE-1;
+    int tilesWide = currentLevelRef->getTilesWide();
+    if (maxCol > tilesWide - 1) maxCol = tilesWide - 1;
 
     vector<Tile*> tilesToBottom;
 

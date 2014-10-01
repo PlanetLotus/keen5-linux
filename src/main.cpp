@@ -25,6 +25,9 @@ void cleanUp(SDL_Window* window, SDL_Renderer* renderer, Texture* keenTexture, T
 vector< vector<Tile*> > tiles;
 const vector< vector<Tile*> >& Sprite::tilesRef = tiles;
 
+Level* currentLevel = NULL;
+Level*& Sprite::currentLevelRef = currentLevel;
+
 vector<Sprite*> enemyBatch(2);
 const vector<Sprite*>& BlasterShot::enemyBatchRef = enemyBatch;
 
@@ -53,8 +56,10 @@ int main (int argc, char **args) {
 
     if (!loadFiles(keenTexture, maskTexture)) return 1;
 
-    Level* currentLevel = loadCurrentLevel(maskTexture);
+    currentLevel = loadCurrentLevel(maskTexture);
     if (currentLevel == NULL) return 1;
+
+    tiles = currentLevel->getTiles();
 
     Player* player = new Player();
     Platform* platform = new Platform(player);
@@ -251,7 +256,6 @@ Level* loadCurrentLevel(Texture* maskTexture) {
 
     // Special case: First line contains # of tiles wide, # tiles tall, and # tiles (non-blank) per layer
     // For now, it's assumed the number of layers is known (hardcoded)
-    // Maybe use a "level" class??
     getline(map, line);
     iss.str(line);
     iss >> tilesWide;
@@ -263,10 +267,8 @@ Level* loadCurrentLevel(Texture* maskTexture) {
         return NULL;
     }
 
-    TILES_WIDE = tilesWide;
-    LEVEL_WIDTH = TILES_WIDE * TILE_WIDTH;
-    TILES_TALL = tilesTall;
-    LEVEL_HEIGHT = TILES_TALL * TILE_HEIGHT;
+    LEVEL_WIDTH = tilesWide * TILE_WIDTH;
+    LEVEL_HEIGHT = tilesTall * TILE_HEIGHT;
 
     // Special case: Second line contains source file absolute path
     // This is mostly used by the level editor. We only want the file name.

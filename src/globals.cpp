@@ -9,7 +9,5 @@ const int TEXTURE_COUNT = 3;
 // Number of timer loops per animation frame
 const int FRAMETIME = 2;
 
-int TILES_WIDE;
-int TILES_TALL;
 int LEVEL_WIDTH;
 int LEVEL_HEIGHT;
