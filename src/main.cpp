@@ -10,6 +10,7 @@
 #include "Sparky.h"
 #include "Timer.h"
 #include "Platform.h"
+#include "Level.h"
 
 using namespace std;
 
@@ -18,7 +19,7 @@ SDL_Renderer* initRenderer(SDL_Window* window);
 bool sdlInit();
 bool init(SDL_Window* window, SDL_Renderer* renderer);
 bool loadFiles(Texture* keenTexture, Texture* maskTexture);
-bool setTiles(Texture* maskTexture);
+Level* loadCurrentLevel(Texture* maskTexture);
 void cleanUp(SDL_Window* window, SDL_Renderer* renderer, Texture* keenTexture, Texture* maskTexture);
 
 vector< vector<Tile*> > tiles;
@@ -51,7 +52,9 @@ int main (int argc, char **args) {
     Texture* maskTexture = new Texture(renderer);
 
     if (!loadFiles(keenTexture, maskTexture)) return 1;
-    if (!setTiles(maskTexture)) return 1;
+
+    Level* currentLevel = loadCurrentLevel(maskTexture);
+    if (currentLevel == NULL) return 1;
 
     Player* player = new Player();
     Platform* platform = new Platform(player);
@@ -214,7 +217,7 @@ bool loadFiles(Texture* keenTexture, Texture* maskTexture) {
     return true;
 }
 
-bool setTiles(Texture* maskTexture) {
+Level* loadCurrentLevel(Texture* maskTexture) {
     // Notes:
     // Does levelWidth / levelHeight matter? Yes, because we have to know when we're at the end of a "row" when reading the file
     // tileCount in file is currently UNUSED
@@ -257,7 +260,7 @@ bool setTiles(Texture* maskTexture) {
     iss >> tileCountLayer2;
     if (iss.fail() || tilesWide == -1 || tilesTall == -1 || tileCountLayer1 == -1 || tileCountLayer2 == -1) {
         printf("Error getting metadata from line 1.\n");
-        return false;
+        return NULL;
     }
 
     TILES_WIDE = tilesWide;
@@ -339,7 +342,13 @@ bool setTiles(Texture* maskTexture) {
     }
 
     map.close();
-    return true;
+
+    return new Level(
+        tilesWide * TILE_WIDTH, tilesTall * TILE_HEIGHT,
+        tilesWide, tilesTall,
+        tileCountLayer1, tileCountLayer2,
+        tiles
+    );
 }
 
 void cleanUp(SDL_Window* window, SDL_Renderer* renderer, Texture* keenTexture, Texture* maskTexture) {
