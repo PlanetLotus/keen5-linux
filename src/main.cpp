@@ -12,10 +12,12 @@
 
 using namespace std;
 
-bool init(SDL_Window* window);
-bool loadFiles();
-bool setTiles();
-void cleanUp(SDL_Window* window);
+SDL_Window* initWindow();
+SDL_Renderer* initRenderer(SDL_Window* window);
+bool init(SDL_Window* window, SDL_Renderer* renderer);
+bool loadFiles(Texture* gKeenTexture, Texture* gMaskTexture);
+bool setTiles(Texture* gMaskTexture);
+void cleanUp(SDL_Window* window, SDL_Renderer* renderer, Texture* gKeenTexture, Texture* gMaskTexture);
 
 vector<Sprite*> enemyBatch(2);
 const vector<Sprite*>& BlasterShot::enemyBatchRef = enemyBatch;
@@ -29,17 +31,28 @@ int main (int argc, char **args) {
     SDL_Event event;
     Timer fps;
 
-    SDL_Window* window = NULL;
+    // Init all SDL subsystems
+    if (SDL_Init(SDL_INIT_TIMER | SDL_INIT_AUDIO | SDL_INIT_VIDEO) == -1) {
+        printf("SDL couldn't be initialized. SDL_Error: %s\n", SDL_GetError());
+        return false;
+    }
+
+    SDL_Window* window = initWindow();
+    SDL_Renderer* renderer = initRenderer(window);
 
     // Initialize SDL
-    if (!init(window)) return 1;
-    if (!loadFiles()) return 1;
-    if (!setTiles()) return 1;
+    if (!init(window, renderer)) return 1;
 
-    Player player;
-    Platform* platform = new Platform(&player);
-    Sprite* sparky = new Sparky(&player);
-    Sprite* ampton = new Ampton(&player);
+    Texture* gKeenTexture = new Texture(renderer);
+    Texture* gMaskTexture = new Texture(renderer);
+
+    if (!loadFiles(gKeenTexture, gMaskTexture)) return 1;
+    if (!setTiles(gMaskTexture)) return 1;
+
+    Player* player = new Player(gKeenTexture);
+    Platform* platform = new Platform(player);
+    Sprite* sparky = new Sparky(player);
+    Sprite* ampton = new Ampton(player);
 
     gPlatformBatch[0] = platform;
 
@@ -70,8 +83,8 @@ int main (int argc, char **args) {
         }
 
         // Clear screen
-        SDL_SetRenderDrawColor(gRenderer, 0x00, 0x00, 0x00, 0xFF);
-        SDL_RenderClear(gRenderer);
+        SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0xFF);
+        SDL_RenderClear(renderer);
 
         // Update units
         for (unsigned int i = 0; i < gPlatformBatch.size(); i++)
@@ -80,7 +93,7 @@ int main (int argc, char **args) {
             enemyBatch[i]->update();
         for (unsigned int i = 0; i < blasterShotBatch.size(); i++)
             blasterShotBatch[i]->update();
-        player.update();
+        player->update();
 
         // Render tiles - Layer 0 (Before units)
         for (unsigned int i=0; i<gTiles.size(); i++) {
@@ -97,7 +110,7 @@ int main (int argc, char **args) {
             enemyBatch[i]->draw(gCamera.getBox());
         for (unsigned int i = 0; i < blasterShotBatch.size(); i++)
             blasterShotBatch[i]->draw(gCamera.getBox());
-        player.draw(gCamera.getBox());
+        player->draw(gCamera.getBox());
 
         // Render tiles - Layer 1 (After units)
         for (unsigned int i=0; i<gTiles.size(); i++) {
@@ -107,27 +120,40 @@ int main (int argc, char **args) {
             }
         }
 
-        gCamera.update(player.getBox(), player.getIsOnGround());
+        gCamera.update(player->getBox(), player->getIsOnGround());
 
         // Update screen
-        SDL_RenderPresent(gRenderer);
+        SDL_RenderPresent(renderer);
 
         // Cap frame rate
         if (fps.getTicks() < 1000 / FRAMES_PER_SECOND)
             SDL_Delay((1000/FRAMES_PER_SECOND) - fps.getTicks());
     }
 
-    cleanUp(window);
+    cleanUp(window, renderer, gKeenTexture, gMaskTexture);
     return 0;
 }
 
-bool init(SDL_Window* window) {
-    // Init all SDL subsystems
-    if (SDL_Init( SDL_INIT_TIMER | SDL_INIT_AUDIO | SDL_INIT_VIDEO ) == -1) {
-        printf("SDL couldn't be initialized. SDL_Error: %s\n", SDL_GetError());
-        return false;
-    }
+SDL_Window* initWindow() {
+    return SDL_CreateWindow(
+        "Commander Keen 5",
+        SDL_WINDOWPOS_CENTERED,
+        SDL_WINDOWPOS_CENTERED,
+        SCREEN_WIDTH,
+        SCREEN_HEIGHT,
+        0
+    );
+}
 
+SDL_Renderer* initRenderer(SDL_Window* window) {
+    return SDL_CreateRenderer(
+        window,
+        -1,
+        0
+    );
+}
+
+bool init(SDL_Window* window, SDL_Renderer* renderer) {
     // Init IMG
     int flags = IMG_INIT_PNG;
     int initted = IMG_Init(flags);
@@ -139,34 +165,25 @@ bool init(SDL_Window* window) {
     if (!SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1"))
         printf("Warning: Linear texture filtering not enabled!\n");
 
-    // Set up screen
-    SDL_CreateWindowAndRenderer(
-        SCREEN_WIDTH,
-        SCREEN_HEIGHT,
-        SDL_WINDOW_SHOWN,
-        &window,
-        &gRenderer
-    );
-
     // Make sure window was successfully set up
-    if (window == NULL || gRenderer == NULL) {
+    if (window == NULL || renderer == NULL) {
         printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
         return false;
     }
 
     // Init renderer color
-    SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
+    SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
 
     // Initialize SDL_ttf
     if (TTF_Init() == -1) return false;
 
     // Update screen
-    SDL_RenderPresent(gRenderer);
+    SDL_RenderPresent(renderer);
 
     return true;
 }
 
-bool loadFiles() {
+bool loadFiles(Texture* gKeenTexture, Texture* gMaskTexture) {
     string data = "../data/";
 
     // Load images
@@ -182,7 +199,7 @@ bool loadFiles() {
     return true;
 }
 
-bool setTiles() {
+bool setTiles(Texture* gMaskTexture) {
     // Notes:
     // Does levelWidth / levelHeight matter? Yes, because we have to know when we're at the end of a "row" when reading the file
     // tileCount in file is currently UNUSED
@@ -300,7 +317,7 @@ bool setTiles() {
 
         iss >> layerVal;
 
-        gTiles[x][y] = new Tile(xSrc, ySrc, x * TILE_WIDTH, y * TILE_HEIGHT, leftHeight, rightHeight,
+        gTiles[x][y] = new Tile(gMaskTexture, xSrc, ySrc, x * TILE_WIDTH, y * TILE_HEIGHT, leftHeight, rightHeight,
             collideT, collideR, collideB, collideL, layerVal, isPole, isEdge);
 
         x++;
@@ -310,7 +327,7 @@ bool setTiles() {
     return true;
 }
 
-void cleanUp(SDL_Window* window) {
+void cleanUp(SDL_Window* window, SDL_Renderer* renderer, Texture* gKeenTexture, Texture* gMaskTexture) {
     gKeenTexture->free();
     gMaskTexture->free();
 
@@ -321,7 +338,7 @@ void cleanUp(SDL_Window* window) {
         }
     }
 
-    SDL_DestroyRenderer(gRenderer);
+    SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
 
     IMG_Quit();

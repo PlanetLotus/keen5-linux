@@ -4,9 +4,11 @@
 #include <vector>
 #include "SDL.h"
 #include "Sprite.h"
+#include "Texture.h"
 
 class BlasterShot : public Sprite {
     private:
+        Texture* gKeenTexture;
         int expireTimer;
 
         std::vector<SDL_Rect> anims[2];
@@ -15,7 +17,7 @@ class BlasterShot : public Sprite {
         static const std::vector<Sprite*>& enemyBatchRef;
         static std::vector<BlasterShot*>& blasterShotBatchRef;
 
-        BlasterShot(int startX, int startY, float velocityX, float velocityY);
+        BlasterShot(Texture* texture, int startX, int startY, float velocityX, float velocityY);
         void update();
         void draw(SDL_Rect cameraBox);
         void expire();

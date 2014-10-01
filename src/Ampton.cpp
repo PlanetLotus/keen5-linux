@@ -23,6 +23,7 @@ Ampton::Ampton(Player* player) {
     srcClip = NULL;
 
     keen = player;
+    gKeenTexture = keen->gKeenTexture;
     isStunned = false;
 
     climbCooldownTimer = 0;

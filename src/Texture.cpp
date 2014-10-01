@@ -2,8 +2,9 @@
 #include "SDL_image.h"
 #include "Texture.h"
 
-Texture::Texture() {
+Texture::Texture(SDL_Renderer* rendererFromMain) {
     texture = NULL;
+    renderer = rendererFromMain;
     width = 0;
     height = 0;
 }
@@ -31,7 +32,7 @@ bool Texture::loadFromFile(std::string path, bool doSetColorKey) {
         SDL_SetColorKey(loadedSurface, SDL_TRUE, SDL_MapRGB(loadedSurface->format, 0xFF, 0x00, 0x00));
 
     // Create texture from surface pixels
-    newTexture = SDL_CreateTextureFromSurface(gRenderer, loadedSurface);
+    newTexture = SDL_CreateTextureFromSurface(renderer, loadedSurface);
     if (newTexture == NULL) {
         printf("Unable to create texture from %s! SDL Error: %s\n", path.c_str(), SDL_GetError());
     } else {
@@ -84,7 +85,7 @@ void Texture::render(int destX, int destY, SDL_Rect* srcClip, double angle, SDL_
     }
 
     // Render to screen
-    SDL_RenderCopyEx(gRenderer, texture, srcClip, &renderQuad, angle, center, flip);
+    SDL_RenderCopyEx(renderer, texture, srcClip, &renderQuad, angle, center, flip);
 }
 
 int Texture::getWidth() { return width; }

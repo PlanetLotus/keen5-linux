@@ -40,7 +40,8 @@ class Player : public Sprite {
         Tile* getCollidingPoleTile();
         void animate(int nextState, int frametime = FRAMETIME);
     public:
-        Player();
+        Player(Texture* texture);
+        Texture* gKeenTexture;
         void shoot(bool isPressingUp, bool isPressingDown);
         void walk(directionEnum dir);
         void jump();

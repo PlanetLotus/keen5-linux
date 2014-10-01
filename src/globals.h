@@ -28,13 +28,6 @@ extern int TILES_TALL;
 extern int LEVEL_WIDTH;
 extern int LEVEL_HEIGHT;
 
-// Window and renderer
-extern SDL_Renderer* gRenderer;
-
-// Global textures
-extern Texture* gKeenTexture;
-extern Texture* gMaskTexture;
-
 // 2D array of tiles describing a level
 extern std::vector< std::vector<Tile*> > gTiles;
 

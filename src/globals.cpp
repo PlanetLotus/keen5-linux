@@ -14,11 +14,6 @@ int TILES_TALL;
 int LEVEL_WIDTH;
 int LEVEL_HEIGHT;
 
-SDL_Renderer* gRenderer = NULL;
-
-Texture* gKeenTexture = new Texture();
-Texture* gMaskTexture = new Texture();
-
 std::vector< std::vector<Tile*> > gTiles;
 
 Controller gController;

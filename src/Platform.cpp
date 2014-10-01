@@ -12,6 +12,9 @@ Platform::Platform(Player* player) {
     srcRect.w = TILE_WIDTH * 2;
     srcRect.h = TILE_HEIGHT;
 
+    keen = player;
+    gKeenTexture = keen->gKeenTexture;
+
     xVel = 0;
     yVel = 0;
 }

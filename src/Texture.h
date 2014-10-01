@@ -7,7 +7,7 @@
 
 class Texture {
     public:
-        Texture();
+        Texture(SDL_Renderer* rendererFromMain);
         ~Texture();
 
         // Loads image at specified path
@@ -35,6 +35,8 @@ class Texture {
     private:
         // The actual hardware texture
         SDL_Texture* texture;
+
+        SDL_Renderer* renderer;
 
         // Image dimensions
         int width;

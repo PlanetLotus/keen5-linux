@@ -26,6 +26,7 @@ class Sparky : public Sprite {
         int scanCount;
         bool canSeeKeen();
         Player* keen;
+        Texture* gKeenTexture;
         bool isCollidingWithPlayer();
 
         void fall();

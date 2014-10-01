@@ -42,7 +42,7 @@ void Player::shoot(bool isPressingUp, bool isPressingDown) {
             if (isOnPole) animVal = 26 + facing;
         }
 
-        new BlasterShot(xStart, yStart, xShotVel, yShotVel);
+        new BlasterShot(gKeenTexture, xStart, yStart, xShotVel, yShotVel);
 
         animate(animVal);
 
@@ -556,7 +556,7 @@ void Player::push(int x) {
 
 bool Player::getIsOnGround() { return isOnGround; }
 
-Player::Player() {
+Player::Player(Texture* texture) {
     xVel = 0;
     yVel = 0;
     xVelRem = 0;
@@ -588,6 +588,8 @@ Player::Player() {
 
     shootingFrameCount = 0;
     isShooting = false;
+
+    gKeenTexture = texture;
 
     // Animation data
     SDL_Rect standL0 = {0, TILE_HEIGHT * 2, TILE_WIDTH, TILE_HEIGHT * 2};

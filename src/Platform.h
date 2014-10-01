@@ -8,6 +8,8 @@ class Platform {
     private:
         SDL_Rect hitbox;
         SDL_Rect srcRect;
+        Player* keen;
+        Texture* gKeenTexture;
 
         static const int speed = 4;
         float xVel;

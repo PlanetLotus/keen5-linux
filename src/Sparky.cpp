@@ -19,6 +19,7 @@ Sparky::Sparky(Player* player) {
 
     scanCount = 0;
     keen = player;
+    gKeenTexture = keen->gKeenTexture;
 
     isStunned = false;
 

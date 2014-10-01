@@ -2,6 +2,7 @@
 #define TILE_H
 
 #include "SDL.h"
+#include "Texture.h"
 
 const int TILE_WIDTH = 32;
 const int TILE_HEIGHT = 32;
@@ -27,10 +28,11 @@ class Tile {
         enum TileProperty { LEFT, RIGHT, TOP, BOTTOM, ISPOLE };
 
         // Inits position and type
-        Tile(int srcX, int srcY, int destX, int destY, int lHeight, int rHeight,
+        Tile(Texture* texture, int srcX, int srcY, int destX, int destY, int lHeight, int rHeight,
             bool collideT, bool collideR, bool collideB, bool collideL, int layer, bool isPole, bool isEdge);
 
         // Shows the tile
+        Texture* gMaskTexture;
         void render(SDL_Rect cameraBox);
 
         SDL_Rect getBox();

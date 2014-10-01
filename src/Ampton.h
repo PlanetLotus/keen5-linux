@@ -18,6 +18,7 @@ class Ampton : public Sprite {
         stateEnum state;
 
         Player* keen;
+        Texture* gKeenTexture;
         bool isCollidingWithPlayer();
 
         int climbCooldownTimer;
