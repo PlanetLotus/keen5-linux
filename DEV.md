@@ -1,6 +1,7 @@
 <h2>Next steps</h2>
 
 <ul>
+    <li>Add a Level class (and finish getting rid of global variables)</li>
     <li>Add hanging from ledge</li>
     <li>"Jump down" from platforms that have top but not bottom collision</li>
     <li>Moving platforms</li>
