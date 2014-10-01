@@ -28,6 +28,4 @@ extern int TILES_TALL;
 extern int LEVEL_WIDTH;
 extern int LEVEL_HEIGHT;
 
-extern std::vector<Platform*> gPlatformBatch;
-
 #endif

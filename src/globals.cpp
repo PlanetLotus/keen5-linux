@@ -13,5 +13,3 @@ int TILES_WIDE;
 int TILES_TALL;
 int LEVEL_WIDTH;
 int LEVEL_HEIGHT;
-
-std::vector<Platform*> gPlatformBatch(1);

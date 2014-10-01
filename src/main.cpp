@@ -57,7 +57,8 @@ int main (int argc, char **args) {
     Sprite* sparky = new Sparky(player);
     Sprite* ampton = new Ampton(player);
 
-    gPlatformBatch[0] = platform;
+    vector<Platform*> platformBatch(1);
+    platformBatch[0] = platform;
 
     enemyBatch[0] = ampton;
     enemyBatch[1] = sparky;
@@ -90,8 +91,8 @@ int main (int argc, char **args) {
         SDL_RenderClear(renderer);
 
         // Update units
-        for (unsigned int i = 0; i < gPlatformBatch.size(); i++)
-            gPlatformBatch[i]->update();
+        for (unsigned int i = 0; i < platformBatch.size(); i++)
+            platformBatch[i]->update();
         for (unsigned int i = 0; i < enemyBatch.size(); i++)
             enemyBatch[i]->update();
         for (unsigned int i = 0; i < blasterShotBatch.size(); i++)
@@ -107,8 +108,8 @@ int main (int argc, char **args) {
         }
 
         // Draw units
-        for (unsigned int i = 0; i < gPlatformBatch.size(); i++)
-            gPlatformBatch[i]->draw(keenTexture, camera.getBox());
+        for (unsigned int i = 0; i < platformBatch.size(); i++)
+            platformBatch[i]->draw(keenTexture, camera.getBox());
         for (unsigned int i = 0; i < enemyBatch.size(); i++)
             enemyBatch[i]->draw(keenTexture, camera.getBox());
         for (unsigned int i = 0; i < blasterShotBatch.size(); i++)
