@@ -31,8 +31,6 @@ extern int LEVEL_HEIGHT;
 // 2D array of tiles describing a level
 extern std::vector< std::vector<Tile*> > gTiles;
 
-extern Controller gController;
-
 extern std::vector<Platform*> gPlatformBatch;
 
 #endif

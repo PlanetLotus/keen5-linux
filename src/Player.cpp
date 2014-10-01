@@ -304,13 +304,13 @@ void Player::pogo() {
 }
 
 void Player::jump() {
-    if (gController.isHoldingCtrl && yVel < 0) {
+    if (controllerRef.isHoldingCtrl && yVel < 0) {
         if (isOnPogo)
             yAccel = -1.5;
         else
             yAccel = -1.3;
         yVel += yAccel;
-    } else if (isOnGround && !gController.isHoldingCtrl) {
+    } else if (isOnGround && !controllerRef.isHoldingCtrl) {
         yAccel = -21;
         yVel += yAccel;
         isOnGround = false; // This isn't ideal. It's assuming nothing stopped the jump.
@@ -344,9 +344,9 @@ void Player::processKeyboard() {
     // Read in current keyboard state and update object accordingly
     const Uint8* state = SDL_GetKeyboardState(NULL);
 
-    if (state[SDL_SCANCODE_LALT] && !gController.isHoldingAlt && !isOnPole) {
+    if (state[SDL_SCANCODE_LALT] && !controllerRef.isHoldingAlt && !isOnPole) {
         togglePogo();
-        gController.isHoldingAlt = true;
+        controllerRef.isHoldingAlt = true;
     } else if (isOnPogo) {
         pogo();
     }
@@ -362,7 +362,7 @@ void Player::processKeyboard() {
     if (state[SDL_SCANCODE_LCTRL]) {
         jump();
         lookTimer = 0;
-        gController.isHoldingCtrl = true;
+        controllerRef.isHoldingCtrl = true;
     } else if (state[SDL_SCANCODE_UP] && !isOnPogo) {
         processUpArrow();
     } else if (state[SDL_SCANCODE_DOWN] && !isOnPogo) {
@@ -374,9 +374,9 @@ void Player::processKeyboard() {
         lookTimer = 0;
     }
 
-    if (state[SDL_SCANCODE_SPACE] && !gController.isHoldingSpace) {
+    if (state[SDL_SCANCODE_SPACE] && !controllerRef.isHoldingSpace) {
         shoot(state[SDL_SCANCODE_UP], state[SDL_SCANCODE_DOWN]);
-        gController.isHoldingSpace = true;
+        controllerRef.isHoldingSpace = true;
     }
 }
 

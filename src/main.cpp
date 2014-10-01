@@ -29,6 +29,9 @@ vector<BlasterShot*>& BlasterShot::blasterShotBatchRef = blasterShotBatch;
 Camera camera;
 Camera& Player::cameraRef = camera;
 
+Controller controller;
+Controller& Player::controllerRef = controller;
+
 int main (int argc, char **args) {
     // Initialize variables
     bool running = true;
@@ -68,9 +71,9 @@ int main (int argc, char **args) {
                 }
             } else if (event.type == SDL_KEYUP) {
                 switch (event.key.keysym.sym) {
-                    case SDLK_LCTRL: gController.isHoldingCtrl = false; break;
-                    case SDLK_SPACE: gController.isHoldingSpace = false; break;
-                    case SDLK_LALT: gController.isHoldingAlt = false; break;
+                    case SDLK_LCTRL: controller.isHoldingCtrl = false; break;
+                    case SDLK_SPACE: controller.isHoldingSpace = false; break;
+                    case SDLK_LALT: controller.isHoldingAlt = false; break;
                 }
             }
             // If the user X'd out of the window

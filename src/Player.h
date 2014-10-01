@@ -2,6 +2,8 @@
 #define PLAYER_H
 
 #include <vector>
+#include "Camera.h"
+#include "Controller.h"
 #include "SDL.h"
 #include "Sprite.h"
 
@@ -40,6 +42,7 @@ class Player : public Sprite {
         Tile* getCollidingPoleTile();
         void animate(int nextState, int frametime = FRAMETIME);
         static Camera& cameraRef;
+        static Controller& controllerRef;
     public:
         Player();
         void shoot(bool isPressingUp, bool isPressingDown);
