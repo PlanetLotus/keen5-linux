@@ -26,7 +26,6 @@ class Sparky : public Sprite {
         int scanCount;
         bool canSeeKeen();
         Player* keen;
-        Texture* gKeenTexture;
         bool isCollidingWithPlayer();
 
         void fall();
@@ -36,7 +35,7 @@ class Sparky : public Sprite {
     public:
         Sparky(Player* player);
         void update();
-        void draw(SDL_Rect cameraBox);
+        void draw(Texture* texture, SDL_Rect cameraBox);
         void takeShotByPlayer();
 };
 

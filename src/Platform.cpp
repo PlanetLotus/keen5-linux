@@ -13,7 +13,6 @@ Platform::Platform(Player* player) {
     srcRect.h = TILE_HEIGHT;
 
     keen = player;
-    gKeenTexture = keen->gKeenTexture;
 
     xVel = 0;
     yVel = 0;
@@ -22,6 +21,6 @@ Platform::Platform(Player* player) {
 void Platform::update() {
 }
 
-void Platform::draw(SDL_Rect cameraBox) {
-    gKeenTexture->render(hitbox.x - cameraBox.x, hitbox.y - cameraBox.y, &srcRect);
+void Platform::draw(Texture* texture, SDL_Rect cameraBox) {
+    texture->render(hitbox.x - cameraBox.x, hitbox.y - cameraBox.y, &srcRect);
 }

@@ -19,7 +19,6 @@ Sparky::Sparky(Player* player) {
 
     scanCount = 0;
     keen = player;
-    gKeenTexture = keen->gKeenTexture;
 
     isStunned = false;
 
@@ -298,6 +297,6 @@ void Sparky::update() {
         keen->die(hitbox.x);
 }
 
-void Sparky::draw(SDL_Rect cameraBox) {
-    gKeenTexture->render(hitbox.x - cameraBox.x, hitbox.y - cameraBox.y, srcClip);
+void Sparky::draw(Texture* texture, SDL_Rect cameraBox) {
+    texture->render(hitbox.x - cameraBox.x, hitbox.y - cameraBox.y, srcClip);
 }

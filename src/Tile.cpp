@@ -2,9 +2,8 @@
 #include "helpers.h"
 #include "Tile.h"
 
-Tile::Tile(Texture* texture, int srcX, int srcY, int destX, int destY, int lHeight, int rHeight,
+Tile::Tile(int srcX, int srcY, int destX, int destY, int lHeight, int rHeight,
     bool collideT, bool collideR, bool collideB, bool collideL, int layer, bool isPole=false, bool isEdge=false) {
-    gMaskTexture = texture;
     srcBox.x = srcX;
     srcBox.y = srcY;
 
@@ -39,9 +38,9 @@ Tile::Tile(Texture* texture, int srcX, int srcY, int destX, int destY, int lHeig
     this->isEdge = isEdge;
 }
 
-void Tile::render(SDL_Rect cameraBox) {
+void Tile::draw(Texture* texture, SDL_Rect cameraBox) {
     if (isTileOnScreen(&destBox, &cameraBox))
-        gMaskTexture->render(destBox.x - cameraBox.x, destBox.y - cameraBox.y, &srcBox);
+        texture->render(destBox.x - cameraBox.x, destBox.y - cameraBox.y, &srcBox);
 }
 
 bool Tile::isColliding(TileProperty tileProperty, SDL_Rect hitbox, SDL_Rect nextHitbox) {

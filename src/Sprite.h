@@ -21,7 +21,7 @@ class Sprite {
         bool isUnitColliding(SDL_Rect unitBox);
     public:
         virtual void update() = 0;
-        virtual void draw(SDL_Rect cameraBox) = 0;
+        virtual void draw(Texture* texture, SDL_Rect cameraBox) = 0;
         virtual void takeShotByPlayer(); // If I ever have an "Enemy" base class, this should go there instead
         TileCollisionInfo checkTileCollisionLR();
         TileCollisionInfo checkTileCollisionTB();

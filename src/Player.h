@@ -40,7 +40,7 @@ class Player : public Sprite {
         Tile* getCollidingPoleTile();
         void animate(int nextState, int frametime = FRAMETIME);
     public:
-        Player(Texture* texture);
+        Player();
         Texture* gKeenTexture;
         void shoot(bool isPressingUp, bool isPressingDown);
         void walk(directionEnum dir);
@@ -53,7 +53,7 @@ class Player : public Sprite {
         void die(int collidingEnemyX);
         void push(int x);
         void update();
-        void draw(SDL_Rect cameraBox);
+        void draw(Texture* texture, SDL_Rect cameraBox);
         bool getIsOnGround();
 };
 

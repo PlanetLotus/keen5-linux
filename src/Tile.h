@@ -28,12 +28,11 @@ class Tile {
         enum TileProperty { LEFT, RIGHT, TOP, BOTTOM, ISPOLE };
 
         // Inits position and type
-        Tile(Texture* texture, int srcX, int srcY, int destX, int destY, int lHeight, int rHeight,
+        Tile(int srcX, int srcY, int destX, int destY, int lHeight, int rHeight,
             bool collideT, bool collideR, bool collideB, bool collideL, int layer, bool isPole, bool isEdge);
 
         // Shows the tile
-        Texture* gMaskTexture;
-        void render(SDL_Rect cameraBox);
+        void draw(Texture* texture, SDL_Rect cameraBox);
 
         SDL_Rect getBox();
         bool isColliding(TileProperty tileProperty, SDL_Rect hitbox, SDL_Rect nextHitbox);

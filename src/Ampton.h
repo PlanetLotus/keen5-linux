@@ -18,7 +18,6 @@ class Ampton : public Sprite {
         stateEnum state;
 
         Player* keen;
-        Texture* gKeenTexture;
         bool isCollidingWithPlayer();
 
         int climbCooldownTimer;
@@ -45,7 +44,7 @@ class Ampton : public Sprite {
     public:
         Ampton(Player* player);
         void update();
-        void draw(SDL_Rect cameraBox);
+        void draw(Texture* texture, SDL_Rect cameraBox);
 
 };
 

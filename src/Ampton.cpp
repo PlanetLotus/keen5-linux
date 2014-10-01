@@ -23,7 +23,6 @@ Ampton::Ampton(Player* player) {
     srcClip = NULL;
 
     keen = player;
-    gKeenTexture = keen->gKeenTexture;
     isStunned = false;
 
     climbCooldownTimer = 0;
@@ -390,7 +389,7 @@ void Ampton::update() {
     }
 }
 
-void Ampton::draw(SDL_Rect cameraBox) {
+void Ampton::draw(Texture* texture, SDL_Rect cameraBox) {
     // Center the hitbox (horizontally) inside the displayed frame
     int offsetX = srcClip->w / 2 - TILE_WIDTH / 2;
     int destX = hitbox.x - offsetX;
@@ -399,5 +398,5 @@ void Ampton::draw(SDL_Rect cameraBox) {
     int offsetY = srcClip->h - TILE_HEIGHT;
     int destY = hitbox.y - offsetY;
 
-    gKeenTexture->render(destX - cameraBox.x, destY - cameraBox.y, srcClip);
+    texture->render(destX - cameraBox.x, destY - cameraBox.y, srcClip);
 }

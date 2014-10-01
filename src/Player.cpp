@@ -42,7 +42,7 @@ void Player::shoot(bool isPressingUp, bool isPressingDown) {
             if (isOnPole) animVal = 26 + facing;
         }
 
-        new BlasterShot(gKeenTexture, xStart, yStart, xShotVel, yShotVel);
+        new BlasterShot(xStart, yStart, xShotVel, yShotVel);
 
         animate(animVal);
 
@@ -511,7 +511,7 @@ void Player::animate(int nextState, int frametime) {
     srcClip = &anims[animState][frame / frametime];
 }
 
-void Player::draw(SDL_Rect cameraBox) {
+void Player::draw(Texture* texture, SDL_Rect cameraBox) {
     // Center the hitbox (horizontally) inside the displayed frame
     int offsetX = srcClip->w / 2 - TILE_WIDTH / 2;
     int destX = hitbox.x - offsetX;
@@ -520,7 +520,7 @@ void Player::draw(SDL_Rect cameraBox) {
     int offsetY = srcClip->h - TILE_HEIGHT * 2;
     int destY = hitbox.y - offsetY;
 
-    gKeenTexture->render(destX - cameraBox.x, destY - cameraBox.y, srcClip);
+    texture->render(destX - cameraBox.x, destY - cameraBox.y, srcClip);
 }
 
 void Player::die(int collidingEnemyX) {
@@ -556,7 +556,7 @@ void Player::push(int x) {
 
 bool Player::getIsOnGround() { return isOnGround; }
 
-Player::Player(Texture* texture) {
+Player::Player() {
     xVel = 0;
     yVel = 0;
     xVelRem = 0;
@@ -588,8 +588,6 @@ Player::Player(Texture* texture) {
 
     shootingFrameCount = 0;
     isShooting = false;
-
-    gKeenTexture = texture;
 
     // Animation data
     SDL_Rect standL0 = {0, TILE_HEIGHT * 2, TILE_WIDTH, TILE_HEIGHT * 2};

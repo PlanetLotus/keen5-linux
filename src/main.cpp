@@ -14,10 +14,11 @@ using namespace std;
 
 SDL_Window* initWindow();
 SDL_Renderer* initRenderer(SDL_Window* window);
+bool sdlInit();
 bool init(SDL_Window* window, SDL_Renderer* renderer);
-bool loadFiles(Texture* gKeenTexture, Texture* gMaskTexture);
-bool setTiles(Texture* gMaskTexture);
-void cleanUp(SDL_Window* window, SDL_Renderer* renderer, Texture* gKeenTexture, Texture* gMaskTexture);
+bool loadFiles(Texture* keenTexture, Texture* maskTexture);
+bool setTiles(Texture* maskTexture);
+void cleanUp(SDL_Window* window, SDL_Renderer* renderer, Texture* keenTexture, Texture* maskTexture);
 
 vector<Sprite*> enemyBatch(2);
 const vector<Sprite*>& BlasterShot::enemyBatchRef = enemyBatch;
@@ -31,25 +32,18 @@ int main (int argc, char **args) {
     SDL_Event event;
     Timer fps;
 
-    // Init all SDL subsystems
-    if (SDL_Init(SDL_INIT_TIMER | SDL_INIT_AUDIO | SDL_INIT_VIDEO) == -1) {
-        printf("SDL couldn't be initialized. SDL_Error: %s\n", SDL_GetError());
-        return false;
-    }
-
+    if (!sdlInit()) return 1;
     SDL_Window* window = initWindow();
     SDL_Renderer* renderer = initRenderer(window);
-
-    // Initialize SDL
     if (!init(window, renderer)) return 1;
 
-    Texture* gKeenTexture = new Texture(renderer);
-    Texture* gMaskTexture = new Texture(renderer);
+    Texture* keenTexture = new Texture(renderer);
+    Texture* maskTexture = new Texture(renderer);
 
-    if (!loadFiles(gKeenTexture, gMaskTexture)) return 1;
-    if (!setTiles(gMaskTexture)) return 1;
+    if (!loadFiles(keenTexture, maskTexture)) return 1;
+    if (!setTiles(maskTexture)) return 1;
 
-    Player* player = new Player(gKeenTexture);
+    Player* player = new Player();
     Platform* platform = new Platform(player);
     Sprite* sparky = new Sparky(player);
     Sprite* ampton = new Ampton(player);
@@ -95,28 +89,28 @@ int main (int argc, char **args) {
             blasterShotBatch[i]->update();
         player->update();
 
-        // Render tiles - Layer 0 (Before units)
+        // Draw tiles - Layer 0 (Before units)
         for (unsigned int i=0; i<gTiles.size(); i++) {
             for (unsigned int j=0; j<gTiles[i].size(); j++) {
                 if (gTiles[i][j] != NULL && gTiles[i][j]->layer == 0)
-                    gTiles[i][j]->render(gCamera.getBox());
+                    gTiles[i][j]->draw(maskTexture, gCamera.getBox());
             }
         }
 
         // Draw units
         for (unsigned int i = 0; i < gPlatformBatch.size(); i++)
-            gPlatformBatch[i]->draw(gCamera.getBox());
+            gPlatformBatch[i]->draw(keenTexture, gCamera.getBox());
         for (unsigned int i = 0; i < enemyBatch.size(); i++)
-            enemyBatch[i]->draw(gCamera.getBox());
+            enemyBatch[i]->draw(keenTexture, gCamera.getBox());
         for (unsigned int i = 0; i < blasterShotBatch.size(); i++)
-            blasterShotBatch[i]->draw(gCamera.getBox());
-        player->draw(gCamera.getBox());
+            blasterShotBatch[i]->draw(keenTexture, gCamera.getBox());
+        player->draw(keenTexture, gCamera.getBox());
 
         // Render tiles - Layer 1 (After units)
         for (unsigned int i=0; i<gTiles.size(); i++) {
             for (unsigned int j=0; j<gTiles[i].size(); j++) {
                 if (gTiles[i][j] != NULL && gTiles[i][j]->layer == 1)
-                    gTiles[i][j]->render(gCamera.getBox());
+                    gTiles[i][j]->draw(maskTexture, gCamera.getBox());
             }
         }
 
@@ -130,8 +124,32 @@ int main (int argc, char **args) {
             SDL_Delay((1000/FRAMES_PER_SECOND) - fps.getTicks());
     }
 
-    cleanUp(window, renderer, gKeenTexture, gMaskTexture);
+    cleanUp(window, renderer, keenTexture, maskTexture);
     return 0;
+}
+
+bool sdlInit() {
+    // Init all SDL subsystems
+    if (SDL_Init(SDL_INIT_TIMER | SDL_INIT_AUDIO | SDL_INIT_VIDEO) == -1) {
+        printf("SDL couldn't be initialized. SDL_Error: %s\n", SDL_GetError());
+        return false;
+    }
+
+    // Init IMG
+    int flags = IMG_INIT_PNG;
+    int initted = IMG_Init(flags);
+    if ((initted&flags) != flags) {
+        printf("Couldn't init SDL_image. IMG_Error: %s\n", IMG_GetError());
+    }
+
+    // Set texture filtering to linear
+    if (!SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1"))
+        printf("Warning: Linear texture filtering not enabled!\n");
+
+    // Init SDL_ttf
+    if (TTF_Init() == -1) return false;
+
+    return true;
 }
 
 SDL_Window* initWindow() {
@@ -154,17 +172,6 @@ SDL_Renderer* initRenderer(SDL_Window* window) {
 }
 
 bool init(SDL_Window* window, SDL_Renderer* renderer) {
-    // Init IMG
-    int flags = IMG_INIT_PNG;
-    int initted = IMG_Init(flags);
-    if ((initted&flags) != flags) {
-        printf("Couldn't init SDL_image. IMG_Error: %s\n", IMG_GetError());
-    }
-
-    // Set texture filtering to linear
-    if (!SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1"))
-        printf("Warning: Linear texture filtering not enabled!\n");
-
     // Make sure window was successfully set up
     if (window == NULL || renderer == NULL) {
         printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
@@ -174,24 +181,21 @@ bool init(SDL_Window* window, SDL_Renderer* renderer) {
     // Init renderer color
     SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
 
-    // Initialize SDL_ttf
-    if (TTF_Init() == -1) return false;
-
     // Update screen
     SDL_RenderPresent(renderer);
 
     return true;
 }
 
-bool loadFiles(Texture* gKeenTexture, Texture* gMaskTexture) {
+bool loadFiles(Texture* keenTexture, Texture* maskTexture) {
     string data = "../data/";
 
     // Load images
-    if (!gKeenTexture->loadFromFile(data + "keensprite.png", true)) {
+    if (!keenTexture->loadFromFile(data + "keensprite.png", true)) {
         printf("Failed to load keen texture!\n");
         return false;
     }
-    if (!gMaskTexture->loadFromFile(data + "masks.png", false)) {
+    if (!maskTexture->loadFromFile(data + "masks.png", false)) {
         printf("Failed to load masks texture!\n");
         return false;
     }
@@ -199,7 +203,7 @@ bool loadFiles(Texture* gKeenTexture, Texture* gMaskTexture) {
     return true;
 }
 
-bool setTiles(Texture* gMaskTexture) {
+bool setTiles(Texture* maskTexture) {
     // Notes:
     // Does levelWidth / levelHeight matter? Yes, because we have to know when we're at the end of a "row" when reading the file
     // tileCount in file is currently UNUSED
@@ -317,7 +321,7 @@ bool setTiles(Texture* gMaskTexture) {
 
         iss >> layerVal;
 
-        gTiles[x][y] = new Tile(gMaskTexture, xSrc, ySrc, x * TILE_WIDTH, y * TILE_HEIGHT, leftHeight, rightHeight,
+        gTiles[x][y] = new Tile(xSrc, ySrc, x * TILE_WIDTH, y * TILE_HEIGHT, leftHeight, rightHeight,
             collideT, collideR, collideB, collideL, layerVal, isPole, isEdge);
 
         x++;
@@ -327,9 +331,9 @@ bool setTiles(Texture* gMaskTexture) {
     return true;
 }
 
-void cleanUp(SDL_Window* window, SDL_Renderer* renderer, Texture* gKeenTexture, Texture* gMaskTexture) {
-    gKeenTexture->free();
-    gMaskTexture->free();
+void cleanUp(SDL_Window* window, SDL_Renderer* renderer, Texture* keenTexture, Texture* maskTexture) {
+    keenTexture->free();
+    maskTexture->free();
 
     for (unsigned int i=0; i<gTiles.size(); i++) {
         for (unsigned int j=0; j<gTiles[i].size(); j++) {

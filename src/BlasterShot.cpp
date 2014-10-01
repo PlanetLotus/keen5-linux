@@ -4,7 +4,7 @@
 
 using namespace std;
 
-BlasterShot::BlasterShot(Texture* texture, int startX, int startY, float velocityX, float velocityY) {
+BlasterShot::BlasterShot(int startX, int startY, float velocityX, float velocityY) {
     hitbox.x = startX;
     hitbox.y = startY;
     hitbox.w = TILE_WIDTH;
@@ -19,7 +19,6 @@ BlasterShot::BlasterShot(Texture* texture, int startX, int startY, float velocit
     frame = 0;
     animState = 0;
 
-    gKeenTexture = texture;
     srcClip = NULL;
 
     // Animation instantiation
@@ -117,8 +116,8 @@ void BlasterShot::animate(int nextState) {
     srcClip = &anims[animState][frame / FRAMETIME];
 }
 
-void BlasterShot::draw(SDL_Rect cameraBox) {
-    gKeenTexture->render(hitbox.x - cameraBox.x, hitbox.y - cameraBox.y, srcClip);
+void BlasterShot::draw(Texture* texture, SDL_Rect cameraBox) {
+    texture->render(hitbox.x - cameraBox.x, hitbox.y - cameraBox.y, srcClip);
 }
 
 void BlasterShot::expire() {
