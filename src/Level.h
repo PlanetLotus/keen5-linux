@@ -18,6 +18,12 @@ class Level {
         std::vector< std::vector<Tile*> > tiles;
 
     public:
+        Level(
+            int width, int height,
+            int tilesWide, int tilesTall,
+            int tileCountLayer1, int tileCountLayer2,
+            std::vector< std::vector<Tile*> > tiles
+        );
         int getWidth();
         int getHeight();
         int getTilesWide();
