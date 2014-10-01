@@ -27,6 +27,7 @@ const vector< vector<Tile*> >& Sprite::tilesRef = tiles;
 
 Level* currentLevel = NULL;
 Level*& Sprite::currentLevelRef = currentLevel;
+Level*& Camera::currentLevelRef = currentLevel;
 
 vector<Sprite*> enemyBatch(2);
 const vector<Sprite*>& BlasterShot::enemyBatchRef = enemyBatch;
@@ -266,9 +267,6 @@ Level* loadCurrentLevel(Texture* maskTexture) {
         printf("Error getting metadata from line 1.\n");
         return NULL;
     }
-
-    LEVEL_WIDTH = tilesWide * TILE_WIDTH;
-    LEVEL_HEIGHT = tilesTall * TILE_HEIGHT;
 
     // Special case: Second line contains source file absolute path
     // This is mostly used by the level editor. We only want the file name.

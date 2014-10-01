@@ -11,9 +11,4 @@ extern const int TEXTURE_COUNT;
 // Number of timer loops per animation frame
 extern const int FRAMETIME;
 
-// Level globals
-// These should really go in a "level" class
-extern int LEVEL_WIDTH;
-extern int LEVEL_HEIGHT;
-
 #endif
