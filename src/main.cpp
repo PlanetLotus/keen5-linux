@@ -362,6 +362,8 @@ void cleanUp(SDL_Window* window, SDL_Renderer* renderer, Texture* keenTexture, T
         }
     }
 
+    delete currentLevel;
+
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
 
