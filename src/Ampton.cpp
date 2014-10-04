@@ -88,10 +88,6 @@ void Ampton::fall() {
     yVel += 2.6;
 }
 
-bool Ampton::isCollidingWithPlayer() {
-    return isUnitColliding(keen->getBox());
-}
-
 void Ampton::changeState(stateEnum nextState) {
     state = nextState;
 }
@@ -224,30 +220,6 @@ void Ampton::takeShotByPlayer() {
 
     // Enemies do a brief "hop" when stunned
     yVel += -12;
-}
-
-Tile* Ampton::getTileUnderFeet() {
-    int amptonBottom = hitbox.y + hitbox.h;
-
-    if (amptonBottom % TILE_HEIGHT != 0)
-        return NULL;
-
-    int amptonRight = hitbox.x + hitbox.w;
-    unsigned int leftCol = hitbox.x / TILE_WIDTH;
-    unsigned int rightCol = (amptonRight + TILE_WIDTH) / TILE_WIDTH;
-    int tileRow = amptonBottom / TILE_HEIGHT;
-    Tile* tile = NULL;
-
-    // If moving left, return leftmost tile. If moving right, return rightmost
-    // If the unit is pushed by something else, will that mess up this logic?
-    for (unsigned int i = leftCol; i < rightCol; i++) {
-        tile = tilesRef[i][tileRow];
-        if (tile != NULL) {
-            if (facing == LEFT)
-                return tile;
-        }
-    }
-    return tile;
 }
 
 Tile* Ampton::getCollidingPoleTile() {

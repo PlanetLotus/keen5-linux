@@ -1,10 +1,11 @@
 #ifndef SPARKY_H
 #define SPARKY_H
 
+#include "Enemy.h"
 #include "Player.h"
 #include "SDL.h"
 
-class Sparky : public Sprite {
+class Sparky : public Enemy {
     private:
         enum stateEnum { PATROL, CHASE, SCAN, CHANGE_DIRECTION, STUNNED };
         stateEnum state;
@@ -16,17 +17,11 @@ class Sparky : public Sprite {
         void changeDirection();
         void stunned();
 
-        Tile* getTileUnderFeet();
-
-        enum facingEnum { LEFT = -1, RIGHT = 1 };
-        facingEnum facing;
         int patrolSpeed;
         int chaseSpeed;
 
         int scanCount;
         bool canSeeKeen();
-        Player* keen;
-        bool isCollidingWithPlayer();
 
         void fall();
         std::vector<SDL_Rect> anims[5];

@@ -205,37 +205,9 @@ bool Sparky::canSeeKeen() {
     return false;
 }
 
-bool Sparky::isCollidingWithPlayer() {
-    return isUnitColliding(keen->getBox());
-}
-
 void Sparky::changeState(stateEnum nextState) {
     prevState = state;
     state = nextState;
-}
-
-Tile* Sparky::getTileUnderFeet() {
-    int sparkyBottom = hitbox.y + hitbox.h;
-
-    if (sparkyBottom % TILE_HEIGHT != 0)
-        return NULL;
-
-    int sparkyRight = hitbox.x + hitbox.w;
-    unsigned int leftCol = hitbox.x / TILE_WIDTH;
-    unsigned int rightCol = (sparkyRight + TILE_WIDTH) / TILE_WIDTH;
-    int tileRow = sparkyBottom / TILE_HEIGHT;
-    Tile* tile = NULL;
-
-    // If moving left, return leftmost tile. If moving right, return rightmost
-    // If the unit is pushed by something else, will that mess up this logic?
-    for (unsigned int i = leftCol; i < rightCol; i++) {
-        tile = tilesRef[i][tileRow];
-        if (tile != NULL) {
-            if (facing == LEFT)
-                return tile;
-        }
-    }
-    return tile;
 }
 
 void Sparky::update() {
