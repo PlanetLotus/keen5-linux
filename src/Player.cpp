@@ -453,18 +453,16 @@ void Player::update() {
 
     // Apply push from other units
     if (xPush != 0) {
-        animate(0 + facing);
         xVel += xPush;
         xPush = 0;
     }
-    /*
+
+    isOnPlatform = handlePlatformCollision();
+
     if (yPush != 0) {
         yVel += yPush;
         yPush = 0;
     }
-    */
-
-    isOnPlatform = handlePlatformCollision();
 
     // Check left/right collision
     TileCollisionInfo tciLR;

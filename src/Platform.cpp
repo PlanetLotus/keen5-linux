@@ -16,7 +16,7 @@ Platform::Platform(Player* player) {
     keen = player;
 
     xVel = 0;
-    yVel = 0;
+    yVel = 3;
 }
 
 void Platform::update() {
