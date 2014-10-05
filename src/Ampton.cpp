@@ -355,9 +355,9 @@ void Ampton::update() {
         if (state == CLIMB_UP || state == CLIMB_DOWN)
             keen->die(hitbox.x);
         else if (facing == LEFT && hitbox.x > keenBox.x)
-            keen->push(hitbox.x - (keenBox.x + keenBox.w));
+            keen->pushX(hitbox.x - (keenBox.x + keenBox.w));
         else if (hitbox.x + hitbox.w < keenBox.x + keenBox.w)
-            keen->push((hitbox.x + hitbox.w) - keenBox.x);
+            keen->pushX((hitbox.x + hitbox.w) - keenBox.x);
     }
 }
 

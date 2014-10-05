@@ -1,4 +1,5 @@
 #include "globals.h"
+#include "helpers.h"
 #include "Platform.h"
 
 Platform::Platform(Player* player) {
@@ -19,8 +20,14 @@ Platform::Platform(Player* player) {
 }
 
 void Platform::update() {
+    hitbox.x += xVel;
+    hitbox.y += yVel;
+
+    // Later: keen->pushX(xVel);
 }
 
 void Platform::draw(Texture* texture, SDL_Rect cameraBox) {
     texture->render(hitbox.x - cameraBox.x, hitbox.y - cameraBox.y, &srcRect);
 }
+
+SDL_Rect Platform::getBox() { return hitbox; }

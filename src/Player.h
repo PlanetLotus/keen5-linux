@@ -4,17 +4,20 @@
 #include <vector>
 #include "Camera.h"
 #include "Controller.h"
+#include "Platform.h"
 #include "SDL.h"
 #include "Sprite.h"
 
 // This can't be the right way to do this, but it does work as intended...
 extern const int FRAMETIME;
+class Platform;
 
 class Player : public Sprite {
     private:
         enum directionEnum { LEFT, RIGHT, UP, DOWN, STOP };
 
         int xPush;
+        int yPush;
         float xAccel;
         float yAccel;
 
@@ -40,9 +43,12 @@ class Player : public Sprite {
         void stopClimb();
         void snapToPole(Tile* pole, directionEnum facing);
         Tile* getCollidingPoleTile();
+        bool isCollidingWithPlatform(SDL_Rect platformBox);
+        bool handlePlatformCollision();
         void animate(int nextState, int frametime = FRAMETIME);
         static Camera& cameraRef;
         static Controller& controllerRef;
+        static const std::vector<Platform*>& platformBatchRef;
     public:
         Player();
         void shoot(bool isPressingUp, bool isPressingDown);
@@ -54,7 +60,8 @@ class Player : public Sprite {
         void climb(directionEnum dir);
         void fall();
         void die(int collidingEnemyX);
-        void push(int x);
+        void pushX(int x);
+        void pushY(int y);
         void update();
         void draw(Texture* texture, SDL_Rect cameraBox);
         bool getIsOnGround();

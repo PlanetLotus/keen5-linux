@@ -4,6 +4,8 @@
 #include "Player.h"
 #include "SDL.h"
 
+class Player;
+
 class Platform {
     private:
         SDL_Rect hitbox;
@@ -18,6 +20,7 @@ class Platform {
         Platform(Player* player);
         void update();
         void draw(Texture* texture, SDL_Rect cameraBox);
+        SDL_Rect getBox();
 };
 
 #endif

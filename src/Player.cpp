@@ -380,6 +380,43 @@ void Player::processKeyboard() {
     }
 }
 
+bool Player::isCollidingWithPlatform(SDL_Rect platformBox) {
+    SDL_Rect nextHitbox = { hitbox.x + (int)xVel, hitbox.y + (int)yVel, hitbox.w, hitbox.h };
+
+    int keenLeft = nextHitbox.x;
+    int keenRight = nextHitbox.x + nextHitbox.w;
+    int keenBottom = nextHitbox.y + nextHitbox.h;
+    int platformLeft = platformBox.x;
+    int platformRight = platformBox.x + platformBox.w;
+    int platformBottom = platformBox.y + platformBox.h;
+
+    // Make sure Keen is directly above Platform
+    if (keenLeft > platformRight) return false;
+    if (keenRight < platformLeft) return false;
+    if (keenBottom > platformBottom) return false;
+
+    return isBottomColliding(hitbox, nextHitbox, platformBox);
+}
+
+bool Player::handlePlatformCollision() {
+    if (yVel <= 0) return false;
+
+    for (unsigned int i = 0; i < platformBatchRef.size(); i++) {
+        SDL_Rect platformBox = platformBatchRef[i]->getBox();
+
+        if (isCollidingWithPlatform(platformBox)) {
+            int keenBottom = hitbox.y + hitbox.h + (int)yVel;
+            int platformTop = platformBox.y;
+
+            yVel += platformTop - keenBottom;
+            yVelRem = 0;
+            return true;
+        }
+    }
+
+    return false;
+}
+
 void Player::update() {
     // Process in this order
     // 1) User actions
@@ -413,6 +450,14 @@ void Player::update() {
         xVel += xPush;
         xPush = 0;
     }
+    /*
+    if (yPush != 0) {
+        yVel += yPush;
+        yPush = 0;
+    }
+    */
+
+    bool collidingWithPlatform = handlePlatformCollision();
 
     // Check left/right collision
     TileCollisionInfo tciLR;
@@ -434,7 +479,7 @@ void Player::update() {
 
         // Set properties based on y-collision
         if (tciTB.isBottomChecked)
-            isOnGround = tciTB.isBottomColliding();
+            isOnGround = tciTB.isBottomColliding() || collidingWithPlatform;
 
         if (tciTB.isTopColliding()) {
             yVel = (tciTB.tileCollidingWithTop->getBox().y + tciTB.tileCollidingWithTop->getBox().h) - hitbox.y;
@@ -474,7 +519,7 @@ void Player::update() {
     yVelRem = modf(yVel, &intPart);
 
     // Reset velocity if collision or on pole
-    if (tciTB.isTopColliding() || tciTB.isBottomColliding()) {
+    if (tciTB.isTopColliding() || tciTB.isBottomColliding() || collidingWithPlatform) {
         yVel = 0;
         yVelRem = 0;
     }
@@ -549,9 +594,14 @@ void Player::die(int collidingEnemyX) {
     // Show menu
 }
 
-void Player::push(int x) {
+void Player::pushX(int x) {
     if (!isOnPole)
         xPush += x;
+}
+
+void Player::pushY(int y) {
+    if (!isOnPole)
+        yPush += y;
 }
 
 bool Player::getIsOnGround() { return isOnGround; }
@@ -562,6 +612,7 @@ Player::Player() {
     xVelRem = 0;
     yVelRem = 0;
     xPush = 0;
+    yPush = 0;
     xAccel = 0;
     yAccel = 0;
 
@@ -569,7 +620,7 @@ Player::Player() {
 
     srcClip = NULL;
 
-    hitbox.x = TILE_WIDTH * 24;
+    hitbox.x = TILE_WIDTH * 26;
     hitbox.y = TILE_HEIGHT * 9;
     hitbox.w = TILE_WIDTH;
     hitbox.h = TILE_HEIGHT * 2;
