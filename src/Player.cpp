@@ -410,6 +410,10 @@ bool Player::handlePlatformCollision() {
 
             yVel += platformTop - keenBottom;
             yVelRem = 0;
+
+            if (xVel == 0)
+                animate(33);
+
             return true;
         }
     }
@@ -700,6 +704,8 @@ Player::Player() {
     SDL_Rect die0 = { TILE_WIDTH * 11, TILE_HEIGHT * 8, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
     SDL_Rect die1 = { TILE_WIDTH * 13, TILE_HEIGHT * 8, TILE_WIDTH, TILE_HEIGHT * 2 };
 
+    SDL_Rect standPlatform0 = { 0, TILE_HEIGHT * 14, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
+
     SDL_Rect standL_array[1] = { standL0 };
     SDL_Rect standR_array[1] = { standR0 };
     SDL_Rect walkL_array[4] = { walkL0, walkL1, walkL2, walkL3 };
@@ -733,6 +739,7 @@ Player::Player() {
     SDL_Rect lookUp_array[1] = { lookUp };
     SDL_Rect lookDown_array[2] = { lookDown0, lookDown1 };
     SDL_Rect die_array[2] = { die0, die1 };
+    SDL_Rect standPlatform_array[1] = { standPlatform0 };
 
     vector<SDL_Rect> standL_anim(standL_array, standL_array + sizeof(standL_array) / sizeof(SDL_Rect));
     vector<SDL_Rect> standR_anim(standR_array, standR_array + sizeof(standR_array) / sizeof(SDL_Rect));
@@ -767,6 +774,7 @@ Player::Player() {
     vector<SDL_Rect> lookUp_anim(lookUp_array, lookUp_array + sizeof(lookUp_array) / sizeof(SDL_Rect));
     vector<SDL_Rect> lookDown_anim(lookDown_array, lookDown_array + sizeof(lookDown_array) / sizeof(SDL_Rect));
     vector<SDL_Rect> die_anim(die_array, die_array + sizeof(die_array) / sizeof(SDL_Rect));
+    vector<SDL_Rect> standPlatform_anim(standPlatform_array, standPlatform_array + sizeof(standPlatform_array) / sizeof(SDL_Rect));
 
     anims[0] = standL_anim; anims[1] = standR_anim;
     anims[2] = walkL_anim; anims[3] = walkR_anim;
@@ -783,5 +791,5 @@ Player::Player() {
     anims[26] = poleShootL_anim; anims[27] = poleShootR_anim;
     anims[28] = poleShootUpL_anim; anims[29] = poleShootUpR_anim;
     anims[30] = lookUp_anim; anims[31] = lookDown_anim;
-    anims[32] = die_anim;
+    anims[32] = die_anim; anims[33] = standPlatform_anim;
 }
