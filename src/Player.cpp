@@ -461,7 +461,7 @@ void Player::update() {
     }
     */
 
-    bool collidingWithPlatform = handlePlatformCollision();
+    isOnPlatform = handlePlatformCollision();
 
     // Check left/right collision
     TileCollisionInfo tciLR;
@@ -483,7 +483,7 @@ void Player::update() {
 
         // Set properties based on y-collision
         if (tciTB.isBottomChecked)
-            isOnGround = tciTB.isBottomColliding() || collidingWithPlatform;
+            isOnGround = tciTB.isBottomColliding() || isOnPlatform;
 
         if (tciTB.isTopColliding()) {
             yVel = (tciTB.tileCollidingWithTop->getBox().y + tciTB.tileCollidingWithTop->getBox().h) - hitbox.y;
@@ -523,7 +523,7 @@ void Player::update() {
     yVelRem = modf(yVel, &intPart);
 
     // Reset velocity if collision or on pole
-    if (tciTB.isTopColliding() || tciTB.isBottomColliding() || collidingWithPlatform) {
+    if (tciTB.isTopColliding() || tciTB.isBottomColliding() || isOnPlatform) {
         yVel = 0;
         yVelRem = 0;
     }
@@ -609,6 +609,7 @@ void Player::pushY(int y) {
 }
 
 bool Player::getIsOnGround() { return isOnGround; }
+bool Player::getIsOnPlatform() { return isOnPlatform; }
 
 Player::Player() {
     xVel = 0;
@@ -640,6 +641,7 @@ Player::Player() {
     isOnGround = true;
     isOnPogo = false;
     isOnPole = false;
+    isOnPlatform = false;
 
     shootingFrameCount = 0;
     isShooting = false;
