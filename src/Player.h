@@ -34,6 +34,8 @@ class Player : public Sprite {
         bool isOnPole;
         bool isOnPlatform;
 
+        Platform* collidingPlatform;
+
         int shootingFrameCount;
         bool isShooting;
 
@@ -66,7 +68,7 @@ class Player : public Sprite {
         void update();
         void draw(Texture* texture, SDL_Rect cameraBox);
         bool getIsOnGround();
-        bool getIsOnPlatform();
+        Platform* getCollidingPlatform();
 };
 
 #endif

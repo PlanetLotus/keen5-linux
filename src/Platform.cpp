@@ -23,7 +23,11 @@ void Platform::update() {
     hitbox.x += xVel;
     hitbox.y += yVel;
 
-    // Later: keen->pushX(xVel);
+    Platform* collidingPlatform = keen->getCollidingPlatform();
+    if (collidingPlatform != NULL && collidingPlatform == this) {
+        keen->pushX(xVel);
+        keen->pushY(yVel);
+    }
 }
 
 void Platform::draw(Texture* texture, SDL_Rect cameraBox) {

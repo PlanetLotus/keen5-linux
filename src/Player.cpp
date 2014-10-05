@@ -399,6 +399,8 @@ bool Player::isCollidingWithPlatform(SDL_Rect platformBox) {
 }
 
 bool Player::handlePlatformCollision() {
+    collidingPlatform = NULL;
+
     if (yVel <= 0) return false;
 
     for (unsigned int i = 0; i < platformBatchRef.size(); i++) {
@@ -414,6 +416,7 @@ bool Player::handlePlatformCollision() {
             if (xVel == 0)
                 animate(33);
 
+            collidingPlatform = platformBatchRef[i];
             return true;
         }
     }
@@ -609,7 +612,7 @@ void Player::pushY(int y) {
 }
 
 bool Player::getIsOnGround() { return isOnGround; }
-bool Player::getIsOnPlatform() { return isOnPlatform; }
+Platform* Player::getCollidingPlatform() { return collidingPlatform; }
 
 Player::Player() {
     xVel = 0;
@@ -642,6 +645,8 @@ Player::Player() {
     isOnPogo = false;
     isOnPole = false;
     isOnPlatform = false;
+
+    collidingPlatform = NULL;
 
     shootingFrameCount = 0;
     isShooting = false;
