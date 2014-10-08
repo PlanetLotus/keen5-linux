@@ -4,7 +4,7 @@
 
 Platform::Platform(Player* player) {
     hitbox.x = TILE_WIDTH * 23;
-    hitbox.y = TILE_HEIGHT * 9;
+    hitbox.y = TILE_HEIGHT * 26;
     hitbox.w = TILE_WIDTH * 2;
     hitbox.h = TILE_HEIGHT;
 
@@ -16,18 +16,20 @@ Platform::Platform(Player* player) {
     keen = player;
 
     xVel = 0;
-    yVel = 3;
+    yVel = -3;
 }
 
 void Platform::update() {
     hitbox.x += xVel;
     hitbox.y += yVel;
 
+    /*
     Platform* collidingPlatform = keen->getCollidingPlatform();
     if (collidingPlatform != NULL && collidingPlatform == this) {
         keen->pushX(xVel);
         keen->pushY(yVel);
     }
+    */
 }
 
 void Platform::draw(Texture* texture, SDL_Rect cameraBox) {

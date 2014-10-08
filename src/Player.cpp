@@ -84,6 +84,7 @@ void Player::walk(directionEnum dir) {
         animate(2 + facing);
     } else {
         // Walking in the air
+        // Stray thought: Maybe it's just low acceleration and not "drag"
         xAccel = dir == LEFT ? -1.7 : 1.7;
         xVel += xAccel;
 
@@ -386,14 +387,21 @@ bool Player::isCollidingWithPlatform(SDL_Rect platformBox) {
     int keenLeft = nextHitbox.x;
     int keenRight = nextHitbox.x + nextHitbox.w;
     int keenBottom = nextHitbox.y + nextHitbox.h;
+    int oldKeenBottom = hitbox.y + hitbox.h;
     int platformLeft = platformBox.x;
     int platformRight = platformBox.x + platformBox.w;
-    int platformBottom = platformBox.y + platformBox.h;
+    int platformTop = platformBox.y;
+    int oldPlatformTop = platformBox.y + 3;
+
+    //printf("%d,%d\n", oldKeenBottom, oldPlatformTop);
+    // If Keen was already on Platform and is still with it, stay on
+    if (isOnPlatform && oldKeenBottom == oldPlatformTop)
+        return true;
 
     // Make sure Keen is directly above Platform
     if (keenLeft > platformRight) return false;
     if (keenRight < platformLeft) return false;
-    if (keenBottom > platformBottom) return false;
+    if (oldKeenBottom >= oldPlatformTop) return false;
 
     return isBottomColliding(hitbox, nextHitbox, platformBox);
 }
@@ -401,20 +409,28 @@ bool Player::isCollidingWithPlatform(SDL_Rect platformBox) {
 bool Player::handlePlatformCollision() {
     collidingPlatform = NULL;
 
-    if (yVel <= 0) return false;
-
     for (unsigned int i = 0; i < platformBatchRef.size(); i++) {
         SDL_Rect platformBox = platformBatchRef[i]->getBox();
 
         if (isCollidingWithPlatform(platformBox)) {
+            int oldKeenBottom = hitbox.y + hitbox.h;
             int keenBottom = hitbox.y + hitbox.h + (int)yVel;
             int platformTop = platformBox.y;
 
-            yVel += platformTop - keenBottom;
+            if (!isOnPlatform)
+                printf("%f\n", yVel);
+
+            yVel = platformTop - oldKeenBottom;
             yVelRem = 0;
+
+            // HACK: This should never happen
+            if (!isOnPlatform && yVel < 0)
+                continue;
 
             if (xVel == 0)
                 animate(33);
+
+            //printf("%d
 
             collidingPlatform = platformBatchRef[i];
             return true;
@@ -456,13 +472,16 @@ void Player::update() {
         xVel += xPush;
         xPush = 0;
     }
-
-    isOnPlatform = handlePlatformCollision();
-
-    if (yPush != 0) {
+    if (collidingPlatform != NULL && yPush != 0) {
         yVel += yPush;
         yPush = 0;
     }
+
+    bool prevOnPlatform = isOnPlatform;
+    isOnPlatform = handlePlatformCollision();
+
+    if (isOnPlatform && !prevOnPlatform)
+        printf("%f\n", yVel);   // This should never be negative. The problem occurs when this is negative.
 
     // Check left/right collision
     TileCollisionInfo tciLR;
@@ -627,7 +646,7 @@ Player::Player() {
     srcClip = NULL;
 
     hitbox.x = TILE_WIDTH * 26;
-    hitbox.y = TILE_HEIGHT * 9;
+    hitbox.y = TILE_HEIGHT * 26;
     hitbox.w = TILE_WIDTH;
     hitbox.h = TILE_HEIGHT * 2;
 
