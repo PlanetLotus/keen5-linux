@@ -315,6 +315,7 @@ void Player::jump() {
         yAccel = -21;
         yVel += yAccel;
         isOnGround = false; // This isn't ideal. It's assuming nothing stopped the jump.
+        platformStandingOn = NULL;  // Not my favorite hack.
     } else if (isOnPole) {
         yAccel = -12;
         yVel += yAccel;
@@ -382,6 +383,21 @@ void Player::processKeyboard() {
 }
 
 bool Player::isCollidingWithPlatform(SDL_Rect platformBox) {
+    int keenLeft = hitbox.x;
+    int keenRight = hitbox.x + hitbox.w;
+    int keenBottom = hitbox.y + hitbox.h;
+    int platformLeft = platformBox.x;
+    int platformRight = platformBox.x + platformBox.w;
+    int platformTop = platformBox.y;
+    int platformBottom = platformBox.y + platformBox.h;
+
+    if (keenLeft >= platformRight) return false;
+    if (keenRight <= platformLeft) return false;
+    if (yVel < 0) return false; // Will cause rare bugs
+
+    return keenBottom > platformTop && keenBottom < platformBottom;
+
+    /*
     SDL_Rect nextHitbox = { hitbox.x + (int)xVel, hitbox.y + (int)yVel, hitbox.w, hitbox.h };
 
     int keenLeft = nextHitbox.x;
@@ -404,6 +420,7 @@ bool Player::isCollidingWithPlatform(SDL_Rect platformBox) {
     if (oldKeenBottom >= oldPlatformTop) return false;
 
     return isBottomColliding(hitbox, nextHitbox, platformBox);
+    */
 }
 
 bool Player::handlePlatformCollision() {
@@ -413,19 +430,23 @@ bool Player::handlePlatformCollision() {
         SDL_Rect platformBox = platformBatchRef[i]->getBox();
 
         if (isCollidingWithPlatform(platformBox)) {
-            int oldKeenBottom = hitbox.y + hitbox.h;
-            int keenBottom = hitbox.y + hitbox.h + (int)yVel;
+            int keenBottom = hitbox.y + hitbox.h;
+            //int keenBottom = hitbox.y + hitbox.h + (int)yVel;
             int platformTop = platformBox.y;
 
+            /*
             if (!isOnPlatform)
                 printf("%f\n", yVel);
+                */
 
-            yVel = platformTop - oldKeenBottom;
+            yVel = platformTop - keenBottom;
             yVelRem = 0;
 
             // HACK: This should never happen
+            /*
             if (!isOnPlatform && yVel < 0)
                 continue;
+                */
 
             if (xVel == 0)
                 animate(33);
@@ -464,10 +485,20 @@ void Player::update() {
     }
 
     // Apply gravity and relevant animations
-    if (!isOnPole)
+    if (!isOnPole && platformStandingOn == NULL) {
         fall();
+    } else if (platformStandingOn != NULL) {
+        xVel += platformStandingOn->getXVel();
+        xVelRem = 0;
+        yVel = platformStandingOn->getYVel();
+        yVelRem = 0;
+    }
+            printf("%f\n", yVel);
+
+    // 3) If Platform handle exists, adjust player position by Platform velocity
 
     // Apply push from other units
+    /*
     if (xPush != 0) {
         xVel += xPush;
         xPush = 0;
@@ -482,6 +513,13 @@ void Player::update() {
 
     if (isOnPlatform && !prevOnPlatform)
         printf("%f\n", yVel);   // This should never be negative. The problem occurs when this is negative.
+        */
+
+    if (platformStandingOn == NULL)
+        handlePlatformCollision();
+
+    if (platformStandingOn != NULL)
+        isOnGround = true;
 
     // Check left/right collision
     TileCollisionInfo tciLR;
@@ -503,7 +541,10 @@ void Player::update() {
 
         // Set properties based on y-collision
         if (tciTB.isBottomChecked)
-            isOnGround = tciTB.isBottomColliding() || isOnPlatform;
+            //isOnGround = tciTB.isBottomColliding() || isOnPlatform;
+            isOnGround = tciTB.isBottomColliding() || platformStandingOn != NULL;
+
+        //printf("%s\n", isOnGround ? "isOnGround" : "not on ground");
 
         if (tciTB.isTopColliding()) {
             yVel = (tciTB.tileCollidingWithTop->getBox().y + tciTB.tileCollidingWithTop->getBox().h) - hitbox.y;
@@ -543,7 +584,7 @@ void Player::update() {
     yVelRem = modf(yVel, &intPart);
 
     // Reset velocity if collision or on pole
-    if (tciTB.isTopColliding() || tciTB.isBottomColliding() || isOnPlatform) {
+    if (tciTB.isTopColliding() || tciTB.isBottomColliding() || isOnPlatform || platformStandingOn != NULL) {
         yVel = 0;
         yVelRem = 0;
     }
@@ -664,6 +705,7 @@ Player::Player() {
     isOnPlatform = false;
 
     collidingPlatform = NULL;
+    platformStandingOn = NULL;
 
     shootingFrameCount = 0;
     isShooting = false;

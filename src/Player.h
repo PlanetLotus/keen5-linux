@@ -69,6 +69,7 @@ class Player : public Sprite {
         void draw(Texture* texture, SDL_Rect cameraBox);
         bool getIsOnGround();
         Platform* getCollidingPlatform();
+        Platform* platformStandingOn;
 };
 
 #endif

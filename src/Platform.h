@@ -16,11 +16,15 @@ class Platform {
         float xVel;
         float yVel;
 
+        bool playerIsStandingOnThis(SDL_Rect keenBox);
+
     public:
         Platform(Player* player);
         void update();
         void draw(Texture* texture, SDL_Rect cameraBox);
         SDL_Rect getBox();
+        float getXVel();
+        float getYVel();
 };
 
 #endif

@@ -3,8 +3,8 @@
 #include "Platform.h"
 
 Platform::Platform(Player* player) {
-    hitbox.x = TILE_WIDTH * 23;
-    hitbox.y = TILE_HEIGHT * 26;
+    hitbox.x = TILE_WIDTH * 24;
+    hitbox.y = TILE_HEIGHT * 28;
     hitbox.w = TILE_WIDTH * 2;
     hitbox.h = TILE_HEIGHT;
 
@@ -19,9 +19,25 @@ Platform::Platform(Player* player) {
     yVel = -3;
 }
 
+bool Platform::playerIsStandingOnThis(SDL_Rect keenBox) {
+    // KeenBottom == PlatformTop
+    //printf("%d,%d\n", keenBox.y + keenBox.h, hitbox.y);
+    if (keenBox.x + keenBox.w <= hitbox.x) return false;
+    if (keenBox.x >= hitbox.x + hitbox.w) return false;
+
+    return keenBox.y + keenBox.h == hitbox.y;
+}
+
 void Platform::update() {
-    hitbox.x += xVel;
-    hitbox.y += yVel;
+    // 0) Reset platformStandingOn if it points to this platform
+    if (keen->platformStandingOn == this)
+        keen->platformStandingOn = NULL;
+
+    // 1) Check if player is standing on this platform. If so, store handle to it in Player.
+    SDL_Rect keenBox = keen->getBox();
+    if (playerIsStandingOnThis(keenBox)) {
+        keen->platformStandingOn = this;
+    }
 
     /*
     Platform* collidingPlatform = keen->getCollidingPlatform();
@@ -30,6 +46,10 @@ void Platform::update() {
         keen->pushY(yVel);
     }
     */
+
+    // 2) Update Platform
+    hitbox.x += xVel;
+    hitbox.y += yVel;
 }
 
 void Platform::draw(Texture* texture, SDL_Rect cameraBox) {
@@ -41,3 +61,5 @@ void Platform::draw(Texture* texture, SDL_Rect cameraBox) {
 }
 
 SDL_Rect Platform::getBox() { return hitbox; }
+float Platform::getXVel() { return xVel; }
+float Platform::getYVel() { return yVel; }
