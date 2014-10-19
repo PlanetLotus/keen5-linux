@@ -296,6 +296,7 @@ void Player::pogo() {
     if (isOnGround) {
         yVel = -24;
         isOnGround = false; // This isn't ideal. It's assuming nothing stopped the jump.
+        platformStandingOn = NULL;  // Not my favorite hack.
     }
 
     if (yVel >= 0)
@@ -406,7 +407,9 @@ bool Player::handlePlatformCollision() {
             yVel = platformTop - keenBottom;
             yVelRem = 0;
 
-            if (xVel == 0)
+            int platformXVel = platformBatchRef[i]->getXVel();
+
+            if (!isOnPogo && (xVel == 0 || (xVel == platformXVel && platformXVel != 0)))
                 animate(33);
 
             return true;
@@ -452,7 +455,7 @@ void Player::update() {
         yVelRem = 0;
         isOnGround = true;
 
-        if (xVel == 0 || (xVel == platformXVel && platformXVel != 0))
+        if (!isOnPogo && (xVel == 0 || (xVel == platformXVel && platformXVel != 0)))
             animate(33);
     } else {
         handlePlatformCollision();
