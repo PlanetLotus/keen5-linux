@@ -393,9 +393,9 @@ bool Player::isCollidingWithPlatform(SDL_Rect platformBox) {
 
     if (keenLeft >= platformRight) return false;
     if (keenRight <= platformLeft) return false;
-    if (yVel < 0) return false; // Will cause rare bugs
 
-    return keenBottom > platformTop && keenBottom < platformBottom;
+    SDL_Rect nextHitbox = { hitbox.x + (int)(xVel + xVelRem), hitbox.y + (int)(yVel + yVelRem), hitbox.w, hitbox.h };
+    return isBottomColliding(hitbox, nextHitbox, platformBox);
 }
 
 bool Player::handlePlatformCollision() {
