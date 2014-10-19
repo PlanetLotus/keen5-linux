@@ -92,7 +92,7 @@ void BlasterShot::update() {
 
     // Check unit hit
     for (unsigned int i = 0; i < enemyBatchRef.size(); i++) {
-        Sprite* unit = enemyBatchRef[i];
+        Enemy* unit = enemyBatchRef[i];
         if (unit != NULL && !unit->getIsStunned() && isUnitColliding(unit->getBox())) {
             expire();
             unit->takeShotByPlayer();

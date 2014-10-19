@@ -4,8 +4,6 @@
 
 using namespace std;
 
-void Sprite::takeShotByPlayer() {}
-
 vector<Tile*> Sprite::getTilesToLeft() {
     SDL_Rect nextHitbox = { hitbox.x + (int)xVel, hitbox.y, hitbox.w, hitbox.h };
 

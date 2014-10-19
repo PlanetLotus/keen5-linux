@@ -2,6 +2,7 @@
 #define BLASTERSHOT_H
 
 #include <vector>
+#include "Enemy.h"
 #include "SDL.h"
 #include "Sprite.h"
 
@@ -11,7 +12,7 @@ class BlasterShot : public Sprite {
 
         std::vector<SDL_Rect> anims[2];
         void animate(int nextState);
-        static const std::vector<Sprite*>& enemyBatchRef;
+        static const std::vector<Enemy*>& enemyBatchRef;
         static std::vector<BlasterShot*>& blasterShotBatchRef;
     public:
         BlasterShot(int startX, int startY, float velocityX, float velocityY);

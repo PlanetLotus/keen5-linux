@@ -29,8 +29,8 @@ Level* currentLevel = NULL;
 Level*& Sprite::currentLevelRef = currentLevel;
 Level*& Camera::currentLevelRef = currentLevel;
 
-vector<Sprite*> enemyBatch(1);
-const vector<Sprite*>& BlasterShot::enemyBatchRef = enemyBatch;
+vector<Enemy*> enemyBatch(2);
+const vector<Enemy*>& BlasterShot::enemyBatchRef = enemyBatch;
 
 vector<Platform*> platformBatch(1);
 const vector<Platform*>& Player::platformBatchRef = platformBatch;
@@ -67,13 +67,13 @@ int main (int argc, char **args) {
 
     Player* player = new Player();
     Platform* platform = new Platform(player);
-    Sprite* sparky = new Sparky(player);
-    //Sprite* ampton = new Ampton(player);
+    Enemy* sparky = new Sparky(player);
+    Enemy* ampton = new Ampton(player);
 
     platformBatch[0] = platform;
 
-    //enemyBatch[0] = ampton;
-    enemyBatch[0] = sparky;
+    enemyBatch[0] = ampton;
+    enemyBatch[1] = sparky;
 
     while (running) {
         // Start timer

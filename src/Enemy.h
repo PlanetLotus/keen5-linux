@@ -13,6 +13,9 @@ class Enemy : public Sprite {
         bool isCollidingWithPlayer();
 
         Tile* getTileUnderFeet();
+
+    public:
+        virtual void takeShotByPlayer() = 0;
 };
 
 #endif

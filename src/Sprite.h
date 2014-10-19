@@ -26,7 +26,6 @@ class Sprite {
     public:
         virtual void update() = 0;
         virtual void draw(Texture* texture, SDL_Rect cameraBox) = 0;
-        virtual void takeShotByPlayer(); // If I ever have an "Enemy" base class, this should go there instead
         TileCollisionInfo checkTileCollisionLR();
         TileCollisionInfo checkTileCollisionTB();
         std::vector<Tile*> getTilesToLeft();
