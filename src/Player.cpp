@@ -458,7 +458,8 @@ void Player::update() {
         if (!isOnPogo && (xVel == 0 || (xVel == platformXVel && platformXVel != 0)))
             animate(33);
     } else {
-        handlePlatformCollision();
+        if (handlePlatformCollision())
+            isOnGround = true;
     }
 
     // Apply push from other units
