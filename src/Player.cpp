@@ -385,11 +385,8 @@ void Player::processKeyboard() {
 bool Player::isCollidingWithPlatform(SDL_Rect platformBox) {
     int keenLeft = hitbox.x;
     int keenRight = hitbox.x + hitbox.w;
-    int keenBottom = hitbox.y + hitbox.h;
     int platformLeft = platformBox.x;
     int platformRight = platformBox.x + platformBox.w;
-    int platformTop = platformBox.y;
-    int platformBottom = platformBox.y + platformBox.h;
 
     if (keenLeft >= platformRight) return false;
     if (keenRight <= platformLeft) return false;
