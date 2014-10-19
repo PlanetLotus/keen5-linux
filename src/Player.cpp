@@ -443,14 +443,18 @@ void Player::update() {
     }
 
     // Apply gravity and relevant animations
-    if (!isOnPole && platformStandingOn == NULL) {
+    if (!isOnPole)
         fall();
-    } else if (platformStandingOn != NULL) {
+
+    if (platformStandingOn != NULL) {
         // If Platform handle exists, adjust player position by Platform velocity
         xVel += platformStandingOn->getXVel();
         xVelRem = 0;
         yVel = platformStandingOn->getYVel();
         yVelRem = 0;
+        isOnGround = true;
+    } else {
+        handlePlatformCollision();
     }
 
     // Apply push from other units
@@ -458,11 +462,6 @@ void Player::update() {
         xVel += xPush;
         xPush = 0;
     }
-
-    if (platformStandingOn == NULL)
-        handlePlatformCollision();
-    else
-        isOnGround = true;
 
     // Check left/right collision
     TileCollisionInfo tciLR;
