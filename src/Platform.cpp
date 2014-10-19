@@ -4,7 +4,7 @@
 
 Platform::Platform(Player* player) {
     hitbox.x = TILE_WIDTH * 24;
-    hitbox.y = TILE_HEIGHT * 28;
+    hitbox.y = TILE_HEIGHT * 27;
     hitbox.w = TILE_WIDTH * 2;
     hitbox.h = TILE_HEIGHT;
 
@@ -20,12 +20,17 @@ Platform::Platform(Player* player) {
 }
 
 bool Platform::playerIsStandingOnThis(SDL_Rect keenBox) {
-    // KeenBottom == PlatformTop
-    //printf("%d,%d\n", keenBox.y + keenBox.h, hitbox.y);
-    if (keenBox.x + keenBox.w <= hitbox.x) return false;
-    if (keenBox.x >= hitbox.x + hitbox.w) return false;
+    int platformLeft = hitbox.x;
+    int platformRight = hitbox.x + hitbox.w;
+    int platformTop = hitbox.y;
+    int keenRight = keenBox.x + keenBox.w;
+    int keenLeft = keenBox.x;
+    int keenBottom = keenBox.y + keenBox.h;
 
-    return keenBox.y + keenBox.h == hitbox.y;
+    if (keenRight <= platformLeft) return false;
+    if (keenLeft >= platformRight) return false;
+
+    return keenBottom == platformTop;
 }
 
 void Platform::update() {
@@ -35,17 +40,8 @@ void Platform::update() {
 
     // 1) Check if player is standing on this platform. If so, store handle to it in Player.
     SDL_Rect keenBox = keen->getBox();
-    if (playerIsStandingOnThis(keenBox)) {
+    if (playerIsStandingOnThis(keenBox))
         keen->platformStandingOn = this;
-    }
-
-    /*
-    Platform* collidingPlatform = keen->getCollidingPlatform();
-    if (collidingPlatform != NULL && collidingPlatform == this) {
-        keen->pushX(xVel);
-        keen->pushY(yVel);
-    }
-    */
 
     // 2) Update Platform
     hitbox.x += xVel;

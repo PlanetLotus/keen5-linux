@@ -32,9 +32,6 @@ class Player : public Sprite {
         bool isOnGround;
         bool isOnPogo;
         bool isOnPole;
-        bool isOnPlatform;
-
-        Platform* collidingPlatform;
 
         int shootingFrameCount;
         bool isShooting;
@@ -68,7 +65,6 @@ class Player : public Sprite {
         void update();
         void draw(Texture* texture, SDL_Rect cameraBox);
         bool getIsOnGround();
-        Platform* getCollidingPlatform();
         Platform* platformStandingOn;
 };
 
