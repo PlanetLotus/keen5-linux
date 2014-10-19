@@ -20,12 +20,6 @@ class Sprite {
         float xVelRem;
         float yVelRem;
 
-        bool isUnitColliding(SDL_Rect unitBox);
-        static const std::vector< std::vector<Tile*> >& tilesRef;
-        static Level*& currentLevelRef;
-    public:
-        virtual void update() = 0;
-        virtual void draw(Texture* texture, SDL_Rect cameraBox) = 0;
         TileCollisionInfo checkTileCollisionLR();
         TileCollisionInfo checkTileCollisionTB();
         std::vector<Tile*> getTilesToLeft();
@@ -36,6 +30,13 @@ class Sprite {
         Tile* getTileCollidingWithLeft();
         Tile* getTileCollidingWithBottom(bool checkOnlyTouching = false);
         Tile* getTileCollidingWithTop();
+
+        bool isUnitColliding(SDL_Rect unitBox);
+        static const std::vector< std::vector<Tile*> >& tilesRef;
+        static Level*& currentLevelRef;
+    public:
+        virtual void update() = 0;
+        virtual void draw(Texture* texture, SDL_Rect cameraBox) = 0;
         SDL_Rect getBox();
         bool getIsStunned();
 };

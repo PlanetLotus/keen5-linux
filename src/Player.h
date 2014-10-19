@@ -37,6 +37,15 @@ class Player : public Sprite {
         int shootingFrameCount;
         bool isShooting;
 
+        void shoot(bool isPressingUp, bool isPressingDown);
+        void walk(directionEnum dir);
+        void jump();
+        void jumpDown();
+        void togglePogo();
+        void pogo();
+        void look(directionEnum dir);
+        void climb(directionEnum dir);
+        void fall();
         void processKeyboard(); // Call player actions based on keyboard input
         void processUpArrow();
         void processDownArrow();
@@ -53,15 +62,6 @@ class Player : public Sprite {
         static const std::vector<Platform*>& platformBatchRef;
     public:
         Player();
-        void shoot(bool isPressingUp, bool isPressingDown);
-        void walk(directionEnum dir);
-        void jump();
-        void jumpDown();
-        void togglePogo();
-        void pogo();
-        void look(directionEnum dir);
-        void climb(directionEnum dir);
-        void fall();
         void die(int collidingEnemyX);
         void pushX(int x);
         void pushY(int y);
