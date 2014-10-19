@@ -32,6 +32,7 @@ class Player : public Sprite {
         bool isOnGround;
         bool isOnPogo;
         bool isOnPole;
+        bool isJumpingDown;
 
         int shootingFrameCount;
         bool isShooting;
@@ -43,6 +44,7 @@ class Player : public Sprite {
         void stopClimb();
         void snapToPole(Tile* pole, directionEnum facing);
         Tile* getCollidingPoleTile();
+        Tile* getTileUnderFeet();
         bool isCollidingWithPlatform(SDL_Rect platformBox);
         bool handlePlatformCollision();
         void animate(int nextState, int frametime = FRAMETIME);
@@ -54,6 +56,7 @@ class Player : public Sprite {
         void shoot(bool isPressingUp, bool isPressingDown);
         void walk(directionEnum dir);
         void jump();
+        void jumpDown();
         void togglePogo();
         void pogo();
         void look(directionEnum dir);

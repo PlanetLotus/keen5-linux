@@ -90,6 +90,7 @@ int main (int argc, char **args) {
                     case SDLK_LCTRL: controller.isHoldingCtrl = false; break;
                     case SDLK_SPACE: controller.isHoldingSpace = false; break;
                     case SDLK_LALT: controller.isHoldingAlt = false; break;
+                    case SDLK_DOWN: controller.isHoldingDown = false; break;
                 }
             }
             // If the user X'd out of the window

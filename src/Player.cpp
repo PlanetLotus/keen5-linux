@@ -324,6 +324,49 @@ void Player::jump() {
     }
 }
 
+void Player::jumpDown() {
+    if (!isOnGround) return;
+
+    if (platformStandingOn == NULL) {
+        Tile* tile = getTileUnderFeet();
+        if (tile == NULL || tile->getCollideBottom() || !tile->getCollideTop())
+            return;
+    }
+
+    // Verified that Keen is on a platform or valid tile to jump down from
+    // Turn off collision for one update loop
+    isOnGround = false;
+    platformStandingOn = NULL;
+    isJumpingDown = true;
+    lookTimer = 0;
+}
+
+// This is redundant with the one in Enemy class but currently Player and Enemy
+// don't agree on values for facing
+Tile* Player::getTileUnderFeet() {
+    int keenBottom = hitbox.y + hitbox.h;
+
+    if (keenBottom % TILE_HEIGHT != 0)
+        return NULL;
+
+    int keenRight = hitbox.x + hitbox.w;
+    unsigned int leftCol = hitbox.x / TILE_WIDTH;
+    unsigned int rightCol = (keenRight + TILE_WIDTH) / TILE_WIDTH;
+    int tileRow = keenBottom / TILE_HEIGHT;
+    Tile* tile = NULL;
+
+    // If moving left, return leftmost tile. If moving right, return rightmost
+    // If the unit is pushed by something else, will that mess up this logic?
+    for (unsigned int i = leftCol; i < rightCol; i++) {
+        tile = tilesRef[i][tileRow];
+        if (tile != NULL) {
+            if (facing == LEFT)
+                return tile;
+        }
+    }
+    return tile;
+}
+
 void Player::fall() {
     yAccel = 2.6;
 
@@ -363,13 +406,18 @@ void Player::processKeyboard() {
     }
 
     if (state[SDL_SCANCODE_LCTRL]) {
-        jump();
-        lookTimer = 0;
+        if (controllerRef.isHoldingDown && !controllerRef.isHoldingCtrl) {
+            jumpDown();
+        } else if (!controllerRef.isHoldingDown) {
+            jump();
+            lookTimer = 0;
+        }
         controllerRef.isHoldingCtrl = true;
     } else if (state[SDL_SCANCODE_UP] && !isOnPogo) {
         processUpArrow();
     } else if (state[SDL_SCANCODE_DOWN] && !isOnPogo) {
         processDownArrow();
+        controllerRef.isHoldingDown = true;
     } else if (isOnPole) {
         lookTimer = 0;
         stopClimb();
@@ -457,7 +505,7 @@ void Player::update() {
 
         if (!isOnPogo && (xVel == 0 || (xVel == platformXVel && platformXVel != 0)))
             animate(33);
-    } else {
+    } else if (!isJumpingDown) {
         if (handlePlatformCollision())
             isOnGround = true;
     }
@@ -483,7 +531,7 @@ void Player::update() {
 
     // Check top/bottom collision
     TileCollisionInfo tciTB;
-    if (yVel != 0) {
+    if (yVel != 0 && !isJumpingDown) {
         tciTB = checkTileCollisionTB();
 
         // Set properties based on y-collision
@@ -540,6 +588,8 @@ void Player::update() {
         if (tciTB.isBottomColliding() && (!isOnPole || tciTB.tileCollidingWithBottom->getCollideBottom()))
             isOnPole = false;
     }
+
+    isJumpingDown = false;
 }
 
 void Player::animate(int nextState, int frametime) {
@@ -640,6 +690,7 @@ Player::Player() {
     isOnGround = true;
     isOnPogo = false;
     isOnPole = false;
+    isJumpingDown = false;
 
     platformStandingOn = NULL;
 
