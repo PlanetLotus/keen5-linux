@@ -448,11 +448,15 @@ void Player::update() {
 
     if (platformStandingOn != NULL) {
         // If Platform handle exists, adjust player position by Platform velocity
-        xVel += platformStandingOn->getXVel();
+        int platformXVel = platformStandingOn->getXVel();
+        xVel += platformXVel;
         xVelRem = 0;
         yVel = platformStandingOn->getYVel();
         yVelRem = 0;
         isOnGround = true;
+
+        if (xVel == 0 || (xVel == platformXVel && platformXVel != 0))
+            animate(33);
     } else {
         handlePlatformCollision();
     }
