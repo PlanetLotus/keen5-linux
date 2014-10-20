@@ -674,8 +674,8 @@ Player::Player() {
 
     srcClip = NULL;
 
-    hitbox.x = TILE_WIDTH * 26;
-    hitbox.y = TILE_HEIGHT * 26;
+    hitbox.x = TILE_WIDTH * 20;
+    hitbox.y = TILE_HEIGHT * 8;
     hitbox.w = TILE_WIDTH;
     hitbox.h = TILE_HEIGHT * 2;
 
@@ -759,6 +759,9 @@ Player::Player() {
 
     SDL_Rect standPlatform0 = { 0, TILE_HEIGHT * 14, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
 
+    SDL_Rect hangL0 = { 0, TILE_HEIGHT * 16, TILE_WIDTH * 2, TILE_HEIGHT * 3 };
+    SDL_Rect hangR0 = { 0, TILE_HEIGHT * 19, TILE_WIDTH, TILE_HEIGHT * 3 };
+
     SDL_Rect standL_array[1] = { standL0 };
     SDL_Rect standR_array[1] = { standR0 };
     SDL_Rect walkL_array[4] = { walkL0, walkL1, walkL2, walkL3 };
@@ -793,6 +796,8 @@ Player::Player() {
     SDL_Rect lookDown_array[2] = { lookDown0, lookDown1 };
     SDL_Rect die_array[2] = { die0, die1 };
     SDL_Rect standPlatform_array[1] = { standPlatform0 };
+    SDL_Rect hangL_array[1] = { hangL0 };
+    SDL_Rect hangR_array[2] = { hangR0 };
 
     vector<SDL_Rect> standL_anim(standL_array, standL_array + sizeof(standL_array) / sizeof(SDL_Rect));
     vector<SDL_Rect> standR_anim(standR_array, standR_array + sizeof(standR_array) / sizeof(SDL_Rect));
@@ -828,6 +833,8 @@ Player::Player() {
     vector<SDL_Rect> lookDown_anim(lookDown_array, lookDown_array + sizeof(lookDown_array) / sizeof(SDL_Rect));
     vector<SDL_Rect> die_anim(die_array, die_array + sizeof(die_array) / sizeof(SDL_Rect));
     vector<SDL_Rect> standPlatform_anim(standPlatform_array, standPlatform_array + sizeof(standPlatform_array) / sizeof(SDL_Rect));
+    vector<SDL_Rect> hangL_anim(hangL_array, hangL_array + sizeof(hangL_array) / sizeof(SDL_Rect));
+    vector<SDL_Rect> hangR_anim(hangR_array, hangR_array + sizeof(hangR_array) / sizeof(SDL_Rect));
 
     anims[0] = standL_anim; anims[1] = standR_anim;
     anims[2] = walkL_anim; anims[3] = walkR_anim;
@@ -845,4 +852,5 @@ Player::Player() {
     anims[28] = poleShootUpL_anim; anims[29] = poleShootUpR_anim;
     anims[30] = lookUp_anim; anims[31] = lookDown_anim;
     anims[32] = die_anim; anims[33] = standPlatform_anim;
+    anims[34] = hangL_anim; anims[35] = hangR_anim;
 }

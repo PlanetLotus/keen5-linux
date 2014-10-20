@@ -29,7 +29,7 @@ Level* currentLevel = NULL;
 Level*& Sprite::currentLevelRef = currentLevel;
 Level*& Camera::currentLevelRef = currentLevel;
 
-vector<Enemy*> enemyBatch(2);
+vector<Enemy*> enemyBatch(1);
 const vector<Enemy*>& BlasterShot::enemyBatchRef = enemyBatch;
 
 vector<Platform*> platformBatch(1);
@@ -68,12 +68,12 @@ int main (int argc, char **args) {
     Player* player = new Player();
     Platform* platform = new Platform(player);
     Enemy* sparky = new Sparky(player);
-    Enemy* ampton = new Ampton(player);
+    //Enemy* ampton = new Ampton(player);
 
     platformBatch[0] = platform;
 
-    enemyBatch[0] = ampton;
-    enemyBatch[1] = sparky;
+    //enemyBatch[0] = ampton;
+    enemyBatch[0] = sparky;
 
     while (running) {
         // Start timer
@@ -254,7 +254,7 @@ Level* loadCurrentLevel(Texture* maskTexture) {
     int x = 0;
     int y = 0;
 
-    ifstream map("../data/edgetest");
+    ifstream map("../data/hangtest");
     string line;
     istringstream iss;
 
