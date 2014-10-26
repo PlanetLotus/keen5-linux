@@ -398,8 +398,10 @@ void Player::processKeyboard() {
     }
 
     if (state[SDL_SCANCODE_LEFT]) {
+        controllerRef.isHoldingLeft = true;
         walk(LEFT);
     } else if (state[SDL_SCANCODE_RIGHT]) {
+        controllerRef.isHoldingRight = true;
         walk(RIGHT);
     } else if (!isOnPole) {
         stopWalk();
@@ -515,6 +517,8 @@ void Player::update() {
         xVel += xPush;
         xPush = 0;
     }
+
+    // Check for ledge
 
     // Check left/right collision
     TileCollisionInfo tciLR;

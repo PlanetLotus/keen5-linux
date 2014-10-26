@@ -8,6 +8,8 @@ class Controller {
         bool isHoldingCtrl;
         bool isHoldingAlt;
         bool isHoldingDown;
+        bool isHoldingLeft;
+        bool isHoldingRight;
 };
 
 #endif

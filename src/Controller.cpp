@@ -5,4 +5,6 @@ Controller::Controller() {
     isHoldingCtrl = false;
     isHoldingAlt = false;
     isHoldingDown = false;
+    isHoldingLeft = false;
+    isHoldingRight = false;
 }
