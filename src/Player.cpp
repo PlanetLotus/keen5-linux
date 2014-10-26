@@ -470,12 +470,12 @@ bool Player::handlePlatformCollision() {
 }
 
 void Player::handleLeftLedgeCollision() {
+    // "Left" being left edge of Keen
     int nextKeenLeft = hitbox.x + xVel + (int)xVelRem;
     int keenTop = hitbox.y;
     int nextKeenTop = hitbox.y + yVel + (int)yVelRem;
 
-    if (nextKeenLeft % TILE_WIDTH != 0)
-        return;
+    if (nextKeenLeft % TILE_WIDTH != 0) return;
 
     int yCollide = -1;
 
@@ -502,6 +502,35 @@ void Player::handleLeftLedgeCollision() {
 }
 
 void Player::handleRightLedgeCollision() {
+    // "Right" being right edge of Keen
+    int nextKeenRight = hitbox.x + hitbox.w + xVel + (int)xVelRem;
+    int keenTop = hitbox.y;
+    int nextKeenTop = hitbox.y + yVel + (int)yVelRem;
+
+    if (nextKeenRight % TILE_WIDTH != 0) return;
+
+    int yCollide = -1;
+
+    for (int i = keenTop; i <= nextKeenTop; i++) {
+        if (i % TILE_HEIGHT == 0) {
+            yCollide = i;
+            break;
+        }
+    }
+
+    if (yCollide == -1) return;
+
+    int tileRow = nextKeenTop / TILE_HEIGHT;
+    int tileCol = nextKeenRight / TILE_WIDTH;
+
+    Tile* tile = tilesRef[tileCol][tileRow];
+    if (tile == NULL || !tile->getIsEdge())
+        return;
+
+    yVel = yCollide - keenTop;
+    animate(35);
+
+    printf("collision at %d,%d\n", nextKeenRight, yCollide);
 }
 
 void Player::update() {
@@ -568,8 +597,11 @@ void Player::update() {
 
     // Check for ledge - Should be done AFTER xVel collision
     //  this allows player to hold arrow against wall
-    if (!isOnGround && yVel > 0 && controllerRef.isHoldingLeft) {
-        handleLeftLedgeCollision();
+    if (!isOnGround && yVel > 0) {
+        if (controllerRef.isHoldingLeft)
+            handleLeftLedgeCollision();
+        if (controllerRef.isHoldingRight)
+            handleRightLedgeCollision();
     }
 
     // Check top/bottom collision
