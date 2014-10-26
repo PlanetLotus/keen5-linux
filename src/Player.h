@@ -57,6 +57,8 @@ class Player : public Sprite {
         Tile* getTileUnderFeet();
         bool isCollidingWithPlatform(SDL_Rect platformBox);
         bool handlePlatformCollision();
+        void handleLeftLedgeCollision();
+        void handleRightLedgeCollision();
         void animate(int nextState, int frametime = FRAMETIME);
         static Camera& cameraRef;
         static Controller& controllerRef;
