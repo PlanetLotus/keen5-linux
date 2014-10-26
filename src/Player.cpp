@@ -1,4 +1,4 @@
-#include <math.h>
+#include <algorithm>
 #include "BlasterShot.h"
 #include "globals.h"
 #include "helpers.h"
@@ -559,7 +559,9 @@ void Player::update() {
     // Update hitbox //
     // Add back remainder
     xVel += xVelRem;
-    yVel += abs(yVelRem);
+    // This is a bug. This used to be abs(yVelRem) which unintentionally cast yVelRem into an int.
+    // For some reason, unless I cast to int here, I fall through the floor when hitbox.y = TILE_HEIGHT * 8
+    yVel += (int)yVelRem;
 
     // Add int part of vel to pos
     hitbox.x += xVel;
@@ -615,8 +617,17 @@ void Player::draw(Texture* texture, SDL_Rect cameraBox) {
     int offsetX = srcClip->w / 2 - TILE_WIDTH / 2;
     int destX = hitbox.x - offsetX;
 
-    // Bottom-align the hitbox for taller vertical frames
-    int offsetY = srcClip->h - TILE_HEIGHT * 2;
+    // Align the hitbox for taller vertical frames
+    int offsetY;
+
+    if (find(topAlignedFrames.begin(), topAlignedFrames.end(), srcClip) != topAlignedFrames.end()) {
+        // Align bottom
+        offsetY = srcClip->h - TILE_HEIGHT * 3;
+    } else {
+        // Align top
+        offsetY = srcClip->h - TILE_HEIGHT * 2;
+    }
+
     int destY = hitbox.y - offsetY;
 
     texture->render(destX - cameraBox.x, destY - cameraBox.y, srcClip);
@@ -853,4 +864,7 @@ Player::Player() {
     anims[30] = lookUp_anim; anims[31] = lookDown_anim;
     anims[32] = die_anim; anims[33] = standPlatform_anim;
     anims[34] = hangL_anim; anims[35] = hangR_anim;
+
+    topAlignedFrames.push_back(&anims[34][0]);
+    topAlignedFrames.push_back(&anims[35][0]);
 }

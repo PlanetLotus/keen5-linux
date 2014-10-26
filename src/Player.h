@@ -23,6 +23,7 @@ class Player : public Sprite {
 
         std::vector<SDL_Rect> anims[36];
         bool isAnimLocked;
+        std::vector<SDL_Rect*> topAlignedFrames;
 
         int lookTimer;
 
