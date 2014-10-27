@@ -34,6 +34,8 @@ class Player : public Sprite {
         bool isOnPogo;
         bool isOnPole;
         bool isJumpingDown;
+        bool isHangingLeft;
+        bool isHangingRight;
 
         int shootingFrameCount;
         bool isShooting;

@@ -427,7 +427,7 @@ void Player::processKeyboard() {
         lookTimer = 0;
     }
 
-    if (state[SDL_SCANCODE_SPACE] && !controllerRef.isHoldingSpace) {
+    if (state[SDL_SCANCODE_SPACE] && !controllerRef.isHoldingSpace && !isHangingLeft && !isHangingRight) {
         shoot(state[SDL_SCANCODE_UP], state[SDL_SCANCODE_DOWN]);
         controllerRef.isHoldingSpace = true;
     }
@@ -497,6 +497,7 @@ void Player::handleLeftLedgeCollision() {
 
     yVel = yCollide - keenTop;
     animate(34);
+    isHangingLeft = true;
 
     printf("collision at %d,%d\n", nextKeenLeft, yCollide);
 }
@@ -529,6 +530,7 @@ void Player::handleRightLedgeCollision() {
 
     yVel = yCollide - keenTop;
     animate(35);
+    isHangingRight = true;
 
     printf("collision at %d,%d\n", nextKeenRight, yCollide);
 }
@@ -557,7 +559,7 @@ void Player::update() {
     }
 
     // Apply gravity and relevant animations
-    if (!isOnPole)
+    if (!isOnPole && !isHangingLeft && !isHangingRight)
         fall();
 
     if (platformStandingOn != NULL) {
@@ -594,6 +596,12 @@ void Player::update() {
             xVel = tciLR.tileCollidingWithRight->getBox().x - (hitbox.x + hitbox.w);
         }
     }
+
+    // Check for ledge-hanging cancellation
+    if (isHangingLeft && (controllerRef.isHoldingRight || controllerRef.isHoldingDown))
+        isHangingLeft = false;
+    else if (isHangingRight && (controllerRef.isHoldingLeft || controllerRef.isHoldingDown))
+        isHangingRight = false;
 
     // Check for ledge - Should be done AFTER xVel collision
     //  this allows player to hold arrow against wall
@@ -777,6 +785,8 @@ Player::Player() {
     isOnPogo = false;
     isOnPole = false;
     isJumpingDown = false;
+    isHangingLeft = false;
+    isHangingRight = false;
 
     platformStandingOn = NULL;
 
