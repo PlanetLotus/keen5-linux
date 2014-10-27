@@ -26,6 +26,8 @@ class Player : public Sprite {
         std::vector<SDL_Rect*> topAlignedFrames;
 
         int lookTimer;
+        int hangTimer;
+        int hangCooldown;
 
         directionEnum facing;
         bool idle;

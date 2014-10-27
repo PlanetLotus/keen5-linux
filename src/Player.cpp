@@ -537,6 +537,8 @@ void Player::handleRightLedgeCollision() {
 }
 
 void Player::rollLeft() {
+    if (hangTimer < hangCooldown) return;
+
     xVel = 0;
     xVelRem = 0;
     yVel = 0;
@@ -629,6 +631,10 @@ void Player::update() {
             xVel = tciLR.tileCollidingWithRight->getBox().x - (hitbox.x + hitbox.w);
         }
     }
+
+    // Increment hang timer if hanging
+    if ((isHangingLeft || isHangingRight) && hangTimer < hangCooldown)
+        hangTimer++;
 
     // Check for actions while hanging on ledge
     if (isHangingLeft && (controllerRef.isHoldingRight || controllerRef.isHoldingDown))
@@ -817,6 +823,8 @@ Player::Player() {
     idle = true;
 
     lookTimer = 0;
+    hangTimer = 0;
+    hangCooldown = FRAMES_PER_SECOND / 4;
 
     isOnGround = true;
     isOnPogo = false;
