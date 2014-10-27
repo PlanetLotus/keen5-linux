@@ -90,6 +90,7 @@ int main (int argc, char **args) {
                     case SDLK_LCTRL: controller.isHoldingCtrl = false; break;
                     case SDLK_SPACE: controller.isHoldingSpace = false; break;
                     case SDLK_LALT: controller.isHoldingAlt = false; break;
+                    case SDLK_UP: controller.isHoldingUp = false; break;
                     case SDLK_DOWN: controller.isHoldingDown = false; break;
                     case SDLK_LEFT: controller.isHoldingLeft = false; break;
                     case SDLK_RIGHT: controller.isHoldingRight = false; break;

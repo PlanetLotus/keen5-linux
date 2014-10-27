@@ -40,6 +40,9 @@ class Player : public Sprite {
         int shootingFrameCount;
         bool isShooting;
 
+        int rollingFrameCount;
+        bool isRolling;
+
         void shoot(bool isPressingUp, bool isPressingDown);
         void walk(directionEnum dir);
         void jump();
@@ -61,6 +64,8 @@ class Player : public Sprite {
         bool handlePlatformCollision();
         void handleLeftLedgeCollision();
         void handleRightLedgeCollision();
+        void rollLeft();
+        void rollRight();
         void animate(int nextState, int frametime = FRAMETIME);
         static Camera& cameraRef;
         static Controller& controllerRef;

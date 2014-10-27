@@ -416,6 +416,7 @@ void Player::processKeyboard() {
         }
         controllerRef.isHoldingCtrl = true;
     } else if (state[SDL_SCANCODE_UP] && !isOnPogo) {
+        controllerRef.isHoldingUp = true;
         processUpArrow();
     } else if (state[SDL_SCANCODE_DOWN] && !isOnPogo) {
         processDownArrow();
@@ -535,6 +536,38 @@ void Player::handleRightLedgeCollision() {
     printf("collision at %d,%d\n", nextKeenRight, yCollide);
 }
 
+void Player::rollLeft() {
+    xVel = 0;
+    xVelRem = 0;
+    yVel = 0;
+    yVelRem = 0;
+    const int rollingFrametime = 4;
+
+    if (!isRolling) {
+        isRolling = true;
+        yVel = TILE_HEIGHT * -1;
+    }
+
+    // Shift left and up on 2nd frame
+    if (rollingFrameCount % rollingFrametime == 0 && rollingFrameCount / rollingFrametime == 1) {
+        xVel = TILE_WIDTH * -1;
+        yVel = TILE_HEIGHT * -1;
+    }
+
+    animate(36, rollingFrametime);
+    rollingFrameCount++;
+
+    // Stop rolling at end of last frame
+    if (rollingFrameCount % rollingFrametime == 0 && rollingFrameCount / rollingFrametime == 4) {
+        isRolling = false;
+        isHangingLeft = false;
+        rollingFrameCount = 0;
+    }
+}
+
+void Player::rollRight() {
+}
+
 void Player::update() {
     // Process in this order
     // 1) User actions
@@ -597,11 +630,15 @@ void Player::update() {
         }
     }
 
-    // Check for ledge-hanging cancellation
+    // Check for actions while hanging on ledge
     if (isHangingLeft && (controllerRef.isHoldingRight || controllerRef.isHoldingDown))
         isHangingLeft = false;
     else if (isHangingRight && (controllerRef.isHoldingLeft || controllerRef.isHoldingDown))
         isHangingRight = false;
+    else if (isHangingLeft && !isRolling && (controllerRef.isHoldingUp || controllerRef.isHoldingLeft))
+        rollLeft();
+    else if (isRolling && isHangingLeft)
+        rollLeft();
 
     // Check for ledge - Should be done AFTER xVel collision
     //  this allows player to hold arrow against wall
@@ -614,7 +651,7 @@ void Player::update() {
 
     // Check top/bottom collision
     TileCollisionInfo tciTB;
-    if (yVel != 0 && !isJumpingDown) {
+    if (yVel != 0 && !isJumpingDown && !isRolling) {
         tciTB = checkTileCollisionTB();
 
         // Set properties based on y-collision
@@ -656,11 +693,11 @@ void Player::update() {
     yVelRem = modf(yVel, &intPart);
 
     // Reset velocity if collision or on pole
-    if (tciTB.isTopColliding() || tciTB.isBottomColliding() || platformStandingOn != NULL) {
+    if (tciTB.isTopColliding() || tciTB.isBottomColliding() || platformStandingOn != NULL || isRolling) {
         yVel = 0;
         yVelRem = 0;
     }
-    if (tciLR.isLeftColliding() || tciLR.isRightColliding()) {
+    if (tciLR.isLeftColliding() || tciLR.isRightColliding() || isRolling) {
         xVel = 0;
         xVelRem = 0;
     }
