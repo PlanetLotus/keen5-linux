@@ -390,7 +390,7 @@ void Player::processKeyboard() {
     // Read in current keyboard state and update object accordingly
     const Uint8* state = SDL_GetKeyboardState(NULL);
 
-    if (state[SDL_SCANCODE_LALT] && !controllerRef.isHoldingAlt && !isOnPole) {
+    if (state[SDL_SCANCODE_LALT] && !controllerRef.isHoldingAlt && !isOnPole && !isHangingLeft && !isHangingRight) {
         togglePogo();
         controllerRef.isHoldingAlt = true;
     } else if (isOnPogo) {
@@ -499,8 +499,6 @@ void Player::handleLeftLedgeCollision() {
     yVel = yCollide - keenTop;
     animate(34);
     isHangingLeft = true;
-
-    printf("collision at %d,%d\n", nextKeenLeft, yCollide);
 }
 
 void Player::handleRightLedgeCollision() {
@@ -532,8 +530,6 @@ void Player::handleRightLedgeCollision() {
     yVel = yCollide - keenTop;
     animate(35);
     isHangingRight = true;
-
-    printf("collision at %d,%d\n", nextKeenRight, yCollide);
 }
 
 void Player::rollLeft() {
@@ -564,10 +560,40 @@ void Player::rollLeft() {
         isRolling = false;
         isHangingLeft = false;
         rollingFrameCount = 0;
+        hangTimer = 0;
     }
 }
 
 void Player::rollRight() {
+    if (hangTimer < hangCooldown) return;
+
+    xVel = 0;
+    xVelRem = 0;
+    yVel = 0;
+    yVelRem = 0;
+    const int rollingFrametime = 4;
+
+    if (!isRolling) {
+        isRolling = true;
+        yVel = TILE_HEIGHT * -1;
+    }
+
+    // Shift left and up on 2nd frame
+    if (rollingFrameCount % rollingFrametime == 0 && rollingFrameCount / rollingFrametime == 1) {
+        xVel = TILE_WIDTH * 1;
+        yVel = TILE_HEIGHT * -1;
+    }
+
+    animate(37, rollingFrametime);
+    rollingFrameCount++;
+
+    // Stop rolling at end of last frame
+    if (rollingFrameCount % rollingFrametime == 0 && rollingFrameCount / rollingFrametime == 4) {
+        isRolling = false;
+        isHangingRight = false;
+        rollingFrameCount = 0;
+        hangTimer = 0;
+    }
 }
 
 void Player::update() {
@@ -643,8 +669,12 @@ void Player::update() {
         isHangingRight = false;
     else if (isHangingLeft && !isRolling && (controllerRef.isHoldingUp || controllerRef.isHoldingLeft))
         rollLeft();
+    else if (isHangingRight && !isRolling && (controllerRef.isHoldingUp || controllerRef.isHoldingRight))
+        rollRight();
     else if (isRolling && isHangingLeft)
         rollLeft();
+    else if (isRolling && isHangingRight)
+        rollRight();
 
     // Check for ledge - Should be done AFTER xVel collision
     //  this allows player to hold arrow against wall
@@ -908,6 +938,11 @@ Player::Player() {
     SDL_Rect rollL2 = { TILE_WIDTH * 6, TILE_HEIGHT * 16, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
     SDL_Rect rollL3 = { TILE_WIDTH * 8, TILE_HEIGHT * 16, TILE_WIDTH, TILE_HEIGHT * 2 };
 
+    SDL_Rect rollR0 = { TILE_WIDTH * 2, TILE_HEIGHT * 18, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
+    SDL_Rect rollR1 = { TILE_WIDTH * 4, TILE_HEIGHT * 18, TILE_WIDTH * 2, TILE_HEIGHT };
+    SDL_Rect rollR2 = { TILE_WIDTH * 6, TILE_HEIGHT * 18, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
+    SDL_Rect rollR3 = { TILE_WIDTH * 8, TILE_HEIGHT * 18, TILE_WIDTH, TILE_HEIGHT * 2 };
+
     SDL_Rect standL_array[1] = { standL0 };
     SDL_Rect standR_array[1] = { standR0 };
     SDL_Rect walkL_array[4] = { walkL0, walkL1, walkL2, walkL3 };
@@ -945,6 +980,7 @@ Player::Player() {
     SDL_Rect hangL_array[1] = { hangL0 };
     SDL_Rect hangR_array[2] = { hangR0 };
     SDL_Rect rollL_array[4] = { rollL0, rollL1, rollL2, rollL3 };
+    SDL_Rect rollR_array[4] = { rollR0, rollR1, rollR2, rollR3 };
 
     vector<SDL_Rect> standL_anim(standL_array, standL_array + sizeof(standL_array) / sizeof(SDL_Rect));
     vector<SDL_Rect> standR_anim(standR_array, standR_array + sizeof(standR_array) / sizeof(SDL_Rect));
@@ -983,6 +1019,7 @@ Player::Player() {
     vector<SDL_Rect> hangL_anim(hangL_array, hangL_array + sizeof(hangL_array) / sizeof(SDL_Rect));
     vector<SDL_Rect> hangR_anim(hangR_array, hangR_array + sizeof(hangR_array) / sizeof(SDL_Rect));
     vector<SDL_Rect> rollL_anim(rollL_array, rollL_array + sizeof(rollL_array) / sizeof(SDL_Rect));
+    vector<SDL_Rect> rollR_anim(rollR_array, rollR_array + sizeof(rollR_array) / sizeof(SDL_Rect));
 
     anims[0] = standL_anim; anims[1] = standR_anim;
     anims[2] = walkL_anim; anims[3] = walkR_anim;
@@ -1001,7 +1038,7 @@ Player::Player() {
     anims[30] = lookUp_anim; anims[31] = lookDown_anim;
     anims[32] = die_anim; anims[33] = standPlatform_anim;
     anims[34] = hangL_anim; anims[35] = hangR_anim;
-    anims[36] = rollL_anim;
+    anims[36] = rollL_anim; anims[37] = rollR_anim;
 
     topAlignedFrames.push_back(&anims[34][0]);
     topAlignedFrames.push_back(&anims[35][0]);
