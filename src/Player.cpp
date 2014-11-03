@@ -596,6 +596,35 @@ void Player::rollRight() {
     }
 }
 
+void Player::handleLedgeHanging() {
+    // Increment hang timer if hanging
+    if ((isHangingLeft || isHangingRight) && hangTimer < hangCooldown)
+        hangTimer++;
+
+    // Check for actions while hanging on ledge
+    if (isHangingLeft && (controllerRef.isHoldingRight || controllerRef.isHoldingDown))
+        isHangingLeft = false;
+    else if (isHangingRight && (controllerRef.isHoldingLeft || controllerRef.isHoldingDown))
+        isHangingRight = false;
+    else if (isHangingLeft && !isRolling && (controllerRef.isHoldingUp || controllerRef.isHoldingLeft))
+        rollLeft();
+    else if (isHangingRight && !isRolling && (controllerRef.isHoldingUp || controllerRef.isHoldingRight))
+        rollRight();
+    else if (isRolling && isHangingLeft)
+        rollLeft();
+    else if (isRolling && isHangingRight)
+        rollRight();
+
+    // Check for ledge - Should be done AFTER xVel collision
+    //  this allows player to hold arrow against wall
+    if (!isOnGround && yVel > 0) {
+        if (controllerRef.isHoldingLeft)
+            handleLeftLedgeCollision();
+        if (controllerRef.isHoldingRight)
+            handleRightLedgeCollision();
+    }
+}
+
 void Player::update() {
     // Process in this order
     // 1) User actions
@@ -658,32 +687,8 @@ void Player::update() {
         }
     }
 
-    // Increment hang timer if hanging
-    if ((isHangingLeft || isHangingRight) && hangTimer < hangCooldown)
-        hangTimer++;
-
-    // Check for actions while hanging on ledge
-    if (isHangingLeft && (controllerRef.isHoldingRight || controllerRef.isHoldingDown))
-        isHangingLeft = false;
-    else if (isHangingRight && (controllerRef.isHoldingLeft || controllerRef.isHoldingDown))
-        isHangingRight = false;
-    else if (isHangingLeft && !isRolling && (controllerRef.isHoldingUp || controllerRef.isHoldingLeft))
-        rollLeft();
-    else if (isHangingRight && !isRolling && (controllerRef.isHoldingUp || controllerRef.isHoldingRight))
-        rollRight();
-    else if (isRolling && isHangingLeft)
-        rollLeft();
-    else if (isRolling && isHangingRight)
-        rollRight();
-
-    // Check for ledge - Should be done AFTER xVel collision
-    //  this allows player to hold arrow against wall
-    if (!isOnGround && yVel > 0) {
-        if (controllerRef.isHoldingLeft)
-            handleLeftLedgeCollision();
-        if (controllerRef.isHoldingRight)
-            handleRightLedgeCollision();
-    }
+    // Must go after left/right collision check
+    handleLedgeHanging();
 
     // Check top/bottom collision
     TileCollisionInfo tciTB;

@@ -66,6 +66,7 @@ class Player : public Sprite {
         bool handlePlatformCollision();
         void handleLeftLedgeCollision();
         void handleRightLedgeCollision();
+        void handleLedgeHanging();
         void rollLeft();
         void rollRight();
         void animate(int nextState, int frametime = FRAMETIME);
