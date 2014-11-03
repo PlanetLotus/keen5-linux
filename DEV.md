@@ -1,7 +1,7 @@
 <h2>Next steps</h2>
 
 <ul>
-    <li>Add hanging from ledge</li>
+    <li>Build first level</li>
     <li>Add units to level info</li>
     <li>Add items to level info</li>
     <li>Add backgrounds to level info</li>
@@ -16,7 +16,7 @@
 Level editor outputs a file that the game then reads in. Tile placement and tile collision info are included.
 Level editor is also capable of loading saved files and overwriting them.
 
-Left/right movement, look up/down, jump, pogo, climb, shoot, and death implemented with animations.
+Left/right movement, look up/down, jump, pogo, climb, shoot, hang from ledge, roll onto ledge, and death implemented with animations.
 
 Camera scrolling - enables levels larger than the screen. Only actually renders what fits on the screen to save on processing cycles.
 
