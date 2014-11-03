@@ -397,10 +397,10 @@ void Player::processKeyboard() {
         pogo();
     }
 
-    if (state[SDL_SCANCODE_LEFT]) {
+    if (state[SDL_SCANCODE_LEFT] && !isRolling) {
         controllerRef.isHoldingLeft = true;
         walk(LEFT);
-    } else if (state[SDL_SCANCODE_RIGHT]) {
+    } else if (state[SDL_SCANCODE_RIGHT] && !isRolling) {
         controllerRef.isHoldingRight = true;
         walk(RIGHT);
     } else if (!isOnPole) {
