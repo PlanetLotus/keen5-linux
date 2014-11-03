@@ -734,7 +734,7 @@ void Player::update() {
     yVelRem = modf(yVel, &intPart);
 
     // Reset velocity if collision or on pole
-    if (tciTB.isTopColliding() || tciTB.isBottomColliding() || platformStandingOn != NULL || isRolling) {
+    if (tciTB.isTopColliding() || tciTB.isBottomColliding() || platformStandingOn != NULL || isHangingLeft || isHangingRight) {
         yVel = 0;
         yVelRem = 0;
     }
