@@ -846,8 +846,8 @@ Player::Player() {
 
     srcClip = NULL;
 
-    hitbox.x = TILE_WIDTH * 20;
-    hitbox.y = TILE_HEIGHT * 8;
+    hitbox.x = TILE_WIDTH * 10;
+    hitbox.y = TILE_HEIGHT * 22;
     hitbox.w = TILE_WIDTH;
     hitbox.h = TILE_HEIGHT * 2;
 
@@ -860,6 +860,7 @@ Player::Player() {
     lookTimer = 0;
     hangTimer = 0;
     hangCooldown = FRAMES_PER_SECOND / 4;
+    rollingFrameCount = 0;
 
     isOnGround = true;
     isOnPogo = false;
