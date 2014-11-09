@@ -257,7 +257,7 @@ Level* loadCurrentLevel(Texture* maskTexture) {
     int x = 0;
     int y = 0;
 
-    ifstream map("../data/hangtest");
+    ifstream map("../data/level1");
     string line;
     istringstream iss;
 
