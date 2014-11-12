@@ -56,7 +56,7 @@ bool Tile::isColliding(TileProperty tileProperty, SDL_Rect hitbox, SDL_Rect next
         return collideRight && isLeftColliding(hitbox, nextHitbox, destBox);
 
     if (tileProperty == TOP)
-        return collideTop && isBottomColliding(hitbox, nextHitbox, destBox);
+        return collideTop && isBottomColliding(hitbox, nextHitbox, destBox, true);
 
     if (tileProperty == BOTTOM)
         return collideBottom && isTopColliding(hitbox, nextHitbox, destBox);

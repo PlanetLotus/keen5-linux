@@ -13,14 +13,14 @@ bool isTopColliding(SDL_Rect before, SDL_Rect after, SDL_Rect obstacle) {
     return false;
 }
 
-bool isBottomColliding(SDL_Rect before, SDL_Rect after, SDL_Rect obstacle) {
+bool isBottomColliding(SDL_Rect before, SDL_Rect after, SDL_Rect obstacle, bool allowOtherCollisions) {
     int bottomAfter = after.y + after.h;
     int bottomBefore = before.y + before.h;
     int bottomObstacle = obstacle.y + obstacle.h;
     int topObstacle = obstacle.y;
 
     // If bottomBefore is one pixel below topObstacle, it's not a collision
-    if (bottomBefore > topObstacle) return false;
+    if (!allowOtherCollisions && bottomBefore > topObstacle) return false;
 
     // Handles "teleporting" and bad spawning
     if (before.y <= obstacle.y && bottomObstacle <= bottomAfter) return true;
