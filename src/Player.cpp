@@ -847,7 +847,7 @@ Player::Player() {
     srcClip = NULL;
 
     hitbox.x = TILE_WIDTH * 10;
-    hitbox.y = TILE_HEIGHT * 22;
+    hitbox.y = TILE_HEIGHT * 32;
     hitbox.w = TILE_WIDTH;
     hitbox.h = TILE_HEIGHT * 2;
 

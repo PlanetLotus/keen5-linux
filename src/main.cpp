@@ -67,13 +67,13 @@ int main (int argc, char **args) {
 
     Player* player = new Player();
     Platform* platform = new Platform(player);
-    Enemy* sparky = new Sparky(player);
-    //Enemy* ampton = new Ampton(player);
+    //Enemy* sparky = new Sparky(player);
+    Enemy* ampton = new Ampton(player);
 
     platformBatch[0] = platform;
 
-    //enemyBatch[0] = ampton;
-    enemyBatch[0] = sparky;
+    enemyBatch[0] = ampton;
+    //enemyBatch[0] = sparky;
 
     while (running) {
         // Start timer
