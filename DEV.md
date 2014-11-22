@@ -1,7 +1,6 @@
 <h2>Next steps</h2>
 
 <ul>
-    <li>Build first level</li>
     <li>Add units to level info</li>
     <li>Add items to level info</li>
     <li>Add backgrounds to level info</li>
@@ -16,9 +15,11 @@
 Level editor outputs a file that the game then reads in. Tile placement and tile collision info are included.
 Level editor is also capable of loading saved files and overwriting them.
 
+Completed the static foreground tiles for the first level of the game.
+
 Left/right movement, look up/down, jump, pogo, climb, shoot, hang from ledge, roll onto ledge, and death implemented with animations.
 
-Camera scrolling - enables levels larger than the screen. Only actually renders what fits on the screen to save on processing cycles.
+Camera scrolling - enables levels larger than the screen.
 
 Basic collision implemented against the static tiles. Sloped tiles are also
 mostly working but have a few visual problems. Moving platforms work fine but
