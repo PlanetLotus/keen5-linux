@@ -49,6 +49,10 @@ bool Tile::isColliding(TileProperty tileProperty, SDL_Rect hitbox, SDL_Rect next
             isLeftColliding(hitbox, nextHitbox, destBox));
     }
 
+    if (isSloped && tileProperty == TOP) {
+        return isBottomColliding(hitbox, nextHitbox, destBox, true);
+    }
+
     if (tileProperty == LEFT)
         return collideLeft && isRightColliding(hitbox, nextHitbox, destBox);
 
@@ -56,7 +60,7 @@ bool Tile::isColliding(TileProperty tileProperty, SDL_Rect hitbox, SDL_Rect next
         return collideRight && isLeftColliding(hitbox, nextHitbox, destBox);
 
     if (tileProperty == TOP)
-        return collideTop && isBottomColliding(hitbox, nextHitbox, destBox, true);
+        return collideTop && isBottomColliding(hitbox, nextHitbox, destBox);
 
     if (tileProperty == BOTTOM)
         return collideBottom && isTopColliding(hitbox, nextHitbox, destBox);
