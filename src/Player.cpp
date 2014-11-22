@@ -197,7 +197,7 @@ void Player::snapToPole(Tile* pole, directionEnum facing) {
 }
 
 Tile* Player::getCollidingPoleTile() {
-    SDL_Rect nextHitbox = { hitbox.x + (int)xVel, hitbox.y, hitbox.w, hitbox.h };
+    SDL_Rect nextHitbox = getNextHitboxX();
     vector<Tile*> leftTiles = getTilesToLeft();
 
     for (unsigned int i = 0; i < leftTiles.size(); i++) {
@@ -443,7 +443,7 @@ bool Player::isCollidingWithPlatform(SDL_Rect platformBox) {
     if (keenLeft >= platformRight) return false;
     if (keenRight <= platformLeft) return false;
 
-    SDL_Rect nextHitbox = { hitbox.x + (int)(xVel + xVelRem), hitbox.y + (int)(yVel + yVelRem), hitbox.w, hitbox.h };
+    SDL_Rect nextHitbox = getNextHitboxXY();
     return isBottomColliding(hitbox, nextHitbox, platformBox);
 }
 
@@ -847,7 +847,7 @@ Player::Player() {
     srcClip = NULL;
 
     hitbox.x = TILE_WIDTH * 10;
-    hitbox.y = TILE_HEIGHT * 32;
+    hitbox.y = TILE_HEIGHT * 22;
     hitbox.w = TILE_WIDTH;
     hitbox.h = TILE_HEIGHT * 2;
 

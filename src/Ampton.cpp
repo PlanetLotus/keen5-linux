@@ -223,7 +223,7 @@ void Ampton::takeShotByPlayer() {
 }
 
 Tile* Ampton::getCollidingPoleTile() {
-    SDL_Rect nextHitbox = { hitbox.x + (int)xVel, hitbox.y, hitbox.w, hitbox.h };
+    SDL_Rect nextHitbox = getNextHitboxX();
     vector<Tile*> leftTiles = getTilesToLeft();
 
     for (unsigned int i = 0; i < leftTiles.size(); i++) {
