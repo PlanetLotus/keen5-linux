@@ -14,6 +14,8 @@ BlasterShot::BlasterShot(int startX, int startY, float velocityX, float velocity
 
     xVel = velocityX * 20;
     yVel = velocityY * 20;
+    xVelRem = 0;
+    yVelRem = 0;
 
     expireTimer = 0;
 
