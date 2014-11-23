@@ -4,10 +4,6 @@
 #include "SDL.h"
 #include "Texture.h"
 
-const int TILE_WIDTH = 32;
-const int TILE_HEIGHT = 32;
-const int TILE_OFFSET = 0;
-
 class BackgroundTile {
     private:
         SDL_Rect srcBox;

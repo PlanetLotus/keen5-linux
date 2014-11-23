@@ -1,6 +1,7 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
+#include "BackgroundTile.h"
 #include "BlasterShot.h"
 #include "Camera.h"
 #include "globals.h"
@@ -64,6 +65,7 @@ int main (int argc, char **args) {
     if (currentLevel == NULL) return 1;
 
     tiles = currentLevel->getTiles();
+    vector<BackgroundTile*> backgroundTiles = currentLevel->getBackgroundTiles();
 
     Player* player = new Player();
     Platform* platform = new Platform(player);
@@ -114,6 +116,11 @@ int main (int argc, char **args) {
         for (unsigned int i = 0; i < blasterShotBatch.size(); i++)
             blasterShotBatch[i]->update();
         player->update();
+
+        // Draw background tiles
+        for (unsigned int i = 0; i < backgroundTiles.size(); i++) {
+            backgroundTiles[i]->draw(maskTexture, camera.getBox());
+        }
 
         // Draw tiles - Layer 0 (Before units)
         for (unsigned int i=0; i<tiles.size(); i++) {
@@ -234,6 +241,8 @@ Level* loadCurrentLevel(Texture* maskTexture) {
     // Does levelWidth / levelHeight matter? Yes, because we have to know when we're at the end of a "row" when reading the file
     // tileCount in file is currently UNUSED
 
+    vector<BackgroundTile*> backgroundTiles;
+
     int tilesWide = -1;
     int tilesTall = -1;
     int tileCountLayer1 = -1;
@@ -341,8 +350,13 @@ Level* loadCurrentLevel(Texture* maskTexture) {
 
         iss >> layerVal;
 
-        tiles[x][y] = new Tile(xSrc, ySrc, x * TILE_WIDTH, y * TILE_HEIGHT, leftHeight, rightHeight,
-            collideT, collideR, collideB, collideL, layerVal, isPole, isEdge);
+        if (collideT || collideR || collideB || collideL || isEdge || isPole) {
+            tiles[x][y] = new Tile(xSrc, ySrc, x * TILE_WIDTH, y * TILE_HEIGHT, leftHeight, rightHeight,
+                collideT, collideR, collideB, collideL, layerVal, isPole, isEdge);
+        } else {
+            backgroundTiles.push_back(new BackgroundTile(xSrc, ySrc, x * TILE_WIDTH, y * TILE_WIDTH));
+            tiles[x][y] = NULL;
+        }
 
         x++;
     }
@@ -353,7 +367,8 @@ Level* loadCurrentLevel(Texture* maskTexture) {
         tilesWide * TILE_WIDTH, tilesTall * TILE_HEIGHT,
         tilesWide, tilesTall,
         tileCountLayer1, tileCountLayer2,
-        tiles
+        tiles,
+        backgroundTiles
     );
 }
 
