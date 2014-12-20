@@ -1,17 +1,20 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
+#include "Ampton.h"
 #include "BackgroundTile.h"
 #include "BlasterShot.h"
 #include "Camera.h"
+#include "Controller.h"
 #include "globals.h"
+#include "Level.h"
+#include "Platform.h"
 #include "Player.h"
 #include "SDL_image.h"
-#include "Ampton.h"
 #include "Sparky.h"
+#include "Texture.h"
+#include "Tile.h"
 #include "Timer.h"
-#include "Platform.h"
-#include "Level.h"
 
 using namespace std;
 

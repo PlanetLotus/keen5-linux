@@ -2,7 +2,8 @@
 #define BACKGROUNDTILE_H
 
 #include "SDL.h"
-#include "Texture.h"
+
+class Texture;
 
 class BackgroundTile {
     private:

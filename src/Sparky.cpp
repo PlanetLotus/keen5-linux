@@ -1,5 +1,8 @@
 #include "globals.h"
+#include "Player.h"
 #include "Sparky.h"
+#include "Texture.h"
+#include "Tile.h"
 
 using namespace std;
 

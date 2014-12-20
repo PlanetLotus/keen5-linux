@@ -1,4 +1,6 @@
+#include "Enemy.h"
 #include "Level.h"
+#include "Player.h"
 
 using namespace std;
 

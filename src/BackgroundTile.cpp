@@ -1,5 +1,6 @@
 #include "BackgroundTile.h"
 #include "helpers.h"
+#include "Texture.h"
 #include "Tile.h"
 
 BackgroundTile::BackgroundTile(int srcX, int srcY, int destX, int destY) {

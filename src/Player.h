@@ -2,15 +2,16 @@
 #define PLAYER_H
 
 #include <vector>
-#include "Camera.h"
-#include "Controller.h"
 #include "SDL.h"
 #include "Sprite.h"
-#include "Tile.h"
 
 // This can't be the right way to do this, but it does work as intended...
 extern const int FRAMETIME;
+
+class Camera;
+class Controller;
 class Platform;
+class Tile;
 
 class Player : public Sprite {
     private:

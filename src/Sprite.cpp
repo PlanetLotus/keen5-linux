@@ -1,6 +1,8 @@
 #include "globals.h"
 #include "helpers.h"
+#include "Level.h"
 #include "Sprite.h"
+#include "Tile.h"
 
 using namespace std;
 

@@ -1,8 +1,9 @@
 #ifndef ENEMY_H
 #define ENEMY_H
 
-#include "Player.h"
 #include "Sprite.h"
+
+class Player;
 
 class Enemy : public Sprite {
     protected:

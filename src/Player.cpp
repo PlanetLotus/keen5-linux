@@ -1,8 +1,13 @@
 #include <algorithm>
 #include "BlasterShot.h"
+#include "Camera.h"
+#include "Controller.h"
 #include "globals.h"
 #include "helpers.h"
+#include "Platform.h"
 #include "Player.h"
+#include "Texture.h"
+#include "Tile.h"
 #include "Timer.h"
 
 using namespace std;

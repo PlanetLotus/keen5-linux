@@ -1,7 +1,10 @@
 #include <algorithm>
 #include "BlasterShot.h"
+#include "Enemy.h"
 #include "globals.h"
 #include "helpers.h"
+#include "Texture.h"
+#include "Tile.h"
 
 using namespace std;
 

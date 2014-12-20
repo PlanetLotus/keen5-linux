@@ -1,3 +1,4 @@
+#include "Tile.h"
 #include "TileCollisionInfo.h"
 
 using namespace std;

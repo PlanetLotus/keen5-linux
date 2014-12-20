@@ -1,5 +1,6 @@
 #include "globals.h"
 #include "helpers.h"
+#include "Texture.h"
 #include "Tile.h"
 
 Tile::Tile(int srcX, int srcY, int destX, int destY, int lHeight, int rHeight,

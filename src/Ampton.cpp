@@ -1,5 +1,8 @@
 #include "Ampton.h"
 #include "globals.h"
+#include "Player.h"
+#include "Texture.h"
+#include "Tile.h"
 #include "Timer.h"
 
 using namespace std;

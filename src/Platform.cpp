@@ -1,6 +1,9 @@
 #include "globals.h"
 #include "helpers.h"
 #include "Platform.h"
+#include "Player.h"
+#include "Texture.h"
+#include "Tile.h"
 
 Platform::Platform(Player* player) {
     hitbox.x = TILE_WIDTH * 24;

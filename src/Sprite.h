@@ -2,9 +2,11 @@
 #define SPRITE_H
 
 #include <vector>
-#include "Level.h"
 #include "SDL.h"
 #include "TileCollisionInfo.h"
+
+class Level;
+class Texture;
 
 class Sprite {
     protected:

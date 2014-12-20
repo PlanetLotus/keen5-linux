@@ -2,9 +2,10 @@
 #define BLASTERSHOT_H
 
 #include <vector>
-#include "Enemy.h"
 #include "SDL.h"
 #include "Sprite.h"
+
+class Enemy;
 
 class BlasterShot : public Sprite {
     private:

@@ -2,8 +2,9 @@
 #define SPARKY_H
 
 #include "Enemy.h"
-#include "Player.h"
 #include "SDL.h"
+
+class Player;
 
 class Sparky : public Enemy {
     private:

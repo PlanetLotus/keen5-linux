@@ -1,11 +1,10 @@
 #ifndef PLATFORM_H
 #define PLATFORM_H
 
-#include "Player.h"
 #include "SDL.h"
-#include "Texture.h"
 
 class Player;
+class Texture;
 
 class Platform {
     private:

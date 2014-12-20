@@ -1,7 +1,7 @@
 #ifndef TILECOLLISIONINFO_H
 #define TILECOLLISIONINFO_h
 
-#include "Tile.h"
+class Tile;
 
 class TileCollisionInfo {
     public:

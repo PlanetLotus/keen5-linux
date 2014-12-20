@@ -3,8 +3,9 @@
 
 #include "Enemy.h"
 #include "globals.h"
-#include "Player.h"
 #include "SDL.h"
+
+class Player;
 
 class Ampton : public Enemy {
     private:

@@ -1,4 +1,6 @@
 #include "Enemy.h"
+#include "Player.h"
+#include "Tile.h"
 
 bool Enemy::isCollidingWithPlayer() {
     return isUnitColliding(keen->getBox());

@@ -2,11 +2,12 @@
 #define LEVEL_H
 
 #include <vector>
-#include "BackgroundTile.h"
-#include "Tile.h"
 
+class BackgroundTile;
 class Enemy;
 class Player;
+class Tile;
+
 class Level {
     private:
         int width;
