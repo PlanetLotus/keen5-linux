@@ -4,9 +4,9 @@
 
 using namespace std;
 
-Ampton::Ampton(Player* player) {
-    hitbox.x = TILE_WIDTH * 26;
-    hitbox.y = TILE_HEIGHT * 3;
+Ampton::Ampton(Player* player, int spawnX, int spawnY) {
+    hitbox.x = spawnX;
+    hitbox.y = spawnY;
     hitbox.w = TILE_WIDTH;
     hitbox.h = TILE_HEIGHT;
 

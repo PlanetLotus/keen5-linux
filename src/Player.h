@@ -4,9 +4,9 @@
 #include <vector>
 #include "Camera.h"
 #include "Controller.h"
-#include "Platform.h"
 #include "SDL.h"
 #include "Sprite.h"
+#include "Tile.h"
 
 // This can't be the right way to do this, but it does work as intended...
 extern const int FRAMETIME;
@@ -74,7 +74,7 @@ class Player : public Sprite {
         static Controller& controllerRef;
         static const std::vector<Platform*>& platformBatchRef;
     public:
-        Player();
+        Player(int spawnX, int spawnY);
         void die(int collidingEnemyX);
         void pushX(int x);
         void pushY(int y);

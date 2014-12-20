@@ -27,3 +27,5 @@ Tile* Enemy::getTileUnderFeet() {
     }
     return tile;
 }
+
+void Enemy::setPlayer(Player* player) { keen = player; }

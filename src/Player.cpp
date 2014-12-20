@@ -832,7 +832,7 @@ void Player::pushY(int y) {
 
 bool Player::getIsOnGround() { return isOnGround; }
 
-Player::Player() {
+Player::Player(int spawnX, int spawnY) {
     xVel = 0;
     yVel = 0;
     xVelRem = 0;
@@ -846,8 +846,8 @@ Player::Player() {
 
     srcClip = NULL;
 
-    hitbox.x = TILE_WIDTH * 10;
-    hitbox.y = TILE_HEIGHT * 22;
+    hitbox.x = spawnX;
+    hitbox.y = spawnY;
     hitbox.w = TILE_WIDTH;
     hitbox.h = TILE_HEIGHT * 2;
 

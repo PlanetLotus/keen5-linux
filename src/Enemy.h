@@ -16,6 +16,7 @@ class Enemy : public Sprite {
 
     public:
         virtual void takeShotByPlayer() = 0;
+        void setPlayer(Player* player); // Ideally this would be done at instantiation, not later
 };
 
 #endif

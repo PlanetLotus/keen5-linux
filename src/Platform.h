@@ -3,6 +3,7 @@
 
 #include "Player.h"
 #include "SDL.h"
+#include "Texture.h"
 
 class Player;
 

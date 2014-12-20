@@ -1,11 +1,11 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
-#include "Level.h"
 #include "SDL.h"
 
 const int smoothUpdateFactor = 5;
 
+class Level;
 class Camera {
     private:
         SDL_Rect box;

@@ -51,8 +51,12 @@ void Camera::update(SDL_Rect keenHitbox, bool isOnGround) {
     }
 
     // Keep camera in level bounds
+    /*
     int levelWidth = currentLevelRef->getWidth();
     int levelHeight = currentLevelRef->getHeight();
+    */
+    int levelWidth = 0;
+    int levelHeight = 0;
 
     if (box.x < 0)
         box.x = 0;

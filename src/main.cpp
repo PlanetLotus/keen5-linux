@@ -30,7 +30,7 @@ Level* currentLevel = NULL;
 Level*& Sprite::currentLevelRef = currentLevel;
 Level*& Camera::currentLevelRef = currentLevel;
 
-vector<Enemy*> enemyBatch(1);
+vector<Enemy*> enemyBatch;
 const vector<Enemy*>& BlasterShot::enemyBatchRef = enemyBatch;
 
 vector<Platform*> platformBatch(1);
@@ -65,17 +65,13 @@ int main (int argc, char **args) {
     if (currentLevel == NULL) return 1;
 
     tiles = currentLevel->getTiles();
+    enemyBatch = currentLevel->getEnemies();
     vector<BackgroundTile*> backgroundTiles = currentLevel->getBackgroundTiles();
 
-    Player* player = new Player();
+    Player* player = currentLevel->getPlayer();
     Platform* platform = new Platform(player);
-    //Enemy* sparky = new Sparky(player);
-    Enemy* ampton = new Ampton(player);
 
     platformBatch[0] = platform;
-
-    enemyBatch[0] = ampton;
-    //enemyBatch[0] = sparky;
 
     while (running) {
         // Start timer
@@ -241,7 +237,11 @@ Level* loadCurrentLevel(Texture* maskTexture) {
     // Does levelWidth / levelHeight matter? Yes, because we have to know when we're at the end of a "row" when reading the file
     // tileCount in file is currently UNUSED
 
+    Player* dummyPlayer = new Player(TILE_WIDTH, TILE_HEIGHT);
+
     vector<BackgroundTile*> backgroundTiles;
+    vector<Enemy*> enemies;
+    enum unitEnum { NONE, KEEN, SPARKY, AMPTON };
 
     int tilesWide = -1;
     int tilesTall = -1;
@@ -262,6 +262,10 @@ Level* loadCurrentLevel(Texture* maskTexture) {
     bool collideB = false;
     bool collideL = false;
     bool isEdge = false;
+    int unitVal = -1;
+    int itemVal = -1;
+    int keenSpawnX = -1;
+    int keenSpawnY = -1;
 
     int x = 0;
     int y = 0;
@@ -350,6 +354,18 @@ Level* loadCurrentLevel(Texture* maskTexture) {
 
         iss >> layerVal;
 
+        iss >> unitVal;
+        iss >> itemVal;
+
+        if ((unitEnum)unitVal == KEEN) {
+            keenSpawnX = TILE_WIDTH * x;
+            keenSpawnY = TILE_HEIGHT * y;
+        } else if ((unitEnum)unitVal == SPARKY) {
+            enemies.push_back(new Sparky(dummyPlayer, TILE_WIDTH * x, TILE_HEIGHT * y));
+        } else if ((unitEnum)unitVal == AMPTON) {
+            enemies.push_back(new Ampton(dummyPlayer, TILE_WIDTH * x, TILE_HEIGHT * y));
+        }
+
         if (collideT || collideR || collideB || collideL || isEdge || isPole) {
             tiles[x][y] = new Tile(xSrc, ySrc, x * TILE_WIDTH, y * TILE_HEIGHT, leftHeight, rightHeight,
                 collideT, collideR, collideB, collideL, layerVal, isPole, isEdge);
@@ -363,12 +379,18 @@ Level* loadCurrentLevel(Texture* maskTexture) {
 
     map.close();
 
+    // TODO: Throw exception instead of returning null
+    if (keenSpawnX == -1 || keenSpawnY == -2)
+        return NULL;
+
     return new Level(
         tilesWide * TILE_WIDTH, tilesTall * TILE_HEIGHT,
         tilesWide, tilesTall,
         tileCountLayer1, tileCountLayer2,
         tiles,
-        backgroundTiles
+        backgroundTiles,
+        enemies,
+        keenSpawnX, keenSpawnY
     );
 }
 

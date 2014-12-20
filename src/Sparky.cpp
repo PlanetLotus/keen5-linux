@@ -3,9 +3,9 @@
 
 using namespace std;
 
-Sparky::Sparky(Player* player) {
-    hitbox.x = TILE_WIDTH * 14;
-    hitbox.y = TILE_HEIGHT * 9;
+Sparky::Sparky(Player* player, int spawnX, int spawnY) {
+    hitbox.x = spawnX;
+    hitbox.y = spawnY;
     hitbox.w = TILE_WIDTH * 2;
     hitbox.h = TILE_HEIGHT * 2;
 
