@@ -5,8 +5,6 @@
 #include "globals.h"
 #include "SDL.h"
 
-class Player;
-
 class Ampton : public Enemy {
     private:
         std::vector<SDL_Rect> anims[5];
@@ -38,7 +36,7 @@ class Ampton : public Enemy {
         void resetYVel(bool isTBColliding);
 
     public:
-        Ampton(Player* player, int spawnX, int spawnY);
+        Ampton(int spawnX, int spawnY);
         void update();
         void draw(Texture* texture, SDL_Rect cameraBox);
 

@@ -6,7 +6,7 @@
 
 using namespace std;
 
-Sparky::Sparky(Player* player, int spawnX, int spawnY) {
+Sparky::Sparky(int spawnX, int spawnY) {
     hitbox.x = spawnX;
     hitbox.y = spawnY;
     hitbox.w = TILE_WIDTH * 2;
@@ -21,7 +21,7 @@ Sparky::Sparky(Player* player, int spawnX, int spawnY) {
     yVelRem = 0;
 
     scanCount = 0;
-    keen = player;
+    keen = NULL;
 
     isStunned = false;
 

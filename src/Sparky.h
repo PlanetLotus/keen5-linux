@@ -4,8 +4,6 @@
 #include "Enemy.h"
 #include "SDL.h"
 
-class Player;
-
 class Sparky : public Enemy {
     private:
         enum stateEnum { PATROL, CHASE, SCAN, CHANGE_DIRECTION, STUNNED };
@@ -29,7 +27,7 @@ class Sparky : public Enemy {
         void animate(int nextState, int frametime = FRAMETIME);
 
     public:
-        Sparky(Player* player, int spawnX, int spawnY);
+        Sparky(int spawnX, int spawnY);
         void update();
         void draw(Texture* texture, SDL_Rect cameraBox);
         void takeShotByPlayer();

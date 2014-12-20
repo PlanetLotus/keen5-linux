@@ -240,8 +240,6 @@ Level* loadCurrentLevel(Texture* maskTexture) {
     // Does levelWidth / levelHeight matter? Yes, because we have to know when we're at the end of a "row" when reading the file
     // tileCount in file is currently UNUSED
 
-    Player* dummyPlayer = new Player(TILE_WIDTH, TILE_HEIGHT);
-
     vector<BackgroundTile*> backgroundTiles;
     vector<Enemy*> enemies;
     enum unitEnum { NONE, KEEN, SPARKY, AMPTON };
@@ -364,9 +362,9 @@ Level* loadCurrentLevel(Texture* maskTexture) {
             keenSpawnX = TILE_WIDTH * x;
             keenSpawnY = TILE_HEIGHT * y;
         } else if ((unitEnum)unitVal == SPARKY) {
-            enemies.push_back(new Sparky(dummyPlayer, TILE_WIDTH * x, TILE_HEIGHT * y));
+            enemies.push_back(new Sparky(TILE_WIDTH * x, TILE_HEIGHT * y));
         } else if ((unitEnum)unitVal == AMPTON) {
-            enemies.push_back(new Ampton(dummyPlayer, TILE_WIDTH * x, TILE_HEIGHT * y));
+            enemies.push_back(new Ampton(TILE_WIDTH * x, TILE_HEIGHT * y));
         }
 
         if (collideT || collideR || collideB || collideL || isEdge || isPole) {
@@ -383,7 +381,7 @@ Level* loadCurrentLevel(Texture* maskTexture) {
     map.close();
 
     // TODO: Throw exception instead of returning null
-    if (keenSpawnX == -1 || keenSpawnY == -2)
+    if (keenSpawnX == -1 || keenSpawnY == -1)
         return NULL;
 
     return new Level(

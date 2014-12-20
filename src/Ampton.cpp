@@ -7,7 +7,7 @@
 
 using namespace std;
 
-Ampton::Ampton(Player* player, int spawnX, int spawnY) {
+Ampton::Ampton(int spawnX, int spawnY) {
     hitbox.x = spawnX;
     hitbox.y = spawnY;
     hitbox.w = TILE_WIDTH;
@@ -25,7 +25,7 @@ Ampton::Ampton(Player* player, int spawnX, int spawnY) {
     animState = 0;
     srcClip = NULL;
 
-    keen = player;
+    keen = NULL;
     isStunned = false;
 
     climbCooldownTimer = 0;
