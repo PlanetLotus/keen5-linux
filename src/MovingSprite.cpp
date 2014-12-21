@@ -236,5 +236,4 @@ SDL_Rect MovingSprite::getNextHitboxXY() {
     return nextHitbox;
 }
 
-SDL_Rect MovingSprite::getBox() { return hitbox; }
 bool MovingSprite::getIsStunned() { return isStunned; }

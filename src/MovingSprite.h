@@ -1,21 +1,16 @@
-#ifndef SPRITE_H
-#define SPRITE_H
+#ifndef MOVINGSPRITE_H
+#define MOVINGSPRITE_H
 
 #include <vector>
 #include "SDL.h"
+#include "Sprite.h"
 #include "TileCollisionInfo.h"
 
 class Level;
-class Texture;
 
-class MovingSprite {
+class MovingSprite : public Sprite {
     protected:
-        SDL_Rect hitbox;
-        SDL_Rect* srcClip;
         bool isStunned;
-
-        unsigned int frame;
-        int animState;
 
         float xVel;
         float yVel;
@@ -39,9 +34,6 @@ class MovingSprite {
         static const std::vector< std::vector<Tile*> >& tilesRef;
         static Level*& currentLevelRef;
     public:
-        virtual void update() = 0;
-        virtual void draw(Texture* texture, SDL_Rect cameraBox) = 0;
-        SDL_Rect getBox();
         bool getIsStunned();
 };
 
