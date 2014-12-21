@@ -8,6 +8,7 @@
 #include "Controller.h"
 #include "globals.h"
 #include "Level.h"
+#include "MovingSprite.h"
 #include "Platform.h"
 #include "Player.h"
 #include "SDL_image.h"
@@ -27,10 +28,10 @@ Level* loadCurrentLevel(Texture* maskTexture);
 void cleanUp(SDL_Window* window, SDL_Renderer* renderer, Texture* keenTexture, Texture* maskTexture);
 
 vector< vector<Tile*> > tiles;
-const vector< vector<Tile*> >& Sprite::tilesRef = tiles;
+const vector< vector<Tile*> >& MovingSprite::tilesRef = tiles;
 
 Level* currentLevel = NULL;
-Level*& Sprite::currentLevelRef = currentLevel;
+Level*& MovingSprite::currentLevelRef = currentLevel;
 Level*& Camera::currentLevelRef = currentLevel;
 
 vector<Enemy*> enemyBatch;

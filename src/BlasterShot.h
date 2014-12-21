@@ -3,11 +3,11 @@
 
 #include <vector>
 #include "SDL.h"
-#include "Sprite.h"
+#include "MovingSprite.h"
 
 class Enemy;
 
-class BlasterShot : public Sprite {
+class BlasterShot : public MovingSprite {
     private:
         int expireTimer;
 

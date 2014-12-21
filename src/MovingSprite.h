@@ -8,7 +8,7 @@
 class Level;
 class Texture;
 
-class Sprite {
+class MovingSprite {
     protected:
         SDL_Rect hitbox;
         SDL_Rect* srcClip;

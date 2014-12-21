@@ -1,11 +1,11 @@
 #ifndef ENEMY_H
 #define ENEMY_H
 
-#include "Sprite.h"
+#include "MovingSprite.h"
 
 class Player;
 
-class Enemy : public Sprite {
+class Enemy : public MovingSprite {
     protected:
         enum facingEnum { LEFT = -1, RIGHT = 1 };
         facingEnum facing;

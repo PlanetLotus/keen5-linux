@@ -3,7 +3,7 @@
 
 #include <vector>
 #include "SDL.h"
-#include "Sprite.h"
+#include "MovingSprite.h"
 
 // This can't be the right way to do this, but it does work as intended...
 extern const int FRAMETIME;
@@ -13,7 +13,7 @@ class Controller;
 class Platform;
 class Tile;
 
-class Player : public Sprite {
+class Player : public MovingSprite {
     private:
         enum directionEnum { LEFT, RIGHT, UP, DOWN, STOP };
 

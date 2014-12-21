@@ -1,12 +1,12 @@
 #include "globals.h"
 #include "helpers.h"
 #include "Level.h"
-#include "Sprite.h"
+#include "MovingSprite.h"
 #include "Tile.h"
 
 using namespace std;
 
-vector<Tile*> Sprite::getTilesToLeft() {
+vector<Tile*> MovingSprite::getTilesToLeft() {
     SDL_Rect nextHitbox = getNextHitboxX();
 
     int col = (nextHitbox.x + nextHitbox.w) / TILE_WIDTH;
@@ -36,7 +36,7 @@ vector<Tile*> Sprite::getTilesToLeft() {
     return tilesToLeft;
 }
 
-vector<Tile*> Sprite::getTilesToRight() {
+vector<Tile*> MovingSprite::getTilesToRight() {
     SDL_Rect nextHitbox = getNextHitboxX();
 
     int col = nextHitbox.x / TILE_WIDTH;
@@ -66,7 +66,7 @@ vector<Tile*> Sprite::getTilesToRight() {
     return tilesToRight;
 }
 
-vector<Tile*> Sprite::getTilesToTop() {
+vector<Tile*> MovingSprite::getTilesToTop() {
     SDL_Rect nextHitbox = getNextHitboxXY();
 
     int row = (nextHitbox.y + nextHitbox.h) / TILE_HEIGHT;
@@ -96,7 +96,7 @@ vector<Tile*> Sprite::getTilesToTop() {
     return tilesToTop;
 }
 
-vector<Tile*> Sprite::getTilesToBottom() {
+vector<Tile*> MovingSprite::getTilesToBottom() {
     SDL_Rect nextHitbox = getNextHitboxXY();
 
     int row = nextHitbox.y / TILE_HEIGHT;
@@ -126,7 +126,7 @@ vector<Tile*> Sprite::getTilesToBottom() {
     return tilesToBottom;
 }
 
-TileCollisionInfo Sprite::checkTileCollisionLR() {
+TileCollisionInfo MovingSprite::checkTileCollisionLR() {
     TileCollisionInfo tci;
 
     if (xVel > 0) {
@@ -141,7 +141,7 @@ TileCollisionInfo Sprite::checkTileCollisionLR() {
     return tci;
 }
 
-TileCollisionInfo Sprite::checkTileCollisionTB() {
+TileCollisionInfo MovingSprite::checkTileCollisionTB() {
     TileCollisionInfo tci;
 
     if (yVel > 0) {
@@ -156,7 +156,7 @@ TileCollisionInfo Sprite::checkTileCollisionTB() {
     return tci;
 }
 
-Tile* Sprite::getTileCollidingWithRight() {
+Tile* MovingSprite::getTileCollidingWithRight() {
     SDL_Rect nextHitbox = getNextHitboxX();
     vector<Tile*> tiles = getTilesToRight();
 
@@ -167,7 +167,7 @@ Tile* Sprite::getTileCollidingWithRight() {
     return NULL;
 }
 
-Tile* Sprite::getTileCollidingWithLeft() {
+Tile* MovingSprite::getTileCollidingWithLeft() {
     SDL_Rect nextHitbox = getNextHitboxX();
     vector<Tile*> tiles = getTilesToLeft();
 
@@ -178,7 +178,7 @@ Tile* Sprite::getTileCollidingWithLeft() {
     return NULL;
 }
 
-Tile* Sprite::getTileCollidingWithBottom(bool checkOnlyTouching) {
+Tile* MovingSprite::getTileCollidingWithBottom(bool checkOnlyTouching) {
     SDL_Rect nextHitbox = getNextHitboxXY();
     vector<Tile*> tiles = getTilesToBottom();
 
@@ -196,7 +196,7 @@ Tile* Sprite::getTileCollidingWithBottom(bool checkOnlyTouching) {
     return NULL;
 }
 
-Tile* Sprite::getTileCollidingWithTop() {
+Tile* MovingSprite::getTileCollidingWithTop() {
     SDL_Rect nextHitbox = getNextHitboxXY();
     vector<Tile*> tiles = getTilesToTop();
 
@@ -207,7 +207,7 @@ Tile* Sprite::getTileCollidingWithTop() {
     return NULL;
 }
 
-bool Sprite::isUnitColliding(SDL_Rect unitBox) {
+bool MovingSprite::isUnitColliding(SDL_Rect unitBox) {
     int thisTop = hitbox.y;
     int thisBottom = hitbox.y + hitbox.h;
     int thisLeft = hitbox.x;
@@ -226,15 +226,15 @@ bool Sprite::isUnitColliding(SDL_Rect unitBox) {
     return true;
 }
 
-SDL_Rect Sprite::getNextHitboxX() {
+SDL_Rect MovingSprite::getNextHitboxX() {
     SDL_Rect nextHitbox = { hitbox.x + (int)(xVel + xVelRem), hitbox.y, hitbox.w, hitbox.h };
     return nextHitbox;
 }
 
-SDL_Rect Sprite::getNextHitboxXY() {
+SDL_Rect MovingSprite::getNextHitboxXY() {
     SDL_Rect nextHitbox = { hitbox.x + (int)(xVel + xVelRem), hitbox.y + (int)(yVel + yVelRem), hitbox.w, hitbox.h };
     return nextHitbox;
 }
 
-SDL_Rect Sprite::getBox() { return hitbox; }
-bool Sprite::getIsStunned() { return isStunned; }
+SDL_Rect MovingSprite::getBox() { return hitbox; }
+bool MovingSprite::getIsStunned() { return isStunned; }
