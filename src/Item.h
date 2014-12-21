@@ -9,8 +9,9 @@ class Item : public Sprite {
     private:
         int value;
         ItemTypeEnum type;
+        std::vector<SDL_Rect> anims[6];
     public:
-        Item(ItemTypeEnum type, int value);
+        Item(int spawnX, int spawnY, ItemTypeEnum type, int value);
         int getValue();
         ItemTypeEnum getType();
 };
