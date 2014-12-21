@@ -29,6 +29,7 @@ Item::Item(int spawnX, int spawnY, int type) {
     srcClip = NULL;
     frame = 0;
     animState = 0;
+    expireTimer = 0;
 
     SDL_Rect vitalin0 = { TILE_WIDTH * 28, 0, TILE_WIDTH, TILE_HEIGHT };
     SDL_Rect vitalin1 = { TILE_WIDTH * 29, 0, TILE_WIDTH, TILE_HEIGHT };
@@ -99,8 +100,32 @@ void Item::animate(int nextState, int frametime) {
     srcClip = &anims[animState][frame / frametime];
 }
 
-void Item::beginDie() {
-    die();
+void Item::beginExpire() {
+    // If already called for this instance, return
+    if (animState == 1 || animState == 3)
+        return;
+
+    if (type == AMMO) {
+        animState = 1;
+        frame = 0;
+    } else if (type == VITALIN) {
+        animState = 3;
+        frame = 0;
+    } else {
+        die();
+    }
+}
+
+void Item::expire() {
+    const int frameCount = 5;
+
+    hitbox.x++;
+    hitbox.y--;
+
+    if (expireTimer / FRAMETIME >= frameCount)
+        die();
+
+    expireTimer++;
 }
 
 void Item::die() {
@@ -111,7 +136,12 @@ void Item::die() {
 }
 
 void Item::update() {
-    animate(animState, 11);
+    if (animState == 1 || animState == 3) {
+        animate(animState, 3);
+        expire();
+    } else {
+        animate(animState, 11);
+    }
 }
 
 void Item::draw(Texture* texture, SDL_Rect cameraBox) {

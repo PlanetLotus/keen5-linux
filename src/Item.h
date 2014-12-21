@@ -13,13 +13,15 @@ class Item : public Sprite {
         ItemTypeEnum type;
         std::vector<SDL_Rect> anims[6];
         void die();
+        void expire();
 
         void animate(int nextState, int frametime = FRAMETIME);
+        int expireTimer;
 
         static std::vector<Item*>& itemBatchRef;
     public:
         Item(int spawnX, int spawnY, int type);
-        void beginDie();
+        void beginExpire();
         void update();
         void draw(Texture* texture, SDL_Rect cameraBox);
         int getValue();

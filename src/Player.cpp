@@ -639,7 +639,18 @@ void Player::checkItemCollision() {
 }
 
 void Player::handleItemCollision(Item* item) {
-    item->beginDie();
+    item->beginExpire();
+
+    ItemTypeEnum itemType = item->getType();
+
+    // TODO: Add PlayerStats class
+    if (itemType == AMMO) {
+        // Add item value to ammo
+    } else if (itemType == VITALIN) {
+        // Add item value to vitalin
+    } else {
+        // Add item value to points
+    }
 }
 
 void Player::update() {
