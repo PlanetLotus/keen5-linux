@@ -1,5 +1,6 @@
 #include <vector>
 #include "Item.h"
+#include "Texture.h"
 #include "Tile.h"
 
 using namespace std;
@@ -13,7 +14,6 @@ Item::Item(int spawnX, int spawnY, ItemTypeEnum type, int value) {
     hitbox.w = TILE_WIDTH;
     hitbox.y = TILE_HEIGHT;
 
-    srcClip = NULL;
     frame = 0;
     animState = 0;
 
@@ -52,9 +52,44 @@ Item::Item(int spawnX, int spawnY, ItemTypeEnum type, int value) {
     vector<SDL_Rect> marshmellowAnim(marshmellowArray, marshmellowArray + sizeof(marshmellowArray) / sizeof(SDL_Rect));
     vector<SDL_Rect> gumAnim(gumArray, gumArray + sizeof(gumArray) / sizeof(SDL_Rect));
 
-    anims[0] = vitalinAnim; anims[1] = vitalinDieAnim;
-    anims[2] = ammoAnim; anims[3] = ammoDieAnim;
-    anims[4] = marshmellowAnim; anims[5] = gumAnim;
+    anims[0] = ammoAnim; anims[1] = ammoDieAnim;
+    anims[2] = vitalinAnim; anims[3] = vitalinDieAnim;
+    anims[4] = gumAnim; anims[5] = marshmellowAnim;
+
+    if (type == AMMO)
+        animState = 0;
+    else if (type == VITALIN)
+        animState = 2;
+    else if (type == GUM)
+        animState = 4;
+    else if (type == MARSHMELLOW)
+        animState = 5;
+
+    animate(animState);
+}
+
+void Item::animate(int nextState, int frametime) {
+    if (animState == nextState) {
+        // Get next frame
+        frame++;
+    } else {
+        // Start new animation
+        frame = 0;
+        animState = nextState;
+    }
+
+    if (frame == anims[animState].size() * frametime)
+        frame = 0;
+
+    srcClip = &anims[animState][frame / frametime];
+}
+
+void Item::update() {
+    animate(animState);
+}
+
+void Item::draw(Texture* texture, SDL_Rect cameraBox) {
+    texture->render(hitbox.x - cameraBox.x, hitbox.y - cameraBox.y, srcClip);
 }
 
 int Item::getValue() { return value; }
