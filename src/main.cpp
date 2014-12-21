@@ -7,6 +7,7 @@
 #include "Camera.h"
 #include "Controller.h"
 #include "globals.h"
+#include "Item.h"
 #include "Level.h"
 #include "MovingSprite.h"
 #include "Platform.h"
@@ -36,6 +37,9 @@ Level*& Camera::currentLevelRef = currentLevel;
 
 vector<Enemy*> enemyBatch;
 const vector<Enemy*>& BlasterShot::enemyBatchRef = enemyBatch;
+
+vector<Item*> itemBatch;
+//const vector<Item*>& Player::itemBatchRef = itemBatch;
 
 vector<Platform*> platformBatch(1);
 const vector<Platform*>& Player::platformBatchRef = platformBatch;
@@ -70,6 +74,7 @@ int main (int argc, char **args) {
 
     tiles = currentLevel->getTiles();
     enemyBatch = currentLevel->getEnemies();
+    itemBatch = currentLevel->getItems();
     vector<BackgroundTile*> backgroundTiles = currentLevel->getBackgroundTiles();
 
     Player* player = currentLevel->getPlayer();
@@ -117,14 +122,18 @@ int main (int argc, char **args) {
             blasterShotBatch[i]->update();
         player->update();
 
+        // Update items
+        for (unsigned int i = 0; i < itemBatch.size(); i++)
+            itemBatch[i]->update();
+
         // Draw background tiles
         for (unsigned int i = 0; i < backgroundTiles.size(); i++) {
             backgroundTiles[i]->draw(maskTexture, camera.getBox());
         }
 
         // Draw tiles - Layer 0 (Before units)
-        for (unsigned int i=0; i<tiles.size(); i++) {
-            for (unsigned int j=0; j<tiles[i].size(); j++) {
+        for (unsigned int i = 0; i<tiles.size(); i++) {
+            for (unsigned int j = 0; j<tiles[i].size(); j++) {
                 if (tiles[i][j] != NULL && tiles[i][j]->layer == 0)
                     tiles[i][j]->draw(maskTexture, camera.getBox());
             }
@@ -140,12 +149,16 @@ int main (int argc, char **args) {
         player->draw(keenTexture, camera.getBox());
 
         // Render tiles - Layer 1 (After units)
-        for (unsigned int i=0; i<tiles.size(); i++) {
-            for (unsigned int j=0; j<tiles[i].size(); j++) {
+        for (unsigned int i = 0; i<tiles.size(); i++) {
+            for (unsigned int j = 0; j<tiles[i].size(); j++) {
                 if (tiles[i][j] != NULL && tiles[i][j]->layer == 1)
                     tiles[i][j]->draw(maskTexture, camera.getBox());
             }
         }
+
+        // Draw items
+        for (unsigned int i = 0; i < itemBatch.size(); i++)
+            itemBatch[i]->draw(keenTexture, camera.getBox());
 
         camera.update(player->getBox(), player->getIsOnGround());
 
@@ -243,6 +256,7 @@ Level* loadCurrentLevel(Texture* maskTexture) {
 
     vector<BackgroundTile*> backgroundTiles;
     vector<Enemy*> enemies;
+    vector<Item*> items;
     enum unitEnum { NONE, KEEN, SPARKY, AMPTON };
 
     int tilesWide = -1;
@@ -265,7 +279,7 @@ Level* loadCurrentLevel(Texture* maskTexture) {
     bool collideL = false;
     bool isEdge = false;
     int unitVal = -1;
-    int itemVal = -1;
+    int itemVal = 0;
     int keenSpawnX = -1;
     int keenSpawnY = -1;
 
@@ -368,6 +382,9 @@ Level* loadCurrentLevel(Texture* maskTexture) {
             enemies.push_back(new Ampton(TILE_WIDTH * x, TILE_HEIGHT * y));
         }
 
+        if (itemVal != 0)
+            items.push_back(new Item(TILE_WIDTH * x, TILE_HEIGHT * y, itemVal));
+
         if (collideT || collideR || collideB || collideL || isEdge || isPole) {
             tiles[x][y] = new Tile(xSrc, ySrc, x * TILE_WIDTH, y * TILE_HEIGHT, leftHeight, rightHeight,
                 collideT, collideR, collideB, collideL, layerVal, isPole, isEdge);
@@ -392,6 +409,7 @@ Level* loadCurrentLevel(Texture* maskTexture) {
         tiles,
         backgroundTiles,
         enemies,
+        items,
         keenSpawnX, keenSpawnY
     );
 }

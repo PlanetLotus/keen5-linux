@@ -5,15 +5,26 @@
 
 using namespace std;
 
-Item::Item(int spawnX, int spawnY, ItemTypeEnum type, int value) {
-    this->type = type;
-    this->value = value;
+Item::Item(int spawnX, int spawnY, int type) {
+    this->type = (ItemTypeEnum)type;
+
+    if (type == AMMO)
+        value = 5;
+    else if (type == GUM)
+        value = 100;
+    else if (type == MARSHMELLOW)
+        value = 200;
+    else if (type == VITALIN)
+        value = 1;
+    else
+        value = 0;
 
     hitbox.x = spawnX;
     hitbox.y = spawnY;
     hitbox.w = TILE_WIDTH;
     hitbox.y = TILE_HEIGHT;
 
+    srcClip = NULL;
     frame = 0;
     animState = 0;
 
@@ -64,6 +75,8 @@ Item::Item(int spawnX, int spawnY, ItemTypeEnum type, int value) {
         animState = 4;
     else if (type == MARSHMELLOW)
         animState = 5;
+    else
+        printf("Item type not recognized: %d\n", (int)type);
 
     animate(animState);
 }

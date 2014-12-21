@@ -5,6 +5,7 @@
 
 class BackgroundTile;
 class Enemy;
+class Item;
 class Player;
 class Tile;
 
@@ -29,6 +30,7 @@ class Level {
         std::vector<BackgroundTile*> backgroundTiles;
 
         std::vector<Enemy*> enemyBatch;
+        std::vector<Item*> itemBatch;
 
     public:
         Level(
@@ -38,6 +40,7 @@ class Level {
             std::vector< std::vector<Tile*> > tiles,
             std::vector<BackgroundTile*> backgroundTiles,
             std::vector<Enemy*> enemyBatch,
+            std::vector<Item*> itemBatch,
             int keenSpawnX, int keenSpawnY
         );
         int getWidth() const;
@@ -48,6 +51,7 @@ class Level {
         std::vector< std::vector<Tile*> > getTiles() const;
         std::vector<BackgroundTile*> getBackgroundTiles() const;
         std::vector<Enemy*> getEnemies() const;
+        std::vector<Item*> getItems() const;
 };
 
 #endif

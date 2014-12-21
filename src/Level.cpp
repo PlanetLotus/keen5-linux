@@ -11,6 +11,7 @@ Level::Level(
     vector< vector<Tile*> > tiles,
     vector<BackgroundTile*> backgroundTiles,
     vector<Enemy*> enemyBatch,
+    vector<Item*> itemBatch,
     int keenSpawnX, int keenSpawnY
 ) {
     this->width = width;
@@ -20,6 +21,7 @@ Level::Level(
     this->tiles = tiles;
     this->backgroundTiles = backgroundTiles;
     this->enemyBatch = enemyBatch;
+    this->itemBatch = itemBatch;
 
     player = new Player(keenSpawnX, keenSpawnY);
 
@@ -35,3 +37,4 @@ Player* Level::getPlayer() const { return player; }
 vector< vector<Tile*> > Level::getTiles() const { return tiles; }
 vector<BackgroundTile*> Level::getBackgroundTiles() const { return backgroundTiles; }
 vector<Enemy*> Level::getEnemies() const { return enemyBatch; }
+vector<Item*> Level::getItems() const { return itemBatch; }

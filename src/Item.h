@@ -4,7 +4,8 @@
 #include "globals.h"
 #include "Sprite.h"
 
-enum ItemTypeEnum { AMMO, VITALIN, GUM, MARSHMELLOW };
+// Not zero-indexed because this doesn't contain NONE as the level editor does
+enum ItemTypeEnum { AMMO = 1, GUM, MARSHMELLOW, VITALIN };
 
 class Item : public Sprite {
     private:
@@ -14,7 +15,7 @@ class Item : public Sprite {
 
         void animate(int nextState, int frametime = FRAMETIME);
     public:
-        Item(int spawnX, int spawnY, ItemTypeEnum type, int value);
+        Item(int spawnX, int spawnY, int type);
         void update();
         void draw(Texture* texture, SDL_Rect cameraBox);
         int getValue();
