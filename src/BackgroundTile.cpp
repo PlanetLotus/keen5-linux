@@ -18,6 +18,6 @@ BackgroundTile::BackgroundTile(int srcX, int srcY, int destX, int destY) {
 }
 
 void BackgroundTile::draw(Texture* texture, SDL_Rect cameraBox) {
-    if (isTileOnScreen(&destBox, &cameraBox))
+    if (isTileLocationOnScreen(&destBox, &cameraBox))
         texture->render(destBox.x - cameraBox.x, destBox.y - cameraBox.y, &srcBox);
 }

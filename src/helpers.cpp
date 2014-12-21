@@ -57,7 +57,7 @@ bool isRightColliding(SDL_Rect before, SDL_Rect after, SDL_Rect obstacle) {
     return false;
 }
 
-bool isTileOnScreen(SDL_Rect* tileBox, SDL_Rect* cameraBox) {
+bool isTileLocationOnScreen(SDL_Rect* tileBox, SDL_Rect* cameraBox) {
     if (tileBox->x + tileBox->w <= cameraBox->x)
         return false;
     else if (tileBox->x >= cameraBox->x + cameraBox->w)

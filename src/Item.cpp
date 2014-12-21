@@ -1,4 +1,5 @@
 #include <vector>
+#include "helpers.h"
 #include "Item.h"
 #include "Texture.h"
 #include "Tile.h"
@@ -102,7 +103,8 @@ void Item::update() {
 }
 
 void Item::draw(Texture* texture, SDL_Rect cameraBox) {
-    texture->render(hitbox.x - cameraBox.x, hitbox.y - cameraBox.y, srcClip);
+    if (isTileLocationOnScreen(&hitbox, &cameraBox))
+        texture->render(hitbox.x - cameraBox.x, hitbox.y - cameraBox.y, srcClip);
 }
 
 int Item::getValue() { return value; }

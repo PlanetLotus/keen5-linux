@@ -40,7 +40,7 @@ Tile::Tile(int srcX, int srcY, int destX, int destY, int lHeight, int rHeight,
 }
 
 void Tile::draw(Texture* texture, SDL_Rect cameraBox) {
-    if (isTileOnScreen(&destBox, &cameraBox))
+    if (isTileLocationOnScreen(&destBox, &cameraBox))
         texture->render(destBox.x - cameraBox.x, destBox.y - cameraBox.y, &srcBox);
 }
 
