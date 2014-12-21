@@ -78,7 +78,7 @@ Item::Item(int spawnX, int spawnY, int type) {
     else
         printf("Item type not recognized: %d\n", (int)type);
 
-    animate(animState);
+    animate(animState, 11);
 }
 
 void Item::animate(int nextState, int frametime) {
@@ -98,7 +98,7 @@ void Item::animate(int nextState, int frametime) {
 }
 
 void Item::update() {
-    animate(animState);
+    animate(animState, 11);
 }
 
 void Item::draw(Texture* texture, SDL_Rect cameraBox) {
