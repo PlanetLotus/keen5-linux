@@ -10,6 +10,7 @@ extern const int FRAMETIME;
 
 class Camera;
 class Controller;
+class Item;
 class Platform;
 class Tile;
 
@@ -68,12 +69,15 @@ class Player : public MovingSprite {
         void handleLeftLedgeCollision();
         void handleRightLedgeCollision();
         void handleLedgeHanging();
+        void checkItemCollision();
+        void handleItemCollision(Item* item);
         void rollLeft();
         void rollRight();
         void animate(int nextState, int frametime = FRAMETIME);
         static Camera& cameraRef;
         static Controller& controllerRef;
         static const std::vector<Platform*>& platformBatchRef;
+        static std::vector<Item*>& itemBatchRef;
     public:
         Player(int spawnX, int spawnY);
         void die(int collidingEnemyX);

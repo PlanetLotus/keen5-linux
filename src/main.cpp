@@ -38,11 +38,12 @@ Level*& Camera::currentLevelRef = currentLevel;
 vector<Enemy*> enemyBatch;
 const vector<Enemy*>& BlasterShot::enemyBatchRef = enemyBatch;
 
-vector<Item*> itemBatch;
-//const vector<Item*>& Player::itemBatchRef = itemBatch;
-
 vector<Platform*> platformBatch(1);
 const vector<Platform*>& Player::platformBatchRef = platformBatch;
+
+vector<Item*> itemBatch;
+vector<Item*>& Player::itemBatchRef = itemBatch;
+vector<Item*>& Item::itemBatchRef = itemBatch;
 
 vector<BlasterShot*> blasterShotBatch;
 vector<BlasterShot*>& BlasterShot::blasterShotBatchRef = blasterShotBatch;

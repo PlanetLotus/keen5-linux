@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <vector>
 #include "helpers.h"
 #include "Item.h"
@@ -96,6 +97,17 @@ void Item::animate(int nextState, int frametime) {
         frame = 0;
 
     srcClip = &anims[animState][frame / frametime];
+}
+
+void Item::beginDie() {
+    die();
+}
+
+void Item::die() {
+    vector<Item*>::iterator it = find(itemBatchRef.begin(), itemBatchRef.end(), this);
+
+    if (it != itemBatchRef.end())
+        itemBatchRef.erase(it);
 }
 
 void Item::update() {

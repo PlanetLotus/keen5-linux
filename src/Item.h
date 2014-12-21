@@ -12,10 +12,14 @@ class Item : public Sprite {
         int value;
         ItemTypeEnum type;
         std::vector<SDL_Rect> anims[6];
+        void die();
 
         void animate(int nextState, int frametime = FRAMETIME);
+
+        static std::vector<Item*>& itemBatchRef;
     public:
         Item(int spawnX, int spawnY, int type);
+        void beginDie();
         void update();
         void draw(Texture* texture, SDL_Rect cameraBox);
         int getValue();

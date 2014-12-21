@@ -4,6 +4,7 @@
 #include "Controller.h"
 #include "globals.h"
 #include "helpers.h"
+#include "Item.h"
 #include "Platform.h"
 #include "Player.h"
 #include "Texture.h"
@@ -630,6 +631,17 @@ void Player::handleLedgeHanging() {
     }
 }
 
+void Player::checkItemCollision() {
+    for (unsigned int i = 0; i < itemBatchRef.size(); i++) {
+        if (isUnitColliding(itemBatchRef[i]->getBox()))
+            handleItemCollision(itemBatchRef[i]);
+    }
+}
+
+void Player::handleItemCollision(Item* item) {
+    item->beginDie();
+}
+
 void Player::update() {
     // Process in this order
     // 1) User actions
@@ -721,6 +733,9 @@ void Player::update() {
             }
         }
     }
+
+    // Check item collision
+    checkItemCollision();
 
     // Update hitbox //
     // Add back remainder
