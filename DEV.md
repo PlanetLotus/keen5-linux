@@ -1,7 +1,6 @@
 <h2>Next steps</h2>
 
 <ul>
-    <li>Add units to level info</li>
     <li>Add items to level info</li>
     <li>Dropdown pause menu</li>
     <li>Upper-left corner HUD</li>
@@ -14,7 +13,7 @@
 Level editor outputs a file that the game then reads in. Tile placement and tile collision info are included.
 Level editor is also capable of loading saved files and overwriting them.
 
-Completed the static foreground and background tiles for the first level of the game.
+Completed the static foreground and background tiles for the first level of the game. Added unit info to the level.
 
 Left/right movement, look up/down, jump, pogo, climb, shoot, hang from ledge, roll onto ledge, and death implemented with animations.
 
