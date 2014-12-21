@@ -22,7 +22,7 @@ Item::Item(int spawnX, int spawnY, int type) {
     hitbox.x = spawnX;
     hitbox.y = spawnY;
     hitbox.w = TILE_WIDTH;
-    hitbox.y = TILE_HEIGHT;
+    hitbox.h = TILE_HEIGHT;
 
     srcClip = NULL;
     frame = 0;
