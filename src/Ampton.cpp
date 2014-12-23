@@ -23,9 +23,9 @@ Ampton::Ampton(int spawnX, int spawnY) {
     state = State::PATROL;
     frame = 0;
     animState = 0;
-    srcClip = NULL;
+    srcClip = nullptr;
 
-    keen = NULL;
+    keen = nullptr;
     isStunned = false;
 
     climbCooldownTimer = 0;
@@ -107,7 +107,7 @@ void Ampton::patrol() {
     // If colliding with pole tile, climb it
     if (climbCooldownTimer > climbCooldown) {
         Tile* pole = getCollidingPoleTile();
-        if (pole != NULL) {
+        if (pole != nullptr) {
             snapToPole(pole);
             changeState(State::CLIMB_DOWN);
             climbCooldownTimer = 0;
@@ -141,7 +141,7 @@ void Ampton::changeDirection() {
 }
 
 void Ampton::climbUp() {
-    if (getCollidingPoleTile() == NULL) {
+    if (getCollidingPoleTile() == nullptr) {
         changeState(State::CLIMB_DOWN);
         return;
     }
@@ -254,16 +254,16 @@ Tile* Ampton::getCollidingPoleTile() {
             if (hitbox.x < poleRight - TILE_WIDTH / 4 && amptonRight >= TILE_WIDTH / 4 + poleBox.x) {
                 return rightTiles[i];
             } else {
-                return NULL;
+                return nullptr;
             }
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 void Ampton::snapToPole(Tile* pole) {
-    if (pole == NULL)
+    if (pole == nullptr)
         return;
 
     // "Snap" to the pole horizontally, locking movement in x-direction
@@ -276,7 +276,7 @@ void Ampton::snapToPole(Tile* pole) {
 void Ampton::changeDirectionIfOnEdge() {
     if (xVel != 0) {
         Tile* tileUnderFeet = getTileUnderFeet();
-        if (tileUnderFeet != NULL && tileUnderFeet->getIsEdge()) {
+        if (tileUnderFeet != nullptr && tileUnderFeet->getIsEdge()) {
             changeState(State::CHANGE_DIRECTION);
             xVel = 0;
             xVelRem = 0;

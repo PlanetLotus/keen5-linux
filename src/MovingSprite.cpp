@@ -28,7 +28,7 @@ vector<Tile*> MovingSprite::getTilesToLeft() {
         for (int j = minRow; j <= maxRow; j++) {
             Tile* tile = tilesRef[i][j];
 
-            if (tile != NULL)
+            if (tile != nullptr)
                 tilesToLeft.push_back(tile);
         }
     }
@@ -58,7 +58,7 @@ vector<Tile*> MovingSprite::getTilesToRight() {
         for (int j = minRow; j <= maxRow; j++) {
             Tile* tile = tilesRef[i][j];
 
-            if (tile != NULL)
+            if (tile != nullptr)
                 tilesToRight.push_back(tile);
         }
     }
@@ -88,7 +88,7 @@ vector<Tile*> MovingSprite::getTilesToTop() {
         for (int j = row; j >= 0; j--) {
             Tile* tile = tilesRef[i][j];
 
-            if (tile != NULL)
+            if (tile != nullptr)
                 tilesToTop.push_back(tile);
         }
     }
@@ -118,7 +118,7 @@ vector<Tile*> MovingSprite::getTilesToBottom() {
         for (unsigned int j = row; j < tilesRef[i].size(); j++) {
             Tile* tile = tilesRef[i][j];
 
-            if (tile != NULL)
+            if (tile != nullptr)
                 tilesToBottom.push_back(tile);
         }
     }
@@ -164,7 +164,7 @@ Tile* MovingSprite::getTileCollidingWithRight() {
         if (tiles[i]->isColliding(Tile::TileProperty::LEFT, hitbox, nextHitbox))
             return tiles[i];
     }
-    return NULL;
+    return nullptr;
 }
 
 Tile* MovingSprite::getTileCollidingWithLeft() {
@@ -175,7 +175,7 @@ Tile* MovingSprite::getTileCollidingWithLeft() {
         if (tiles[i]->isColliding(Tile::TileProperty::RIGHT, hitbox, nextHitbox))
             return tiles[i];
     }
-    return NULL;
+    return nullptr;
 }
 
 Tile* MovingSprite::getTileCollidingWithBottom(bool checkOnlyTouching) {
@@ -193,7 +193,7 @@ Tile* MovingSprite::getTileCollidingWithBottom(bool checkOnlyTouching) {
                 return tiles[i];
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 Tile* MovingSprite::getTileCollidingWithTop() {
@@ -204,7 +204,7 @@ Tile* MovingSprite::getTileCollidingWithTop() {
         if (tiles[i]->isColliding(Tile::TileProperty::BOTTOM, hitbox, nextHitbox))
             return tiles[i];
     }
-    return NULL;
+    return nullptr;
 }
 
 bool MovingSprite::isUnitColliding(SDL_Rect unitBox) {

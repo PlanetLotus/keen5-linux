@@ -21,7 +21,7 @@ Sparky::Sparky(int spawnX, int spawnY) {
     yVelRem = 0;
 
     scanCount = 0;
-    keen = NULL;
+    keen = nullptr;
 
     isStunned = false;
 
@@ -31,7 +31,7 @@ Sparky::Sparky(int spawnX, int spawnY) {
     frame = 0;
     animState = 0;
 
-    srcClip = NULL;
+    srcClip = nullptr;
 
     vector<SDL_Rect> walkLeftAnim = {
         { TILE_WIDTH * 14, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2 },
@@ -239,7 +239,7 @@ void Sparky::update() {
 
             if (xVel != 0) {
                 Tile* tileUnderFeet = getTileUnderFeet();
-                if (tileUnderFeet != NULL && tileUnderFeet->getIsEdge()) {
+                if (tileUnderFeet != nullptr && tileUnderFeet->getIsEdge()) {
                     changeState(State::CHANGE_DIRECTION);
                     xVel = 0;
                     xVelRem = 0;

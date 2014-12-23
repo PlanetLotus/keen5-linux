@@ -31,7 +31,7 @@ void cleanUp(SDL_Window* window, SDL_Renderer* renderer, Texture* keenTexture, T
 vector< vector<Tile*> > tiles;
 const vector< vector<Tile*> >& MovingSprite::tilesRef = tiles;
 
-Level* currentLevel = NULL;
+Level* currentLevel = nullptr;
 Level*& MovingSprite::currentLevelRef = currentLevel;
 Level*& Camera::currentLevelRef = currentLevel;
 
@@ -71,7 +71,7 @@ int main (int argc, char **args) {
     if (!loadFiles(keenTexture, maskTexture)) return 1;
 
     currentLevel = loadCurrentLevel(maskTexture);
-    if (currentLevel == NULL) return 1;
+    if (currentLevel == nullptr) return 1;
 
     tiles = currentLevel->getTiles();
     enemyBatch = currentLevel->getEnemies();
@@ -135,7 +135,7 @@ int main (int argc, char **args) {
         // Draw tiles - Layer 0 (Before units)
         for (unsigned int i = 0; i<tiles.size(); i++) {
             for (unsigned int j = 0; j<tiles[i].size(); j++) {
-                if (tiles[i][j] != NULL && tiles[i][j]->layer == 0)
+                if (tiles[i][j] != nullptr && tiles[i][j]->layer == 0)
                     tiles[i][j]->draw(maskTexture, camera.getBox());
             }
         }
@@ -152,7 +152,7 @@ int main (int argc, char **args) {
         // Render tiles - Layer 1 (After units)
         for (unsigned int i = 0; i<tiles.size(); i++) {
             for (unsigned int j = 0; j<tiles[i].size(); j++) {
-                if (tiles[i][j] != NULL && tiles[i][j]->layer == 1)
+                if (tiles[i][j] != nullptr && tiles[i][j]->layer == 1)
                     tiles[i][j]->draw(maskTexture, camera.getBox());
             }
         }
@@ -220,7 +220,7 @@ SDL_Renderer* initRenderer(SDL_Window* window) {
 
 bool init(SDL_Window* window, SDL_Renderer* renderer) {
     // Make sure window was successfully set up
-    if (window == NULL || renderer == NULL) {
+    if (window == nullptr || renderer == nullptr) {
         printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
         return false;
     }
@@ -301,7 +301,7 @@ Level* loadCurrentLevel(Texture* maskTexture) {
     iss >> tileCountLayer2;
     if (iss.fail() || tilesWide == -1 || tilesTall == -1 || tileCountLayer1 == -1 || tileCountLayer2 == -1) {
         printf("Error getting metadata from line 1.\n");
-        return NULL;
+        return nullptr;
     }
 
     // Special case: Second line contains source file absolute path
@@ -341,7 +341,7 @@ Level* loadCurrentLevel(Texture* maskTexture) {
                     x = 0;
                 }
 
-                tiles[x][y] = NULL;
+                tiles[x][y] = nullptr;
                 x++;
             }
             continue;
@@ -391,7 +391,7 @@ Level* loadCurrentLevel(Texture* maskTexture) {
                 collideT, collideR, collideB, collideL, layerVal, isPole, isEdge);
         } else {
             backgroundTiles.push_back(new BackgroundTile(xSrc, ySrc, x * TILE_WIDTH, y * TILE_WIDTH));
-            tiles[x][y] = NULL;
+            tiles[x][y] = nullptr;
         }
 
         x++;
@@ -401,7 +401,7 @@ Level* loadCurrentLevel(Texture* maskTexture) {
 
     // TODO: Throw exception instead of returning null
     if (keenSpawnX == -1 || keenSpawnY == -1)
-        return NULL;
+        return nullptr;
 
     return new Level(
         tilesWide * TILE_WIDTH, tilesTall * TILE_HEIGHT,
@@ -421,7 +421,7 @@ void cleanUp(SDL_Window* window, SDL_Renderer* renderer, Texture* keenTexture, T
 
     for (unsigned int i = 0; i < tiles.size(); i++) {
         for (unsigned int j = 0; j < tiles[i].size(); j++) {
-            if (tiles[i][j] != NULL)
+            if (tiles[i][j] != nullptr)
                 delete tiles[i][j];
         }
     }

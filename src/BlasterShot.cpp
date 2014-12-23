@@ -25,7 +25,7 @@ BlasterShot::BlasterShot(int startX, int startY, float velocityX, float velocity
     frame = 0;
     animState = 0;
 
-    srcClip = NULL;
+    srcClip = nullptr;
 
     // Animation instantiation
     vector<SDL_Rect> moveAnim = {
@@ -98,7 +98,7 @@ void BlasterShot::update() {
     // Check unit hit
     for (unsigned int i = 0; i < enemyBatchRef.size(); i++) {
         Enemy* unit = enemyBatchRef[i];
-        if (unit != NULL && !unit->getIsStunned() && isUnitColliding(unit->getBox())) {
+        if (unit != nullptr && !unit->getIsStunned() && isUnitColliding(unit->getBox())) {
             expire();
             unit->takeShotByPlayer();
             break;

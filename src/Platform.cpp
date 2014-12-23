@@ -39,7 +39,7 @@ bool Platform::playerIsStandingOnThis(SDL_Rect keenBox) {
 void Platform::update() {
     // 0) Reset platformStandingOn if it points to this platform
     if (keen->platformStandingOn == this)
-        keen->platformStandingOn = NULL;
+        keen->platformStandingOn = nullptr;
 
     // 1) Check if player is standing on this platform. If so, store handle to it in Player.
     SDL_Rect keenBox = keen->getBox();

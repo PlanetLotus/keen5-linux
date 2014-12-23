@@ -156,7 +156,7 @@ void Player::processUpArrow() {
     }
 
     Tile* pole = getCollidingPoleTile();
-    if (pole != NULL) {
+    if (pole != nullptr) {
         snapToPole(pole, facing);
         animate(21 + (int)facing);
         return;
@@ -172,9 +172,9 @@ void Player::processDownArrow() {
     }
 
     Tile* pole = getCollidingPoleTile();
-    if (pole != NULL) {
+    if (pole != nullptr) {
         Tile* tileCollidingWithBottom = getTileCollidingWithBottom(true);
-        if (tileCollidingWithBottom != NULL && !tileCollidingWithBottom->getCollideBottom()) {
+        if (tileCollidingWithBottom != nullptr && !tileCollidingWithBottom->getCollideBottom()) {
             snapToPole(pole, facing);
             animate(21 + (int)facing);
             return;
@@ -185,7 +185,7 @@ void Player::processDownArrow() {
 }
 
 void Player::snapToPole(Tile* pole, Direction facing) {
-    if (pole == NULL)
+    if (pole == nullptr)
         return;
 
     // "Snap" to the pole horizontally, locking movement in x-direction
@@ -240,12 +240,12 @@ Tile* Player::getCollidingPoleTile() {
             if (hitbox.x < poleRight - TILE_WIDTH / 4 && playerRight >= TILE_WIDTH / 4 + poleBox.x) {
                 return rightTiles[i];
             } else {
-                return NULL;
+                return nullptr;
             }
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 void Player::look(Direction dir) {
@@ -268,7 +268,7 @@ void Player::look(Direction dir) {
 }
 
 void Player::climb(Direction dir) {
-    if (dir == Direction::UP && getCollidingPoleTile() != NULL) {
+    if (dir == Direction::UP && getCollidingPoleTile() != nullptr) {
         yVel = -3;
         animate(21 + (int)facing, 3);
     } else if (dir == Direction::DOWN) {
@@ -302,7 +302,7 @@ void Player::pogo() {
     if (isOnGround) {
         yVel = -24;
         isOnGround = false; // This isn't ideal. It's assuming nothing stopped the jump.
-        platformStandingOn = NULL;  // Not my favorite hack.
+        platformStandingOn = nullptr;  // Not my favorite hack.
     }
 
     if (yVel >= 0)
@@ -322,7 +322,7 @@ void Player::jump() {
         yAccel = -21;
         yVel += yAccel;
         isOnGround = false; // This isn't ideal. It's assuming nothing stopped the jump.
-        platformStandingOn = NULL;  // Not my favorite hack.
+        platformStandingOn = nullptr;  // Not my favorite hack.
     } else if (isOnPole) {
         yAccel = -12;
         yVel += yAccel;
@@ -333,16 +333,16 @@ void Player::jump() {
 void Player::jumpDown() {
     if (!isOnGround) return;
 
-    if (platformStandingOn == NULL) {
+    if (platformStandingOn == nullptr) {
         Tile* tile = getTileUnderFeet();
-        if (tile == NULL || tile->getCollideBottom() || !tile->getCollideTop())
+        if (tile == nullptr || tile->getCollideBottom() || !tile->getCollideTop())
             return;
     }
 
     // Verified that Keen is on a platform or valid tile to jump down from
     // Turn off collision for one update loop
     isOnGround = false;
-    platformStandingOn = NULL;
+    platformStandingOn = nullptr;
     isJumpingDown = true;
     lookTimer = 0;
 }
@@ -353,19 +353,19 @@ Tile* Player::getTileUnderFeet() {
     int keenBottom = hitbox.y + hitbox.h;
 
     if (keenBottom % TILE_HEIGHT != 0)
-        return NULL;
+        return nullptr;
 
     int keenRight = hitbox.x + hitbox.w;
     unsigned int leftCol = hitbox.x / TILE_WIDTH;
     unsigned int rightCol = (keenRight + TILE_WIDTH) / TILE_WIDTH;
     int tileRow = keenBottom / TILE_HEIGHT;
-    Tile* tile = NULL;
+    Tile* tile = nullptr;
 
     // If moving left, return leftmost tile. If moving right, return rightmost
     // If the unit is pushed by something else, will that mess up this logic?
     for (unsigned int i = leftCol; i < rightCol; i++) {
         tile = tilesRef[i][tileRow];
-        if (tile != NULL) {
+        if (tile != nullptr) {
             if (facing == Direction::LEFT)
                 return tile;
         }
@@ -394,7 +394,7 @@ void Player::fall() {
 
 void Player::processKeyboard() {
     // Read in current keyboard state and update object accordingly
-    const Uint8* state = SDL_GetKeyboardState(NULL);
+    const Uint8* state = SDL_GetKeyboardState(nullptr);
 
     if (state[SDL_SCANCODE_LALT] && !controllerRef.isHoldingAlt && !isOnPole && !isHangingLeft && !isHangingRight) {
         togglePogo();
@@ -499,7 +499,7 @@ void Player::handleLeftLedgeCollision() {
     int tileCol = nextKeenLeft / TILE_WIDTH - 1;
 
     Tile* tile = tilesRef[tileCol][tileRow];
-    if (tile == NULL || !tile->getIsEdge())
+    if (tile == nullptr || !tile->getIsEdge())
         return;
 
     yVel = yCollide - keenTop;
@@ -530,7 +530,7 @@ void Player::handleRightLedgeCollision() {
     int tileCol = nextKeenRight / TILE_WIDTH;
 
     Tile* tile = tilesRef[tileCol][tileRow];
-    if (tile == NULL || !tile->getIsEdge())
+    if (tile == nullptr || !tile->getIsEdge())
         return;
 
     yVel = yCollide - keenTop;
@@ -680,7 +680,7 @@ void Player::update() {
     if (!isOnPole && !isHangingLeft && !isHangingRight)
         fall();
 
-    if (platformStandingOn != NULL) {
+    if (platformStandingOn != nullptr) {
         // If Platform handle exists, adjust player position by Platform velocity
         int platformXVel = platformStandingOn->getXVel();
         xVel += platformXVel;
@@ -725,7 +725,7 @@ void Player::update() {
 
         // Set properties based on y-collision
         if (tciTB.isBottomChecked)
-            isOnGround = tciTB.isBottomColliding() || platformStandingOn != NULL;
+            isOnGround = tciTB.isBottomColliding() || platformStandingOn != nullptr;
 
         if (tciTB.isTopColliding()) {
             yVel = (tciTB.tileCollidingWithTop->getBox().y + tciTB.tileCollidingWithTop->getBox().h) - hitbox.y;
@@ -765,7 +765,7 @@ void Player::update() {
     yVelRem = modf(yVel, &intPart);
 
     // Reset velocity if collision or on pole
-    if (tciTB.isTopColliding() || tciTB.isBottomColliding() || platformStandingOn != NULL || isHangingLeft || isHangingRight) {
+    if (tciTB.isTopColliding() || tciTB.isBottomColliding() || platformStandingOn != nullptr || isHangingLeft || isHangingRight) {
         yVel = 0;
         yVelRem = 0;
     }
@@ -875,7 +875,7 @@ Player::Player(int spawnX, int spawnY) {
 
     isStunned = false;
 
-    srcClip = NULL;
+    srcClip = nullptr;
 
     hitbox.x = spawnX;
     hitbox.y = spawnY;
@@ -900,7 +900,7 @@ Player::Player(int spawnX, int spawnY) {
     isHangingLeft = false;
     isHangingRight = false;
 
-    platformStandingOn = NULL;
+    platformStandingOn = nullptr;
 
     shootingFrameCount = 0;
     isShooting = false;

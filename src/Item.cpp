@@ -32,7 +32,7 @@ Item::Item(int spawnX, int spawnY, int type) {
     hitbox.w = TILE_WIDTH;
     hitbox.h = TILE_HEIGHT;
 
-    srcClip = NULL;
+    srcClip = nullptr;
     frame = 0;
     expireTimer = 0;
 

@@ -9,10 +9,10 @@ TileCollisionInfo::TileCollisionInfo() {
     isRightChecked = false;
     isLeftChecked = false;
 
-    tileCollidingWithTop = NULL;
-    tileCollidingWithBottom = NULL;
-    tileCollidingWithLeft = NULL;
-    tileCollidingWithRight = NULL;
+    tileCollidingWithTop = nullptr;
+    tileCollidingWithBottom = nullptr;
+    tileCollidingWithLeft = nullptr;
+    tileCollidingWithRight = nullptr;
 }
 
 TileCollisionInfo::TileCollisionInfo(TileCollisionInfo tciLR, TileCollisionInfo tciTB) {
@@ -28,17 +28,17 @@ TileCollisionInfo::TileCollisionInfo(TileCollisionInfo tciLR, TileCollisionInfo 
 }
 
 bool TileCollisionInfo::isTopColliding() {
-    return tileCollidingWithTop != NULL;
+    return tileCollidingWithTop != nullptr;
 }
 
 bool TileCollisionInfo::isBottomColliding() {
-    return tileCollidingWithBottom != NULL;
+    return tileCollidingWithBottom != nullptr;
 }
 
 bool TileCollisionInfo::isRightColliding() {
-    return tileCollidingWithRight != NULL;
+    return tileCollidingWithRight != nullptr;
 }
 
 bool TileCollisionInfo::isLeftColliding() {
-    return tileCollidingWithLeft != NULL;
+    return tileCollidingWithLeft != nullptr;
 }

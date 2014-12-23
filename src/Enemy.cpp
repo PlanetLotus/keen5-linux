@@ -10,19 +10,19 @@ Tile* Enemy::getTileUnderFeet() {
     int enemyBottom = hitbox.y + hitbox.h;
 
     if (enemyBottom % TILE_HEIGHT != 0)
-        return NULL;
+        return nullptr;
 
     int enemyRight = hitbox.x + hitbox.w;
     unsigned int leftCol = hitbox.x / TILE_WIDTH;
     unsigned int rightCol = (enemyRight + TILE_WIDTH) / TILE_WIDTH;
     int tileRow = enemyBottom / TILE_HEIGHT;
-    Tile* tile = NULL;
+    Tile* tile = nullptr;
 
     // If moving left, return leftmost tile. If moving right, return rightmost
     // If the unit is pushed by something else, will that mess up this logic?
     for (unsigned int i = leftCol; i < rightCol; i++) {
         tile = tilesRef[i][tileRow];
-        if (tile != NULL) {
+        if (tile != nullptr) {
             if (facing == Facing::LEFT)
                 return tile;
         }
