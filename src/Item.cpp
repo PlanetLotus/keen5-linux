@@ -129,7 +129,7 @@ void Item::expire() {
 }
 
 void Item::die() {
-    vector<Item*>::iterator it = find(itemBatchRef.begin(), itemBatchRef.end(), this);
+    auto it = find(itemBatchRef.begin(), itemBatchRef.end(), this);
 
     if (it != itemBatchRef.end())
         itemBatchRef.erase(it);

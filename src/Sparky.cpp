@@ -252,7 +252,8 @@ void Sparky::update() {
 
     // Add back remainder
     xVel += xVelRem;
-    yVel += abs(yVelRem);
+    // This is a bug. This used to be abs(yVelRem) which unintentionally cast yVelRem into an int.
+    yVel += (int)yVelRem;
 
     hitbox.x += xVel;
     hitbox.y += yVel;

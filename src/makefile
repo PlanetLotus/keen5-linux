@@ -1,4 +1,4 @@
-CC = g++
+CC = g++ -std=c++11
 CFLAGS = -Wall -g
 INCLUDES = -I/usr/local/include/SDL2 -D_REENTRANT
 LFLAGS = -L/usr/local/lib -Wl,-rpath,/usr/local/lib

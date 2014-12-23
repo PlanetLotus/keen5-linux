@@ -314,7 +314,8 @@ bool Ampton::setYVelIfTBCollision() {
 
 void Ampton::updateVelsWithRemainder() {
     xVel += xVelRem;
-    yVel += abs(yVelRem);
+    // This is a bug. This used to be abs(yVelRem) which unintentionally cast yVelRem into an int.
+    yVel += (int)yVelRem;
 }
 
 void Ampton::updateHitbox() {
