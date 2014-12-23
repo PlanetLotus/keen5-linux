@@ -31,35 +31,26 @@ Ampton::Ampton(int spawnX, int spawnY) {
     climbCooldownTimer = 0;
     climbCooldown = FRAMES_PER_SECOND / 2;
 
-    SDL_Rect walkL0 = { TILE_WIDTH * 12, TILE_HEIGHT * 4, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
-    SDL_Rect walkL1 = { TILE_WIDTH * 14, TILE_HEIGHT * 4, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
-    SDL_Rect walkL2 = { TILE_WIDTH * 16, TILE_HEIGHT * 4, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
-    SDL_Rect walkL3 = { TILE_WIDTH * 18, TILE_HEIGHT * 4, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
+    vector<SDL_Rect> walkLeftAnim = {
+        { TILE_WIDTH * 12, TILE_HEIGHT * 4, TILE_WIDTH * 2, TILE_HEIGHT * 2 },
+        { TILE_WIDTH * 14, TILE_HEIGHT * 4, TILE_WIDTH * 2, TILE_HEIGHT * 2 },
+        { TILE_WIDTH * 16, TILE_HEIGHT * 4, TILE_WIDTH * 2, TILE_HEIGHT * 2 },
+        { TILE_WIDTH * 18, TILE_HEIGHT * 4, TILE_WIDTH * 2, TILE_HEIGHT * 2 }
+    };
+    vector<SDL_Rect> walkRightAnim = {
+        { TILE_WIDTH * 12, TILE_HEIGHT * 6, TILE_WIDTH * 2, TILE_HEIGHT * 2 },
+        { TILE_WIDTH * 14, TILE_HEIGHT * 6, TILE_WIDTH * 2, TILE_HEIGHT * 2 },
+        { TILE_WIDTH * 16, TILE_HEIGHT * 6, TILE_WIDTH * 2, TILE_HEIGHT * 2 },
+        { TILE_WIDTH * 18, TILE_HEIGHT * 6, TILE_WIDTH * 2, TILE_HEIGHT * 2 }
+    };
+    vector<SDL_Rect> stunnedAnim = {
+        { TILE_WIDTH * 20, TILE_HEIGHT * 6, TILE_WIDTH * 2, TILE_HEIGHT * 2 },
+        { TILE_WIDTH * 22, TILE_HEIGHT * 6, TILE_WIDTH * 2, TILE_HEIGHT * 2 },
+        { TILE_WIDTH * 24, TILE_HEIGHT * 6, TILE_WIDTH * 2, TILE_HEIGHT * 2 }
+    };
 
-    SDL_Rect walkR0 = { TILE_WIDTH * 12, TILE_HEIGHT * 6, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
-    SDL_Rect walkR1 = { TILE_WIDTH * 14, TILE_HEIGHT * 6, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
-    SDL_Rect walkR2 = { TILE_WIDTH * 16, TILE_HEIGHT * 6, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
-    SDL_Rect walkR3 = { TILE_WIDTH * 18, TILE_HEIGHT * 6, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
-
-    SDL_Rect turn0 = { TILE_WIDTH * 20, TILE_HEIGHT * 4, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
-
-    SDL_Rect climb0 = { TILE_WIDTH * 24, TILE_HEIGHT * 4, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
-
-    SDL_Rect stunned0 = { TILE_WIDTH * 20, TILE_HEIGHT * 6, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
-    SDL_Rect stunned1 = { TILE_WIDTH * 22, TILE_HEIGHT * 6, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
-    SDL_Rect stunned2 = { TILE_WIDTH * 24, TILE_HEIGHT * 6, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
-
-    SDL_Rect walkLeftArray[4] = { walkL0, walkL1, walkL2, walkL3 };
-    SDL_Rect walkRightArray[4] = { walkR0, walkR1, walkR2, walkR3 };
-    SDL_Rect turnArray[1] = { turn0 };
-    SDL_Rect climbArray[1] = { climb0 };
-    SDL_Rect stunnedArray[3] = { stunned0, stunned1, stunned2 };
-
-    vector<SDL_Rect> walkLeftAnim(walkLeftArray, walkLeftArray + sizeof(walkLeftArray) / sizeof(SDL_Rect));
-    vector<SDL_Rect> walkRightAnim(walkRightArray, walkRightArray + sizeof(walkRightArray) / sizeof(SDL_Rect));
-    vector<SDL_Rect> turnAnim(turnArray, turnArray + sizeof(turnArray) / sizeof(SDL_Rect));
-    vector<SDL_Rect> climbAnim(climbArray, climbArray + sizeof(climbArray) / sizeof(SDL_Rect));
-    vector<SDL_Rect> stunnedAnim(stunnedArray, stunnedArray + sizeof(stunnedArray) / sizeof(SDL_Rect));
+    vector<SDL_Rect> turnAnim = { { TILE_WIDTH * 20, TILE_HEIGHT * 4, TILE_WIDTH * 2, TILE_HEIGHT * 2 } };
+    vector<SDL_Rect> climbAnim = { { TILE_WIDTH * 24, TILE_HEIGHT * 4, TILE_WIDTH * 2, TILE_HEIGHT * 2 } };
 
     anims[0] = walkLeftAnim;
     anims[1] = walkRightAnim;

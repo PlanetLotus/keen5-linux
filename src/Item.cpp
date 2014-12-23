@@ -31,40 +31,33 @@ Item::Item(int spawnX, int spawnY, int type) {
     animState = 0;
     expireTimer = 0;
 
-    SDL_Rect vitalin0 = { TILE_WIDTH * 28, 0, TILE_WIDTH, TILE_HEIGHT };
-    SDL_Rect vitalin1 = { TILE_WIDTH * 29, 0, TILE_WIDTH, TILE_HEIGHT };
-    SDL_Rect vitalin2 = { TILE_WIDTH * 30, 0, TILE_WIDTH, TILE_HEIGHT };
-    SDL_Rect vitalin3 = { TILE_WIDTH * 31, 0, TILE_WIDTH, TILE_HEIGHT };
+    vector<SDL_Rect> vitalinAnim = {
+        { TILE_WIDTH * 28, 0, TILE_WIDTH, TILE_HEIGHT },
+        { TILE_WIDTH * 29, 0, TILE_WIDTH, TILE_HEIGHT },
+        { TILE_WIDTH * 30, 0, TILE_WIDTH, TILE_HEIGHT },
+        { TILE_WIDTH * 31, 0, TILE_WIDTH, TILE_HEIGHT }
+    };
+    vector<SDL_Rect> vitalinDieAnim = {
+        { TILE_WIDTH * 32, 0, TILE_WIDTH, TILE_HEIGHT },
+        { TILE_WIDTH * 33, 0, TILE_WIDTH, TILE_HEIGHT },
+        { TILE_WIDTH * 34, 0, TILE_WIDTH, TILE_HEIGHT },
+        { TILE_WIDTH * 35, 0, TILE_WIDTH, TILE_HEIGHT }
+    };
 
-    SDL_Rect vitalinDie0 = { TILE_WIDTH * 32, 0, TILE_WIDTH, TILE_HEIGHT };
-    SDL_Rect vitalinDie1 = { TILE_WIDTH * 33, 0, TILE_WIDTH, TILE_HEIGHT };
-    SDL_Rect vitalinDie2 = { TILE_WIDTH * 34, 0, TILE_WIDTH, TILE_HEIGHT };
-    SDL_Rect vitalinDie3 = { TILE_WIDTH * 35, 0, TILE_WIDTH, TILE_HEIGHT };
+    vector<SDL_Rect> ammoAnim = {
+        { TILE_WIDTH * 28, TILE_HEIGHT, TILE_WIDTH, TILE_HEIGHT },
+        { TILE_WIDTH * 29, TILE_HEIGHT, TILE_WIDTH, TILE_HEIGHT }
+    };
+    vector<SDL_Rect> ammoDieAnim = { { TILE_WIDTH * 30, TILE_HEIGHT, TILE_WIDTH, TILE_HEIGHT } };
 
-    SDL_Rect ammo0 = { TILE_WIDTH * 28, TILE_HEIGHT, TILE_WIDTH, TILE_HEIGHT };
-    SDL_Rect ammo1 = { TILE_WIDTH * 29, TILE_HEIGHT, TILE_WIDTH, TILE_HEIGHT };
-
-    SDL_Rect ammoDie = { TILE_WIDTH * 30, TILE_HEIGHT, TILE_WIDTH, TILE_HEIGHT };
-
-    SDL_Rect marshmellow0 = { TILE_WIDTH * 31, TILE_HEIGHT, TILE_WIDTH, TILE_HEIGHT };
-    SDL_Rect marshmellow1 = { TILE_WIDTH * 32, TILE_HEIGHT, TILE_WIDTH, TILE_HEIGHT };
-
-    SDL_Rect gum0 = { TILE_WIDTH * 33, TILE_HEIGHT, TILE_WIDTH, TILE_HEIGHT };
-    SDL_Rect gum1 = { TILE_WIDTH * 34, TILE_HEIGHT, TILE_WIDTH, TILE_HEIGHT };
-
-    SDL_Rect vitalinArray[4] = { vitalin0, vitalin1, vitalin2, vitalin3 };
-    SDL_Rect vitalinDieArray[4] = { vitalinDie0, vitalinDie1, vitalinDie2, vitalinDie3 };
-    SDL_Rect ammoArray[2] = { ammo0, ammo1 };
-    SDL_Rect ammoDieArray[1] = { ammoDie };
-    SDL_Rect marshmellowArray[2] = { marshmellow0, marshmellow1 };
-    SDL_Rect gumArray[2] = { gum0, gum1 };
-
-    vector<SDL_Rect> vitalinAnim(vitalinArray, vitalinArray + sizeof(vitalinArray) / sizeof(SDL_Rect));
-    vector<SDL_Rect> vitalinDieAnim(vitalinDieArray, vitalinDieArray + sizeof(vitalinDieArray) / sizeof(SDL_Rect));
-    vector<SDL_Rect> ammoAnim(ammoArray, ammoArray + sizeof(ammoArray) / sizeof(SDL_Rect));
-    vector<SDL_Rect> ammoDieAnim(ammoDieArray, ammoDieArray + sizeof(ammoDieArray) / sizeof(SDL_Rect));
-    vector<SDL_Rect> marshmellowAnim(marshmellowArray, marshmellowArray + sizeof(marshmellowArray) / sizeof(SDL_Rect));
-    vector<SDL_Rect> gumAnim(gumArray, gumArray + sizeof(gumArray) / sizeof(SDL_Rect));
+    vector<SDL_Rect> gumAnim = {
+        { TILE_WIDTH * 33, TILE_HEIGHT, TILE_WIDTH, TILE_HEIGHT },
+        { TILE_WIDTH * 34, TILE_HEIGHT, TILE_WIDTH, TILE_HEIGHT }
+    };
+    vector<SDL_Rect> marshmellowAnim = {
+        { TILE_WIDTH * 31, TILE_HEIGHT, TILE_WIDTH, TILE_HEIGHT },
+        { TILE_WIDTH * 32, TILE_HEIGHT, TILE_WIDTH, TILE_HEIGHT }
+    };
 
     anims[0] = ammoAnim; anims[1] = ammoDieAnim;
     anims[2] = vitalinAnim; anims[3] = vitalinDieAnim;

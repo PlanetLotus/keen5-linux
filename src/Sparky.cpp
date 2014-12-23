@@ -33,35 +33,33 @@ Sparky::Sparky(int spawnX, int spawnY) {
 
     srcClip = NULL;
 
-    SDL_Rect walkL0 = { TILE_WIDTH * 14, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
-    SDL_Rect walkL1 = { TILE_WIDTH * 16, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
-    SDL_Rect walkL2 = { TILE_WIDTH * 18, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
-    SDL_Rect walkL3 = { TILE_WIDTH * 20, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
-
-    SDL_Rect walkR0 = { TILE_WIDTH * 14, TILE_HEIGHT * 2, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
-    SDL_Rect walkR1 = { TILE_WIDTH * 16, TILE_HEIGHT * 2, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
-    SDL_Rect walkR2 = { TILE_WIDTH * 18, TILE_HEIGHT * 2, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
-    SDL_Rect walkR3 = { TILE_WIDTH * 20, TILE_HEIGHT * 2, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
-
-    SDL_Rect turn0 = { TILE_WIDTH * 22, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
-    SDL_Rect turn1 = { TILE_WIDTH * 24, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
-    SDL_Rect turn2 = { TILE_WIDTH * 26, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
-
-    SDL_Rect die0 = { TILE_WIDTH * 22, TILE_HEIGHT * 2, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
-    SDL_Rect die1 = { TILE_WIDTH * 24, TILE_HEIGHT * 2, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
-    SDL_Rect die2 = { TILE_WIDTH * 26, TILE_HEIGHT * 2, TILE_WIDTH * 2, TILE_HEIGHT * 2 };
-
-    SDL_Rect walkLeftArray[4] = { walkL0, walkL1, walkL2, walkL3 };
-    SDL_Rect walkRightArray[4] = { walkR0, walkR1, walkR2, walkR3 };
-    SDL_Rect turnLeftArray[4] = { turn2, turn1, turn0, walkL0 };
-    SDL_Rect turnRightArray[4] = { turn0, turn1, turn2, walkR0 };
-    SDL_Rect dieArray[3] = { die0, die1, die2 };
-
-    vector<SDL_Rect> walkLeftAnim(walkLeftArray, walkLeftArray + sizeof(walkLeftArray) / sizeof(SDL_Rect));
-    vector<SDL_Rect> walkRightAnim(walkRightArray, walkRightArray + sizeof(walkRightArray) / sizeof(SDL_Rect));
-    vector<SDL_Rect> turnLeftAnim(turnLeftArray, turnLeftArray + sizeof(turnLeftArray) / sizeof(SDL_Rect));
-    vector<SDL_Rect> turnRightAnim(turnRightArray, turnRightArray + sizeof(turnRightArray) / sizeof(SDL_Rect));
-    vector<SDL_Rect> dieAnim(dieArray, dieArray + sizeof(dieArray) / sizeof(SDL_Rect));
+    vector<SDL_Rect> walkLeftAnim = {
+        { TILE_WIDTH * 14, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2 },
+        { TILE_WIDTH * 16, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2 },
+        { TILE_WIDTH * 18, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2 },
+        { TILE_WIDTH * 20, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2 }
+    };
+    vector<SDL_Rect> walkRightAnim = {
+        { TILE_WIDTH * 14, TILE_HEIGHT * 2, TILE_WIDTH * 2, TILE_HEIGHT * 2 },
+        { TILE_WIDTH * 16, TILE_HEIGHT * 2, TILE_WIDTH * 2, TILE_HEIGHT * 2 },
+        { TILE_WIDTH * 18, TILE_HEIGHT * 2, TILE_WIDTH * 2, TILE_HEIGHT * 2 },
+        { TILE_WIDTH * 20, TILE_HEIGHT * 2, TILE_WIDTH * 2, TILE_HEIGHT * 2 }
+    };
+    vector<SDL_Rect> turnLeftAnim = {
+        { TILE_WIDTH * 22, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2 },
+        { TILE_WIDTH * 24, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2 },
+        { TILE_WIDTH * 26, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2 }
+    };
+    vector<SDL_Rect> turnRightAnim = {
+        { TILE_WIDTH * 26, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2 },
+        { TILE_WIDTH * 24, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2 },
+        { TILE_WIDTH * 22, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2 }
+    };
+    vector<SDL_Rect> dieAnim = {
+        { TILE_WIDTH * 22, TILE_HEIGHT * 2, TILE_WIDTH * 2, TILE_HEIGHT * 2 },
+        { TILE_WIDTH * 24, TILE_HEIGHT * 2, TILE_WIDTH * 2, TILE_HEIGHT * 2 },
+        { TILE_WIDTH * 26, TILE_HEIGHT * 2, TILE_WIDTH * 2, TILE_HEIGHT * 2 }
+    };
 
     anims[0] = walkLeftAnim;
     anims[1] = walkRightAnim;
