@@ -7,8 +7,8 @@ class Player;
 
 class Enemy : public MovingSprite {
     protected:
-        enum facingEnum { LEFT = -1, RIGHT = 1 };
-        facingEnum facing;
+        enum class Facing { LEFT = -1, RIGHT = 1 };
+        Facing facing;
 
         Player* keen;
         bool isCollidingWithPlayer();

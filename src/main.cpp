@@ -258,7 +258,7 @@ Level* loadCurrentLevel(Texture* maskTexture) {
     vector<BackgroundTile*> backgroundTiles;
     vector<Enemy*> enemies;
     vector<Item*> items;
-    enum unitEnum { NONE, KEEN, SPARKY, AMPTON };
+    enum class UnitType { NONE, KEEN, SPARKY, AMPTON };
 
     int tilesWide = -1;
     int tilesTall = -1;
@@ -374,12 +374,12 @@ Level* loadCurrentLevel(Texture* maskTexture) {
         iss >> unitVal;
         iss >> itemVal;
 
-        if ((unitEnum)unitVal == KEEN) {
+        if ((UnitType)unitVal == UnitType::KEEN) {
             keenSpawnX = TILE_WIDTH * x;
             keenSpawnY = TILE_HEIGHT * y;
-        } else if ((unitEnum)unitVal == SPARKY) {
+        } else if ((UnitType)unitVal == UnitType::SPARKY) {
             enemies.push_back(new Sparky(TILE_WIDTH * x, TILE_HEIGHT * y));
-        } else if ((unitEnum)unitVal == AMPTON) {
+        } else if ((UnitType)unitVal == UnitType::AMPTON) {
             enemies.push_back(new Ampton(TILE_WIDTH * x, TILE_HEIGHT * y));
         }
 

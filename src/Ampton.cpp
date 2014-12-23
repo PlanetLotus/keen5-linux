@@ -13,14 +13,14 @@ Ampton::Ampton(int spawnX, int spawnY) {
     hitbox.w = TILE_WIDTH;
     hitbox.h = TILE_HEIGHT;
 
-    facing = LEFT;
+    facing = Facing::LEFT;
     patrolSpeed = 4;
-    xVel = patrolSpeed * facing;
+    xVel = patrolSpeed * (int)facing;
     yVel = 0;
     xVelRem = 0;
     yVelRem = 0;
 
-    state = PATROL;
+    state = State::PATROL;
     frame = 0;
     animState = 0;
     srcClip = NULL;
@@ -82,15 +82,15 @@ void Ampton::fall() {
     yVel += 2.6;
 }
 
-void Ampton::changeState(stateEnum nextState) {
+void Ampton::changeState(State nextState) {
     state = nextState;
 }
 
 void Ampton::patrol() {
-    xVel = patrolSpeed * facing;
+    xVel = patrolSpeed * (int)facing;
     TileCollisionInfo tciLR;
 
-    if (facing == LEFT)
+    if (facing == Facing::LEFT)
         animate(0, 3);
     else
         animate(1, 3);
@@ -99,7 +99,7 @@ void Ampton::patrol() {
     tciLR = checkTileCollisionLR();
 
     if (tciLR.isLeftColliding() || tciLR.isRightColliding()) {
-        changeState(CHANGE_DIRECTION);
+        changeState(State::CHANGE_DIRECTION);
         xVel = 0;
         xVelRem = 0;
     }
@@ -109,7 +109,7 @@ void Ampton::patrol() {
         Tile* pole = getCollidingPoleTile();
         if (pole != NULL) {
             snapToPole(pole);
-            changeState(CLIMB_DOWN);
+            changeState(State::CLIMB_DOWN);
             climbCooldownTimer = 0;
         }
     }
@@ -129,8 +129,8 @@ void Ampton::changeDirection() {
 
     // Then, invert velocity
     if (frame == anims[animState].size() * frametime - 1) {
-        facing = facing == LEFT ? RIGHT : LEFT;
-        changeState(PATROL);
+        facing = facing == Facing::LEFT ? Facing::RIGHT : Facing::LEFT;
+        changeState(State::PATROL);
     }
 
     bool isTBColliding = setYVelIfTBCollision();
@@ -142,7 +142,7 @@ void Ampton::changeDirection() {
 
 void Ampton::climbUp() {
     if (getCollidingPoleTile() == NULL) {
-        changeState(CLIMB_DOWN);
+        changeState(State::CLIMB_DOWN);
         return;
     }
 
@@ -156,7 +156,7 @@ void Ampton::climbUp() {
 
     if (tciTB.isTopColliding()) {
         yVel = (tciTB.tileCollidingWithTop->getBox().y + tciTB.tileCollidingWithTop->getBox().h) - hitbox.y;
-        changeState(CLIMB_DOWN);
+        changeState(State::CLIMB_DOWN);
     }
 
     updateHitbox();
@@ -180,16 +180,16 @@ void Ampton::climbDown() {
             if (climbCooldownTimer > climbCooldown) {
                 climbCooldownTimer = 0;
                 yVel = tile->getBox().y - (hitbox.y + hitbox.h);
-                changeState(PATROL);
+                changeState(State::PATROL);
             } else {
                 // If just starting, climb up instead!
                 yVel = tile->getBox().y - (hitbox.y + hitbox.h);
-                changeState(CLIMB_UP);
+                changeState(State::CLIMB_UP);
             }
         } else if (climbCooldownTimer > climbCooldown) {
             climbCooldownTimer = 0;
             yVel = tile->getBox().y - (hitbox.y + hitbox.h);
-            changeState(PATROL);
+            changeState(State::PATROL);
         }
     }
 
@@ -208,7 +208,7 @@ void Ampton::stunned() {
 
 void Ampton::takeShotByPlayer() {
     isStunned = true;
-    changeState(STUNNED);
+    changeState(State::STUNNED);
     xVel = 0;
     xVelRem = 0;
 
@@ -223,7 +223,7 @@ Tile* Ampton::getCollidingPoleTile() {
     for (unsigned int i = 0; i < leftTiles.size(); i++) {
         SDL_Rect tileBox = leftTiles[i]->getBox();
         if (tileBox.y + tileBox.h > hitbox.y && hitbox.y >= tileBox.y &&
-            leftTiles[i]->isColliding(Tile::ISPOLE, hitbox, nextHitbox)) {
+            leftTiles[i]->isColliding(Tile::TileProperty::ISPOLE, hitbox, nextHitbox)) {
 
             SDL_Rect poleBox = leftTiles[i]->getBox();
             int poleRight = poleBox.x + poleBox.w;
@@ -244,7 +244,7 @@ Tile* Ampton::getCollidingPoleTile() {
     for (unsigned int i = 0; i < rightTiles.size(); i++) {
         SDL_Rect tileBox = rightTiles[i]->getBox();
         if (tileBox.y + tileBox.h > hitbox.y && hitbox.y >= tileBox.y &&
-            rightTiles[i]->isColliding(Tile::ISPOLE, hitbox, nextHitbox)) {
+            rightTiles[i]->isColliding(Tile::TileProperty::ISPOLE, hitbox, nextHitbox)) {
 
             int amptonRight = hitbox.x + hitbox.w;
             SDL_Rect poleBox = rightTiles[i]->getBox();
@@ -267,7 +267,7 @@ void Ampton::snapToPole(Tile* pole) {
         return;
 
     // "Snap" to the pole horizontally, locking movement in x-direction
-    if (facing == LEFT)
+    if (facing == Facing::LEFT)
         xVel = pole->getBox().x - hitbox.x;
     else
         xVel = pole->getBox().x - hitbox.x;
@@ -277,7 +277,7 @@ void Ampton::changeDirectionIfOnEdge() {
     if (xVel != 0) {
         Tile* tileUnderFeet = getTileUnderFeet();
         if (tileUnderFeet != NULL && tileUnderFeet->getIsEdge()) {
-            changeState(CHANGE_DIRECTION);
+            changeState(State::CHANGE_DIRECTION);
             xVel = 0;
             xVelRem = 0;
         }
@@ -332,24 +332,24 @@ void Ampton::resetYVel(bool isTBColliding) {
 void Ampton::update() {
     fall();
 
-    if (state == PATROL)
+    if (state == State::PATROL)
         patrol();
-    else if (state == CHANGE_DIRECTION)
+    else if (state == State::CHANGE_DIRECTION)
         changeDirection();
-    else if (state == CLIMB_UP)
+    else if (state == State::CLIMB_UP)
         climbUp();
-    else if (state == CLIMB_DOWN)
+    else if (state == State::CLIMB_DOWN)
         climbDown();
     else
         stunned();
 
     climbCooldownTimer++;
 
-    if (state != STUNNED && isCollidingWithPlayer()) {
+    if (state != State::STUNNED && isCollidingWithPlayer()) {
         SDL_Rect keenBox = keen->getBox();
-        if (state == CLIMB_UP || state == CLIMB_DOWN)
+        if (state == State::CLIMB_UP || state == State::CLIMB_DOWN)
             keen->die(hitbox.x);
-        else if (facing == LEFT && hitbox.x > keenBox.x)
+        else if (facing == Facing::LEFT && hitbox.x > keenBox.x)
             keen->pushX(hitbox.x - (keenBox.x + keenBox.w));
         else if (hitbox.x + hitbox.w < keenBox.x + keenBox.w)
             keen->pushX((hitbox.x + hitbox.w) - keenBox.x);

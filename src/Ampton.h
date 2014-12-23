@@ -12,14 +12,14 @@ class Ampton : public Enemy {
 
         int patrolSpeed;
 
-        enum stateEnum { PATROL, CLIMB_UP, CLIMB_DOWN, CHANGE_DIRECTION, FIX_MACHINE, STUNNED };
-        stateEnum state;
+        enum class State { PATROL, CLIMB_UP, CLIMB_DOWN, CHANGE_DIRECTION, FIX_MACHINE, STUNNED };
+        State state;
 
         int climbCooldownTimer;
         int climbCooldown;
 
         void fall();
-        void changeState(stateEnum nextState);
+        void changeState(State nextState);
         void patrol();
         void changeDirection();
         void climbUp();

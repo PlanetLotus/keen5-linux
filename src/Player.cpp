@@ -14,7 +14,7 @@
 using namespace std;
 
 void Player::shoot(bool isPressingUp, bool isPressingDown) {
-    int animVal = 10 + facing;
+    int animVal = 10 + (int)facing;
 
     if (!isShooting) {
         // Create shot
@@ -27,25 +27,25 @@ void Player::shoot(bool isPressingUp, bool isPressingDown) {
             xStart = hitbox.x;
             yStart = hitbox.y + TILE_HEIGHT;
             yShotVel = 1;
-            animVal = 24 + facing;
+            animVal = 24 + (int)facing;
         } else if (isPressingUp) {
             xStart = hitbox.x;
             yStart = hitbox.y - TILE_HEIGHT;
             yShotVel = -1;
             animVal = isOnGround ? 12 : 15;
-            if (isOnPole) animVal = 28 + facing;
+            if (isOnPole) animVal = 28 + (int)facing;
         } else if (isPressingDown && !isOnGround) {
             xStart = hitbox.x;
             yStart = hitbox.y + TILE_HEIGHT;
             yShotVel = 1;
             animVal = 16;
         } else {
-            xStart = facing == 0 ? hitbox.x - TILE_WIDTH : hitbox.x + TILE_WIDTH;
+            xStart = facing == Direction::LEFT ? hitbox.x - TILE_WIDTH : hitbox.x + TILE_WIDTH;
             yStart = hitbox.y + TILE_HEIGHT / 3;
-            xShotVel = facing == 0 ? -1 : 1;
+            xShotVel = facing == Direction::LEFT ? -1 : 1;
 
-            if (!isOnGround) animVal = 13 + facing;
-            if (isOnPole) animVal = 26 + facing;
+            if (!isOnGround) animVal = 13 + (int)facing;
+            if (isOnPole) animVal = 26 + (int)facing;
         }
 
         new BlasterShot(xStart, yStart, xShotVel, yShotVel);
@@ -71,27 +71,27 @@ void Player::shoot(bool isPressingUp, bool isPressingDown) {
     isOnPogo = false;
 }
 
-void Player::walk(directionEnum dir) {
+void Player::walk(Direction dir) {
     // TODO: Enforce dir being only left or right
     bool isFacingChanging = dir != facing;
-    facing = dir == LEFT ? LEFT : RIGHT;
+    facing = dir == Direction::LEFT ? Direction::LEFT : Direction::RIGHT;
 
     // Does this special case warrant a change of method name to something more general?
     if (isOnPole) {
         if (isFacingChanging) {
             Tile* pole = getCollidingPoleTile();
             snapToPole(pole, facing);
-            animate(21 + facing);
+            animate(21 + (int)facing);
         }
     } else if (isOnGround) {
         xAccel = 0;
 
-        xVel = dir == LEFT ? -5 : 5;
-        animate(2 + facing);
+        xVel = dir == Direction::LEFT ? -5 : 5;
+        animate(2 + (int)facing);
     } else {
         // Walking in the air
         // Stray thought: Maybe it's just low acceleration and not "drag"
-        xAccel = dir == LEFT ? -1.7 : 1.7;
+        xAccel = dir == Direction::LEFT ? -1.7 : 1.7;
         xVel += xAccel;
 
         // Limit velocity
@@ -115,21 +115,21 @@ void Player::stopWalk() {
         xVelRem = 0;
 
         if (lookTimer == 0)
-            animate(facing);
+            animate((int)facing);
     } else {
         // Falling with drag
         if (!isOnPogo) {
-            float drag = facing == LEFT ? 0.8 : -0.8;
+            float drag = facing == Direction::LEFT ? 0.8 : -0.8;
             xVel += drag;
         }
 
         // Make sure remainder is applied in direction opposite movement
-        //if ((facing == LEFT && xVelRem < 0) || (facing == RIGHT && xVelRem > 0))
+        //if ((facing == Direction::LEFT && xVelRem < 0) || (facing == Direction::RIGHT && xVelRem > 0))
         //    xVelRem *= -1;
         xVelRem = 0;
 
         // Limit velocity
-        if ((facing == LEFT && xVel > 0) || (facing == RIGHT && xVel < 0)) {
+        if ((facing == Direction::LEFT && xVel > 0) || (facing == Direction::RIGHT && xVel < 0)) {
             xVel = 0;
             xVelRem = 0;
         }
@@ -137,37 +137,37 @@ void Player::stopWalk() {
 }
 
 void Player::stopClimb() {
-    if (animState != 21 + facing) {
+    if (animState != 21 + (int)facing) {
         Tile* pole = getCollidingPoleTile();
         snapToPole(pole, facing);
-        animate(21 + facing);
+        animate(21 + (int)facing);
     } else if (frame / FRAMETIME != 0) {
         // Hack: Force a frame reset
         // Could add an optional param to animate to reset frame
         frame = anims[animState].size() * FRAMETIME - 1;
-        animate(21 + facing);
+        animate(21 + (int)facing);
     }
 }
 
 void Player::processUpArrow() {
     if (isOnPole) {
-        climb(UP);
+        climb(Direction::UP);
         return;
     }
 
     Tile* pole = getCollidingPoleTile();
     if (pole != NULL) {
         snapToPole(pole, facing);
-        animate(21 + facing);
+        animate(21 + (int)facing);
         return;
     }
 
-    look(UP);
+    look(Direction::UP);
 }
 
 void Player::processDownArrow() {
     if (isOnPole) {
-        climb(DOWN);
+        climb(Direction::DOWN);
         return;
     }
 
@@ -176,20 +176,20 @@ void Player::processDownArrow() {
         Tile* tileCollidingWithBottom = getTileCollidingWithBottom(true);
         if (tileCollidingWithBottom != NULL && !tileCollidingWithBottom->getCollideBottom()) {
             snapToPole(pole, facing);
-            animate(21 + facing);
+            animate(21 + (int)facing);
             return;
         }
     }
 
-    look(DOWN);
+    look(Direction::DOWN);
 }
 
-void Player::snapToPole(Tile* pole, directionEnum facing) {
+void Player::snapToPole(Tile* pole, Direction facing) {
     if (pole == NULL)
         return;
 
     // "Snap" to the pole horizontally, locking movement in x-direction
-    if (facing == LEFT)
+    if (facing == Direction::LEFT)
         xVel = pole->getBox().x + TILE_WIDTH / 4 - hitbox.x;
     else
         xVel = pole->getBox().x - TILE_WIDTH / 4 - hitbox.x;
@@ -209,7 +209,7 @@ Tile* Player::getCollidingPoleTile() {
     for (unsigned int i = 0; i < leftTiles.size(); i++) {
         SDL_Rect tileBox = leftTiles[i]->getBox();
         if (tileBox.y + tileBox.h > hitbox.y && hitbox.y >= tileBox.y &&
-            leftTiles[i]->isColliding(Tile::ISPOLE, hitbox, nextHitbox)) {
+            leftTiles[i]->isColliding(Tile::TileProperty::ISPOLE, hitbox, nextHitbox)) {
 
             SDL_Rect poleBox = leftTiles[i]->getBox();
             int poleRight = poleBox.x + poleBox.w;
@@ -230,7 +230,7 @@ Tile* Player::getCollidingPoleTile() {
     for (unsigned int i = 0; i < rightTiles.size(); i++) {
         SDL_Rect tileBox = rightTiles[i]->getBox();
         if (tileBox.y + tileBox.h > hitbox.y && hitbox.y >= tileBox.y &&
-            rightTiles[i]->isColliding(Tile::ISPOLE, hitbox, nextHitbox)) {
+            rightTiles[i]->isColliding(Tile::TileProperty::ISPOLE, hitbox, nextHitbox)) {
 
             int playerRight = hitbox.x + hitbox.w;
             SDL_Rect poleBox = rightTiles[i]->getBox();
@@ -248,17 +248,17 @@ Tile* Player::getCollidingPoleTile() {
     return NULL;
 }
 
-void Player::look(directionEnum dir) {
+void Player::look(Direction dir) {
     if (!isOnGround) return;
 
     lookTimer++;
 
-    if (dir == UP) {
+    if (dir == Direction::UP) {
         animate(30);
 
         if (lookTimer >= FRAMES_PER_SECOND / 2 && hitbox.y + hitbox.h < cameraRef.getBottomMargin())
             cameraRef.lookUp();
-    } else if (dir == DOWN) {
+    } else if (dir == Direction::DOWN) {
         if (frame < 2)
             animate(31);
 
@@ -267,21 +267,21 @@ void Player::look(directionEnum dir) {
     }
 }
 
-void Player::climb(directionEnum dir) {
-    if (dir == UP && getCollidingPoleTile() != NULL) {
+void Player::climb(Direction dir) {
+    if (dir == Direction::UP && getCollidingPoleTile() != NULL) {
         yVel = -3;
-        animate(21 + facing, 3);
-    } else if (dir == DOWN) {
+        animate(21 + (int)facing, 3);
+    } else if (dir == Direction::DOWN) {
         yVel = 7;
         int frametime = 3;
         animate(23, frametime);
 
         if (frame / frametime == 0) {
             Tile* pole = getCollidingPoleTile();
-            snapToPole(pole, RIGHT);
+            snapToPole(pole, Direction::RIGHT);
         } else if (frame / frametime == 2) {
             Tile* pole = getCollidingPoleTile();
-            snapToPole(pole, LEFT);
+            snapToPole(pole, Direction::LEFT);
         }
     }
 }
@@ -306,9 +306,9 @@ void Player::pogo() {
     }
 
     if (yVel >= 0)
-        animate(17 + facing);
+        animate(17 + (int)facing);
     else
-        animate(19 + facing);
+        animate(19 + (int)facing);
 }
 
 void Player::jump() {
@@ -366,7 +366,7 @@ Tile* Player::getTileUnderFeet() {
     for (unsigned int i = leftCol; i < rightCol; i++) {
         tile = tilesRef[i][tileRow];
         if (tile != NULL) {
-            if (facing == LEFT)
+            if (facing == Direction::LEFT)
                 return tile;
         }
     }
@@ -383,11 +383,11 @@ void Player::fall() {
 
     if (!isOnGround && !isShooting && !isOnPogo) { // Implies that he's either falling or jumping
         if (yVel > 0) {
-            animate(8 + facing);
+            animate(8 + (int)facing);
         } else if (yVel == 0) {
-            animate(6 + facing);
+            animate(6 + (int)facing);
         } else {
-            animate(4 + facing);
+            animate(4 + (int)facing);
         }
     }
 }
@@ -405,10 +405,10 @@ void Player::processKeyboard() {
 
     if (state[SDL_SCANCODE_LEFT] && !isRolling) {
         controllerRef.isHoldingLeft = true;
-        walk(LEFT);
+        walk(Direction::LEFT);
     } else if (state[SDL_SCANCODE_RIGHT] && !isRolling) {
         controllerRef.isHoldingRight = true;
-        walk(RIGHT);
+        walk(Direction::RIGHT);
     } else if (!isOnPole) {
         stopWalk();
     }
@@ -641,12 +641,12 @@ void Player::checkItemCollision() {
 void Player::handleItemCollision(Item* item) {
     item->beginExpire();
 
-    ItemTypeEnum itemType = item->getType();
+    ItemType itemType = item->getType();
 
     // TODO: Add PlayerStats class
-    if (itemType == AMMO) {
+    if (itemType == ItemType::AMMO) {
         // Add item value to ammo
-    } else if (itemType == VITALIN) {
+    } else if (itemType == ItemType::VITALIN) {
         // Add item value to vitalin
     } else {
         // Add item value to points
@@ -885,7 +885,7 @@ Player::Player(int spawnX, int spawnY) {
     isAnimLocked = false;
     frame = 0;
     animState = 2;
-    facing = LEFT;
+    facing = Direction::LEFT;
     idle = true;
 
     lookTimer = 0;

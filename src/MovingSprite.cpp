@@ -161,7 +161,7 @@ Tile* MovingSprite::getTileCollidingWithRight() {
     vector<Tile*> tiles = getTilesToRight();
 
     for (unsigned int i = 0; i < tiles.size(); i++) {
-        if (tiles[i]->isColliding(Tile::LEFT, hitbox, nextHitbox))
+        if (tiles[i]->isColliding(Tile::TileProperty::LEFT, hitbox, nextHitbox))
             return tiles[i];
     }
     return NULL;
@@ -172,7 +172,7 @@ Tile* MovingSprite::getTileCollidingWithLeft() {
     vector<Tile*> tiles = getTilesToLeft();
 
     for (unsigned int i = 0; i < tiles.size(); i++) {
-        if (tiles[i]->isColliding(Tile::RIGHT, hitbox, nextHitbox))
+        if (tiles[i]->isColliding(Tile::TileProperty::RIGHT, hitbox, nextHitbox))
             return tiles[i];
     }
     return NULL;
@@ -184,12 +184,12 @@ Tile* MovingSprite::getTileCollidingWithBottom(bool checkOnlyTouching) {
 
     if (checkOnlyTouching) {
         for (unsigned int i = 0; i < tiles.size(); i++) {
-            if (tiles[i]->isTouching(Tile::TOP, nextHitbox))
+            if (tiles[i]->isTouching(Tile::TileProperty::TOP, nextHitbox))
                 return tiles[i];
         }
     } else {
         for (unsigned int i = 0; i < tiles.size(); i++) {
-            if (tiles[i]->isColliding(Tile::TOP, hitbox, nextHitbox))
+            if (tiles[i]->isColliding(Tile::TileProperty::TOP, hitbox, nextHitbox))
                 return tiles[i];
         }
     }
@@ -201,7 +201,7 @@ Tile* MovingSprite::getTileCollidingWithTop() {
     vector<Tile*> tiles = getTilesToTop();
 
     for (unsigned int i = 0; i < tiles.size(); i++) {
-        if (tiles[i]->isColliding(Tile::BOTTOM, hitbox, nextHitbox))
+        if (tiles[i]->isColliding(Tile::TileProperty::BOTTOM, hitbox, nextHitbox))
             return tiles[i];
     }
     return NULL;

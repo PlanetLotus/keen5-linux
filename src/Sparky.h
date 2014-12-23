@@ -6,10 +6,10 @@
 
 class Sparky : public Enemy {
     private:
-        enum stateEnum { PATROL, CHASE, SCAN, CHANGE_DIRECTION, STUNNED };
-        stateEnum state;
-        stateEnum prevState;
-        void changeState(stateEnum nextState);
+        enum class State { PATROL, CHASE, SCAN, CHANGE_DIRECTION, STUNNED };
+        State state;
+        State prevState;
+        void changeState(State nextState);
         void patrol();
         void chase();
         void scan();

@@ -8,18 +8,24 @@
 using namespace std;
 
 Item::Item(int spawnX, int spawnY, int type) {
-    this->type = (ItemTypeEnum)type;
+    ItemType itemType = (ItemType)type;
+    this->type = itemType;
 
-    if (type == AMMO)
+    if (itemType == ItemType::AMMO) {
         value = 5;
-    else if (type == GUM)
+        animState = 0;
+    } else if (itemType == ItemType::GUM) {
         value = 100;
-    else if (type == MARSHMELLOW)
+        animState = 4;
+    } else if (itemType == ItemType::MARSHMELLOW) {
         value = 200;
-    else if (type == VITALIN)
+        animState = 5;
+    } else if (itemType == ItemType::VITALIN) {
         value = 1;
-    else
-        value = 0;
+        animState = 2;
+    } else {
+        printf("Item type not recognized: %d\n", (int)type);
+    }
 
     hitbox.x = spawnX;
     hitbox.y = spawnY;
@@ -28,7 +34,6 @@ Item::Item(int spawnX, int spawnY, int type) {
 
     srcClip = NULL;
     frame = 0;
-    animState = 0;
     expireTimer = 0;
 
     vector<SDL_Rect> vitalinAnim = {
@@ -63,17 +68,6 @@ Item::Item(int spawnX, int spawnY, int type) {
     anims[2] = vitalinAnim; anims[3] = vitalinDieAnim;
     anims[4] = gumAnim; anims[5] = marshmellowAnim;
 
-    if (type == AMMO)
-        animState = 0;
-    else if (type == VITALIN)
-        animState = 2;
-    else if (type == GUM)
-        animState = 4;
-    else if (type == MARSHMELLOW)
-        animState = 5;
-    else
-        printf("Item type not recognized: %d\n", (int)type);
-
     animate(animState, 11);
 }
 
@@ -98,10 +92,10 @@ void Item::beginExpire() {
     if (animState == 1 || animState == 3)
         return;
 
-    if (type == AMMO) {
+    if (type == ItemType::AMMO) {
         animState = 1;
         frame = 0;
-    } else if (type == VITALIN) {
+    } else if (type == ItemType::VITALIN) {
         animState = 3;
         frame = 0;
     } else {
@@ -143,4 +137,4 @@ void Item::draw(Texture* texture, SDL_Rect cameraBox) {
 }
 
 int Item::getValue() { return value; }
-ItemTypeEnum Item::getType() { return type; }
+ItemType Item::getType() { return type; }

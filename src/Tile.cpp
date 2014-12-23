@@ -45,41 +45,41 @@ void Tile::draw(Texture* texture, SDL_Rect cameraBox) {
 }
 
 bool Tile::isColliding(TileProperty tileProperty, SDL_Rect hitbox, SDL_Rect nextHitbox) {
-    if (tileProperty == ISPOLE) {
+    if (tileProperty == TileProperty::ISPOLE) {
         return isPole && (isRightColliding(hitbox, nextHitbox, destBox) ||
             isLeftColliding(hitbox, nextHitbox, destBox));
     }
 
-    if (isSloped && tileProperty == TOP) {
+    if (isSloped && tileProperty == TileProperty::TOP) {
         return isBottomColliding(hitbox, nextHitbox, destBox, true);
     }
 
-    if (tileProperty == LEFT)
+    if (tileProperty == TileProperty::LEFT)
         return collideLeft && isRightColliding(hitbox, nextHitbox, destBox);
 
-    if (tileProperty == RIGHT)
+    if (tileProperty == TileProperty::RIGHT)
         return collideRight && isLeftColliding(hitbox, nextHitbox, destBox);
 
-    if (tileProperty == TOP)
+    if (tileProperty == TileProperty::TOP)
         return collideTop && isBottomColliding(hitbox, nextHitbox, destBox);
 
-    if (tileProperty == BOTTOM)
+    if (tileProperty == TileProperty::BOTTOM)
         return collideBottom && isTopColliding(hitbox, nextHitbox, destBox);
 
     return false;
 }
 
 bool Tile::isTouching(TileProperty tileProperty, SDL_Rect nextHitbox) {
-    if (tileProperty == LEFT)
+    if (tileProperty == TileProperty::LEFT)
         return destBox.x == nextHitbox.x + nextHitbox.w;
 
-    if (tileProperty == RIGHT)
+    if (tileProperty == TileProperty::RIGHT)
         return destBox.x + destBox.w == nextHitbox.x;
 
-    if (tileProperty == TOP)
+    if (tileProperty == TileProperty::TOP)
         return destBox.y == nextHitbox.y + nextHitbox.h;
 
-    if (tileProperty == BOTTOM)
+    if (tileProperty == TileProperty::BOTTOM)
         return destBox.y + destBox.h  == nextHitbox.y;
 
     return false;

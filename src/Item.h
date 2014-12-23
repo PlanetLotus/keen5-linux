@@ -5,12 +5,12 @@
 #include "Sprite.h"
 
 // Not zero-indexed because this doesn't contain NONE as the level editor does
-enum ItemTypeEnum { AMMO = 1, GUM, MARSHMELLOW, VITALIN };
+enum class ItemType { AMMO = 1, GUM, MARSHMELLOW, VITALIN };
 
 class Item : public Sprite {
     private:
         int value;
-        ItemTypeEnum type;
+        ItemType type;
         std::vector<SDL_Rect> anims[6];
         void die();
         void expire();
@@ -25,7 +25,7 @@ class Item : public Sprite {
         void update() override;
         void draw(Texture* texture, SDL_Rect cameraBox) override;
         int getValue();
-        ItemTypeEnum getType();
+        ItemType getType();
 };
 
 #endif

@@ -23,7 +23,7 @@ Tile* Enemy::getTileUnderFeet() {
     for (unsigned int i = leftCol; i < rightCol; i++) {
         tile = tilesRef[i][tileRow];
         if (tile != NULL) {
-            if (facing == LEFT)
+            if (facing == Facing::LEFT)
                 return tile;
         }
     }

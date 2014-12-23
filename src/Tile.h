@@ -26,7 +26,7 @@ class Tile {
         bool collideLeft;
 
     public:
-        enum TileProperty { LEFT, RIGHT, TOP, BOTTOM, ISPOLE };
+        enum class TileProperty { LEFT, RIGHT, TOP, BOTTOM, ISPOLE };
 
         // Inits position and type
         Tile(int srcX, int srcY, int destX, int destY, int lHeight, int rHeight,

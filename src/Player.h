@@ -16,7 +16,7 @@ class Tile;
 
 class Player : public MovingSprite {
     private:
-        enum directionEnum { LEFT, RIGHT, UP, DOWN, STOP };
+        enum class Direction { LEFT, RIGHT, UP, DOWN, STOP };
 
         int xPush;
         int yPush;
@@ -31,7 +31,7 @@ class Player : public MovingSprite {
         int hangTimer;
         int hangCooldown;
 
-        directionEnum facing;
+        Direction facing;
         bool idle;
 
         bool isOnGround;
@@ -48,20 +48,20 @@ class Player : public MovingSprite {
         bool isRolling;
 
         void shoot(bool isPressingUp, bool isPressingDown);
-        void walk(directionEnum dir);
+        void walk(Direction dir);
         void jump();
         void jumpDown();
         void togglePogo();
         void pogo();
-        void look(directionEnum dir);
-        void climb(directionEnum dir);
+        void look(Direction dir);
+        void climb(Direction dir);
         void fall();
         void processKeyboard(); // Call player actions based on keyboard input
         void processUpArrow();
         void processDownArrow();
         void stopWalk();
         void stopClimb();
-        void snapToPole(Tile* pole, directionEnum facing);
+        void snapToPole(Tile* pole, Direction facing);
         Tile* getCollidingPoleTile();
         Tile* getTileUnderFeet();
         bool isCollidingWithPlatform(SDL_Rect platformBox);
