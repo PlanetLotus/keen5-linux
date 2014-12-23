@@ -106,8 +106,7 @@ void Item::beginExpire() {
 void Item::expire() {
     const int frameCount = 5;
 
-    hitbox.x++;
-    hitbox.y--;
+    hitbox.y -= 2;
 
     if (expireTimer / FRAMETIME >= frameCount)
         die();

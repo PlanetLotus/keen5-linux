@@ -899,6 +899,7 @@ Player::Player(int spawnX, int spawnY) {
     isJumpingDown = false;
     isHangingLeft = false;
     isHangingRight = false;
+    isRolling = false;
 
     platformStandingOn = nullptr;
 
