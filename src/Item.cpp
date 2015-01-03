@@ -121,7 +121,7 @@ void Item::die() {
         itemBatchRef.erase(it);
 }
 
-void Item::update() {
+void Item::update(float timeDelta) {
     if (animState == 1 || animState == 3) {
         animate(animState, 3);
         expire();

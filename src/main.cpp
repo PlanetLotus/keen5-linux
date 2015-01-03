@@ -83,6 +83,8 @@ int main (int argc, char **args) {
 
     platformBatch[0] = platform;
 
+    float timeDelta = 0.0;
+
     while (running) {
         // Start timer
         fps.start();
@@ -118,14 +120,14 @@ int main (int argc, char **args) {
         for (unsigned int i = 0; i < platformBatch.size(); i++)
             platformBatch[i]->update();
         for (unsigned int i = 0; i < enemyBatch.size(); i++)
-            enemyBatch[i]->update();
+            enemyBatch[i]->update(timeDelta);
         for (unsigned int i = 0; i < blasterShotBatch.size(); i++)
-            blasterShotBatch[i]->update();
-        player->update();
+            blasterShotBatch[i]->update(timeDelta);
+        player->update(timeDelta);
 
         // Update items
         for (unsigned int i = 0; i < itemBatch.size(); i++)
-            itemBatch[i]->update();
+            itemBatch[i]->update(timeDelta);
 
         // Draw background tiles
         for (unsigned int i = 0; i < backgroundTiles.size(); i++) {
@@ -169,6 +171,8 @@ int main (int argc, char **args) {
         // Cap frame rate
         if (fps.getTicks() < 1000 / FRAMES_PER_SECOND)
             SDL_Delay((1000/FRAMES_PER_SECOND) - fps.getTicks());
+
+        timeDelta = fps.getDeltaTime();
     }
 
     cleanUp(window, renderer, keenTexture, maskTexture);

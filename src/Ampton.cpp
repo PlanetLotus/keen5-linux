@@ -329,7 +329,7 @@ void Ampton::resetYVel(bool isTBColliding) {
     }
 }
 
-void Ampton::update() {
+void Ampton::update(float timeDelta) {
     fall();
 
     if (state == State::PATROL)

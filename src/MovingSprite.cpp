@@ -227,13 +227,16 @@ bool MovingSprite::isUnitColliding(SDL_Rect unitBox) {
 }
 
 SDL_Rect MovingSprite::getNextHitboxX() {
-    SDL_Rect nextHitbox = { hitbox.x + (int)(xVel + xVelRem), hitbox.y, hitbox.w, hitbox.h };
-    return nextHitbox;
+    return { hitbox.x + (int)(xVel + xVelRem), hitbox.y, hitbox.w, hitbox.h };
 }
 
-SDL_Rect MovingSprite::getNextHitboxXY() {
-    SDL_Rect nextHitbox = { hitbox.x + (int)(xVel + xVelRem), hitbox.y + (int)(yVel + yVelRem), hitbox.w, hitbox.h };
-    return nextHitbox;
+SDL_Rect MovingSprite::getNextHitboxXY(float timeDelta) {
+    return {
+        hitbox.x + (int)(xVel * timeDelta + xVelRem),
+        hitbox.y + (int)(yVel * timeDelta + yVelRem),
+        hitbox.w,
+        hitbox.h
+    };
 }
 
 bool MovingSprite::getIsStunned() { return isStunned; }

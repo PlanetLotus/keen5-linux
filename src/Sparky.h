@@ -28,7 +28,7 @@ class Sparky : public Enemy {
 
     public:
         Sparky(int spawnX, int spawnY);
-        void update();
+        void update(float timeDelta);
         void draw(Texture* texture, SDL_Rect cameraBox);
         void takeShotByPlayer();
 };

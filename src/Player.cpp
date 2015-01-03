@@ -84,22 +84,19 @@ void Player::walk(Direction dir) {
             animate(21 + (int)facing);
         }
     } else if (isOnGround) {
-        xAccel = 0;
-
-        xVel = dir == Direction::LEFT ? -5 : 5;
+        xVel = dir == Direction::LEFT ? -walkSpeed : walkSpeed;
         animate(2 + (int)facing);
     } else {
         // Walking in the air
         // Stray thought: Maybe it's just low acceleration and not "drag"
-        xAccel = dir == Direction::LEFT ? -1.7 : 1.7;
-        xVel += xAccel;
+        xVel += dir == Direction::LEFT ? -walkSpeedInAir : walkSpeedInAir;
 
         // Limit velocity
-        if (xVel > 7) {
-            xVel = 6;
+        if (xVel > xVelLimit) {
+            xVel = xVelLimit;
             xVelRem = 0;
-        } else if (xVel < -7) {
-            xVel = -6;
+        } else if (xVel < -xVelLimit) {
+            xVel = -xVelLimit;
             xVelRem = 0;
         }
     }
@@ -119,8 +116,7 @@ void Player::stopWalk() {
     } else {
         // Falling with drag
         if (!isOnPogo) {
-            float drag = facing == Direction::LEFT ? 0.8 : -0.8;
-            xVel += drag;
+            xVel += facing == Direction::LEFT ? dragSpeed : -dragSpeed;
         }
 
         // Make sure remainder is applied in direction opposite movement
@@ -197,7 +193,7 @@ void Player::snapToPole(Tile* pole, Direction facing) {
     isOnPole = true;
 
     if (isOnGround) {
-        yVel = -2;
+        yVel = poleCollideGroundFixVel;
         isOnGround = false;
     }
 }
@@ -269,10 +265,10 @@ void Player::look(Direction dir) {
 
 void Player::climb(Direction dir) {
     if (dir == Direction::UP && getCollidingPoleTile() != nullptr) {
-        yVel = -3;
+        yVel = poleClimbUpVel;
         animate(21 + (int)facing, 3);
     } else if (dir == Direction::DOWN) {
-        yVel = 7;
+        yVel = poleClimbDownVel;
         int frametime = 3;
         animate(23, frametime);
 
@@ -290,7 +286,7 @@ void Player::togglePogo() {
     if (!isOnPogo) {
         isOnPogo = true;
         pogo();
-        yVel -= 2;  // Provide a slightly stronger initial jump
+        yVel -= startPogoJumpVel;  // Provide a slightly stronger initial jump
     } else {
         isOnPogo = false;
     }
@@ -300,7 +296,7 @@ void Player::pogo() {
     // Continue idly jumping while on pogo
     //jump();
     if (isOnGround) {
-        yVel = -24;
+        yVel = hitGroundPogoJumpVel;
         isOnGround = false; // This isn't ideal. It's assuming nothing stopped the jump.
         platformStandingOn = nullptr;  // Not my favorite hack.
     }
@@ -314,18 +310,15 @@ void Player::pogo() {
 void Player::jump() {
     if (controllerRef.isHoldingCtrl && yVel < 0) {
         if (isOnPogo)
-            yAccel = -1.5;
+            yVel += holdPogoJumpVel;
         else
-            yAccel = -1.3;
-        yVel += yAccel;
+            yVel += holdJumpVel;
     } else if (isOnGround && !controllerRef.isHoldingCtrl) {
-        yAccel = -21;
-        yVel += yAccel;
+        yVel += startJumpVel;
         isOnGround = false; // This isn't ideal. It's assuming nothing stopped the jump.
         platformStandingOn = nullptr;  // Not my favorite hack.
     } else if (isOnPole) {
-        yAccel = -12;
-        yVel += yAccel;
+        yVel += poleJumpVel;
         isOnPole = false;
     }
 }
@@ -374,12 +367,10 @@ Tile* Player::getTileUnderFeet() {
 }
 
 void Player::fall() {
-    yAccel = 2.6;
-
-    if (yVel >= 20)
+    if (yVel >= fallVelLimit)
         return;
 
-    yVel += yAccel;
+    yVel += fallAccel;
 
     if (!isOnGround && !isShooting && !isOnPogo) { // Implies that he's either falling or jumping
         if (yVel > 0) {
@@ -653,7 +644,7 @@ void Player::handleItemCollision(Item* item) {
     }
 }
 
-void Player::update() {
+void Player::update(float timeDelta) {
     // Process in this order
     // 1) User actions
     // 2) AI actions
@@ -731,6 +722,7 @@ void Player::update() {
             yVel = (tciTB.tileCollidingWithTop->getBox().y + tciTB.tileCollidingWithTop->getBox().h) - hitbox.y;
         } else if (tciTB.isBottomColliding() && (!isOnPole || tciTB.tileCollidingWithBottom->getCollideBottom())) {
             Tile* tile = tciTB.tileCollidingWithBottom;
+            printf("%d\n", tile->getBox().y - (hitbox.y + hitbox.h));
             yVel = tile->getBox().y - (hitbox.y + hitbox.h);
 
             if (tile->getIsSloped()) {
@@ -740,6 +732,7 @@ void Player::update() {
                 // y = mx + b
                 float yDesiredPosInTile = tile->getSlope() * xPosInTile + tile->getLeftHeight();
                 yVel += (TILE_HEIGHT - yDesiredPosInTile);
+                //yVel += (TILE_HEIGHT - yDesiredPosInTile) * deltaTime;
                 printf("%f: %f = %f * %d + %d\n", yVel, yDesiredPosInTile, tile->getSlope(), xPosInTile, tile->getLeftHeight());
             }
         }
@@ -756,8 +749,9 @@ void Player::update() {
     yVel += (int)yVelRem;
 
     // Add int part of vel to pos
-    hitbox.x += xVel;
-    hitbox.y += yVel;
+    //printf("%f,%f,%f\n", xVel * timeDelta, yVel, yVel * timeDelta);
+    hitbox.x += xVel * timeDelta;
+    hitbox.y += yVel * timeDelta;
 
     // Set fractional part of vel to rem
     double intPart;

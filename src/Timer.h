@@ -21,6 +21,7 @@ class Timer {
         void unpause();
 
         int getTicks();
+        float getDeltaTime();
 
         bool isStarted();
         bool isPaused();

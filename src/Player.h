@@ -23,6 +23,23 @@ class Player : public MovingSprite {
         float xAccel;
         float yAccel;
 
+        // Values are in pixels per second
+        const int walkSpeed = 120;
+        const int walkSpeedInAir = 40;
+        const int dragSpeed = 19;
+        const int xVelLimit = 168;
+        const int fallAccel = 120;
+        const int fallVelLimit = 480;
+        const int startJumpVel = -504;
+        const int holdJumpVel = -31;
+        const int startPogoJumpVel = -48;
+        const int hitGroundPogoJumpVel = -576;
+        const int holdPogoJumpVel = -36;
+        const int poleJumpVel = -240;
+        const int poleClimbUpVel = -72;
+        const int poleClimbDownVel = 168;
+        const int poleCollideGroundFixVel = -48;
+
         std::vector<SDL_Rect> anims[38];
         bool isAnimLocked;
         std::vector<SDL_Rect*> topAlignedFrames;
@@ -83,7 +100,7 @@ class Player : public MovingSprite {
         void die(int collidingEnemyX);
         void pushX(int x);
         void pushY(int y);
-        void update();
+        void update(float timeDelta);
         void draw(Texture* texture, SDL_Rect cameraBox);
         bool getIsOnGround();
         Platform* platformStandingOn;

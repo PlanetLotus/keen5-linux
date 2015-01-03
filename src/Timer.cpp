@@ -48,5 +48,9 @@ int Timer::getTicks() {
     return 0;
 }
 
+float Timer::getDeltaTime() {
+    return (float)getTicks() / 1000.0;
+}
+
 bool Timer::isStarted() { return started; }
 bool Timer::isPaused() { return paused; }
