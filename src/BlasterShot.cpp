@@ -15,8 +15,8 @@ BlasterShot::BlasterShot(int startX, int startY, float velocityX, float velocity
     hitbox.h = TILE_HEIGHT;
     isStunned = false;
 
-    xVel = velocityX * 20;
-    yVel = velocityY * 20;
+    xVel = velocityX * speed;
+    yVel = velocityY * speed;
     xVelRem = 0;
     yVelRem = 0;
 
@@ -88,8 +88,8 @@ void BlasterShot::update() {
     }
 
     // Update hitbox
-    hitbox.x += xVel;
-    hitbox.y += yVel;
+    hitbox.x += xVel * timeDelta;
+    hitbox.y += yVel * timeDelta;
 
     // Reset velocity if collision
     if (tciTB.isTopColliding() || tciTB.isBottomColliding()) yVel = 0;

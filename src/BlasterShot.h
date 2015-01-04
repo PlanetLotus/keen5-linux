@@ -11,6 +11,9 @@ class BlasterShot : public MovingSprite {
     private:
         int expireTimer;
 
+        // Values are in pixels per second
+        const int speed = 480;
+
         std::vector< std::vector<SDL_Rect> > anims;
         void animate(int nextState);
         static const std::vector<Enemy*>& enemyBatchRef;
