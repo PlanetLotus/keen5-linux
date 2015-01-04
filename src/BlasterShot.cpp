@@ -52,7 +52,7 @@ BlasterShot::BlasterShot(int startX, int startY, float velocityX, float velocity
     animate(0);
 }
 
-void BlasterShot::update(float timeDelta) {
+void BlasterShot::update() {
     // Check left/right collision
     TileCollisionInfo tciLR;
     if (xVel != 0) {

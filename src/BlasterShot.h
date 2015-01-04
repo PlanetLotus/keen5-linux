@@ -17,7 +17,7 @@ class BlasterShot : public MovingSprite {
         static std::vector<BlasterShot*>& blasterShotBatchRef;
     public:
         BlasterShot(int startX, int startY, float velocityX, float velocityY);
-        void update(float timeDelta);
+        void update();
         void draw(Texture* texture, SDL_Rect cameraBox);
         void expire();
         void die();

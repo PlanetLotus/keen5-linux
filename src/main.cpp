@@ -33,6 +33,7 @@ const vector< vector<Tile*> >& MovingSprite::tilesRef = tiles;
 
 Level* currentLevel = nullptr;
 Level*& MovingSprite::currentLevelRef = currentLevel;
+float MovingSprite::timeDelta = 0.0;
 Level*& Camera::currentLevelRef = currentLevel;
 
 vector<Enemy*> enemyBatch;
@@ -83,8 +84,6 @@ int main (int argc, char **args) {
 
     platformBatch[0] = platform;
 
-    float timeDelta = 0.0;
-
     while (running) {
         // Start timer
         fps.start();
@@ -120,14 +119,14 @@ int main (int argc, char **args) {
         for (unsigned int i = 0; i < platformBatch.size(); i++)
             platformBatch[i]->update();
         for (unsigned int i = 0; i < enemyBatch.size(); i++)
-            enemyBatch[i]->update(timeDelta);
+            enemyBatch[i]->update();
         for (unsigned int i = 0; i < blasterShotBatch.size(); i++)
-            blasterShotBatch[i]->update(timeDelta);
-        player->update(timeDelta);
+            blasterShotBatch[i]->update();
+        player->update();
 
         // Update items
         for (unsigned int i = 0; i < itemBatch.size(); i++)
-            itemBatch[i]->update(timeDelta);
+            itemBatch[i]->update();
 
         // Draw background tiles
         for (unsigned int i = 0; i < backgroundTiles.size(); i++) {
@@ -172,7 +171,7 @@ int main (int argc, char **args) {
         if (fps.getTicks() < 1000 / FRAMES_PER_SECOND)
             SDL_Delay((1000/FRAMES_PER_SECOND) - fps.getTicks());
 
-        timeDelta = fps.getDeltaTime();
+        MovingSprite::timeDelta = fps.getDeltaTime();
     }
 
     cleanUp(window, renderer, keenTexture, maskTexture);

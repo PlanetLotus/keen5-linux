@@ -644,7 +644,7 @@ void Player::handleItemCollision(Item* item) {
     }
 }
 
-void Player::update(float timeDelta) {
+void Player::update() {
     // Process in this order
     // 1) User actions
     // 2) AI actions
@@ -722,7 +722,6 @@ void Player::update(float timeDelta) {
             yVel = (tciTB.tileCollidingWithTop->getBox().y + tciTB.tileCollidingWithTop->getBox().h) - hitbox.y;
         } else if (tciTB.isBottomColliding() && (!isOnPole || tciTB.tileCollidingWithBottom->getCollideBottom())) {
             Tile* tile = tciTB.tileCollidingWithBottom;
-            printf("%d\n", tile->getBox().y - (hitbox.y + hitbox.h));
             yVel = tile->getBox().y - (hitbox.y + hitbox.h);
 
             if (tile->getIsSloped()) {

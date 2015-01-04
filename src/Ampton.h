@@ -37,7 +37,7 @@ class Ampton : public Enemy {
 
     public:
         Ampton(int spawnX, int spawnY);
-        void update(float timeDelta);
+        void update();
         void draw(Texture* texture, SDL_Rect cameraBox);
 
 };

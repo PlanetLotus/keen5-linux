@@ -100,7 +100,7 @@ class Player : public MovingSprite {
         void die(int collidingEnemyX);
         void pushX(int x);
         void pushY(int y);
-        void update(float timeDelta);
+        void update();
         void draw(Texture* texture, SDL_Rect cameraBox);
         bool getIsOnGround();
         Platform* platformStandingOn;

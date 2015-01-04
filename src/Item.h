@@ -22,7 +22,7 @@ class Item : public Sprite {
     public:
         Item(int spawnX, int spawnY, int type);
         void beginExpire();
-        void update(float timeDelta) override;
+        void update() override;
         void draw(Texture* texture, SDL_Rect cameraBox) override;
         int getValue();
         ItemType getType();

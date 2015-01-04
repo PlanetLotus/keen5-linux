@@ -211,7 +211,7 @@ void Sparky::changeState(State nextState) {
     state = nextState;
 }
 
-void Sparky::update(float timeDelta) {
+void Sparky::update() {
     fall();
 
     if (state == State::PATROL)

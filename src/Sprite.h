@@ -13,7 +13,7 @@ class Sprite {
         unsigned int frame;
         int animState;
     public:
-        virtual void update(float timeDelta) = 0;
+        virtual void update() = 0;
         virtual void draw(Texture* texture, SDL_Rect cameraBox) = 0;
         SDL_Rect getBox();
 };

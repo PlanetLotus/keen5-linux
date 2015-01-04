@@ -31,13 +31,14 @@ class MovingSprite : public Sprite {
         Tile* getTileCollidingWithBottom(bool checkOnlyTouching = false);
         Tile* getTileCollidingWithTop();
         SDL_Rect getNextHitboxX();
-        SDL_Rect getNextHitboxXY(float timeDelta);
+        SDL_Rect getNextHitboxXY();
 
         bool isUnitColliding(SDL_Rect unitBox);
         static const std::vector< std::vector<Tile*> >& tilesRef;
         static Level*& currentLevelRef;
     public:
         bool getIsStunned();
+        static float timeDelta;
 };
 
 #endif

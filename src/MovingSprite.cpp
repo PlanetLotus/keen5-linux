@@ -227,10 +227,15 @@ bool MovingSprite::isUnitColliding(SDL_Rect unitBox) {
 }
 
 SDL_Rect MovingSprite::getNextHitboxX() {
-    return { hitbox.x + (int)(xVel + xVelRem), hitbox.y, hitbox.w, hitbox.h };
+    return {
+        hitbox.x + (int)(xVel * timeDelta + xVelRem),
+        hitbox.y,
+        hitbox.w,
+        hitbox.h
+    };
 }
 
-SDL_Rect MovingSprite::getNextHitboxXY(float timeDelta) {
+SDL_Rect MovingSprite::getNextHitboxXY() {
     return {
         hitbox.x + (int)(xVel * timeDelta + xVelRem),
         hitbox.y + (int)(yVel * timeDelta + yVelRem),
