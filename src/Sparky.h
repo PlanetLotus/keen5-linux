@@ -16,8 +16,12 @@ class Sparky : public Enemy {
         void changeDirection();
         void stunned();
 
-        int patrolSpeed;
-        int chaseSpeed;
+        // Values are in pixels per second
+        const int patrolSpeed = 96;
+        const int chaseSpeedFactor = 2;
+        const int fallAccel = 62;
+        const int fallVelLimit = 480;
+        const int stunHopVel = -12;
 
         int scanCount;
         bool canSeeKeen();

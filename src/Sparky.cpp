@@ -13,8 +13,6 @@ Sparky::Sparky(int spawnX, int spawnY) {
     hitbox.h = TILE_HEIGHT * 2;
 
     facing = Facing::LEFT;
-    patrolSpeed = 4;
-    chaseSpeed = patrolSpeed * 2;
     xVel = patrolSpeed * (int)facing;
     yVel = 0;
     xVelRem = 0;
@@ -91,14 +89,14 @@ void Sparky::takeShotByPlayer() {
     xVelRem = 0;
 
     // Enemies do a brief "hop" when stunned
-    yVel += -12;
+    yVel += stunHopVel;
 }
 
 void Sparky::fall() {
-    if (yVel >= 20)
+    if (yVel >= fallVelLimit)
         return;
 
-    yVel += 2.6;
+    yVel += fallAccel;
 }
 
 void Sparky::patrol() {
@@ -128,7 +126,7 @@ void Sparky::patrol() {
 }
 
 void Sparky::chase() {
-    xVel = chaseSpeed * (int)facing;
+    xVel = patrolSpeed * chaseSpeedFactor * (int)facing;
     TileCollisionInfo tciLR;
 
     if (facing == Facing::LEFT)
@@ -253,8 +251,8 @@ void Sparky::update() {
     // This is a bug. This used to be abs(yVelRem) which unintentionally cast yVelRem into an int.
     yVel += (int)yVelRem;
 
-    hitbox.x += xVel;
-    hitbox.y += yVel;
+    hitbox.x += xVel * timeDelta;
+    hitbox.y += yVel * timeDelta;
 
     // Set fractional part of vel to rem
     double intPart;
