@@ -469,7 +469,7 @@ bool Player::handlePlatformCollision() {
 
 void Player::handleLeftLedgeCollision() {
     // "Left" being left edge of Keen
-    SDL_Rect nextHitbox = getNextHitboxX();
+    SDL_Rect nextHitbox = getNextHitboxXY();
     int nextKeenLeft = nextHitbox.x;
     int keenTop = hitbox.y;
     int nextKeenTop = nextHitbox.y;
@@ -501,7 +501,7 @@ void Player::handleLeftLedgeCollision() {
 
 void Player::handleRightLedgeCollision() {
     // "Right" being right edge of Keen
-    SDL_Rect nextHitbox = getNextHitboxX();
+    SDL_Rect nextHitbox = getNextHitboxXY();
     int nextKeenRight = nextHitbox.x + nextHitbox.w;
     int keenTop = hitbox.y;
     int nextKeenTop = nextHitbox.y;
