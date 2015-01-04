@@ -542,13 +542,13 @@ void Player::rollLeft() {
 
     if (!isRolling) {
         isRolling = true;
-        yVel = TILE_HEIGHT * -1;
+        yVel = -TILE_HEIGHT / timeDelta;
     }
 
     // Shift left and up on 2nd frame
     if (rollingFrameCount % rollingFrametime == 0 && rollingFrameCount / rollingFrametime == 1) {
-        xVel = TILE_WIDTH * -1;
-        yVel = TILE_HEIGHT * -1;
+        xVel = -TILE_WIDTH / timeDelta;
+        yVel = -TILE_HEIGHT / timeDelta;
     }
 
     animate(36, rollingFrametime);
@@ -574,13 +574,13 @@ void Player::rollRight() {
 
     if (!isRolling) {
         isRolling = true;
-        yVel = TILE_HEIGHT * -1;
+        yVel = -TILE_HEIGHT / timeDelta;
     }
 
     // Shift left and up on 2nd frame
     if (rollingFrameCount % rollingFrametime == 0 && rollingFrameCount / rollingFrametime == 1) {
-        xVel = TILE_WIDTH * 1;
-        yVel = TILE_HEIGHT * -1;
+        xVel = TILE_WIDTH / timeDelta;
+        yVel = -TILE_HEIGHT / timeDelta;
     }
 
     animate(37, rollingFrametime);
