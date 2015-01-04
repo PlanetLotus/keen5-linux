@@ -39,6 +39,8 @@ class Player : public MovingSprite {
         const int poleClimbUpVel = -72;
         const int poleClimbDownVel = 168;
         const int poleCollideGroundFixVel = -48;
+        const int dieXSpeed = 120;
+        const int dieYVel = -192;
 
         std::vector<SDL_Rect> anims[38];
         bool isAnimLocked;

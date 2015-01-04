@@ -21,7 +21,7 @@ class Sparky : public Enemy {
         const int chaseSpeedFactor = 2;
         const int fallAccel = 62;
         const int fallVelLimit = 480;
-        const int stunHopVel = -12;
+        const int stunHopVel = -288;
 
         int scanCount;
         bool canSeeKeen();

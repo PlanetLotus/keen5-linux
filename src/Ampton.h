@@ -21,7 +21,7 @@ class Ampton : public Enemy {
         const int fallAccel = 62;
         const int fallVelLimit = 480;
         const int climbSpeedFactor = 2;
-        const int stunHopVel = -12;
+        const int stunHopVel = -288;
 
         void fall();
         void changeState(State nextState);

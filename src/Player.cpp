@@ -469,9 +469,10 @@ bool Player::handlePlatformCollision() {
 
 void Player::handleLeftLedgeCollision() {
     // "Left" being left edge of Keen
-    int nextKeenLeft = hitbox.x + xVel + (int)xVelRem;
+    SDL_Rect nextHitbox = getNextHitboxX();
+    int nextKeenLeft = nextHitbox.x;
     int keenTop = hitbox.y;
-    int nextKeenTop = hitbox.y + yVel + (int)yVelRem;
+    int nextKeenTop = nextHitbox.y;
 
     if (nextKeenLeft % TILE_WIDTH != 0) return;
 
@@ -500,9 +501,10 @@ void Player::handleLeftLedgeCollision() {
 
 void Player::handleRightLedgeCollision() {
     // "Right" being right edge of Keen
-    int nextKeenRight = hitbox.x + hitbox.w + xVel + (int)xVelRem;
+    SDL_Rect nextHitbox = getNextHitboxX();
+    int nextKeenRight = nextHitbox.x + nextHitbox.w;
     int keenTop = hitbox.y;
-    int nextKeenTop = hitbox.y + yVel + (int)yVelRem;
+    int nextKeenTop = nextHitbox.y;
 
     if (nextKeenRight % TILE_WIDTH != 0) return;
 
@@ -833,12 +835,12 @@ void Player::die(int collidingEnemyX) {
     fall();
 
     // Play death animation for every enemy collision
-    xVel = hitbox.x < collidingEnemyX ? -5 : 5;
-    yVel += -8;
+    xVel = hitbox.x < collidingEnemyX ? -dieXSpeed : dieXSpeed;
+    yVel += dieYVel;
     animate(32);
 
-    hitbox.x += xVel;
-    hitbox.y += yVel;
+    hitbox.x += xVel * timeDelta;
+    hitbox.y += yVel * timeDelta;
 
     // Pause game loop after falling off screen
     // Show menu
