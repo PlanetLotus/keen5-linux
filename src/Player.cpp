@@ -186,9 +186,9 @@ void Player::snapToPole(Tile* pole, Direction facing) {
 
     // "Snap" to the pole horizontally, locking movement in x-direction
     if (facing == Direction::LEFT)
-        xVel = pole->getBox().x + TILE_WIDTH / 4 - hitbox.x;
+        xVel = (pole->getBox().x + TILE_WIDTH / 4 - hitbox.x) / timeDelta;
     else
-        xVel = pole->getBox().x - TILE_WIDTH / 4 - hitbox.x;
+        xVel = (pole->getBox().x - TILE_WIDTH / 4 - hitbox.x) / timeDelta;
 
     isOnPole = true;
 

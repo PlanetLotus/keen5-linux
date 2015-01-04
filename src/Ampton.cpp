@@ -267,9 +267,9 @@ void Ampton::snapToPole(Tile* pole) {
 
     // "Snap" to the pole horizontally, locking movement in x-direction
     if (facing == Facing::LEFT)
-        xVel = pole->getBox().x - hitbox.x;
+        xVel = (pole->getBox().x - hitbox.x) / timeDelta;
     else
-        xVel = pole->getBox().x - hitbox.x;
+        xVel = (pole->getBox().x - hitbox.x) / timeDelta;
 }
 
 void Ampton::changeDirectionIfOnEdge() {
