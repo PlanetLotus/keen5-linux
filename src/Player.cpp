@@ -494,7 +494,7 @@ void Player::handleLeftLedgeCollision() {
     if (tile == nullptr || !tile->getIsEdge())
         return;
 
-    yVel = yCollide - keenTop;
+    yVel = (yCollide - keenTop) / timeDelta;
     animate(34);
     isHangingLeft = true;
 }
@@ -526,7 +526,7 @@ void Player::handleRightLedgeCollision() {
     if (tile == nullptr || !tile->getIsEdge())
         return;
 
-    yVel = yCollide - keenTop;
+    yVel = (yCollide - keenTop) / timeDelta;
     animate(35);
     isHangingRight = true;
 }
