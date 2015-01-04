@@ -14,7 +14,6 @@ Ampton::Ampton(int spawnX, int spawnY) {
     hitbox.h = TILE_HEIGHT;
 
     facing = Facing::LEFT;
-    patrolSpeed = 4;
     xVel = patrolSpeed * (int)facing;
     yVel = 0;
     xVelRem = 0;
@@ -76,10 +75,10 @@ void Ampton::animate(int nextState, int frametime) {
 }
 
 void Ampton::fall() {
-    if (yVel >= 20)
+    if (yVel >= fallVelLimit)
         return;
 
-    yVel += 2.6;
+    yVel += fallAccel;
 }
 
 void Ampton::changeState(State nextState) {
@@ -148,7 +147,7 @@ void Ampton::climbUp() {
 
     xVel = 0;
     xVelRem = 0;
-    yVel = patrolSpeed * -2;
+    yVel = patrolSpeed * -climbSpeedFactor;
 
     animate(3);
 
@@ -165,7 +164,7 @@ void Ampton::climbUp() {
 void Ampton::climbDown() {
     xVel = 0;
     xVelRem = 0;
-    yVel = patrolSpeed * 2;
+    yVel = patrolSpeed * climbSpeedFactor;
     yVelRem = 0;
 
     animate(3);
@@ -213,7 +212,7 @@ void Ampton::takeShotByPlayer() {
     xVelRem = 0;
 
     // Enemies do a brief "hop" when stunned
-    yVel += -12;
+    yVel += stunHopVel;
 }
 
 Tile* Ampton::getCollidingPoleTile() {

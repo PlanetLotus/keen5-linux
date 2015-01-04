@@ -28,7 +28,7 @@ class Player : public MovingSprite {
         const int walkSpeedInAir = 40;
         const int dragSpeed = 19;
         const int xVelLimit = 168;
-        const int fallAccel = 120;
+        const int fallAccel = 62;
         const int fallVelLimit = 480;
         const int startJumpVel = -504;
         const int holdJumpVel = -31;
