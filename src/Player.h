@@ -24,10 +24,9 @@ class Player : public MovingSprite {
         float yAccel;
 
         // Values are in pixels per second
-        const int walkSpeed = 120;
+        const int walkSpeed = 192;
         const int walkSpeedInAir = 40;
         const int dragSpeed = 19;
-        const int xVelLimit = 168;
         const int fallAccel = 62;
         const int fallVelLimit = 480;
         const int startJumpVel = -504;

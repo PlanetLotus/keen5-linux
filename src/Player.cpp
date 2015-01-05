@@ -92,11 +92,11 @@ void Player::walk(Direction dir) {
         xVel += dir == Direction::LEFT ? -walkSpeedInAir : walkSpeedInAir;
 
         // Limit velocity
-        if (xVel > xVelLimit) {
-            xVel = xVelLimit;
+        if (xVel > walkSpeed) {
+            xVel = walkSpeed;
             xVelRem = 0;
-        } else if (xVel < -xVelLimit) {
-            xVel = -xVelLimit;
+        } else if (xVel < -walkSpeed) {
+            xVel = -walkSpeed;
             xVelRem = 0;
         }
     }
