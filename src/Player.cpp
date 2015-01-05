@@ -660,8 +660,8 @@ void Player::update() {
     // Check any "blocking" actions before processing more input
     if (isStunned) {
         fall();
-        hitbox.x += xVel;
-        hitbox.y += yVel;
+        hitbox.x += xVel * timeDelta;
+        hitbox.y += yVel * timeDelta;
         return;
     } else if (isShooting) {
         shoot(false, false);
