@@ -10,13 +10,18 @@ class Ampton : public Enemy {
         std::vector<SDL_Rect> anims[5];
         void animate(int nextState, int frametime = FRAMETIME);
 
-        int patrolSpeed;
-
         enum class State { PATROL, CLIMB_UP, CLIMB_DOWN, CHANGE_DIRECTION, FIX_MACHINE, STUNNED };
         State state;
 
         int climbCooldownTimer;
         int climbCooldown;
+
+        // Values are in pixels per second
+        const int patrolSpeed = 96;
+        const int fallAccel = 62;
+        const int fallVelLimit = 480;
+        const int climbSpeedFactor = 2;
+        const int stunHopVel = -288;
 
         void fall();
         void changeState(State nextState);

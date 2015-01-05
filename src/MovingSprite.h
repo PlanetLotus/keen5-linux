@@ -5,6 +5,7 @@
 #include "SDL.h"
 #include "Sprite.h"
 #include "TileCollisionInfo.h"
+#include "Timer.h"
 
 class Level;
 
@@ -16,6 +17,8 @@ class MovingSprite : public Sprite {
         float yVel;
         float xVelRem;
         float yVelRem;
+
+        Timer timer;
 
         TileCollisionInfo checkTileCollisionLR();
         TileCollisionInfo checkTileCollisionTB();
@@ -35,6 +38,7 @@ class MovingSprite : public Sprite {
         static Level*& currentLevelRef;
     public:
         bool getIsStunned();
+        static float timeDelta;
 };
 
 #endif

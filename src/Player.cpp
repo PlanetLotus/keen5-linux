@@ -84,22 +84,19 @@ void Player::walk(Direction dir) {
             animate(21 + (int)facing);
         }
     } else if (isOnGround) {
-        xAccel = 0;
-
-        xVel = dir == Direction::LEFT ? -5 : 5;
+        xVel = dir == Direction::LEFT ? -walkSpeed : walkSpeed;
         animate(2 + (int)facing);
     } else {
         // Walking in the air
         // Stray thought: Maybe it's just low acceleration and not "drag"
-        xAccel = dir == Direction::LEFT ? -1.7 : 1.7;
-        xVel += xAccel;
+        xVel += dir == Direction::LEFT ? -walkSpeedInAir : walkSpeedInAir;
 
         // Limit velocity
-        if (xVel > 7) {
-            xVel = 6;
+        if (xVel > xVelLimit) {
+            xVel = xVelLimit;
             xVelRem = 0;
-        } else if (xVel < -7) {
-            xVel = -6;
+        } else if (xVel < -xVelLimit) {
+            xVel = -xVelLimit;
             xVelRem = 0;
         }
     }
@@ -119,8 +116,7 @@ void Player::stopWalk() {
     } else {
         // Falling with drag
         if (!isOnPogo) {
-            float drag = facing == Direction::LEFT ? 0.8 : -0.8;
-            xVel += drag;
+            xVel += facing == Direction::LEFT ? dragSpeed : -dragSpeed;
         }
 
         // Make sure remainder is applied in direction opposite movement
@@ -190,14 +186,14 @@ void Player::snapToPole(Tile* pole, Direction facing) {
 
     // "Snap" to the pole horizontally, locking movement in x-direction
     if (facing == Direction::LEFT)
-        xVel = pole->getBox().x + TILE_WIDTH / 4 - hitbox.x;
+        xVel = (pole->getBox().x + TILE_WIDTH / 4 - hitbox.x) / timeDelta;
     else
-        xVel = pole->getBox().x - TILE_WIDTH / 4 - hitbox.x;
+        xVel = (pole->getBox().x - TILE_WIDTH / 4 - hitbox.x) / timeDelta;
 
     isOnPole = true;
 
     if (isOnGround) {
-        yVel = -2;
+        yVel = poleCollideGroundFixVel;
         isOnGround = false;
     }
 }
@@ -269,10 +265,10 @@ void Player::look(Direction dir) {
 
 void Player::climb(Direction dir) {
     if (dir == Direction::UP && getCollidingPoleTile() != nullptr) {
-        yVel = -3;
+        yVel = poleClimbUpVel;
         animate(21 + (int)facing, 3);
     } else if (dir == Direction::DOWN) {
-        yVel = 7;
+        yVel = poleClimbDownVel;
         int frametime = 3;
         animate(23, frametime);
 
@@ -290,7 +286,7 @@ void Player::togglePogo() {
     if (!isOnPogo) {
         isOnPogo = true;
         pogo();
-        yVel -= 2;  // Provide a slightly stronger initial jump
+        yVel -= startPogoJumpVel;  // Provide a slightly stronger initial jump
     } else {
         isOnPogo = false;
     }
@@ -300,7 +296,7 @@ void Player::pogo() {
     // Continue idly jumping while on pogo
     //jump();
     if (isOnGround) {
-        yVel = -24;
+        yVel = hitGroundPogoJumpVel;
         isOnGround = false; // This isn't ideal. It's assuming nothing stopped the jump.
         platformStandingOn = nullptr;  // Not my favorite hack.
     }
@@ -314,18 +310,15 @@ void Player::pogo() {
 void Player::jump() {
     if (controllerRef.isHoldingCtrl && yVel < 0) {
         if (isOnPogo)
-            yAccel = -1.5;
+            yVel += holdPogoJumpVel;
         else
-            yAccel = -1.3;
-        yVel += yAccel;
+            yVel += holdJumpVel;
     } else if (isOnGround && !controllerRef.isHoldingCtrl) {
-        yAccel = -21;
-        yVel += yAccel;
+        yVel += startJumpVel;
         isOnGround = false; // This isn't ideal. It's assuming nothing stopped the jump.
         platformStandingOn = nullptr;  // Not my favorite hack.
     } else if (isOnPole) {
-        yAccel = -12;
-        yVel += yAccel;
+        yVel += poleJumpVel;
         isOnPole = false;
     }
 }
@@ -374,12 +367,10 @@ Tile* Player::getTileUnderFeet() {
 }
 
 void Player::fall() {
-    yAccel = 2.6;
-
-    if (yVel >= 20)
+    if (yVel >= fallVelLimit)
         return;
 
-    yVel += yAccel;
+    yVel += fallAccel;
 
     if (!isOnGround && !isShooting && !isOnPogo) { // Implies that he's either falling or jumping
         if (yVel > 0) {
@@ -478,9 +469,10 @@ bool Player::handlePlatformCollision() {
 
 void Player::handleLeftLedgeCollision() {
     // "Left" being left edge of Keen
-    int nextKeenLeft = hitbox.x + xVel + (int)xVelRem;
+    SDL_Rect nextHitbox = getNextHitboxXY();
+    int nextKeenLeft = nextHitbox.x;
     int keenTop = hitbox.y;
-    int nextKeenTop = hitbox.y + yVel + (int)yVelRem;
+    int nextKeenTop = nextHitbox.y;
 
     if (nextKeenLeft % TILE_WIDTH != 0) return;
 
@@ -502,16 +494,17 @@ void Player::handleLeftLedgeCollision() {
     if (tile == nullptr || !tile->getIsEdge())
         return;
 
-    yVel = yCollide - keenTop;
+    yVel = (yCollide - keenTop) / timeDelta;
     animate(34);
     isHangingLeft = true;
 }
 
 void Player::handleRightLedgeCollision() {
     // "Right" being right edge of Keen
-    int nextKeenRight = hitbox.x + hitbox.w + xVel + (int)xVelRem;
+    SDL_Rect nextHitbox = getNextHitboxXY();
+    int nextKeenRight = nextHitbox.x + nextHitbox.w;
     int keenTop = hitbox.y;
-    int nextKeenTop = hitbox.y + yVel + (int)yVelRem;
+    int nextKeenTop = nextHitbox.y;
 
     if (nextKeenRight % TILE_WIDTH != 0) return;
 
@@ -533,7 +526,7 @@ void Player::handleRightLedgeCollision() {
     if (tile == nullptr || !tile->getIsEdge())
         return;
 
-    yVel = yCollide - keenTop;
+    yVel = (yCollide - keenTop) / timeDelta;
     animate(35);
     isHangingRight = true;
 }
@@ -549,13 +542,13 @@ void Player::rollLeft() {
 
     if (!isRolling) {
         isRolling = true;
-        yVel = TILE_HEIGHT * -1;
+        yVel = -TILE_HEIGHT / timeDelta;
     }
 
     // Shift left and up on 2nd frame
     if (rollingFrameCount % rollingFrametime == 0 && rollingFrameCount / rollingFrametime == 1) {
-        xVel = TILE_WIDTH * -1;
-        yVel = TILE_HEIGHT * -1;
+        xVel = -TILE_WIDTH / timeDelta;
+        yVel = -TILE_HEIGHT / timeDelta;
     }
 
     animate(36, rollingFrametime);
@@ -581,13 +574,13 @@ void Player::rollRight() {
 
     if (!isRolling) {
         isRolling = true;
-        yVel = TILE_HEIGHT * -1;
+        yVel = -TILE_HEIGHT / timeDelta;
     }
 
     // Shift left and up on 2nd frame
     if (rollingFrameCount % rollingFrametime == 0 && rollingFrameCount / rollingFrametime == 1) {
-        xVel = TILE_WIDTH * 1;
-        yVel = TILE_HEIGHT * -1;
+        xVel = TILE_WIDTH / timeDelta;
+        yVel = -TILE_HEIGHT / timeDelta;
     }
 
     animate(37, rollingFrametime);
@@ -667,8 +660,8 @@ void Player::update() {
     // Check any "blocking" actions before processing more input
     if (isStunned) {
         fall();
-        hitbox.x += xVel;
-        hitbox.y += yVel;
+        hitbox.x += xVel * timeDelta;
+        hitbox.y += yVel * timeDelta;
         return;
     } else if (isShooting) {
         shoot(false, false);
@@ -731,15 +724,16 @@ void Player::update() {
             yVel = (tciTB.tileCollidingWithTop->getBox().y + tciTB.tileCollidingWithTop->getBox().h) - hitbox.y;
         } else if (tciTB.isBottomColliding() && (!isOnPole || tciTB.tileCollidingWithBottom->getCollideBottom())) {
             Tile* tile = tciTB.tileCollidingWithBottom;
-            yVel = tile->getBox().y - (hitbox.y + hitbox.h);
+            yVel = (tile->getBox().y - (hitbox.y + hitbox.h)) / timeDelta;
 
             if (tile->getIsSloped()) {
-                int xPosInTile = (hitbox.x + (int)xVel) - tile->getBox().x;
+                int nextKeenLeft = getNextHitboxX().x;
+                int xPosInTile = nextKeenLeft - tile->getBox().x;
                 //printf("%d = %d - %d\n", xPosInTile, hitbox.x + (int)xVel, tile->getBox().x);
 
                 // y = mx + b
                 float yDesiredPosInTile = tile->getSlope() * xPosInTile + tile->getLeftHeight();
-                yVel += (TILE_HEIGHT - yDesiredPosInTile);
+                yVel += (TILE_HEIGHT - yDesiredPosInTile) / timeDelta;
                 printf("%f: %f = %f * %d + %d\n", yVel, yDesiredPosInTile, tile->getSlope(), xPosInTile, tile->getLeftHeight());
             }
         }
@@ -756,8 +750,9 @@ void Player::update() {
     yVel += (int)yVelRem;
 
     // Add int part of vel to pos
-    hitbox.x += xVel;
-    hitbox.y += yVel;
+    //printf("%f,%f,%f\n", xVel * timeDelta, yVel, yVel * timeDelta);
+    hitbox.x += xVel * timeDelta;
+    hitbox.y += yVel * timeDelta;
 
     // Set fractional part of vel to rem
     double intPart;
@@ -840,12 +835,12 @@ void Player::die(int collidingEnemyX) {
     fall();
 
     // Play death animation for every enemy collision
-    xVel = hitbox.x < collidingEnemyX ? -5 : 5;
-    yVel += -8;
+    xVel = hitbox.x < collidingEnemyX ? -dieXSpeed : dieXSpeed;
+    yVel += dieYVel;
     animate(32);
 
-    hitbox.x += xVel;
-    hitbox.y += yVel;
+    hitbox.x += xVel * timeDelta;
+    hitbox.y += yVel * timeDelta;
 
     // Pause game loop after falling off screen
     // Show menu
