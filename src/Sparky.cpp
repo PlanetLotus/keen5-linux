@@ -230,10 +230,10 @@ void Sparky::update() {
         tciTB = checkTileCollisionTB();
 
         if (tciTB.isTopColliding()) {
-            yVel = (tciTB.tileCollidingWithTop->getBox().y + tciTB.tileCollidingWithTop->getBox().h) - hitbox.y;
+            yVel = ((tciTB.tileCollidingWithTop->getBox().y + tciTB.tileCollidingWithTop->getBox().h) - hitbox.y) / timeDelta;
         } else if (tciTB.isBottomColliding()) {
             Tile* tile = tciTB.tileCollidingWithBottom;
-            yVel = tile->getBox().y - (hitbox.y + hitbox.h);
+            yVel = (tile->getBox().y - (hitbox.y + hitbox.h)) / timeDelta;
 
             if (xVel != 0) {
                 Tile* tileUnderFeet = getTileUnderFeet();
