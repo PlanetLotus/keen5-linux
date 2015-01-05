@@ -726,16 +726,8 @@ void Player::update() {
             Tile* tile = tciTB.tileCollidingWithBottom;
             yVel = (tile->getBox().y - (hitbox.y + hitbox.h)) / timeDelta;
 
-            if (tile->getIsSloped()) {
-                int nextKeenLeft = getNextHitboxX().x;
-                int xPosInTile = nextKeenLeft - tile->getBox().x;
-                //printf("%d = %d - %d\n", xPosInTile, hitbox.x + (int)xVel, tile->getBox().x);
-
-                // y = mx + b
-                float yDesiredPosInTile = tile->getSlope() * xPosInTile + tile->getLeftHeight();
-                yVel += (TILE_HEIGHT - yDesiredPosInTile) / timeDelta;
-                printf("%f: %f = %f * %d + %d\n", yVel, yDesiredPosInTile, tile->getSlope(), xPosInTile, tile->getLeftHeight());
-            }
+            // Updates yVel
+            checkAndHandleSlope(tile);
         }
     }
 

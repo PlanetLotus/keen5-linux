@@ -8,6 +8,7 @@
 #include "Timer.h"
 
 class Level;
+class Tile;
 
 class MovingSprite : public Sprite {
     protected:
@@ -37,6 +38,7 @@ class MovingSprite : public Sprite {
         static const std::vector< std::vector<Tile*> >& tilesRef;
         static Level*& currentLevelRef;
     public:
+        void checkAndHandleSlope(Tile* tile);
         bool getIsStunned();
         static float timeDelta;
 };

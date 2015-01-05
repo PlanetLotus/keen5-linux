@@ -226,6 +226,18 @@ bool MovingSprite::isUnitColliding(SDL_Rect unitBox) {
     return true;
 }
 
+void MovingSprite::checkAndHandleSlope(Tile* tile) {
+    if (tile->getIsSloped()) {
+        int nextLeft = getNextHitboxX().x;
+        int xPosInTile = nextLeft - tile->getBox().x;
+
+        // y = mx + b
+        float yDesiredPosInTile = tile->getSlope() * xPosInTile + tile->getLeftHeight();
+        yVel += (TILE_HEIGHT - yDesiredPosInTile) / timeDelta;
+        //printf("%f: %f = %f * %d + %d\n", yVel, yDesiredPosInTile, tile->getSlope(), xPosInTile, tile->getLeftHeight());
+    }
+}
+
 SDL_Rect MovingSprite::getNextHitboxX() {
     return {
         hitbox.x + (int)(xVel * timeDelta + xVelRem),

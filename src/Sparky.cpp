@@ -235,6 +235,9 @@ void Sparky::update() {
             Tile* tile = tciTB.tileCollidingWithBottom;
             yVel = (tile->getBox().y - (hitbox.y + hitbox.h)) / timeDelta;
 
+            // Updates yVel
+            checkAndHandleSlope(tile);
+
             if (xVel != 0) {
                 Tile* tileUnderFeet = getTileUnderFeet();
                 if (tileUnderFeet != nullptr && tileUnderFeet->getIsEdge()) {

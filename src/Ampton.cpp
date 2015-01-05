@@ -293,6 +293,7 @@ bool Ampton::setYVelIfTBCollision() {
         } else if (tciTB.isBottomColliding()) {
             Tile* tile = tciTB.tileCollidingWithBottom;
             yVel = (tile->getBox().y - (hitbox.y + hitbox.h)) / timeDelta;
+            checkAndHandleSlope(tile);
             changeDirectionIfOnEdge();
             return true;
         }
