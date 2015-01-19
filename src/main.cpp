@@ -128,14 +128,15 @@ int main (int argc, char **args) {
         for (unsigned int i = 0; i < itemBatch.size(); i++)
             itemBatch[i]->update();
 
-        // Draw background tiles
+        // Draw background tiles - Layer 0 (Before units)
         for (unsigned int i = 0; i < backgroundTiles.size(); i++) {
-            backgroundTiles[i]->draw(maskTexture, camera.getBox());
+            if (backgroundTiles[i]->getLayer() == 0)
+                backgroundTiles[i]->draw(maskTexture, camera.getBox());
         }
 
-        // Draw tiles - Layer 0 (Before units)
-        for (unsigned int i = 0; i<tiles.size(); i++) {
-            for (unsigned int j = 0; j<tiles[i].size(); j++) {
+        // Draw foreground tiles - Layer 0 (Before units)
+        for (unsigned int i = 0; i < tiles.size(); i++) {
+            for (unsigned int j = 0; j < tiles[i].size(); j++) {
                 if (tiles[i][j] != nullptr && tiles[i][j]->layer == 0)
                     tiles[i][j]->draw(maskTexture, camera.getBox());
             }
@@ -150,9 +151,15 @@ int main (int argc, char **args) {
             blasterShotBatch[i]->draw(keenTexture, camera.getBox());
         player->draw(keenTexture, camera.getBox());
 
-        // Render tiles - Layer 1 (After units)
-        for (unsigned int i = 0; i<tiles.size(); i++) {
-            for (unsigned int j = 0; j<tiles[i].size(); j++) {
+        // Draw background tiles - Layer 1 (Before units)
+        for (unsigned int i = 0; i < backgroundTiles.size(); i++) {
+            if (backgroundTiles[i]->getLayer() == 1)
+                backgroundTiles[i]->draw(maskTexture, camera.getBox());
+        }
+
+        // Draw foreground tiles - Layer 1 (After units)
+        for (unsigned int i = 0; i < tiles.size(); i++) {
+            for (unsigned int j = 0; j < tiles[i].size(); j++) {
                 if (tiles[i][j] != nullptr && tiles[i][j]->layer == 1)
                     tiles[i][j]->draw(maskTexture, camera.getBox());
             }
@@ -393,7 +400,7 @@ Level* loadCurrentLevel(Texture* maskTexture) {
             tiles[x][y] = new Tile(xSrc, ySrc, x * TILE_WIDTH, y * TILE_HEIGHT, leftHeight, rightHeight,
                 collideT, collideR, collideB, collideL, layerVal, isPole, isEdge);
         } else {
-            backgroundTiles.push_back(new BackgroundTile(xSrc, ySrc, x * TILE_WIDTH, y * TILE_WIDTH));
+            backgroundTiles.push_back(new BackgroundTile(xSrc, ySrc, x * TILE_WIDTH, y * TILE_WIDTH, layerVal));
             tiles[x][y] = nullptr;
         }
 

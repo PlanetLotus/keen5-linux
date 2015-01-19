@@ -3,7 +3,7 @@
 #include "Texture.h"
 #include "Tile.h"
 
-BackgroundTile::BackgroundTile(int srcX, int srcY, int destX, int destY) {
+BackgroundTile::BackgroundTile(int srcX, int srcY, int destX, int destY, int layerVal) {
     srcBox.x = srcX;
     srcBox.y = srcY;
 
@@ -15,9 +15,13 @@ BackgroundTile::BackgroundTile(int srcX, int srcY, int destX, int destY) {
 
     destBox.w = TILE_WIDTH;
     destBox.h = TILE_HEIGHT;
+
+    layer = layerVal;
 }
 
 void BackgroundTile::draw(Texture* texture, SDL_Rect cameraBox) {
     if (isTileLocationOnScreen(&destBox, &cameraBox))
         texture->render(destBox.x - cameraBox.x, destBox.y - cameraBox.y, &srcBox);
 }
+
+int BackgroundTile::getLayer() { return layer; }
