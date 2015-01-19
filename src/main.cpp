@@ -376,8 +376,11 @@ Level* loadCurrentLevel(Texture* maskTexture) {
 
         iss >> propertyVal;
         bool isPole = false;
+        bool isPoleEdge = false;
         if (propertyVal == 1)
             isPole = true;
+        else if (propertyVal == 2)
+            isPoleEdge = true;
 
         iss >> layerVal;
 
@@ -398,7 +401,7 @@ Level* loadCurrentLevel(Texture* maskTexture) {
 
         if (collideT || collideR || collideB || collideL || isEdge || isPole) {
             tiles[x][y] = new Tile(xSrc, ySrc, x * TILE_WIDTH, y * TILE_HEIGHT, leftHeight, rightHeight,
-                collideT, collideR, collideB, collideL, layerVal, isPole, isEdge);
+                collideT, collideR, collideB, collideL, layerVal, isPole, isPoleEdge, isEdge);
         } else {
             backgroundTiles.push_back(new BackgroundTile(xSrc, ySrc, x * TILE_WIDTH, y * TILE_WIDTH, layerVal));
             tiles[x][y] = nullptr;

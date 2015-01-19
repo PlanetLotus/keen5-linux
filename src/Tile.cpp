@@ -4,7 +4,7 @@
 #include "Tile.h"
 
 Tile::Tile(int srcX, int srcY, int destX, int destY, int lHeight, int rHeight,
-    bool collideT, bool collideR, bool collideB, bool collideL, int layer, bool isPole=false, bool isEdge=false) {
+    bool collideT, bool collideR, bool collideB, bool collideL, int layer, bool isPole=false, bool isPoleEdge=false, bool isEdge=false) {
     srcBox.x = srcX;
     srcBox.y = srcY;
 
@@ -36,6 +36,7 @@ Tile::Tile(int srcX, int srcY, int destX, int destY, int lHeight, int rHeight,
     this->layer = layer;
 
     this->isPole = isPole;
+    this->isPoleEdge = isPoleEdge;
     this->isEdge = isEdge;
 }
 

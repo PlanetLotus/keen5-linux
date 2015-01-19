@@ -30,7 +30,7 @@ class Tile {
 
         // Inits position and type
         Tile(int srcX, int srcY, int destX, int destY, int lHeight, int rHeight,
-            bool collideT, bool collideR, bool collideB, bool collideL, int layer, bool isPole, bool isEdge);
+            bool collideT, bool collideR, bool collideB, bool collideL, int layer, bool isPole, bool isPoleEdge, bool isEdge);
 
         // Shows the tile
         void draw(Texture* texture, SDL_Rect cameraBox);
@@ -50,6 +50,7 @@ class Tile {
         bool getCollideLeft();
 
         bool isPole;
+        bool isPoleEdge;
         int layer;
 };
 
