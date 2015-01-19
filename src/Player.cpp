@@ -702,9 +702,9 @@ void Player::update() {
 
         // Set properties based on x-collision
         if (tciLR.isLeftColliding()) {
-            xVel = (tciLR.tileCollidingWithLeft->getBox().x + tciLR.tileCollidingWithLeft->getBox().w) - hitbox.x;
+            xVel = ((tciLR.tileCollidingWithLeft->getBox().x + tciLR.tileCollidingWithLeft->getBox().w) - hitbox.x) / timeDelta;
         } else if (tciLR.isRightColliding()) {
-            xVel = tciLR.tileCollidingWithRight->getBox().x - (hitbox.x + hitbox.w);
+            xVel = (tciLR.tileCollidingWithRight->getBox().x - (hitbox.x + hitbox.w)) / timeDelta;
         }
     }
 
@@ -721,7 +721,7 @@ void Player::update() {
             isOnGround = tciTB.isBottomColliding() || platformStandingOn != nullptr;
 
         if (tciTB.isTopColliding()) {
-            yVel = (tciTB.tileCollidingWithTop->getBox().y + tciTB.tileCollidingWithTop->getBox().h) - hitbox.y;
+            yVel = ((tciTB.tileCollidingWithTop->getBox().y + tciTB.tileCollidingWithTop->getBox().h) - hitbox.y) / timeDelta;
         } else if (tciTB.isBottomColliding() && (!isOnPole || tciTB.tileCollidingWithBottom->getCollideBottom())) {
             Tile* tile = tciTB.tileCollidingWithBottom;
             yVel = (tile->getBox().y - (hitbox.y + hitbox.h)) / timeDelta;
