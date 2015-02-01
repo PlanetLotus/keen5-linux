@@ -140,9 +140,7 @@ void Ampton::changeDirection() {
 }
 
 void Ampton::climbUp() {
-    Tile* pole = getCollidingPoleTile();
-    if (pole != nullptr && pole->isPoleEdge && isNearPoleTopEdge(pole) && climbCooldownTimer > climbCooldown) {
-        climbCooldownTimer = 0;
+    if (getCollidingPoleTile() == nullptr) {
         changeState(State::CLIMB_DOWN);
         return;
     }
