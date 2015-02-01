@@ -399,7 +399,7 @@ Level* loadCurrentLevel(Texture* maskTexture) {
         if (itemVal != 0)
             items.push_back(new Item(TILE_WIDTH * x, TILE_HEIGHT * y, itemVal));
 
-        if (collideT || collideR || collideB || collideL || isEdge || isPole) {
+        if (collideT || collideR || collideB || collideL || isEdge || isPole || isPoleEdge) {
             tiles[x][y] = new Tile(xSrc, ySrc, x * TILE_WIDTH, y * TILE_HEIGHT, leftHeight, rightHeight,
                 collideT, collideR, collideB, collideL, layerVal, isPole, isPoleEdge, isEdge);
         } else {

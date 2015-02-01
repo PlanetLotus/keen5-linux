@@ -47,7 +47,7 @@ void Tile::draw(Texture* texture, SDL_Rect cameraBox) {
 
 bool Tile::isColliding(TileProperty tileProperty, SDL_Rect hitbox, SDL_Rect nextHitbox) {
     if (tileProperty == TileProperty::ISPOLE) {
-        return isPole && (isRightColliding(hitbox, nextHitbox, destBox) ||
+        return (isPole || isPoleEdge) && (isRightColliding(hitbox, nextHitbox, destBox) ||
             isLeftColliding(hitbox, nextHitbox, destBox));
     }
 

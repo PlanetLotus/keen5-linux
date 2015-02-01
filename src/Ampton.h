@@ -32,6 +32,7 @@ class Ampton : public Enemy {
         void stunned();
         void takeShotByPlayer();
         Tile* getCollidingPoleTile();
+        bool isNearPoleTopEdge(Tile* pole);
         void snapToPole(Tile* pole);
         void changeDirectionIfOnEdge();
         bool setYVelIfTBCollision();

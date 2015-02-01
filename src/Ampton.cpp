@@ -140,7 +140,9 @@ void Ampton::changeDirection() {
 }
 
 void Ampton::climbUp() {
-    if (getCollidingPoleTile() == nullptr) {
+    Tile* pole = getCollidingPoleTile();
+    if (pole != nullptr && pole->isPoleEdge && isNearPoleTopEdge(pole) && climbCooldownTimer > climbCooldown) {
+        climbCooldownTimer = 0;
         changeState(State::CLIMB_DOWN);
         return;
     }
@@ -171,7 +173,12 @@ void Ampton::climbDown() {
 
     TileCollisionInfo tciTB = checkTileCollisionTB();
 
-    if (tciTB.isBottomColliding()) {
+    Tile* pole = getCollidingPoleTile();
+    if (pole != nullptr && pole->isPoleEdge && climbCooldownTimer > climbCooldown) {
+        climbCooldownTimer = 0;
+        yVel = 0;
+        changeState(State::CLIMB_UP);
+    } else if (tciTB.isBottomColliding()) {
         Tile* tile = tciTB.tileCollidingWithBottom;
 
         // End of pole
@@ -259,6 +266,10 @@ Tile* Ampton::getCollidingPoleTile() {
     }
 
     return nullptr;
+}
+
+bool Ampton::isNearPoleTopEdge(Tile* pole) {
+    return hitbox.y - pole->getBox().y < TILE_HEIGHT / 4;
 }
 
 void Ampton::snapToPole(Tile* pole) {
