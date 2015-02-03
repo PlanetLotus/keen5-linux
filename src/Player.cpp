@@ -691,7 +691,7 @@ void Player::update() {
 
     // Apply push from other units
     if (xPush != 0) {
-        xVel += xPush;
+        xVel += xPush / timeDelta;
         xPush = 0;
     }
 
