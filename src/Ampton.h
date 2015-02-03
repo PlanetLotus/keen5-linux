@@ -17,10 +17,10 @@ class Ampton : public Enemy {
         int climbCooldown;
 
         // Values are in pixels per second
-        const int patrolSpeed = 96;
+        const int patrolSpeed = 144;
         const int fallAccel = 62;
         const int fallVelLimit = 480;
-        const int climbSpeedFactor = 2;
+        const float climbSpeedFactor = 1.5;
         const int stunHopVel = -288;
 
         void fall();

@@ -106,6 +106,10 @@ void Ampton::patrol() {
     // If colliding with pole tile, climb it
     if (climbCooldownTimer > climbCooldown) {
         Tile* pole = getCollidingPoleTile();
+        // Rand runs about 6 times every time Ampton walks past a pole
+        // So this isn't as low chance as it seems like
+        // TODO: Save a bool indicating whether this was checked already while looking at the same pole
+        // can reset this check when pole == nullptr
         if (pole != nullptr && rand() % 15 == 0) {
             snapToPole(pole);
             changeState(State::CLIMB_DOWN);
