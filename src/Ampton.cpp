@@ -106,7 +106,7 @@ void Ampton::patrol() {
     // If colliding with pole tile, climb it
     if (climbCooldownTimer > climbCooldown) {
         Tile* pole = getCollidingPoleTile();
-        if (pole != nullptr) {
+        if (pole != nullptr && rand() % 15 == 0) {
             snapToPole(pole);
             changeState(State::CLIMB_DOWN);
             climbCooldownTimer = 0;
