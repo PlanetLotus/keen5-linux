@@ -142,6 +142,10 @@ int main (int argc, char **args) {
             }
         }
 
+        // Draw items
+        for (unsigned int i = 0; i < itemBatch.size(); i++)
+            itemBatch[i]->draw(keenTexture, camera.getBox());
+
         // Draw units
         for (unsigned int i = 0; i < platformBatch.size(); i++)
             platformBatch[i]->draw(keenTexture, camera.getBox());
@@ -151,7 +155,7 @@ int main (int argc, char **args) {
             blasterShotBatch[i]->draw(keenTexture, camera.getBox());
         player->draw(keenTexture, camera.getBox());
 
-        // Draw background tiles - Layer 1 (Before units)
+        // Draw background tiles - Layer 1 (After units)
         for (unsigned int i = 0; i < backgroundTiles.size(); i++) {
             if (backgroundTiles[i]->getLayer() == 1)
                 backgroundTiles[i]->draw(maskTexture, camera.getBox());
@@ -164,10 +168,6 @@ int main (int argc, char **args) {
                     tiles[i][j]->draw(maskTexture, camera.getBox());
             }
         }
-
-        // Draw items
-        for (unsigned int i = 0; i < itemBatch.size(); i++)
-            itemBatch[i]->draw(keenTexture, camera.getBox());
 
         camera.update(player->getBox(), player->getIsOnGround());
 
