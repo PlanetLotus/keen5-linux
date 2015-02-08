@@ -21,12 +21,13 @@ class Platform {
         bool playerIsStandingOnThis(SDL_Rect keenBox);
 
     public:
-        Platform(Player* player, int spawnX, int spawnY, std::vector<std::pair<int, int>> dests);
+        Platform(int spawnX, int spawnY, std::vector<std::pair<int, int>> dests);
         void update();
         void draw(Texture* texture, SDL_Rect cameraBox);
         SDL_Rect getBox();
         float getXVel();
         float getYVel();
+        void setPlayer(Player* player); // Ideally this would be done at instantiation, not later
 };
 
 #endif

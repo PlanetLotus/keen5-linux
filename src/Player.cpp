@@ -865,8 +865,8 @@ Player::Player(int spawnX, int spawnY) {
 
     srcClip = nullptr;
 
-    hitbox.x = spawnX;
-    hitbox.y = spawnY;
+    hitbox.x = 640;
+    hitbox.y = 320;
     hitbox.w = TILE_WIDTH;
     hitbox.h = TILE_HEIGHT * 2;
 

@@ -39,12 +39,12 @@ Level*& Camera::currentLevelRef = currentLevel;
 vector<Enemy*> enemyBatch;
 const vector<Enemy*>& BlasterShot::enemyBatchRef = enemyBatch;
 
-vector<Platform*> platformBatch(1);
-const vector<Platform*>& Player::platformBatchRef = platformBatch;
-
 vector<Item*> itemBatch;
 vector<Item*>& Player::itemBatchRef = itemBatch;
 vector<Item*>& Item::itemBatchRef = itemBatch;
+
+vector<Platform*> platformBatch;
+const vector<Platform*>& Player::platformBatchRef = platformBatch;
 
 vector<BlasterShot*> blasterShotBatch;
 vector<BlasterShot*>& BlasterShot::blasterShotBatchRef = blasterShotBatch;
@@ -77,12 +77,10 @@ int main (int argc, char **args) {
     tiles = currentLevel->getTiles();
     enemyBatch = currentLevel->getEnemies();
     itemBatch = currentLevel->getItems();
+    platformBatch = currentLevel->getPlatforms();
     vector<BackgroundTile*> backgroundTiles = currentLevel->getBackgroundTiles();
 
     Player* player = currentLevel->getPlayer();
-    //Platform* platform = new Platform(player);
-
-    //platformBatch[0] = platform;
 
     while (running) {
         // Start timer
@@ -268,7 +266,8 @@ Level* loadCurrentLevel(Texture* maskTexture) {
     vector<BackgroundTile*> backgroundTiles;
     vector<Enemy*> enemies;
     vector<Item*> items;
-    enum class UnitType { NONE, KEEN, SPARKY, AMPTON };
+    vector<Platform*> platforms;
+    enum class UnitType { NONE, KEEN, SPARKY, AMPTON, PLATFORM };
 
     int tilesWide = -1;
     int tilesTall = -1;
@@ -394,6 +393,19 @@ Level* loadCurrentLevel(Texture* maskTexture) {
             enemies.push_back(new Sparky(TILE_WIDTH * x, TILE_HEIGHT * y));
         } else if ((UnitType)unitVal == UnitType::AMPTON) {
             enemies.push_back(new Ampton(TILE_WIDTH * x, TILE_HEIGHT * y));
+        } else if ((UnitType)unitVal == UnitType::PLATFORM) {
+            vector<pair<int, int>> dests;
+            int tileX = 0;
+            int tileY = 0;
+
+            while (!iss.fail()) {
+                iss >> tileX;
+                iss >> tileY;
+                pair<int, int> dest(tileX, tileY);
+                dests.push_back(dest);
+            }
+
+            platforms.push_back(new Platform(TILE_WIDTH * x, TILE_HEIGHT * y, dests));
         }
 
         if (itemVal != 0)
@@ -424,6 +436,7 @@ Level* loadCurrentLevel(Texture* maskTexture) {
         backgroundTiles,
         enemies,
         items,
+        platforms,
         keenSpawnX, keenSpawnY
     );
 }

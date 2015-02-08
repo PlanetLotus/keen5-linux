@@ -1,5 +1,6 @@
 #include "Enemy.h"
 #include "Level.h"
+#include "Platform.h"
 #include "Player.h"
 
 using namespace std;
@@ -12,6 +13,7 @@ Level::Level(
     vector<BackgroundTile*> backgroundTiles,
     vector<Enemy*> enemyBatch,
     vector<Item*> itemBatch,
+    vector<Platform*> platformBatch,
     int keenSpawnX, int keenSpawnY
 ) {
     this->width = width;
@@ -22,11 +24,15 @@ Level::Level(
     this->backgroundTiles = backgroundTiles;
     this->enemyBatch = enemyBatch;
     this->itemBatch = itemBatch;
+    this->platformBatch = platformBatch;
 
     player = new Player(keenSpawnX, keenSpawnY);
 
     for (unsigned int i = 0; i < enemyBatch.size(); i++)
         enemyBatch[i]->setPlayer(player);
+
+    for (unsigned int i = 0; i < platformBatch.size(); i++)
+        platformBatch[i]->setPlayer(player);
 }
 
 int Level::getWidth() const { return width; }
@@ -38,3 +44,4 @@ vector< vector<Tile*> > Level::getTiles() const { return tiles; }
 vector<BackgroundTile*> Level::getBackgroundTiles() const { return backgroundTiles; }
 vector<Enemy*> Level::getEnemies() const { return enemyBatch; }
 vector<Item*> Level::getItems() const { return itemBatch; }
+vector<Platform*> Level::getPlatforms() const { return platformBatch; }

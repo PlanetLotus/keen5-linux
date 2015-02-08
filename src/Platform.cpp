@@ -7,9 +7,9 @@
 
 using namespace std;
 
-Platform::Platform(Player* player, int spawnX, int spawnY, vector<pair<int, int>> dests) {
-    hitbox.x = TILE_WIDTH * 24;
-    hitbox.y = TILE_HEIGHT * 27;
+Platform::Platform(int spawnX, int spawnY, vector<pair<int, int>> dests) {
+    hitbox.x = spawnX;
+    hitbox.y = spawnY;
     hitbox.w = TILE_WIDTH * 2;
     hitbox.h = TILE_HEIGHT;
 
@@ -18,7 +18,7 @@ Platform::Platform(Player* player, int spawnX, int spawnY, vector<pair<int, int>
     srcRect.w = TILE_WIDTH * 2;
     srcRect.h = TILE_HEIGHT * 2;
 
-    keen = player;
+    keen = nullptr;
 
     xVel = 0;
     yVel = 0;
@@ -73,3 +73,4 @@ void Platform::draw(Texture* texture, SDL_Rect cameraBox) {
 SDL_Rect Platform::getBox() { return hitbox; }
 float Platform::getXVel() { return xVel; }
 float Platform::getYVel() { return yVel; }
+void Platform::setPlayer(Player* player) { keen = player; }
