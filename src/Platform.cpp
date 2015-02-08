@@ -58,8 +58,8 @@ void Platform::update() {
         keen->platformStandingOn = this;
 
     // 2) Update Platform
-    hitbox.x += xVel;
-    hitbox.y += yVel;
+    hitbox.x += xVel * timeDelta;
+    hitbox.y += yVel * timeDelta;
 }
 
 void Platform::draw(Texture* texture, SDL_Rect cameraBox) {

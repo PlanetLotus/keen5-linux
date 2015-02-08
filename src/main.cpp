@@ -34,6 +34,7 @@ const vector< vector<Tile*> >& MovingSprite::tilesRef = tiles;
 Level* currentLevel = nullptr;
 Level*& MovingSprite::currentLevelRef = currentLevel;
 float MovingSprite::timeDelta = 0.0;
+float Platform::timeDelta = 0.0;
 Level*& Camera::currentLevelRef = currentLevel;
 
 vector<Enemy*> enemyBatch;
@@ -177,6 +178,7 @@ int main (int argc, char **args) {
             SDL_Delay((1000/FRAMES_PER_SECOND) - fps.getTicks());
 
         MovingSprite::timeDelta = fps.getDeltaTime();
+        Platform::timeDelta = fps.getDeltaTime();
     }
 
     cleanUp(window, renderer, keenTexture, maskTexture);

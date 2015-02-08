@@ -28,6 +28,7 @@ class Platform {
         float getXVel();
         float getYVel();
         void setPlayer(Player* player); // Ideally this would be done at instantiation, not later
+        static float timeDelta;
 };
 
 #endif

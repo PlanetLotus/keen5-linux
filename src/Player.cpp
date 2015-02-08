@@ -452,7 +452,7 @@ bool Player::handlePlatformCollision() {
             int keenBottom = hitbox.y + hitbox.h;
             int platformTop = platformBox.y;
 
-            yVel = platformTop - keenBottom;
+            yVel = (platformTop - keenBottom) / timeDelta;
             yVelRem = 0;
 
             int platformXVel = platformBatchRef[i]->getXVel();
