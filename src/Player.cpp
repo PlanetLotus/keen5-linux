@@ -921,7 +921,7 @@ Player::Player(int spawnX, int spawnY) {
 
     vector<SDL_Rect> shootLeftAnim = { { 0, TILE_HEIGHT * 6, TILE_WIDTH * 3, TILE_HEIGHT * 2 } };
     vector<SDL_Rect> shootRightAnim = { { 0, TILE_HEIGHT * 4, TILE_WIDTH * 3, TILE_HEIGHT * 2 } };
-    vector<SDL_Rect> shootUpAnim = { { TILE_WIDTH * 10, TILE_HEIGHT * 4, TILE_WIDTH * 2, TILE_HEIGHT * 2 } };
+    vector<SDL_Rect> shootUpAnim = { { TILE_WIDTH * 10, TILE_HEIGHT * 4, TILE_WIDTH * 2, TILE_HEIGHT * 3 } };
 
     vector<SDL_Rect> jumpShootLeftAnim = { { TILE_WIDTH * 3, TILE_HEIGHT * 6, TILE_WIDTH * 3, TILE_HEIGHT * 2 } };
     vector<SDL_Rect> jumpShootRightAnim = { { TILE_WIDTH * 3, TILE_HEIGHT * 4, TILE_WIDTH * 3, TILE_HEIGHT * 2 } };
