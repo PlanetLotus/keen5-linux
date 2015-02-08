@@ -709,7 +709,8 @@ void Player::update() {
     }
 
     // Must go after left/right collision check
-    handleLedgeHanging();
+    if (!isOnPogo)
+        handleLedgeHanging();
 
     // Check top/bottom collision
     TileCollisionInfo tciTB;
