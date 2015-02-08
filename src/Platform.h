@@ -1,6 +1,7 @@
 #ifndef PLATFORM_H
 #define PLATFORM_H
 
+#include <vector>
 #include "SDL.h"
 
 class Player;
@@ -12,14 +13,15 @@ class Platform {
         SDL_Rect srcRect;
         Player* keen;
 
-        static const int speed = 4;
+        static const int speed = 96;
         float xVel;
         float yVel;
+        std::vector<std::pair<int, int>> path;
 
         bool playerIsStandingOnThis(SDL_Rect keenBox);
 
     public:
-        Platform(Player* player);
+        Platform(Player* player, int spawnX, int spawnY, std::vector<std::pair<int, int>> dests);
         void update();
         void draw(Texture* texture, SDL_Rect cameraBox);
         SDL_Rect getBox();

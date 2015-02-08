@@ -5,7 +5,9 @@
 #include "Texture.h"
 #include "Tile.h"
 
-Platform::Platform(Player* player) {
+using namespace std;
+
+Platform::Platform(Player* player, int spawnX, int spawnY, vector<pair<int, int>> dests) {
     hitbox.x = TILE_WIDTH * 24;
     hitbox.y = TILE_HEIGHT * 27;
     hitbox.w = TILE_WIDTH * 2;
@@ -19,7 +21,16 @@ Platform::Platform(Player* player) {
     keen = player;
 
     xVel = 0;
-    yVel = -3;
+    yVel = 0;
+
+    pair<int, int> spawnPair(spawnX, spawnY);
+
+    int numPaths = dests.size() + 1;
+    path.reserve(numPaths);
+
+    for (unsigned int i = 0; i < dests.size(); i++)
+        path.push_back(dests[i]);
+    path.push_back(spawnPair);
 }
 
 bool Platform::playerIsStandingOnThis(SDL_Rect keenBox) {

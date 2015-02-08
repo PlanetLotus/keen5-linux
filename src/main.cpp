@@ -80,9 +80,9 @@ int main (int argc, char **args) {
     vector<BackgroundTile*> backgroundTiles = currentLevel->getBackgroundTiles();
 
     Player* player = currentLevel->getPlayer();
-    Platform* platform = new Platform(player);
+    //Platform* platform = new Platform(player);
 
-    platformBatch[0] = platform;
+    //platformBatch[0] = platform;
 
     while (running) {
         // Start timer
