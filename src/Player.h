@@ -31,7 +31,7 @@ class Player : public MovingSprite {
         const int fallVelLimit = 480;
         const int startJumpVel = -504;
         const int holdJumpVel = -31;
-        const int startPogoJumpVel = -48;
+        const int startPogoJumpVel = -72;
         const int hitGroundPogoJumpVel = -576;
         const int holdPogoJumpVel = -36;
         const int poleJumpVel = -240;

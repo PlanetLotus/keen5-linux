@@ -286,7 +286,7 @@ void Player::togglePogo() {
     if (!isOnPogo) {
         isOnPogo = true;
         pogo();
-        yVel -= startPogoJumpVel;  // Provide a slightly stronger initial jump
+        yVel += startPogoJumpVel;  // Provide a slightly stronger initial jump
     } else {
         isOnPogo = false;
     }
