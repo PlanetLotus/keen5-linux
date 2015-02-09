@@ -17,8 +17,12 @@ class Platform {
         float xVel;
         float yVel;
         std::vector<std::pair<int, int>> path;
+        int numPaths;
+        std::pair<int, int> currentDest;
+        int currentDestIndex;
 
         bool playerIsStandingOnThis(SDL_Rect keenBox);
+        void updateDest();
 
     public:
         Platform(int spawnX, int spawnY, std::vector<std::pair<int, int>> dests);

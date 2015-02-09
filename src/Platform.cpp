@@ -23,14 +23,17 @@ Platform::Platform(int spawnX, int spawnY, vector<pair<int, int>> dests) {
     xVel = 0;
     yVel = 0;
 
-    pair<int, int> spawnPair(spawnX, spawnY);
-
-    int numPaths = dests.size() + 1;
+    numPaths = dests.size() + 1;
     path.reserve(numPaths);
+
+    pair<int, int> spawnPair(spawnX, spawnY);
+    path.push_back(spawnPair);
 
     for (unsigned int i = 0; i < dests.size(); i++)
         path.push_back(dests[i]);
-    path.push_back(spawnPair);
+
+    currentDestIndex = 0;
+    currentDest = path[currentDestIndex];
 }
 
 bool Platform::playerIsStandingOnThis(SDL_Rect keenBox) {
@@ -47,6 +50,36 @@ bool Platform::playerIsStandingOnThis(SDL_Rect keenBox) {
     return keenBottom == platformTop;
 }
 
+void Platform::updateDest() {
+    // Check if reached current destination. If so, get the next destination and update velocities accordingly.
+    printf("%d,%d %d,%d %d\n", hitbox.x, hitbox.y, currentDest.first, currentDest.second, currentDestIndex);
+    bool xReached = hitbox.x == currentDest.first ||
+        (xVel < 0 && hitbox.x < currentDest.first) ||
+        (xVel > 0 && hitbox.x > currentDest.first);
+    bool yReached = hitbox.y == currentDest.second ||
+        (yVel < 0 && hitbox.y < currentDest.second) ||
+        (yVel > 0 && hitbox.y > currentDest.second);
+
+    if (!xReached || !yReached)
+        return;
+
+    currentDestIndex++;
+
+    if (currentDestIndex == numPaths)
+        currentDestIndex = 0;
+
+    currentDest = path[currentDestIndex];
+
+    // Aim toward new dest
+    xVel = currentDest.first < hitbox.x
+        ? -speed
+        : speed;
+
+    yVel = currentDest.second < hitbox.y
+        ? -speed
+        : speed;
+}
+
 void Platform::update() {
     // 0) Reset platformStandingOn if it points to this platform
     if (keen->platformStandingOn == this)
@@ -56,6 +89,9 @@ void Platform::update() {
     SDL_Rect keenBox = keen->getBox();
     if (playerIsStandingOnThis(keenBox))
         keen->platformStandingOn = this;
+
+    // Check to see if next destination is reached. If so, move toward next one.
+    updateDest();
 
     // 2) Update Platform
     hitbox.x += xVel * timeDelta;

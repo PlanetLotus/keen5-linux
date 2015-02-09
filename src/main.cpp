@@ -400,9 +400,13 @@ Level* loadCurrentLevel(Texture* maskTexture) {
             int tileX = 0;
             int tileY = 0;
 
-            while (!iss.fail()) {
+            while (1) {
                 iss >> tileX;
                 iss >> tileY;
+
+                if (iss.fail())
+                    break;
+
                 pair<int, int> dest(tileX, tileY);
                 dests.push_back(dest);
             }
