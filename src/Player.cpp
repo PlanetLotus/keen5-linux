@@ -268,6 +268,10 @@ void Player::climb(Direction dir) {
         yVel = poleClimbUpVel;
         animate(21 + (int)facing, 3);
     } else if (dir == Direction::DOWN) {
+        Tile* pole = getCollidingPoleTile();
+        if (pole == nullptr || (pole->isPoleEdge && pole->getBox().y <= hitbox.y))
+            isOnPole = false;
+
         yVel = poleClimbDownVel;
         int frametime = 3;
         animate(23, frametime);
