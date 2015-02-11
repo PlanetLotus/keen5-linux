@@ -9,14 +9,14 @@ using namespace std;
 
 Platform::Platform(int spawnX, int spawnY, vector<pair<int, int>> dests) {
     hitbox.x = spawnX;
-    hitbox.y = spawnY;
+    hitbox.y = spawnY + TILE_HEIGHT * 3 / 4;
     hitbox.w = TILE_WIDTH * 2;
     hitbox.h = TILE_HEIGHT;
 
     srcRect.x = TILE_WIDTH * 14;
     srcRect.y = TILE_HEIGHT * 8;
     srcRect.w = TILE_WIDTH * 2;
-    srcRect.h = TILE_HEIGHT * 2;
+    srcRect.h = TILE_HEIGHT;
 
     keen = nullptr;
 
@@ -31,6 +31,9 @@ Platform::Platform(int spawnX, int spawnY, vector<pair<int, int>> dests) {
 
     for (unsigned int i = 0; i < dests.size(); i++)
         path.push_back(dests[i]);
+
+    for (int i = 0; i < numPaths; i++)
+        path[i].second += TILE_HEIGHT * 3 / 4;
 
     currentDestIndex = 0;
     currentDest = path[currentDestIndex];
@@ -115,8 +118,8 @@ void Platform::update() {
 }
 
 void Platform::draw(Texture* texture, SDL_Rect cameraBox) {
-    // Center the hitbox vertically
-    int offsetY = srcRect.h - TILE_HEIGHT;
+    // Move drawing down by half a tile
+    int offsetY = TILE_HEIGHT / 2;
     int destY = hitbox.y - offsetY;
 
     texture->render(hitbox.x - cameraBox.x, destY - cameraBox.y, &srcRect);

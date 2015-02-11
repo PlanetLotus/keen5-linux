@@ -675,10 +675,10 @@ void Player::update() {
 
     if (platformStandingOn != nullptr) {
         // If Platform handle exists, adjust player position by Platform velocity
-        int platformXVel = platformStandingOn->getXVel();
+        int platformXVel = platformStandingOn->getXVel() / timeDelta;
         xVel += platformXVel;
         xVelRem = 0;
-        yVel = platformStandingOn->getYVel();
+        yVel = platformStandingOn->getYVel() / timeDelta;
         yVelRem = 0;
         isOnGround = true;
 
@@ -865,8 +865,8 @@ Player::Player(int spawnX, int spawnY) {
 
     srcClip = nullptr;
 
-    hitbox.x = 640;
-    hitbox.y = 320;
+    hitbox.x = 230;
+    hitbox.y = 500;
     hitbox.w = TILE_WIDTH;
     hitbox.h = TILE_HEIGHT * 2;
 
