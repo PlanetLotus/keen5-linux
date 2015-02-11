@@ -52,13 +52,8 @@ bool Platform::playerIsStandingOnThis(SDL_Rect keenBox) {
 
 void Platform::updateDest() {
     // Check if reached current destination. If so, get the next destination and update velocities accordingly.
-    printf("%d,%d %d,%d %d\n", hitbox.x, hitbox.y, currentDest.first, currentDest.second, currentDestIndex);
-    bool xReached = hitbox.x == currentDest.first ||
-        (xVel < 0 && hitbox.x < currentDest.first) ||
-        (xVel > 0 && hitbox.x > currentDest.first);
-    bool yReached = hitbox.y == currentDest.second ||
-        (yVel < 0 && hitbox.y < currentDest.second) ||
-        (yVel > 0 && hitbox.y > currentDest.second);
+    bool xReached = hitbox.x == currentDest.first;
+    bool yReached = hitbox.y == currentDest.second;
 
     if (!xReached || !yReached)
         return;
@@ -69,23 +64,33 @@ void Platform::updateDest() {
         currentDestIndex = 0;
 
     currentDest = path[currentDestIndex];
+}
 
-    // Aim toward new dest
-    xVel = currentDest.first < hitbox.x
-        ? -speed
-        : speed;
+void Platform::setVelocity() {
+    if (currentDest.first < hitbox.x + xVel)
+        xVel = -speed;
+    else if (currentDest.first == hitbox.x + xVel)
+        xVel = 0;
+    else
+        xVel = speed;
 
-    yVel = currentDest.second < hitbox.y
-        ? -speed
-        : speed;
+    if (currentDest.second < hitbox.y + yVel)
+        yVel = -speed;
+    else if (currentDest.second == hitbox.y + yVel)
+        yVel = 0;
+    else
+        yVel = speed;
+
+    xVel *= timeDelta;
+    yVel *= timeDelta;
 }
 
 void Platform::update() {
-    // 0) Reset platformStandingOn if it points to this platform
+    // Reset platformStandingOn if it points to this platform
     if (keen->platformStandingOn == this)
         keen->platformStandingOn = nullptr;
 
-    // 1) Check if player is standing on this platform. If so, store handle to it in Player.
+    // Check if player is standing on this platform. If so, store handle to it in Player.
     SDL_Rect keenBox = keen->getBox();
     if (playerIsStandingOnThis(keenBox))
         keen->platformStandingOn = this;
@@ -93,9 +98,20 @@ void Platform::update() {
     // Check to see if next destination is reached. If so, move toward next one.
     updateDest();
 
-    // 2) Update Platform
-    hitbox.x += xVel * timeDelta;
-    hitbox.y += yVel * timeDelta;
+    setVelocity();
+
+    // Don't overshoot destination
+    int xDistToGo = currentDest.first - hitbox.x;
+    if ((xVel < 0 && xVel < xDistToGo) || (xVel > 0 && xVel > xDistToGo))
+        xVel = xDistToGo;
+
+    int yDistToGo = currentDest.second - hitbox.y;
+    if ((yVel < 0 && yVel < yDistToGo) || (yVel > 0 && yVel > yDistToGo))
+        yVel = yDistToGo;
+
+    // Update Platform
+    hitbox.x += xVel;
+    hitbox.y += yVel;
 }
 
 void Platform::draw(Texture* texture, SDL_Rect cameraBox) {

@@ -23,6 +23,7 @@ class Platform {
 
         bool playerIsStandingOnThis(SDL_Rect keenBox);
         void updateDest();
+        void setVelocity();
 
     public:
         Platform(int spawnX, int spawnY, std::vector<std::pair<int, int>> dests);
