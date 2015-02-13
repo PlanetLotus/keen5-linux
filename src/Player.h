@@ -67,6 +67,7 @@ class Player : public MovingSprite {
 
         void shoot(bool isPressingUp, bool isPressingDown);
         void walk(Direction dir);
+        void changeDirectionOnPole(Direction dir);
         void jump();
         void jumpDown();
         void togglePogo();

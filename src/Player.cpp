@@ -73,17 +73,9 @@ void Player::shoot(bool isPressingUp, bool isPressingDown) {
 
 void Player::walk(Direction dir) {
     // TODO: Enforce dir being only left or right
-    bool isFacingChanging = dir != facing;
     facing = dir == Direction::LEFT ? Direction::LEFT : Direction::RIGHT;
 
-    // Does this special case warrant a change of method name to something more general?
-    if (isOnPole) {
-        if (isFacingChanging) {
-            Tile* pole = getCollidingPoleTile();
-            snapToPole(pole, facing);
-            animate(21 + (int)facing);
-        }
-    } else if (isOnGround) {
+    if (isOnGround) {
         xVel = dir == Direction::LEFT ? -walkSpeed : walkSpeed;
         animate(2 + (int)facing);
     } else {
@@ -100,6 +92,20 @@ void Player::walk(Direction dir) {
             xVelRem = 0;
         }
     }
+}
+
+void Player::changeDirectionOnPole(Direction dir) {
+    bool isFacingChanging = dir != facing;
+    if (!isFacingChanging)
+        return;
+
+    Tile* pole = getCollidingPoleTile();
+    if (pole == nullptr)
+        return;
+
+    facing = dir == Direction::LEFT ? Direction::LEFT : Direction::RIGHT;
+    snapToPole(pole, facing);
+    animate(21 + (int)facing);
 }
 
 void Player::stopWalk() {
@@ -398,10 +404,16 @@ void Player::processKeyboard() {
 
     if (state[SDL_SCANCODE_LEFT] && !isRolling) {
         controllerRef.isHoldingLeft = true;
-        walk(Direction::LEFT);
+        if (isOnPole)
+            changeDirectionOnPole(Direction::LEFT);
+        else
+            walk(Direction::LEFT);
     } else if (state[SDL_SCANCODE_RIGHT] && !isRolling) {
         controllerRef.isHoldingRight = true;
-        walk(Direction::RIGHT);
+        if (isOnPole)
+            changeDirectionOnPole(Direction::RIGHT);
+        else
+            walk(Direction::RIGHT);
     } else if (!isOnPole) {
         stopWalk();
     }
