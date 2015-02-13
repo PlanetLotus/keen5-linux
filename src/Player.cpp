@@ -191,11 +191,7 @@ void Player::snapToPole(Tile* pole, Direction facing) {
         xVel = (pole->getBox().x - TILE_WIDTH / 4 - hitbox.x) / timeDelta;
 
     isOnPole = true;
-
-    if (isOnGround) {
-        yVel = poleCollideGroundFixVel;
-        isOnGround = false;
-    }
+    isOnGround = false;
 }
 
 Tile* Player::getCollidingPoleTile() {
@@ -269,8 +265,10 @@ void Player::climb(Direction dir) {
         animate(21 + (int)facing, 3);
     } else if (dir == Direction::DOWN) {
         Tile* pole = getCollidingPoleTile();
-        if (pole == nullptr || (pole->isPoleEdge && pole->getBox().y <= hitbox.y))
+        if (pole == nullptr || pole->isPoleEdge) {
             isOnPole = false;
+            return;
+        }
 
         yVel = poleClimbDownVel;
         int frametime = 3;
