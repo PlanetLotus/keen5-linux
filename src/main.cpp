@@ -252,7 +252,7 @@ bool loadFiles(Texture* keenTexture, Texture* maskTexture) {
         printf("Failed to load keen texture!\n");
         return false;
     }
-    if (!maskTexture->loadFromFile(data + "masks.png", false)) {
+    if (!maskTexture->loadFromFile(data + "masks.png", true)) {
         printf("Failed to load masks texture!\n");
         return false;
     }
@@ -261,26 +261,19 @@ bool loadFiles(Texture* keenTexture, Texture* maskTexture) {
 }
 
 Level* loadCurrentLevel(Texture* maskTexture) {
-    // Notes:
-    // Does levelWidth / levelHeight matter? Yes, because we have to know when we're at the end of a "row" when reading the file
-    // tileCount in file is currently UNUSED
-
     vector<BackgroundTile*> backgroundTiles;
     vector<Enemy*> enemies;
     vector<Item*> items;
     vector<Platform*> platforms;
     enum class UnitType { NONE, KEEN, SPARKY, AMPTON, PLATFORM };
+    const int numLayers = 3;
 
     int tilesWide = -1;
     int tilesTall = -1;
-    int tileCountLayer1 = -1;
-    int tileCountLayer2 = -1;
 
     int xSrc = -1;
     int ySrc = -1;
-    int heightVal = -1;
     int collideVal = -1;
-    int layerVal = -1;
     int edgeVal = -1;
     int propertyVal = -1;
     int leftHeight = 0;
@@ -308,9 +301,7 @@ Level* loadCurrentLevel(Texture* maskTexture) {
     iss.str(line);
     iss >> tilesWide;
     iss >> tilesTall;
-    iss >> tileCountLayer1;
-    iss >> tileCountLayer2;
-    if (iss.fail() || tilesWide == -1 || tilesTall == -1 || tileCountLayer1 == -1 || tileCountLayer2 == -1) {
+    if (iss.fail() || tilesWide == -1 || tilesTall == -1) {
         printf("Error getting metadata from line 1.\n");
         return nullptr;
     }
@@ -331,7 +322,7 @@ Level* loadCurrentLevel(Texture* maskTexture) {
     while (getline(map, line)) {
         istringstream iss(line);
 
-        iss >> xSrc;
+        iss >> leftHeight;
 
         // Blank line detected - common at end of file
         if (iss.fail())
@@ -343,8 +334,8 @@ Level* loadCurrentLevel(Texture* maskTexture) {
             x = 0;
         }
 
-        if (xSrc < 0) {
-            int nullCount = xSrc * -1;
+        if (leftHeight < 0) {
+            int nullCount = leftHeight * -1;
             for (int i = 0; i < nullCount; i++) {
                 // Check row position
                 if (x == tilesWide) {
@@ -358,12 +349,7 @@ Level* loadCurrentLevel(Texture* maskTexture) {
             continue;
         }
 
-        iss >> ySrc;
-
-        iss >> heightVal;
-        leftHeight = heightVal;
-        iss >> heightVal;
-        rightHeight = heightVal;
+        iss >> rightHeight;
         iss >> collideVal;
         collideT = collideVal == 1 ? true : false;
         iss >> collideVal;
@@ -383,10 +369,27 @@ Level* loadCurrentLevel(Texture* maskTexture) {
         else if (propertyVal == 2)
             isPoleEdge = true;
 
-        iss >> layerVal;
-
         iss >> unitVal;
         iss >> itemVal;
+
+        // For each layer, get tile
+        tiles[x][y] = nullptr;
+        for (int i = 0; i < numLayers; i++) {
+
+            iss >> xSrc;
+
+            if (xSrc == -1)
+                continue;
+
+            iss >> ySrc;
+
+            if (i == 0) {
+                backgroundTiles.push_back(new BackgroundTile(xSrc, ySrc, x * TILE_WIDTH, y * TILE_WIDTH, 0));
+            } else if (i == 1 || i == 2) {
+                tiles[x][y] = new Tile(xSrc, ySrc, x * TILE_WIDTH, y * TILE_HEIGHT, leftHeight, rightHeight,
+                    collideT, collideR, collideB, collideL, i - 1, isPole, isPoleEdge, isEdge);
+            }
+        }
 
         if ((UnitType)unitVal == UnitType::KEEN) {
             keenSpawnX = TILE_WIDTH * x;
@@ -417,14 +420,6 @@ Level* loadCurrentLevel(Texture* maskTexture) {
         if (itemVal != 0)
             items.push_back(new Item(TILE_WIDTH * x, TILE_HEIGHT * y, itemVal));
 
-        if (collideT || collideR || collideB || collideL || isEdge || isPole || isPoleEdge) {
-            tiles[x][y] = new Tile(xSrc, ySrc, x * TILE_WIDTH, y * TILE_HEIGHT, leftHeight, rightHeight,
-                collideT, collideR, collideB, collideL, layerVal, isPole, isPoleEdge, isEdge);
-        } else {
-            backgroundTiles.push_back(new BackgroundTile(xSrc, ySrc, x * TILE_WIDTH, y * TILE_WIDTH, layerVal));
-            tiles[x][y] = nullptr;
-        }
-
         x++;
     }
 
@@ -437,7 +432,6 @@ Level* loadCurrentLevel(Texture* maskTexture) {
     return new Level(
         tilesWide * TILE_WIDTH, tilesTall * TILE_HEIGHT,
         tilesWide, tilesTall,
-        tileCountLayer1, tileCountLayer2,
         tiles,
         backgroundTiles,
         enemies,
