@@ -17,9 +17,6 @@ class Level {
         int tilesWide;
         int tilesTall;
 
-        int tileCountLayer1;
-        int tileCountLayer2;
-
         int keenSpawnX;
         int keenSpawnY;
         Player* player;
@@ -38,7 +35,6 @@ class Level {
         Level(
             int width, int height,
             int tilesWide, int tilesTall,
-            int tileCountLayer1, int tileCountLayer2,
             std::vector< std::vector<Tile*> > tiles,
             std::vector<BackgroundTile*> backgroundTiles,
             std::vector<Enemy*> enemyBatch,

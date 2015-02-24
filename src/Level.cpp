@@ -8,7 +8,6 @@ using namespace std;
 Level::Level(
     int width, int height,
     int tilesWide, int tilesTall,
-    int tileCountLayer1, int tileCountLayer2,
     vector< vector<Tile*> > tiles,
     vector<BackgroundTile*> backgroundTiles,
     vector<Enemy*> enemyBatch,
