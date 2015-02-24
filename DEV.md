@@ -7,7 +7,6 @@
         <li>Falls when Keen hops on</li>
         <li>Avoids Keen from one direction</li>
     </ul>
-    <li>Missing tiles (with background)</li>
     <li>Scenery (background tiles)</li>
     <li>Fire spinner</li>
     <li>Stationary laser</li>
