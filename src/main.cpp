@@ -154,12 +154,6 @@ int main (int argc, char **args) {
             blasterShotBatch[i]->draw(keenTexture, camera.getBox());
         player->draw(keenTexture, camera.getBox());
 
-        // Draw background tiles - Layer 1 (After units)
-        for (unsigned int i = 0; i < backgroundTiles.size(); i++) {
-            if (backgroundTiles[i]->getLayer() == 1)
-                backgroundTiles[i]->draw(maskTexture, camera.getBox());
-        }
-
         // Draw foreground tiles - Layer 1 (After units)
         for (unsigned int i = 0; i < tiles.size(); i++) {
             for (unsigned int j = 0; j < tiles[i].size(); j++) {
