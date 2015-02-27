@@ -10,7 +10,7 @@ const int TILE_HEIGHT = 32;
 const int TILE_OFFSET = 0;
 
 class Tile {
-    private:
+    protected:
         SDL_Rect srcBox;
         SDL_Rect destBox;
 

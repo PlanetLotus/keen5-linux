@@ -6,6 +6,7 @@
 #include "BlasterShot.h"
 #include "Camera.h"
 #include "Controller.h"
+#include "FireSpinner.h"
 #include "globals.h"
 #include "Item.h"
 #include "Level.h"
@@ -80,6 +81,7 @@ int main (int argc, char **args) {
     itemBatch = currentLevel->getItems();
     platformBatch = currentLevel->getPlatforms();
     vector<BackgroundTile*> backgroundTiles = currentLevel->getBackgroundTiles();
+    vector<FireSpinner*> deadlyTileBatch = currentLevel->getDeadlyTileBatch();
 
     Player* player = currentLevel->getPlayer();
 
@@ -115,6 +117,8 @@ int main (int argc, char **args) {
         SDL_RenderClear(renderer);
 
         // Update units
+        for (unsigned int i = 0; i < deadlyTileBatch.size(); i++)
+            deadlyTileBatch[i]->update();
         for (unsigned int i = 0; i < platformBatch.size(); i++)
             platformBatch[i]->update();
         for (unsigned int i = 0; i < enemyBatch.size(); i++)
@@ -256,6 +260,7 @@ bool loadFiles(Texture* keenTexture, Texture* maskTexture) {
 
 Level* loadCurrentLevel(Texture* maskTexture) {
     vector<BackgroundTile*> backgroundTiles;
+    vector<FireSpinner*> deadlyTileBatch;
     vector<Enemy*> enemies;
     vector<Item*> items;
     vector<Platform*> platforms;
@@ -358,10 +363,13 @@ Level* loadCurrentLevel(Texture* maskTexture) {
         iss >> propertyVal;
         bool isPole = false;
         bool isPoleEdge = false;
+        bool isDeadly = false;
         if (propertyVal == 1)
             isPole = true;
         else if (propertyVal == 2)
             isPoleEdge = true;
+        else if (propertyVal == 3)
+            isDeadly = true;
 
         iss >> unitVal;
         iss >> itemVal;
@@ -380,8 +388,14 @@ Level* loadCurrentLevel(Texture* maskTexture) {
             if (i == 0) {
                 backgroundTiles.push_back(new BackgroundTile(xSrc, ySrc, x * TILE_WIDTH, y * TILE_WIDTH, 0));
             } else if (i == 1 || i == 2) {
-                tiles[x][y] = new Tile(xSrc, ySrc, x * TILE_WIDTH, y * TILE_HEIGHT, leftHeight, rightHeight,
-                    collideT, collideR, collideB, collideL, i - 1, isPole, isPoleEdge, isEdge);
+                if (isDeadly) {
+                    FireSpinner* fireSpinner = new FireSpinner(x * TILE_WIDTH, y * TILE_HEIGHT, i - 1);
+                    tiles[x][y] = fireSpinner;
+                    deadlyTileBatch.push_back(fireSpinner);
+                } else {
+                    tiles[x][y] = new Tile(xSrc, ySrc, x * TILE_WIDTH, y * TILE_HEIGHT, leftHeight, rightHeight,
+                        collideT, collideR, collideB, collideL, i - 1, isPole, isPoleEdge, isEdge);
+                }
             }
         }
 
@@ -427,6 +441,7 @@ Level* loadCurrentLevel(Texture* maskTexture) {
         tilesWide * TILE_WIDTH, tilesTall * TILE_HEIGHT,
         tilesWide, tilesTall,
         tiles,
+        deadlyTileBatch,
         backgroundTiles,
         enemies,
         items,

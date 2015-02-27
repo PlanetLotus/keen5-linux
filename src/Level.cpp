@@ -9,6 +9,7 @@ Level::Level(
     int width, int height,
     int tilesWide, int tilesTall,
     vector< vector<Tile*> > tiles,
+    vector<FireSpinner*> deadlyTileBatch,
     vector<BackgroundTile*> backgroundTiles,
     vector<Enemy*> enemyBatch,
     vector<Item*> itemBatch,
@@ -20,6 +21,7 @@ Level::Level(
     this->tilesWide = tilesWide;
     this->tilesTall = tilesTall;
     this->tiles = tiles;
+    this->deadlyTileBatch = deadlyTileBatch;
     this->backgroundTiles = backgroundTiles;
     this->enemyBatch = enemyBatch;
     this->itemBatch = itemBatch;
@@ -40,6 +42,7 @@ int Level::getTilesWide() const { return tilesWide; }
 int Level::getTilesTall() const { return tilesTall; }
 Player* Level::getPlayer() const { return player; }
 vector< vector<Tile*> > Level::getTiles() const { return tiles; }
+vector<FireSpinner*> Level::getDeadlyTileBatch() const { return deadlyTileBatch; }
 vector<BackgroundTile*> Level::getBackgroundTiles() const { return backgroundTiles; }
 vector<Enemy*> Level::getEnemies() const { return enemyBatch; }
 vector<Item*> Level::getItems() const { return itemBatch; }

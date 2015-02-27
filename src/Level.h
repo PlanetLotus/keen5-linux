@@ -5,6 +5,7 @@
 
 class BackgroundTile;
 class Enemy;
+class FireSpinner;
 class Item;
 class Platform;
 class Player;
@@ -27,6 +28,9 @@ class Level {
         // 1D vector of backgrounds
         std::vector<BackgroundTile*> backgroundTiles;
 
+        // Tiles that actually need updated
+        std::vector<FireSpinner*> deadlyTileBatch;
+
         std::vector<Enemy*> enemyBatch;
         std::vector<Item*> itemBatch;
         std::vector<Platform*> platformBatch;
@@ -36,6 +40,7 @@ class Level {
             int width, int height,
             int tilesWide, int tilesTall,
             std::vector< std::vector<Tile*> > tiles,
+            std::vector<FireSpinner*> deadlyTileBatch,
             std::vector<BackgroundTile*> backgroundTiles,
             std::vector<Enemy*> enemyBatch,
             std::vector<Item*> itemBatch,
@@ -48,6 +53,7 @@ class Level {
         int getTilesTall() const;
         Player* getPlayer() const;
         std::vector< std::vector<Tile*> > getTiles() const;
+        std::vector<FireSpinner*> getDeadlyTileBatch() const;
         std::vector<BackgroundTile*> getBackgroundTiles() const;
         std::vector<Enemy*> getEnemies() const;
         std::vector<Item*> getItems() const;
