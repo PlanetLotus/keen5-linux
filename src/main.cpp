@@ -394,7 +394,7 @@ Level* loadCurrentLevel(Texture* maskTexture) {
                     deadlyTileBatch.push_back(fireSpinner);
                 } else {
                     tiles[x][y] = new Tile(xSrc, ySrc, x * TILE_WIDTH, y * TILE_HEIGHT, leftHeight, rightHeight,
-                        collideT, collideR, collideB, collideL, i - 1, isPole, isPoleEdge, isEdge);
+                        collideT, collideR, collideB, collideL, i - 1, isPole, isPoleEdge, isEdge, isDeadly);
                 }
             }
         }

@@ -16,6 +16,7 @@ class Tile {
 
         bool isSloped;
         bool isEdge;
+        bool isDeadly;
         float slope;
         bool hasCollision;
         int leftHeight;
@@ -30,7 +31,7 @@ class Tile {
 
         // Inits position and type
         Tile(int srcX, int srcY, int destX, int destY, int lHeight, int rHeight,
-            bool collideT, bool collideR, bool collideB, bool collideL, int layer, bool isPole, bool isPoleEdge, bool isEdge);
+            bool collideT, bool collideR, bool collideB, bool collideL, int layer, bool isPole, bool isPoleEdge, bool isEdge, bool isDeadly);
 
         // Shows the tile
         void draw(Texture* texture, SDL_Rect cameraBox);
@@ -40,6 +41,7 @@ class Tile {
         bool isTouching(TileProperty tileProperty, SDL_Rect nextHitbox);
         bool getIsSloped();
         bool getIsEdge();
+        bool getIsDeadly();
         float getSlope();
         int getLeftHeight();
         int getRightHeight();

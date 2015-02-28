@@ -4,7 +4,8 @@
 #include "Tile.h"
 
 Tile::Tile(int srcX, int srcY, int destX, int destY, int lHeight, int rHeight,
-    bool collideT, bool collideR, bool collideB, bool collideL, int layer, bool isPole=false, bool isPoleEdge=false, bool isEdge=false) {
+    bool collideT, bool collideR, bool collideB, bool collideL,
+    int layer, bool isPole=false, bool isPoleEdge=false, bool isEdge=false, bool isDeadly=false) {
     srcBox.x = srcX;
     srcBox.y = srcY;
 
@@ -38,6 +39,7 @@ Tile::Tile(int srcX, int srcY, int destX, int destY, int lHeight, int rHeight,
     this->isPole = isPole;
     this->isPoleEdge = isPoleEdge;
     this->isEdge = isEdge;
+    this->isDeadly = isDeadly;
 }
 
 void Tile::draw(Texture* texture, SDL_Rect cameraBox) {
@@ -92,6 +94,7 @@ int Tile::getLeftHeight() { return leftHeight; }
 int Tile::getRightHeight() { return rightHeight; }
 bool Tile::getIsSloped() { return isSloped; }
 bool Tile::getIsEdge() { return isEdge; }
+bool Tile::getIsDeadly() { return isDeadly; }
 bool Tile::getHasCollision() { return hasCollision; }
 bool Tile::getCollideTop() { return collideTop; }
 bool Tile::getCollideRight() { return collideRight; }

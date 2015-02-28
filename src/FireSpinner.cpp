@@ -3,7 +3,7 @@
 using namespace std;
 
 FireSpinner::FireSpinner(int destX, int destY, int layer)
-    : Tile(TILE_WIDTH * 10, TILE_HEIGHT * 54, destX, destY, 0, 0, true, true, true, true, layer, false, false, false) {
+    : Tile(TILE_WIDTH * 10, TILE_HEIGHT * 54, destX, destY, 0, 0, true, true, true, true, layer, false, false, false, true) {
     spinAnim = {
         { TILE_WIDTH * 10, TILE_HEIGHT * 54, TILE_WIDTH, TILE_HEIGHT },
         { TILE_WIDTH * 11, TILE_HEIGHT * 54, TILE_WIDTH, TILE_HEIGHT },

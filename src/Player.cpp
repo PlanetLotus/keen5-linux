@@ -713,13 +713,19 @@ void Player::update() {
     TileCollisionInfo tciLR;
     if (xVel != 0) {
         tciLR = checkTileCollisionLR();
+        Tile* collidingTile = nullptr;
 
         // Set properties based on x-collision
         if (tciLR.isLeftColliding()) {
-            xVel = ((tciLR.tileCollidingWithLeft->getBox().x + tciLR.tileCollidingWithLeft->getBox().w) - hitbox.x) / timeDelta;
+            collidingTile = tciLR.tileCollidingWithLeft;
+            xVel = ((collidingTile->getBox().x + collidingTile->getBox().w) - hitbox.x) / timeDelta;
         } else if (tciLR.isRightColliding()) {
-            xVel = (tciLR.tileCollidingWithRight->getBox().x - (hitbox.x + hitbox.w)) / timeDelta;
+            collidingTile = tciLR.tileCollidingWithRight;
+            xVel = (collidingTile->getBox().x - (hitbox.x + hitbox.w)) / timeDelta;
         }
+
+        if (collidingTile != nullptr && collidingTile->getIsDeadly())
+            die(collidingTile->getBox().x);
     }
 
     // Must go after left/right collision check
@@ -730,20 +736,25 @@ void Player::update() {
     TileCollisionInfo tciTB;
     if (yVel != 0 && !isJumpingDown && !isRolling) {
         tciTB = checkTileCollisionTB();
+        Tile* collidingTile = nullptr;
 
         // Set properties based on y-collision
         if (tciTB.isBottomChecked)
             isOnGround = tciTB.isBottomColliding() || platformStandingOn != nullptr;
 
         if (tciTB.isTopColliding()) {
-            yVel = ((tciTB.tileCollidingWithTop->getBox().y + tciTB.tileCollidingWithTop->getBox().h) - hitbox.y) / timeDelta;
+            collidingTile = tciTB.tileCollidingWithTop;
+            yVel = ((collidingTile->getBox().y + collidingTile->getBox().h) - hitbox.y) / timeDelta;
         } else if (tciTB.isBottomColliding() && (!isOnPole || tciTB.tileCollidingWithBottom->getCollideBottom())) {
-            Tile* tile = tciTB.tileCollidingWithBottom;
-            yVel = (tile->getBox().y - (hitbox.y + hitbox.h)) / timeDelta;
+            collidingTile = tciTB.tileCollidingWithBottom;
+            yVel = (collidingTile->getBox().y - (hitbox.y + hitbox.h)) / timeDelta;
 
             // Updates yVel
-            checkAndHandleSlope(tile);
+            checkAndHandleSlope(collidingTile);
         }
+
+        if (collidingTile != nullptr && collidingTile->getIsDeadly())
+            die(collidingTile->getBox().x);
     }
 
     // Check item collision
