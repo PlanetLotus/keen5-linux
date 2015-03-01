@@ -9,6 +9,7 @@
 #include "FireSpinner.h"
 #include "globals.h"
 #include "Item.h"
+#include "Laser.h"
 #include "Level.h"
 #include "MovingSprite.h"
 #include "Platform.h"
@@ -48,8 +49,8 @@ vector<Item*>& Item::itemBatchRef = itemBatch;
 vector<Platform*> platformBatch;
 const vector<Platform*>& Player::platformBatchRef = platformBatch;
 
-vector<BlasterShot*> blasterShotBatch;
-vector<BlasterShot*>& BlasterShot::blasterShotBatchRef = blasterShotBatch;
+vector<Laser*> laserBatch;
+vector<Laser*>& Laser::laserBatchRef = laserBatch;
 
 Camera camera;
 Camera& Player::cameraRef = camera;
@@ -123,8 +124,8 @@ int main (int argc, char **args) {
             platformBatch[i]->update();
         for (unsigned int i = 0; i < enemyBatch.size(); i++)
             enemyBatch[i]->update();
-        for (unsigned int i = 0; i < blasterShotBatch.size(); i++)
-            blasterShotBatch[i]->update();
+        for (unsigned int i = 0; i < laserBatch.size(); i++)
+            laserBatch[i]->update();
         player->update();
 
         // Update items
@@ -154,8 +155,8 @@ int main (int argc, char **args) {
             platformBatch[i]->draw(keenTexture, camera.getBox());
         for (unsigned int i = 0; i < enemyBatch.size(); i++)
             enemyBatch[i]->draw(keenTexture, camera.getBox());
-        for (unsigned int i = 0; i < blasterShotBatch.size(); i++)
-            blasterShotBatch[i]->draw(keenTexture, camera.getBox());
+        for (unsigned int i = 0; i < laserBatch.size(); i++)
+            laserBatch[i]->draw(keenTexture, camera.getBox());
         player->draw(keenTexture, camera.getBox());
 
         // Draw foreground tiles - Layer 1 (After units)

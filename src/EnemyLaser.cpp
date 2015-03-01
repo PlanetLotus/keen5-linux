@@ -1,25 +1,23 @@
-#include "BlasterShot.h"
-#include "Enemy.h"
-#include "globals.h"
-#include "helpers.h"
+#include "EnemyLaser.h"
+#include "Player.h"
 #include "Texture.h"
 #include "Tile.h"
 
 using namespace std;
 
-BlasterShot::BlasterShot(int startX, int startY, float velocityX, float velocityY)
+EnemyLaser::EnemyLaser(int startX, int startY, float velocityX, float velocityY)
     : Laser(startX, startY, velocityX, velocityY) {
     // Animation instantiation
     vector<SDL_Rect> moveAnim = {
-        { TILE_WIDTH * 6, TILE_HEIGHT * 7, TILE_WIDTH, TILE_HEIGHT },
-        { TILE_WIDTH * 7, TILE_HEIGHT * 7, TILE_WIDTH, TILE_HEIGHT },
-        { TILE_WIDTH * 8, TILE_HEIGHT * 7, TILE_WIDTH, TILE_HEIGHT },
-        { TILE_WIDTH * 9, TILE_HEIGHT * 7, TILE_WIDTH, TILE_HEIGHT }
+        { TILE_WIDTH * 7, TILE_HEIGHT * 50, TILE_WIDTH, TILE_HEIGHT },
+        { TILE_WIDTH * 8, TILE_HEIGHT * 51, TILE_WIDTH, TILE_HEIGHT },
+        { TILE_WIDTH * 9, TILE_HEIGHT * 52, TILE_WIDTH, TILE_HEIGHT },
+        { TILE_WIDTH * 10, TILE_HEIGHT * 53, TILE_WIDTH, TILE_HEIGHT }
     };
 
     vector<SDL_Rect> collideAnim = {
-        { TILE_WIDTH * 10, TILE_HEIGHT * 7, TILE_WIDTH, TILE_HEIGHT },
-        { TILE_WIDTH * 11, TILE_HEIGHT * 7, TILE_WIDTH, TILE_HEIGHT }
+        { TILE_WIDTH * 11, TILE_HEIGHT * 54, TILE_WIDTH, TILE_HEIGHT },
+        { TILE_WIDTH * 12, TILE_HEIGHT * 55, TILE_WIDTH, TILE_HEIGHT }
     };
 
     anims = {
@@ -31,7 +29,11 @@ BlasterShot::BlasterShot(int startX, int startY, float velocityX, float velocity
     animate(0);
 }
 
-void BlasterShot::update() {
+bool EnemyLaser::isCollidingWithPlayer() {
+    return isUnitColliding(keen->getBox());
+}
+
+void EnemyLaser::update() {
     // Check left/right collision
     TileCollisionInfo tciLR;
     if (xVel != 0) {
@@ -75,16 +77,14 @@ void BlasterShot::update() {
     if (tciLR.isLeftColliding() || tciLR.isRightColliding()) xVel = 0;
 
     // Check unit hit
-    for (unsigned int i = 0; i < enemyBatchRef.size(); i++) {
-        Enemy* unit = enemyBatchRef[i];
-        if (unit != nullptr && !unit->getIsStunned() && isUnitColliding(unit->getBox())) {
-            expire();
-            unit->takeShotByPlayer();
-            break;
-        }
+    if (isCollidingWithPlayer()) {
+        expire();
+        keen->die(hitbox.x);
     }
 }
 
-void BlasterShot::draw(Texture* texture, SDL_Rect cameraBox) {
+void EnemyLaser::draw(Texture* texture, SDL_Rect cameraBox) {
     texture->render(hitbox.x - cameraBox.x, hitbox.y - cameraBox.y, srcClip);
 }
+
+void EnemyLaser::setPlayer(Player* player) { keen = player; }
