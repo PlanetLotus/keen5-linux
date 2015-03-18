@@ -1,4 +1,5 @@
 #include "Enemy.h"
+#include "EnemyLaserManager.h"
 #include "Level.h"
 #include "Platform.h"
 #include "Player.h"
@@ -8,6 +9,7 @@ using namespace std;
 Level::Level(
     int width, int height,
     int tilesWide, int tilesTall,
+    EnemyLaserManager* enemyLaserManager,
     vector< vector<Tile*> > tiles,
     vector<FireSpinner*> deadlyTileBatch,
     vector<BackgroundTile*> backgroundTiles,
@@ -20,6 +22,7 @@ Level::Level(
     this->height = height;
     this->tilesWide = tilesWide;
     this->tilesTall = tilesTall;
+    this->enemyLaserManager = enemyLaserManager;
     this->tiles = tiles;
     this->deadlyTileBatch = deadlyTileBatch;
     this->backgroundTiles = backgroundTiles;
@@ -28,6 +31,8 @@ Level::Level(
     this->platformBatch = platformBatch;
 
     player = new Player(keenSpawnX, keenSpawnY);
+
+    enemyLaserManager->setPlayer(player);
 
     for (unsigned int i = 0; i < enemyBatch.size(); i++)
         enemyBatch[i]->setPlayer(player);
@@ -40,6 +45,7 @@ int Level::getWidth() const { return width; }
 int Level::getHeight() const { return height; }
 int Level::getTilesWide() const { return tilesWide; }
 int Level::getTilesTall() const { return tilesTall; }
+EnemyLaserManager* Level::getEnemyLaserManager() const { return enemyLaserManager; }
 Player* Level::getPlayer() const { return player; }
 vector< vector<Tile*> > Level::getTiles() const { return tiles; }
 vector<FireSpinner*> Level::getDeadlyTileBatch() const { return deadlyTileBatch; }

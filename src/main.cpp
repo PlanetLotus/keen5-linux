@@ -6,6 +6,7 @@
 #include "BlasterShot.h"
 #include "Camera.h"
 #include "Controller.h"
+#include "EnemyLaserManager.h"
 #include "FireSpinner.h"
 #include "globals.h"
 #include "Item.h"
@@ -27,14 +28,15 @@ SDL_Renderer* initRenderer(SDL_Window* window);
 bool sdlInit();
 bool init(SDL_Window* window, SDL_Renderer* renderer);
 bool loadFiles(Texture* keenTexture, Texture* maskTexture);
-Level* loadCurrentLevel(Texture* maskTexture);
-void cleanUp(SDL_Window* window, SDL_Renderer* renderer, Texture* keenTexture, Texture* maskTexture);
+Level* loadCurrentLevel(Texture* maskTexture, EnemyLaserManager* enemyLaserManager);
+void cleanUp(SDL_Window* window, SDL_Renderer* renderer, Texture* keenTexture, Texture* maskTexture, EnemyLaserManager* enemyLaserManager);
 
 vector< vector<Tile*> > tiles;
 const vector< vector<Tile*> >& MovingSprite::tilesRef = tiles;
 
 Level* currentLevel = nullptr;
 Level*& MovingSprite::currentLevelRef = currentLevel;
+float EnemyLaserManager::timeDelta = 0.0;
 float MovingSprite::timeDelta = 0.0;
 float Platform::timeDelta = 0.0;
 Level*& Camera::currentLevelRef = currentLevel;
@@ -74,10 +76,13 @@ int main (int argc, char **args) {
 
     if (!loadFiles(keenTexture, maskTexture)) return 1;
 
-    currentLevel = loadCurrentLevel(maskTexture);
+    EnemyLaserManager* enemyLaserManager = new EnemyLaserManager();
+
+    currentLevel = loadCurrentLevel(maskTexture, enemyLaserManager);
     if (currentLevel == nullptr) return 1;
 
     tiles = currentLevel->getTiles();
+    enemyLaserManager = currentLevel->getEnemyLaserManager();
     enemyBatch = currentLevel->getEnemies();
     itemBatch = currentLevel->getItems();
     platformBatch = currentLevel->getPlatforms();
@@ -126,6 +131,7 @@ int main (int argc, char **args) {
             enemyBatch[i]->update();
         for (unsigned int i = 0; i < laserBatch.size(); i++)
             laserBatch[i]->update();
+        enemyLaserManager->update();
         player->update();
 
         // Update items
@@ -176,11 +182,13 @@ int main (int argc, char **args) {
         if (fps.getTicks() < 1000 / FRAMES_PER_SECOND)
             SDL_Delay((1000/FRAMES_PER_SECOND) - fps.getTicks());
 
-        MovingSprite::timeDelta = fps.getDeltaTime();
-        Platform::timeDelta = fps.getDeltaTime();
+        float delta = fps.getDeltaTime();
+        EnemyLaserManager::timeDelta = delta;
+        MovingSprite::timeDelta = delta;
+        Platform::timeDelta = delta;
     }
 
-    cleanUp(window, renderer, keenTexture, maskTexture);
+    cleanUp(window, renderer, keenTexture, maskTexture, enemyLaserManager);
     return 0;
 }
 
@@ -259,7 +267,7 @@ bool loadFiles(Texture* keenTexture, Texture* maskTexture) {
     return true;
 }
 
-Level* loadCurrentLevel(Texture* maskTexture) {
+Level* loadCurrentLevel(Texture* maskTexture, EnemyLaserManager* enemyLaserManager) {
     vector<BackgroundTile*> backgroundTiles;
     vector<FireSpinner*> deadlyTileBatch;
     vector<Enemy*> enemies;
@@ -396,6 +404,14 @@ Level* loadCurrentLevel(Texture* maskTexture) {
                 } else {
                     tiles[x][y] = new Tile(xSrc, ySrc, x * TILE_WIDTH, y * TILE_HEIGHT, leftHeight, rightHeight,
                         collideT, collideR, collideB, collideL, i - 1, isPole, isPoleEdge, isEdge, isDeadly);
+
+                    // Hack: Check for and add EnemyLaser
+                    if (xSrc == 416 && ySrc == 1664) {
+                        EnemyLaserManager::LaserData laserData;
+                        laserData.spawnCoords = pair<int, int>(x * TILE_WIDTH, y * TILE_HEIGHT + TILE_HEIGHT);
+                        laserData.direction = EnemyLaserManager::Direction::DOWN;
+                        enemyLaserManager->laserDataList.push_back(laserData);
+                    }
                 }
             }
         }
@@ -441,6 +457,7 @@ Level* loadCurrentLevel(Texture* maskTexture) {
     return new Level(
         tilesWide * TILE_WIDTH, tilesTall * TILE_HEIGHT,
         tilesWide, tilesTall,
+        enemyLaserManager,
         tiles,
         deadlyTileBatch,
         backgroundTiles,
@@ -451,7 +468,7 @@ Level* loadCurrentLevel(Texture* maskTexture) {
     );
 }
 
-void cleanUp(SDL_Window* window, SDL_Renderer* renderer, Texture* keenTexture, Texture* maskTexture) {
+void cleanUp(SDL_Window* window, SDL_Renderer* renderer, Texture* keenTexture, Texture* maskTexture, EnemyLaserManager* enemyLaserManager) {
     keenTexture->free();
     maskTexture->free();
 
@@ -463,6 +480,7 @@ void cleanUp(SDL_Window* window, SDL_Renderer* renderer, Texture* keenTexture, T
     }
 
     delete currentLevel;
+    delete enemyLaserManager;
 
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);

@@ -17,13 +17,10 @@ class EnemyLaser : public Laser {
 
         Player* keen;
         bool isCollidingWithPlayer();
-
-        std::vector<std::vector<SDL_Rect>> anims;
     public:
-        EnemyLaser(int startX, int startY, float velocityX, float velocityY);
+        EnemyLaser(int startX, int startY, float velocityX, float velocityY, Player* player);
         void update();
         void draw(Texture* texture, SDL_Rect cameraBox);
-        void setPlayer(Player* player); // Ideally this would be done at instantiation, not later
 };
 
 #endif

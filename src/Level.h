@@ -5,6 +5,7 @@
 
 class BackgroundTile;
 class Enemy;
+class EnemyLaserManager;
 class FireSpinner;
 class Item;
 class Platform;
@@ -21,6 +22,8 @@ class Level {
         int keenSpawnX;
         int keenSpawnY;
         Player* player;
+
+        EnemyLaserManager* enemyLaserManager;
 
         // 2D vector of tiles
         std::vector< std::vector<Tile*> > tiles;
@@ -39,6 +42,7 @@ class Level {
         Level(
             int width, int height,
             int tilesWide, int tilesTall,
+            EnemyLaserManager* enemyLaserManager,
             std::vector< std::vector<Tile*> > tiles,
             std::vector<FireSpinner*> deadlyTileBatch,
             std::vector<BackgroundTile*> backgroundTiles,
@@ -51,6 +55,7 @@ class Level {
         int getHeight() const;
         int getTilesWide() const;
         int getTilesTall() const;
+        EnemyLaserManager* getEnemyLaserManager() const;
         Player* getPlayer() const;
         std::vector< std::vector<Tile*> > getTiles() const;
         std::vector<FireSpinner*> getDeadlyTileBatch() const;
