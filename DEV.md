@@ -8,7 +8,6 @@
         <li>Avoids Keen from one direction</li>
     </ul>
     <li>Scenery (background tiles)</li>
-    <li>Stationary laser</li>
     <li>Sounds</li>
     <li>Dropdown pause menu</li>
     <li>Upper-left corner HUD</li>
@@ -34,4 +33,4 @@ intended. Can jump down from certain tiles and from moving platforms.
 
 Physics implemented using floats for integrating position and ints for rendering position.
 
-Two enemies with basic AI implemented. One stationary enemy implemented.
+Two enemies with basic AI implemented. One stationary enemy (FireSpinner) implemented. Stationary laser gun implemented.
