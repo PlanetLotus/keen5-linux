@@ -273,7 +273,7 @@ Level* loadCurrentLevel(Texture* maskTexture, EnemyLaserManager* enemyLaserManag
     vector<Enemy*> enemies;
     vector<Item*> items;
     vector<Platform*> platforms;
-    enum class UnitType { NONE, KEEN, SPARKY, AMPTON, PLATFORM };
+    enum class UnitType { NONE, KEEN, SPARKY, AMPTON, PLATFORM, LASER };
     const int numLayers = 3;
 
     int tilesWide = -1;
@@ -404,14 +404,6 @@ Level* loadCurrentLevel(Texture* maskTexture, EnemyLaserManager* enemyLaserManag
                 } else {
                     tiles[x][y] = new Tile(xSrc, ySrc, x * TILE_WIDTH, y * TILE_HEIGHT, leftHeight, rightHeight,
                         collideT, collideR, collideB, collideL, i - 1, isPole, isPoleEdge, isEdge, isDeadly);
-
-                    // Hack: Check for and add EnemyLaser
-                    if (xSrc == 416 && ySrc == 1664) {
-                        EnemyLaserManager::LaserData laserData;
-                        laserData.spawnCoords = pair<int, int>(x * TILE_WIDTH, y * TILE_HEIGHT + TILE_HEIGHT);
-                        laserData.direction = EnemyLaserManager::Direction::DOWN;
-                        enemyLaserManager->laserDataList.push_back(laserData);
-                    }
                 }
             }
         }
@@ -440,6 +432,11 @@ Level* loadCurrentLevel(Texture* maskTexture, EnemyLaserManager* enemyLaserManag
             }
 
             platforms.push_back(new Platform(TILE_WIDTH * x, TILE_HEIGHT * y, dests));
+        } else if ((UnitType)unitVal == UnitType::LASER) {
+            EnemyLaserManager::LaserData laserData;
+            laserData.spawnCoords = pair<int, int>(x * TILE_WIDTH, y * TILE_HEIGHT);
+            laserData.direction = EnemyLaserManager::Direction::DOWN;
+            enemyLaserManager->laserDataList.push_back(laserData);
         }
 
         if (itemVal != 0)
