@@ -76,7 +76,7 @@ int main (int argc, char **args) {
 
     if (!loadFiles(keenTexture, maskTexture)) return 1;
 
-    EnemyLaserManager* enemyLaserManager = new EnemyLaserManager();
+    EnemyLaserManager* enemyLaserManager = new EnemyLaserManager(maskTexture);
 
     currentLevel = loadCurrentLevel(maskTexture, enemyLaserManager);
     if (currentLevel == nullptr) return 1;

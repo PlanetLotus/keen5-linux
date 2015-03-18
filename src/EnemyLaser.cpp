@@ -5,31 +5,22 @@
 
 using namespace std;
 
-EnemyLaser::EnemyLaser(int startX, int startY, float velocityX, float velocityY, Player* player)
+EnemyLaser::EnemyLaser(int startX, int startY, float velocityX, float velocityY, Player* player, Texture* texture)
     : Laser(startX, startY, velocityX, velocityY) {
     keen = player;
+    this->texture = texture;
 
     // Animation instantiation
     vector<SDL_Rect> moveAnim = {
-        /*
         { TILE_WIDTH * 7, TILE_HEIGHT * 50, TILE_WIDTH, TILE_HEIGHT },
-        { TILE_WIDTH * 8, TILE_HEIGHT * 51, TILE_WIDTH, TILE_HEIGHT },
-        { TILE_WIDTH * 9, TILE_HEIGHT * 52, TILE_WIDTH, TILE_HEIGHT },
-        { TILE_WIDTH * 10, TILE_HEIGHT * 53, TILE_WIDTH, TILE_HEIGHT }
-        */
-        { TILE_WIDTH * 6, TILE_HEIGHT * 7, TILE_WIDTH, TILE_HEIGHT },
-        { TILE_WIDTH * 7, TILE_HEIGHT * 7, TILE_WIDTH, TILE_HEIGHT },
-        { TILE_WIDTH * 8, TILE_HEIGHT * 7, TILE_WIDTH, TILE_HEIGHT },
-        { TILE_WIDTH * 9, TILE_HEIGHT * 7, TILE_WIDTH, TILE_HEIGHT }
+        { TILE_WIDTH * 8, TILE_HEIGHT * 50, TILE_WIDTH, TILE_HEIGHT },
+        { TILE_WIDTH * 9, TILE_HEIGHT * 50, TILE_WIDTH, TILE_HEIGHT },
+        { TILE_WIDTH * 10, TILE_HEIGHT * 50, TILE_WIDTH, TILE_HEIGHT }
     };
 
     vector<SDL_Rect> collideAnim = {
-        /*
-        { TILE_WIDTH * 11, TILE_HEIGHT * 54, TILE_WIDTH, TILE_HEIGHT },
-        { TILE_WIDTH * 12, TILE_HEIGHT * 55, TILE_WIDTH, TILE_HEIGHT }
-        */
-        { TILE_WIDTH * 10, TILE_HEIGHT * 7, TILE_WIDTH, TILE_HEIGHT },
-        { TILE_WIDTH * 11, TILE_HEIGHT * 7, TILE_WIDTH, TILE_HEIGHT }
+        { TILE_WIDTH * 11, TILE_HEIGHT * 50, TILE_WIDTH, TILE_HEIGHT },
+        { TILE_WIDTH * 12, TILE_HEIGHT * 50, TILE_WIDTH, TILE_HEIGHT }
     };
 
     anims = {
@@ -96,6 +87,5 @@ void EnemyLaser::update() {
 }
 
 void EnemyLaser::draw(Texture* texture, SDL_Rect cameraBox) {
-    //this->texture->render(hitbox.x - cameraBox.x, hitbox.y - cameraBox.y, srcClip);
-    texture->render(hitbox.x - cameraBox.x, hitbox.y - cameraBox.y, srcClip);
+    this->texture->render(hitbox.x - cameraBox.x, hitbox.y - cameraBox.y, srcClip);
 }

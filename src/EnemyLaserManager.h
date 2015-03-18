@@ -2,9 +2,9 @@
 #define ENEMYLASERMANAGER_H
 
 #include <vector>
-#include "Texture.h"
 
 class Player;
+class Texture;
 
 class EnemyLaserManager {
     private:
@@ -21,7 +21,7 @@ class EnemyLaserManager {
             Direction direction;
         };
 
-        EnemyLaserManager();
+        EnemyLaserManager(Texture* texture);
         std::vector<LaserData> laserDataList;
         static float timeDelta;
         void update();

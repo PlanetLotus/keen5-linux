@@ -4,10 +4,10 @@
 
 using namespace std;
 
-EnemyLaserManager::EnemyLaserManager() {
+EnemyLaserManager::EnemyLaserManager(Texture* texture) {
     elapsedCooldown = 0;
     keen = nullptr;
-    texture = nullptr;
+    this->texture = texture;
 }
 
 void EnemyLaserManager::update() {
@@ -32,7 +32,7 @@ void EnemyLaserManager::update() {
         else if (direction == Direction::DOWN)
             yShotVel = 1;
 
-        new EnemyLaser(laserDataList[i].spawnCoords.first, laserDataList[i].spawnCoords.second, xShotVel, yShotVel, keen);
+        new EnemyLaser(laserDataList[i].spawnCoords.first, laserDataList[i].spawnCoords.second, xShotVel, yShotVel, keen, texture);
     }
 }
 

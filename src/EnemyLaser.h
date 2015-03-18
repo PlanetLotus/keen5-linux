@@ -16,9 +16,10 @@ class EnemyLaser : public Laser {
         const int speed = 480;
 
         Player* keen;
+        Texture* texture;
         bool isCollidingWithPlayer();
     public:
-        EnemyLaser(int startX, int startY, float velocityX, float velocityY, Player* player);
+        EnemyLaser(int startX, int startY, float velocityX, float velocityY, Player* player, Texture* texture);
         void update();
         void draw(Texture* texture, SDL_Rect cameraBox);
 };
