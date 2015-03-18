@@ -7,16 +7,24 @@
 
 using namespace std;
 
-Platform::Platform(int spawnX, int spawnY, vector<pair<int, int>> dests) {
+Platform::Platform(int spawnX, int spawnY, vector<pair<int, int>> dests, PlatformType type) {
     hitbox.x = spawnX;
     hitbox.y = spawnY + TILE_HEIGHT * 3 / 4;
-    hitbox.w = TILE_WIDTH * 2;
     hitbox.h = TILE_HEIGHT;
 
-    srcRect.x = TILE_WIDTH * 14;
-    srcRect.y = TILE_HEIGHT * 8;
-    srcRect.w = TILE_WIDTH * 2;
-    srcRect.h = TILE_HEIGHT;
+    if (type == PlatformType::PINK) {
+        hitbox.w = TILE_WIDTH * 2;
+        srcRect.x = TILE_WIDTH * 14;
+        srcRect.y = TILE_HEIGHT * 8;
+        srcRect.w = TILE_WIDTH * 2;
+        srcRect.h = TILE_HEIGHT;
+    } else {
+        hitbox.w = TILE_WIDTH * 2;
+        srcRect.x = TILE_WIDTH * 16;
+        srcRect.y = TILE_HEIGHT * 8;
+        srcRect.w = TILE_WIDTH * 3;
+        srcRect.h = TILE_HEIGHT * 2;
+    }
 
     keen = nullptr;
 

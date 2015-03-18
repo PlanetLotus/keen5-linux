@@ -26,7 +26,8 @@ class Platform {
         void setVelocity();
 
     public:
-        Platform(int spawnX, int spawnY, std::vector<std::pair<int, int>> dests);
+        enum class PlatformType { RED, PINK };
+        Platform(int spawnX, int spawnY, std::vector<std::pair<int, int>> dests, PlatformType type);
         void update();
         void draw(Texture* texture, SDL_Rect cameraBox);
         SDL_Rect getBox();

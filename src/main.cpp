@@ -273,7 +273,7 @@ Level* loadCurrentLevel(Texture* maskTexture, EnemyLaserManager* enemyLaserManag
     vector<Enemy*> enemies;
     vector<Item*> items;
     vector<Platform*> platforms;
-    enum class UnitType { NONE, KEEN, SPARKY, AMPTON, PLATFORM, LASER };
+    enum class UnitType { NONE, KEEN, SPARKY, AMPTON, PLATFORM_RED, PLATFORM_PINK, LASER };
     const int numLayers = 3;
 
     int tilesWide = -1;
@@ -415,7 +415,7 @@ Level* loadCurrentLevel(Texture* maskTexture, EnemyLaserManager* enemyLaserManag
             enemies.push_back(new Sparky(TILE_WIDTH * x, TILE_HEIGHT * y));
         } else if ((UnitType)unitVal == UnitType::AMPTON) {
             enemies.push_back(new Ampton(TILE_WIDTH * x, TILE_HEIGHT * y));
-        } else if ((UnitType)unitVal == UnitType::PLATFORM) {
+        } else if ((UnitType)unitVal == UnitType::PLATFORM_RED || (UnitType)unitVal == UnitType::PLATFORM_PINK) {
             vector<pair<int, int>> dests;
             int tileX = 0;
             int tileY = 0;
@@ -431,7 +431,11 @@ Level* loadCurrentLevel(Texture* maskTexture, EnemyLaserManager* enemyLaserManag
                 dests.push_back(dest);
             }
 
-            platforms.push_back(new Platform(TILE_WIDTH * x, TILE_HEIGHT * y, dests));
+            Platform::PlatformType type = (UnitType)unitVal == UnitType::PLATFORM_RED
+                ? Platform::PlatformType::RED
+                : Platform::PlatformType::PINK;
+
+            platforms.push_back(new Platform(TILE_WIDTH * x, TILE_HEIGHT * y, dests, type));
         } else if ((UnitType)unitVal == UnitType::LASER) {
             EnemyLaserManager::LaserData laserData;
             laserData.spawnCoords = pair<int, int>(x * TILE_WIDTH, y * TILE_HEIGHT);
