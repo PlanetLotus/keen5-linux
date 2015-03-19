@@ -1,7 +1,6 @@
 <h2>Next steps</h2>
 
 <ul>
-    <li>Remaining platforms</li>
     <li>Other platform types</li>
     <ul>
         <li>Falls when Keen hops on</li>
