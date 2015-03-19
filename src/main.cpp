@@ -9,6 +9,7 @@
 #include "EnemyLaserManager.h"
 #include "FireSpinner.h"
 #include "globals.h"
+#include "Hud.h"
 #include "Item.h"
 #include "Laser.h"
 #include "Level.h"
@@ -90,6 +91,7 @@ int main (int argc, char **args) {
     vector<FireSpinner*> deadlyTileBatch = currentLevel->getDeadlyTileBatch();
 
     Player* player = currentLevel->getPlayer();
+    Hud hud(maskTexture);
 
     while (running) {
         // Start timer
@@ -133,6 +135,7 @@ int main (int argc, char **args) {
             laserBatch[i]->update();
         enemyLaserManager->update();
         player->update();
+        hud.update();
 
         // Update items
         for (unsigned int i = 0; i < itemBatch.size(); i++)
@@ -172,6 +175,8 @@ int main (int argc, char **args) {
                     tiles[i][j]->draw(maskTexture, camera.getBox());
             }
         }
+
+        hud.draw();
 
         camera.update(player->getBox(), player->getIsOnGround());
 
