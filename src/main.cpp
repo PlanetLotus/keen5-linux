@@ -30,7 +30,7 @@ bool sdlInit();
 bool init(SDL_Window* window, SDL_Renderer* renderer);
 bool loadFiles(Texture* keenTexture, Texture* maskTexture);
 Level* loadCurrentLevel(Texture* maskTexture, EnemyLaserManager* enemyLaserManager);
-void cleanUp(SDL_Window* window, SDL_Renderer* renderer, Texture* keenTexture, Texture* maskTexture, EnemyLaserManager* enemyLaserManager);
+void cleanUp(SDL_Window* window, SDL_Renderer* renderer, EnemyLaserManager* enemyLaserManager);
 
 vector< vector<Tile*> > tiles;
 const vector< vector<Tile*> >& MovingSprite::tilesRef = tiles;
@@ -72,14 +72,14 @@ int main (int argc, char **args) {
     SDL_Renderer* renderer = initRenderer(window);
     if (!init(window, renderer)) return 1;
 
-    Texture* keenTexture = new Texture(renderer);
-    Texture* maskTexture = new Texture(renderer);
+    Texture keenTexture(renderer);
+    Texture maskTexture(renderer);
 
-    if (!loadFiles(keenTexture, maskTexture)) return 1;
+    if (!loadFiles(&keenTexture, &maskTexture)) return 1;
 
-    EnemyLaserManager* enemyLaserManager = new EnemyLaserManager(maskTexture);
+    EnemyLaserManager* enemyLaserManager = new EnemyLaserManager(&maskTexture);
 
-    currentLevel = loadCurrentLevel(maskTexture, enemyLaserManager);
+    currentLevel = loadCurrentLevel(&maskTexture, enemyLaserManager);
     if (currentLevel == nullptr) return 1;
 
     tiles = currentLevel->getTiles();
@@ -91,7 +91,7 @@ int main (int argc, char **args) {
     vector<FireSpinner*> deadlyTileBatch = currentLevel->getDeadlyTileBatch();
 
     Player* player = currentLevel->getPlayer();
-    Hud hud(maskTexture);
+    Hud hud(&maskTexture);
 
     while (running) {
         // Start timer
@@ -144,35 +144,35 @@ int main (int argc, char **args) {
         // Draw background tiles - Layer 0 (Before units)
         for (unsigned int i = 0; i < backgroundTiles.size(); i++) {
             if (backgroundTiles[i]->getLayer() == 0)
-                backgroundTiles[i]->draw(maskTexture, camera.getBox());
+                backgroundTiles[i]->draw(&maskTexture, camera.getBox());
         }
 
         // Draw foreground tiles - Layer 0 (Before units)
         for (unsigned int i = 0; i < tiles.size(); i++) {
             for (unsigned int j = 0; j < tiles[i].size(); j++) {
                 if (tiles[i][j] != nullptr && tiles[i][j]->layer == 0)
-                    tiles[i][j]->draw(maskTexture, camera.getBox());
+                    tiles[i][j]->draw(&maskTexture, camera.getBox());
             }
         }
 
         // Draw items
         for (unsigned int i = 0; i < itemBatch.size(); i++)
-            itemBatch[i]->draw(keenTexture, camera.getBox());
+            itemBatch[i]->draw(&keenTexture, camera.getBox());
 
         // Draw units
         for (unsigned int i = 0; i < platformBatch.size(); i++)
-            platformBatch[i]->draw(keenTexture, camera.getBox());
+            platformBatch[i]->draw(&keenTexture, camera.getBox());
         for (unsigned int i = 0; i < enemyBatch.size(); i++)
-            enemyBatch[i]->draw(keenTexture, camera.getBox());
+            enemyBatch[i]->draw(&keenTexture, camera.getBox());
         for (unsigned int i = 0; i < laserBatch.size(); i++)
-            laserBatch[i]->draw(keenTexture, camera.getBox());
-        player->draw(keenTexture, camera.getBox());
+            laserBatch[i]->draw(&keenTexture, camera.getBox());
+        player->draw(&keenTexture, camera.getBox());
 
         // Draw foreground tiles - Layer 1 (After units)
         for (unsigned int i = 0; i < tiles.size(); i++) {
             for (unsigned int j = 0; j < tiles[i].size(); j++) {
                 if (tiles[i][j] != nullptr && tiles[i][j]->layer == 1)
-                    tiles[i][j]->draw(maskTexture, camera.getBox());
+                    tiles[i][j]->draw(&maskTexture, camera.getBox());
             }
         }
 
@@ -193,7 +193,7 @@ int main (int argc, char **args) {
         Platform::timeDelta = delta;
     }
 
-    cleanUp(window, renderer, keenTexture, maskTexture, enemyLaserManager);
+    cleanUp(window, renderer, enemyLaserManager);
     return 0;
 }
 
@@ -474,10 +474,7 @@ Level* loadCurrentLevel(Texture* maskTexture, EnemyLaserManager* enemyLaserManag
     );
 }
 
-void cleanUp(SDL_Window* window, SDL_Renderer* renderer, Texture* keenTexture, Texture* maskTexture, EnemyLaserManager* enemyLaserManager) {
-    keenTexture->free();
-    maskTexture->free();
-
+void cleanUp(SDL_Window* window, SDL_Renderer* renderer, EnemyLaserManager* enemyLaserManager) {
     for (unsigned int i = 0; i < tiles.size(); i++) {
         for (unsigned int j = 0; j < tiles[i].size(); j++) {
             if (tiles[i][j] != nullptr)
