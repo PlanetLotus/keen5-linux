@@ -10,6 +10,7 @@ Level::Level(
     int width, int height,
     int tilesWide, int tilesTall,
     EnemyLaserManager* enemyLaserManager,
+    StatsManager* statsManager,
     vector< vector<Tile*> > tiles,
     vector<FireSpinner*> deadlyTileBatch,
     vector<BackgroundTile*> backgroundTiles,
@@ -30,7 +31,7 @@ Level::Level(
     this->itemBatch = itemBatch;
     this->platformBatch = platformBatch;
 
-    player = new Player(keenSpawnX, keenSpawnY);
+    player = new Player(keenSpawnX, keenSpawnY, statsManager);
 
     enemyLaserManager->setPlayer(player);
 

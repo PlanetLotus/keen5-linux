@@ -7,6 +7,7 @@
 #include "Item.h"
 #include "Platform.h"
 #include "Player.h"
+#include "StatsManager.h"
 #include "Texture.h"
 #include "Tile.h"
 #include "Timer.h"
@@ -876,7 +877,7 @@ void Player::pushY(int y) {
 
 bool Player::getIsOnGround() { return isOnGround; }
 
-Player::Player(int spawnX, int spawnY) {
+Player::Player(int spawnX, int spawnY, StatsManager* statsManager) {
     xVel = 0;
     yVel = 0;
     xVelRem = 0;
@@ -885,6 +886,8 @@ Player::Player(int spawnX, int spawnY) {
     yPush = 0;
     xAccel = 0;
     yAccel = 0;
+
+    this->statsManager = statsManager;
 
     isStunned = false;
 

@@ -10,6 +10,7 @@ class FireSpinner;
 class Item;
 class Platform;
 class Player;
+class StatsManager;
 class Tile;
 
 class Level {
@@ -43,6 +44,7 @@ class Level {
             int width, int height,
             int tilesWide, int tilesTall,
             EnemyLaserManager* enemyLaserManager,
+            StatsManager* statsManager,
             std::vector< std::vector<Tile*> > tiles,
             std::vector<FireSpinner*> deadlyTileBatch,
             std::vector<BackgroundTile*> backgroundTiles,

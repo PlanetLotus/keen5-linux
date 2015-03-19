@@ -12,10 +12,12 @@ class Camera;
 class Controller;
 class Item;
 class Platform;
+class StatsManager;
 class Tile;
 
 class Player : public MovingSprite {
     private:
+        StatsManager* statsManager;
         enum class Direction { LEFT, RIGHT, UP, DOWN, STOP };
 
         int xPush;
@@ -98,7 +100,7 @@ class Player : public MovingSprite {
         static const std::vector<Platform*>& platformBatchRef;
         static std::vector<Item*>& itemBatchRef;
     public:
-        Player(int spawnX, int spawnY);
+        Player(int spawnX, int spawnY, StatsManager* statsManager);
         void die(int collidingEnemyX);
         void pushX(int x);
         void pushY(int y);

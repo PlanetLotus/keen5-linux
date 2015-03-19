@@ -18,6 +18,7 @@
 #include "Player.h"
 #include "SDL_image.h"
 #include "Sparky.h"
+#include "StatsManager.h"
 #include "Texture.h"
 #include "Tile.h"
 #include "Timer.h"
@@ -29,7 +30,7 @@ SDL_Renderer* initRenderer(SDL_Window* window);
 bool sdlInit();
 bool init(SDL_Window* window, SDL_Renderer* renderer);
 bool loadFiles(Texture* keenTexture, Texture* maskTexture);
-Level* loadCurrentLevel(Texture* maskTexture, EnemyLaserManager* enemyLaserManager);
+Level* loadCurrentLevel(Texture* maskTexture, EnemyLaserManager* enemyLaserManager, StatsManager* statsManager);
 void cleanUp(SDL_Window* window, SDL_Renderer* renderer, EnemyLaserManager* enemyLaserManager);
 
 vector< vector<Tile*> > tiles;
@@ -78,8 +79,9 @@ int main (int argc, char **args) {
     if (!loadFiles(&keenTexture, &maskTexture)) return 1;
 
     EnemyLaserManager* enemyLaserManager = new EnemyLaserManager(&maskTexture);
+    StatsManager statsManager;
 
-    currentLevel = loadCurrentLevel(&maskTexture, enemyLaserManager);
+    currentLevel = loadCurrentLevel(&maskTexture, enemyLaserManager, &statsManager);
     if (currentLevel == nullptr) return 1;
 
     tiles = currentLevel->getTiles();
@@ -272,7 +274,7 @@ bool loadFiles(Texture* keenTexture, Texture* maskTexture) {
     return true;
 }
 
-Level* loadCurrentLevel(Texture* maskTexture, EnemyLaserManager* enemyLaserManager) {
+Level* loadCurrentLevel(Texture* maskTexture, EnemyLaserManager* enemyLaserManager, StatsManager* statsManager) {
     vector<BackgroundTile*> backgroundTiles;
     vector<FireSpinner*> deadlyTileBatch;
     vector<Enemy*> enemies;
@@ -464,6 +466,7 @@ Level* loadCurrentLevel(Texture* maskTexture, EnemyLaserManager* enemyLaserManag
         tilesWide * TILE_WIDTH, tilesTall * TILE_HEIGHT,
         tilesWide, tilesTall,
         enemyLaserManager,
+        statsManager,
         tiles,
         deadlyTileBatch,
         backgroundTiles,
