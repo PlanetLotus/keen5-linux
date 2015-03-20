@@ -20,13 +20,26 @@ class StatsManager {
         enum class DifficultyLevel { EASY, NORMAL, HARD };
         DifficultyLevel difficulty = DifficultyLevel::NORMAL;
 
+        bool isScoreChanged = false;
+        bool isAmmoChanged = false;
+        bool isLivesChanged = false;
+        bool isVitalinChanged = false;
+
     public:
+        void resetIsChanged();
         void addScore(int value);
         void subtractLives();
         void addAmmo();
         void subtractAmmo();
         void addVitalin();
         int getScore();
+        int getAmmo();
+        int getLives();
+        int getVitalin();
+        bool getIsScoreChanged();
+        bool getIsAmmoChanged();
+        bool getIsLivesChanged();
+        bool getIsVitalinChanged();
 };
 
 #endif

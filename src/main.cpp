@@ -93,7 +93,7 @@ int main (int argc, char **args) {
     vector<FireSpinner*> deadlyTileBatch = currentLevel->getDeadlyTileBatch();
 
     Player* player = currentLevel->getPlayer();
-    Hud hud(&maskTexture);
+    Hud hud(&maskTexture, &statsManager);
 
     while (running) {
         // Start timer

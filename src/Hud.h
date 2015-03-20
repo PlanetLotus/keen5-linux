@@ -1,20 +1,19 @@
 #ifndef HUD_H
 #define HUD_H
 
+#include <vector>
 #include "SDL.h"
 #include "Tile.h"
 
+class StatsManager;
 class Texture;
 
 class Hud {
-    /* This is a little tricky because the number values on the HUD don't align
-     * well with tiles. I'll need to hardcode each value's position on the HUD
-     * and update it with the 11 possible number values (as images). These
-     * values are represented by a 12x16 image which I'll need to hardcode
-     * positions for as well. */
     private:
         SDL_Rect srcClip;
+        std::vector<SDL_Rect> valueSrcClips;
         Texture* texture;
+        StatsManager* statsManager;
 
         int screenMarginX = TILE_WIDTH / 2;
         int screenMarginY = TILE_HEIGHT / 2;
@@ -34,32 +33,22 @@ class Hud {
 
         const int valueWidth = 12;
         const int valueHeight = 16;
+        const int spaceBetweenValuesX = 4;
 
         // Number image locations in sprite sheet
-        int grayEightX = TILE_WIDTH * 10;
-        int grayEightY = TILE_HEIGHT * 159;
-        int NineX = TILE_WIDTH * 10 + valueWidth;
-        int NineY = TILE_HEIGHT * 159;
-        int EightX = TILE_WIDTH * 10;
-        int EightY = TILE_HEIGHT * 159 + valueHeight;
-        int SevenX = TILE_WIDTH * 10 + valueWidth;
-        int SevenY = TILE_HEIGHT * 159 + valueHeight;
-        int SixX = TILE_WIDTH * 9;
-        int SixY = TILE_HEIGHT * 160;
-        int FiveX = TILE_WIDTH * 9 + valueWidth;
-        int FiveY = TILE_HEIGHT * 160;
-        int FourX = TILE_WIDTH * 9;
-        int FourY = TILE_HEIGHT * 160 + valueHeight;
-        int ThreeX = TILE_WIDTH * 9 + valueWidth;
-        int ThreeY = TILE_HEIGHT * 160 + valueHeight;
-        int TwoX = TILE_WIDTH * 10;
-        int TwoY = TILE_HEIGHT * 160;
-        int OneX = TILE_WIDTH * 10 + valueWidth;
-        int OneY = TILE_HEIGHT * 160;
-        int ZeroX = TILE_WIDTH * 10;
-        int ZeroY = TILE_HEIGHT * 160 + valueHeight;
+        SDL_Rect grayEightClip = { TILE_WIDTH * 10, TILE_HEIGHT * 159, valueWidth, valueHeight };
+        SDL_Rect nineClip = { TILE_WIDTH * 10 + valueWidth, TILE_HEIGHT * 159, valueWidth, valueHeight };
+        SDL_Rect eightClip = { TILE_WIDTH * 10, TILE_HEIGHT * 159 + valueHeight, valueWidth, valueHeight };
+        SDL_Rect sevenClip = { TILE_WIDTH * 10 + valueWidth, TILE_HEIGHT * 159 + valueHeight, valueWidth, valueHeight };
+        SDL_Rect sixClip = { TILE_WIDTH * 9, TILE_HEIGHT * 160, valueWidth, valueHeight };
+        SDL_Rect fiveClip = { TILE_WIDTH * 9 + valueWidth, TILE_HEIGHT * 160, valueWidth, valueHeight };
+        SDL_Rect fourClip = { TILE_WIDTH * 9, TILE_HEIGHT * 160 + valueHeight, valueWidth, valueHeight };
+        SDL_Rect threeClip = { TILE_WIDTH * 9 + valueWidth, TILE_HEIGHT * 160 + valueHeight, valueWidth, valueHeight };
+        SDL_Rect twoClip = { TILE_WIDTH * 10, TILE_HEIGHT * 160, valueWidth, valueHeight };
+        SDL_Rect oneClip = { TILE_WIDTH * 10 + valueWidth, TILE_HEIGHT * 160, valueWidth, valueHeight };
+        SDL_Rect zeroClip = { TILE_WIDTH * 10, TILE_HEIGHT * 160 + valueHeight, valueWidth, valueHeight };
     public:
-        Hud(Texture* texture);
+        Hud(Texture* texture, StatsManager* statsManager);
         void update();
         void draw();
 };
