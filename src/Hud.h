@@ -11,12 +11,12 @@ class Texture;
 class Hud {
     private:
         SDL_Rect srcClip;
-        std::vector<SDL_Rect> valueSrcClips;
+        std::vector<SDL_Rect*> valueSrcClips;
         Texture* texture;
         StatsManager* statsManager;
 
         int screenMarginX = TILE_WIDTH / 2;
-        int screenMarginY = TILE_HEIGHT / 2;
+        int screenMarginY = TILE_HEIGHT / 4;
 
         int srcClipX = TILE_WIDTH * 11;
         int srcClipY = TILE_HEIGHT * 158;
@@ -35,6 +35,13 @@ class Hud {
         const int valueHeight = 16;
         const int spaceBetweenValuesX = 4;
 
+        const int clipMinIndexScore = 0;
+        const int clipMaxIndexScore = 8;
+        const int clipMinIndexLives = 9;
+        const int clipMaxIndexLives = 10;
+        const int clipMinIndexAmmo = 11;
+        const int clipMaxIndexAmmo = 12;
+
         // Number image locations in sprite sheet
         SDL_Rect grayEightClip = { TILE_WIDTH * 10, TILE_HEIGHT * 159, valueWidth, valueHeight };
         SDL_Rect nineClip = { TILE_WIDTH * 10 + valueWidth, TILE_HEIGHT * 159, valueWidth, valueHeight };
@@ -47,6 +54,21 @@ class Hud {
         SDL_Rect twoClip = { TILE_WIDTH * 10, TILE_HEIGHT * 160, valueWidth, valueHeight };
         SDL_Rect oneClip = { TILE_WIDTH * 10 + valueWidth, TILE_HEIGHT * 160, valueWidth, valueHeight };
         SDL_Rect zeroClip = { TILE_WIDTH * 10, TILE_HEIGHT * 160 + valueHeight, valueWidth, valueHeight };
+
+        SDL_Rect* clipsByDigit[10] = {
+            &zeroClip,
+            &oneClip,
+            &twoClip,
+            &threeClip,
+            &fourClip,
+            &fiveClip,
+            &sixClip,
+            &sevenClip,
+            &eightClip,
+            &nineClip
+        };
+
+        void updateProperty(int value, int minClipIndex, int maxClipIndex);
     public:
         Hud(Texture* texture, StatsManager* statsManager);
         void update();

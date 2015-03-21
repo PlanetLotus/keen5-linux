@@ -9,38 +9,97 @@ Hud::Hud(Texture* texture, StatsManager* statsManager) {
     srcClip = { srcClipX, srcClipY, srcClipWidth, srcClipHeight };
 
     valueSrcClips = {
-        eightClip,
-        eightClip,
-        eightClip,
-        eightClip,
-        eightClip,
-        eightClip,
-        eightClip,
-        eightClip,
-        eightClip,
-        eightClip,
-        eightClip,
-        eightClip,
-        eightClip
+        nullptr,
+        nullptr,
+        nullptr,
+        nullptr,
+        nullptr,
+        nullptr,
+        nullptr,
+        nullptr,
+        nullptr,
+        nullptr,
+        nullptr,
+        nullptr,
+        nullptr
     };
 }
 
+void Hud::updateProperty(int value, int minClipIndex, int maxClipIndex) {
+    int clipIndex = maxClipIndex;
+    int digits = value;
+    int digit = 0;
+    bool isDigitZeroAndMostSigificantDigit = false;
+    bool isValueZeroButNotDigit = false;
+
+    while (clipIndex >= minClipIndex) {
+        digit = digits % 10;
+
+        isDigitZeroAndMostSigificantDigit = digit == 0 && digits / 10 == 0;
+        isValueZeroButNotDigit = digit != 0 || clipIndex != maxClipIndex;
+
+        if (isDigitZeroAndMostSigificantDigit && isValueZeroButNotDigit) {
+            valueSrcClips[clipIndex] = &grayEightClip;
+        } else {
+            valueSrcClips[clipIndex] = clipsByDigit[digit];
+        }
+
+        digits /= 10;
+        clipIndex--;
+    }
+}
+
 void Hud::update() {
-    // Probably need a reference to the to-be-written StatsManager here and pull values from it
-    // Note: I'm pretty sure points ONLY come from collecting items with point
-    // values, and not from things like stunning enemies and completing levels.
+    if (statsManager->getIsScoreChanged()) {
+        updateProperty(statsManager->getScore(), clipMinIndexScore, clipMaxIndexScore);
+    }
+
+    if (statsManager->getIsLivesChanged()) {
+        updateProperty(statsManager->getLives(), clipMinIndexLives, clipMaxIndexLives);
+    }
+
+    if (statsManager->getIsAmmoChanged()) {
+        updateProperty(statsManager->getAmmo(), clipMinIndexAmmo, clipMaxIndexAmmo);
+    }
 }
 
 void Hud::draw() {
     texture->render(screenMarginX, screenMarginY, &srcClip);
 
-    // In addition to drawing the HUD, I need a way of determining whether each value has changed and if so update its box accordingly
-    for (int i = 0; i < 9; i++)
-        texture->render(screenMarginX + score1OffsetX + valueWidth * i + spaceBetweenValuesX * i, screenMarginY + row1OffsetY, &valueSrcClips[i]);
+    for (int i = clipMinIndexScore; i <= clipMaxIndexScore; i++) {
+        if (valueSrcClips[i] == nullptr)
+            continue;
 
-    for (int i = 9; i < 11; i++)
-        texture->render(screenMarginX + lives1OffsetX + valueWidth * (i - 9) + spaceBetweenValuesX * (i - 9), screenMarginY + row2OffsetY, &valueSrcClips[i]);
+        texture->render(
+            screenMarginX + score1OffsetX + valueWidth * i + spaceBetweenValuesX * i,
+            screenMarginY + row1OffsetY,
+            valueSrcClips[i]
+        );
+    }
 
-    for (int i = 11; i < 13; i++)
-        texture->render(screenMarginX + ammo1OffsetX + valueWidth * (i - 11) + spaceBetweenValuesX * (i - 11), screenMarginY + row2OffsetY, &valueSrcClips[i]);
+    for (int i = clipMinIndexLives; i <= clipMaxIndexLives; i++) {
+        if (valueSrcClips[i] == nullptr)
+            continue;
+
+        int livesValueIndex = i - clipMinIndexLives;
+
+        texture->render(
+            screenMarginX + lives1OffsetX + valueWidth * livesValueIndex + spaceBetweenValuesX * livesValueIndex,
+            screenMarginY + row2OffsetY,
+            valueSrcClips[i]
+        );
+    }
+
+    for (int i = clipMinIndexAmmo; i <= clipMaxIndexAmmo; i++) {
+        if (valueSrcClips[i] == nullptr)
+            continue;
+
+        int ammoValueIndex = i - clipMinIndexAmmo;
+
+        texture->render(
+            screenMarginX + ammo1OffsetX + valueWidth * ammoValueIndex + spaceBetweenValuesX * ammoValueIndex,
+            screenMarginY + row2OffsetY,
+            valueSrcClips[i]
+        );
+    }
 }

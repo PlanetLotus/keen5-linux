@@ -138,6 +138,7 @@ int main (int argc, char **args) {
         enemyLaserManager->update();
         player->update();
         hud.update();
+        statsManager.resetIsChanged();
 
         // Update items
         for (unsigned int i = 0; i < itemBatch.size(); i++)

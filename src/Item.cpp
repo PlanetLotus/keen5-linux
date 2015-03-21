@@ -101,6 +101,8 @@ void Item::beginExpire() {
     } else {
         die();
     }
+
+    isExpiring = true;
 }
 
 void Item::expire() {
@@ -137,3 +139,4 @@ void Item::draw(Texture* texture, SDL_Rect cameraBox) {
 
 int Item::getValue() { return value; }
 ItemType Item::getType() { return type; }
+bool Item::getIsExpiring() { return isExpiring; }

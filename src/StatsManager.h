@@ -20,10 +20,11 @@ class StatsManager {
         enum class DifficultyLevel { EASY, NORMAL, HARD };
         DifficultyLevel difficulty = DifficultyLevel::NORMAL;
 
-        bool isScoreChanged = false;
-        bool isAmmoChanged = false;
-        bool isLivesChanged = false;
-        bool isVitalinChanged = false;
+        // Start off as true so they update in first game loop
+        bool isScoreChanged = true;
+        bool isAmmoChanged = true;
+        bool isLivesChanged = true;
+        bool isVitalinChanged = true;
 
     public:
         void resetIsChanged();

@@ -49,7 +49,10 @@ void Player::shoot(bool isPressingUp, bool isPressingDown) {
             if (isOnPole) animVal = 26 + (int)facing;
         }
 
-        new BlasterShot(xStart, yStart, xShotVel, yShotVel);
+        if (statsManager->getAmmo() > 0) {
+            new BlasterShot(xStart, yStart, xShotVel, yShotVel);
+            statsManager->subtractAmmo();
+        }
 
         animate(animVal);
 
@@ -647,18 +650,20 @@ void Player::checkItemCollision() {
 }
 
 void Player::handleItemCollision(Item* item) {
-    item->beginExpire();
+    if (item->getIsExpiring())
+        return;
 
     ItemType itemType = item->getType();
 
-    // TODO: Add PlayerStats class
     if (itemType == ItemType::AMMO) {
-        // Add item value to ammo
+        statsManager->addAmmo();
     } else if (itemType == ItemType::VITALIN) {
-        // Add item value to vitalin
+        statsManager->addVitalin();
     } else {
-        // Add item value to points
+        statsManager->addScore(item->getValue());
     }
+
+    item->beginExpire();
 }
 
 void Player::update() {

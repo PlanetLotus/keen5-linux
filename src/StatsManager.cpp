@@ -34,8 +34,8 @@ void StatsManager::addAmmo() {
 void StatsManager::subtractAmmo() {
     if (ammo > 0) {
         ammo--;
-        isAmmoChanged = true;
     }
+    isAmmoChanged = true;
 }
 
 void StatsManager::addVitalin() {

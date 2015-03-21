@@ -12,6 +12,7 @@ class Item : public Sprite {
         int value;
         ItemType type;
         std::vector<SDL_Rect> anims[6];
+        bool isExpiring = false;
         void die();
         void expire();
 
@@ -26,6 +27,7 @@ class Item : public Sprite {
         void draw(Texture* texture, SDL_Rect cameraBox) override;
         int getValue();
         ItemType getType();
+        bool getIsExpiring();
 };
 
 #endif
