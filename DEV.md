@@ -9,8 +9,6 @@
     <li>Scenery (background tiles)</li>
     <li>Sounds</li>
     <li>Dropdown pause menu</li>
-    <li>Upper-left corner HUD</li>
-    <li>Stats: score, lives, ammo, vitalin</li>
     <li>Save/load game</li>
 </ul>
 
@@ -33,3 +31,5 @@ intended. Can jump down from certain tiles and from moving platforms.
 Physics implemented using floats for integrating position and ints for rendering position.
 
 Two enemies with basic AI implemented. One stationary enemy (FireSpinner) implemented. Stationary laser gun implemented.
+
+Implemented tracking player stats and showing them in a HUD.
