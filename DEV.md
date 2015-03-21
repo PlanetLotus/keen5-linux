@@ -6,7 +6,6 @@
         <li>Falls when Keen hops on</li>
         <li>Avoids Keen from one direction</li>
     </ul>
-    <li>Scenery (background tiles)</li>
     <li>Sounds</li>
     <li>Dropdown pause menu</li>
     <li>Save/load game</li>
